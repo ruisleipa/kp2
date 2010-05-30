@@ -1,0 +1,41 @@
+CXX = g++
+CXXFLAGS = -g -I./src/
+MAKEDEPEND = $(CXX) -MM $(CXXFLAGS) -o $*.d $<
+define MAKEDEPEND
+	$(CXX) $(CXXFLAGS) -MM -MF $3 -MP -MT $2 $1
+endef
+	
+SRC = src/client/main.cpp \
+	src/client/connection.cpp \
+	src/client/graphics.cpp \
+	src/client/vector2d.cpp \
+	src/client/font.cpp \
+	src/client/texture.cpp \
+	src/client/events.cpp \
+	src/client/color.cpp \
+	src/client/keyevent.cpp \
+	src/client/mouseevent.cpp \
+	src/client/assert.cpp \
+	src/client/view.cpp \
+	src/client/widget.cpp \
+	src/client/button.cpp \
+	src/client/fontface.cpp \
+	src/client/scissor.cpp \
+	src/client/image.cpp \
+	src/client/label.cpp \
+	src/client/field.cpp \
+	src/client/select.cpp \
+	src/client/sounds.cpp \
+	src/client/sound.cpp \
+	src/client/ui.cpp \
+	src/client/textwidget.cpp \
+	src/client/activetextwidget.cpp \
+	src/client/mainmenu.cpp \
+	src/client/settingsmenu.cpp \
+	src/client/connectmenu.cpp \
+	src/client/localgamemenu.cpp \
+	src/client/newlocalgamemenu.cpp \
+	src/client/sdl.cpp \
+	src/shared/string.cpp \
+	src/shared/assert.cpp \
+	src/shared/inifile.cpp

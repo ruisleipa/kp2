@@ -1,0 +1,31 @@
+include Makefile.client.common
+
+WINDOWS_LIBS = -lmingw32 -mwindows
+SDL_LIBS = -lSDLmain -lSDL -lSDL_ttf -lSDL_image -lSDL_net
+LIBS = $(WINDOWS_LIBS) $(SDL_LIBS) -lopengl32 -lglew32 -lglu32 -lalut -lopenal32
+BIN = kp2_client.exe
+
+OBJ = $(SRC:.cpp=.o)
+DEPS = $(SRC:.cpp=.d)
+
+all: $(BIN)
+
+$(BIN): $(OBJ)
+	$(CXX) $(OBJ) $(LIBS) $(CXXFLAGS) -o $(BIN)
+
+clean:
+	-rm $(BIN)
+	-rm $(OBJ)
+	-rm $(DEPS)
+
+%.o: %.cpp
+	$(call MAKEDEPEND,$<,$@,$(subst .o,.d,$@))
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+ifneq "$(MAKECMDGOALS)" "clean"
+
+  -include $(DEPS)
+
+endif
+
+

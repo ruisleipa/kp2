@@ -1,0 +1,29 @@
+include Makefile.server.common
+
+LIBS = -lSDL -lSDL_net
+BIN = kp2_server
+
+OBJ = $(SRC:.cpp=.o)
+DEPS = $(SRC:.cpp=.d)
+
+all: $(BIN)
+
+$(BIN): $(OBJ)
+	$(CXX) $(OBJ) $(LIBS) $(CXXFLAGS) -o $(BIN)
+
+clean:
+	-rm $(BIN)
+	-rm $(OBJ)
+	-rm $(DEPS)
+
+%.o: %.cpp
+	$(call MAKEDEPEND,$<,$@,$(subst .o,.d,$@))
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+ifneq "$(MAKECMDGOALS)" "clean"
+
+  -include $(DEPS)
+
+endif
+
+
