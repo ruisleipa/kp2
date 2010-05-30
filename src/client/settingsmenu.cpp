@@ -4,7 +4,7 @@
 
 #include "ui.hpp"
 #include "graphics.hpp"
-#include "string.hpp"
+#include "shared/string.hpp"
 
 SettingsMenu::SettingsMenu()
 {

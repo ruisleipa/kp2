@@ -1,6 +1,6 @@
 #include "textwidget.hpp"
 
-#include "string.hpp"
+#include "shared/string.hpp"
 
 void TextWidget::setText(std::string text)
 {

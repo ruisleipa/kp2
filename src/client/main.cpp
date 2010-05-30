@@ -4,7 +4,7 @@
 #include "events.hpp"
 #include "ui.hpp"
 #include "sdl.hpp"
-#include "string.hpp"
+#include "shared/string.hpp"
 
 #include "mainmenu.hpp"
 #include "settingsmenu.hpp"

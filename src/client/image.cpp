@@ -1,6 +1,6 @@
 #include "image.hpp"
 
-#include "string.hpp"
+#include "shared/string.hpp"
 #include "assert.hpp"
 #include "color.hpp"
 #include "graphics.hpp"

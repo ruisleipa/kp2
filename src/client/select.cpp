@@ -1,6 +1,6 @@
 #include "select.hpp"
 
-#include "string.hpp"
+#include "shared/string.hpp"
 #include "assert.hpp"
 #include "scissor.hpp"
 #include "ui.hpp"
