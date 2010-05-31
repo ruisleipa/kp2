@@ -73,8 +73,6 @@ Socket* SocketSet::waitForActivity()
 		m_first_wait=false;
 	
 		m_active_sockets=m_fd_set;
-	
-		std::cout<<"select"<<std::endl;
 		
 		if(select(m_highest_fd+1,&m_active_sockets,0,0,0)==-1)
 		{
@@ -86,8 +84,6 @@ Socket* SocketSet::waitForActivity()
 	
 	for(;m_current_active<=m_highest_fd;m_current_active++)
 	{
-		std::cout<<"active"<<std::endl;
-	
 		if(FD_ISSET(m_current_active,&m_active_sockets))
 		{
 			return m_sockets[m_current_active++];
