@@ -21,7 +21,7 @@ int ServerSocket::open(int port)
 	getAddresses(0,port,true);
 	
 	addrinfo* p;
-	char yes='1';
+	int yes=1;
 	
 	while((p=nextAddress()))
 	{
@@ -33,7 +33,7 @@ int ServerSocket::open(int port)
 			continue;
 		}
 		
-		if(setsockopt(m_socket,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(yes))==SOCKET_ERROR)
+		if(setsockopt(m_socket,SOL_SOCKET,SO_REUSEADDR,(const char*)&yes,sizeof(yes))==SOCKET_ERROR)
 		{
 			std::cerr<<"Cannot set SO_REUSEADDR:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 			close();

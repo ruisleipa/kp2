@@ -6,6 +6,11 @@
 #include <ws2tcpip.h>
 #include <wspiapi.h>
 
+#else
+
+#include <errno.h>
+#include <string.h>
+
 #endif
 
 #include <iostream>
