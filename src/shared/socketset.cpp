@@ -40,6 +40,8 @@ void SocketSet::remove(Socket* socket)
 	if(s==m_sockets.end())
 		return;
 	
+	FD_CLR((*s).first,m_fd_set);
+	
 	if((*s).first<m_highest_fd)
 	{
 		int i=m_highest_fd-1;
