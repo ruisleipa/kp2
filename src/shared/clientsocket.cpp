@@ -1,15 +1,18 @@
 #include "clientsocket.hpp"
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
+#ifndef SOCKET_ERROR
+#define SOCKET_ERROR -1
+#endif
+
+#include <iostream>
+
+#include "socketcore.hpp"
 
 int ClientSocket::open(std::string host,int port)
 {
 	close();
 
-	getAddresses(host.c_str(),port);
+	getAddresses(host.c_str(),port,false);
 	
 	addrinfo* p;
 	
@@ -20,7 +23,7 @@ int ClientSocket::open(std::string host,int port)
 		if(!isSocketValid())
 			continue;
 			
-		if(connect(m_socket,p->ai_addr,p->ai_addrlen)==-1)
+		if(connect(m_socket,p->ai_addr,p->ai_addrlen)==SOCKET_ERROR)
 		{
 			close();
 			continue;			
@@ -32,7 +35,10 @@ int ClientSocket::open(std::string host,int port)
 	freeAddresses();
 	
 	if(p==0)
+	{
+		std::cerr<<"Cannot connect to \""<<host<<"\" port "<<port<<":"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 		return -1;
+	}
 
 	return 0;
 }

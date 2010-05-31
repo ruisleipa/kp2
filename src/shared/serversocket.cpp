@@ -1,10 +1,5 @@
 #include "serversocket.hpp"
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-
 #include <string.h>
 #include <stdio.h>
 #include <iostream>
@@ -13,14 +8,20 @@
 #define INVALID_SOCKET -1
 #endif
 
+#ifndef SOCKET_ERROR
+#define SOCKET_ERROR -1
+#endif
+
+#include "socketcore.hpp"
+
 int ServerSocket::open(int port)
 {
 	close();
 
-	getAddresses(0,port);
+	getAddresses(0,port,true);
 	
 	addrinfo* p;
-	int yes=1;
+	char yes='1';
 	
 	while((p=nextAddress()))
 	{
@@ -28,19 +29,20 @@ int ServerSocket::open(int port)
 		
 		if(!isSocketValid())
 		{
-			perror("socket");
+			std::cerr<<"Cannot create socket:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 			continue;
 		}
 		
-		if(setsockopt(m_socket,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(yes))==-1)
+		if(setsockopt(m_socket,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(yes))==SOCKET_ERROR)
 		{
-			perror("setsockopt");
+			std::cerr<<"Cannot set SO_REUSEADDR:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+			close();
 			continue;
 		}
 		
-		if(bind(m_socket,p->ai_addr,p->ai_addrlen)==-1)
+		if(bind(m_socket,p->ai_addr,p->ai_addrlen)==SOCKET_ERROR)
 		{
-			perror("bind");
+			std::cerr<<"Cannot bind to port "<<port<<":"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 			close();
 			continue;			
 		}
@@ -48,18 +50,21 @@ int ServerSocket::open(int port)
 		break;
 	}
 	
-	freeAddresses();
-	
-	if(listen(m_socket,10)==-1)
-	{
-		close();
-		return -1;			
-	}
-
 	if(p==0)
 	{
 		return -1;
 	}
+	
+	freeAddresses();
+	
+	if(listen(m_socket,10)==SOCKET_ERROR)
+	{
+		std::cerr<<"Cannot listen socket:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+		close();
+		return -1;			
+	}
+
+	
 
 	return 0;
 }

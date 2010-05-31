@@ -1,9 +1,17 @@
 #ifndef __SOCKETSET_HPP
 #define __SOCKETSET_HPP
 
+#ifdef WIN32
+
+#include <winsock2.h>
+
+#else
+
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/select.h> 
+
+#endif
 
 #include <map>
 

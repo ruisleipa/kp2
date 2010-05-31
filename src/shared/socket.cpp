@@ -1,10 +1,5 @@
 #include "socket.hpp"
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-
 #include <string.h>
 #include <iostream>
 
@@ -13,6 +8,8 @@
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET -1
 #endif
+
+#include "socketcore.hpp"
 
 #include "socketset.hpp"
 
@@ -38,6 +35,8 @@ void Socket::close()
 
 Socket::Socket()
 {
+	SocketCore::getInstance();
+
 	m_socket=INVALID_SOCKET;
 	m_addrs=0;
 	m_curr_addr=0;
@@ -53,7 +52,7 @@ bool Socket::isSocketValid()
 	return (m_socket!=INVALID_SOCKET);
 }
 
-int Socket::getAddresses(const char* host,int port)
+int Socket::getAddresses(const char* host,int port,bool passive)
 {
 	freeAddresses();
 	
@@ -66,7 +65,9 @@ int Socket::getAddresses(const char* host,int port)
 	
 	hints.ai_family=AF_UNSPEC;
 	hints.ai_socktype=SOCK_STREAM;
-	hints.ai_flags=AI_PASSIVE;	
+	if(passive)
+		hints.ai_flags=AI_PASSIVE;	
+	hints.ai_protocol=IPPROTO_TCP;
 	
 	status=getaddrinfo(0,portstring.c_str(),&hints,&m_addrs);
 	

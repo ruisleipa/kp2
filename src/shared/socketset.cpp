@@ -1,15 +1,12 @@
 #include "socketset.hpp"
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-
 #include <string.h>
 #include <stdio.h>
 #include <iostream>
 
 #include "string.hpp"
+
+#include "socketcore.hpp"
 
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET -1
@@ -40,7 +37,7 @@ void SocketSet::remove(Socket* socket)
 	if(s==m_sockets.end())
 		return;
 	
-	FD_CLR((*s).first,m_fd_set);
+	FD_CLR((*s).first,&m_fd_set);
 	
 	if((*s).first<m_highest_fd)
 	{
@@ -60,6 +57,10 @@ void SocketSet::remove(Socket* socket)
 	m_sockets.erase(s);
 }
 
+#ifndef SOCKET_ERROR
+#define SOCKET_ERROR -1
+#endif
+
 Socket* SocketSet::waitForActivity()
 {
 	/*
@@ -74,9 +75,9 @@ Socket* SocketSet::waitForActivity()
 	
 		m_active_sockets=m_fd_set;
 		
-		if(select(m_highest_fd+1,&m_active_sockets,0,0,0)==-1)
+		if(select(m_highest_fd+1,&m_active_sockets,0,0,0)==SOCKET_ERROR)
 		{
-			perror("select");
+			std::cerr<<"Cannot select:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 		}
 		
 		m_current_active=0;
@@ -101,6 +102,8 @@ Socket* SocketSet::waitForActivity()
 
 SocketSet::SocketSet()
 {
+	SocketCore::getInstance();
+
 	m_highest_fd=0;
 	FD_ZERO(&m_fd_set);
 	m_current_active=0;

@@ -3,10 +3,20 @@
 
 #include <string>
 
+#ifdef WIN32
+
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <wspiapi.h>
+
+#else
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+
+#endif
 
 #include <vector>
 
@@ -21,7 +31,7 @@ class Socket
 		virtual ~Socket();
 
 	protected:
-		int getAddresses(const char* host,int port);
+		int getAddresses(const char* host,int port,bool passive);
 		addrinfo* nextAddress();
 		void freeAddresses();
 		bool isSocketValid();
