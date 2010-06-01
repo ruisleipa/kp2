@@ -16,6 +16,7 @@
 #include <map>
 
 #include "socket.hpp"
+#include "socketactivity.hpp"
 
 class SocketSet
 {
@@ -23,7 +24,7 @@ class SocketSet
 		void add(Socket* socket);
 		void remove(Socket* socket);
 		
-		Socket* waitForActivity();
+		SocketActivity waitForActivity();
 
 		SocketSet();
 		~SocketSet();
@@ -34,7 +35,8 @@ class SocketSet
 		fd_set m_fd_set;
 		
 		int m_current_active;
-		fd_set m_active_sockets;
+		fd_set m_readable_sockets;
+		fd_set m_writable_sockets;
 		bool m_first_wait;
 };
 

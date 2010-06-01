@@ -61,7 +61,7 @@ void SocketSet::remove(Socket* socket)
 #define SOCKET_ERROR -1
 #endif
 
-Socket* SocketSet::waitForActivity()
+SocketActivity SocketSet::waitForActivity()
 {
 	/*
 	We call select if this is the first wait or the sockets of the last
@@ -73,9 +73,10 @@ Socket* SocketSet::waitForActivity()
 	{
 		m_first_wait=false;
 	
-		m_active_sockets=m_fd_set;
+		m_readable_sockets=m_fd_set;
+		m_writable_sockets=m_fd_set;
 		
-		if(select(m_highest_fd+1,&m_active_sockets,0,0,0)==SOCKET_ERROR)
+		if(select(m_highest_fd+1,&m_readable_sockets,&m_writable_sockets,0,0)==SOCKET_ERROR)
 		{
 			std::cerr<<"Cannot select:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 		}
@@ -85,9 +86,12 @@ Socket* SocketSet::waitForActivity()
 	
 	for(;m_current_active<=m_highest_fd;m_current_active++)
 	{
-		if(FD_ISSET(m_current_active,&m_active_sockets))
+		bool can_read=FD_ISSET(m_current_active,&m_readable_sockets);
+		bool can_write=FD_ISSET(m_current_active,&m_writable_sockets);
+	
+		if(can_read || can_write)
 		{
-			return m_sockets[m_current_active++];
+			return SocketActivity(m_sockets[m_current_active++],can_read,can_write);
 		}
 	}
 	
