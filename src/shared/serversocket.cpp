@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <errno.h>
 #include <iostream>
 
 #ifndef INVALID_SOCKET
@@ -29,22 +30,36 @@ int ServerSocket::open(int port)
 		
 		if(!isSocketValid())
 		{
-			std::cerr<<"Cannot create socket:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+			std::cerr<<"Cannot create socket: "<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 			continue;
 		}
 		
 		if(setsockopt(m_socket,SOL_SOCKET,SO_REUSEADDR,(const char*)&yes,sizeof(yes))==SOCKET_ERROR)
 		{
-			std::cerr<<"Cannot set SO_REUSEADDR:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+			std::cerr<<"Cannot set SO_REUSEADDR: "<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 			close();
 			continue;
 		}
 		
 		if(bind(m_socket,p->ai_addr,p->ai_addrlen)==SOCKET_ERROR)
 		{
-			std::cerr<<"Cannot bind to port "<<port<<":"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+			std::cerr<<"Cannot bind to port "<<port<<": "<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 			close();
 			continue;			
+		}
+		
+		/* Set the socket to non blocking mode. */
+
+#ifdef WIN32		
+		unsigned long nonblock=1;
+		if(ioctlsocket(m_socket,FIONBIO,&nonblock)==SOCKET_ERROR)		
+#else
+		int flags=fcntl(m_socket,F_GETFL,0);
+		if(fcntl(m_socket,F_SETFL,flags|O_NONBLOCK)==-1)		
+#endif
+		{
+			std::cerr<<"Cannot set socket to non-blocking mode: "<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+			close();
 		}
 		
 		break;
@@ -62,22 +77,48 @@ int ServerSocket::open(int port)
 		std::cerr<<"Cannot listen socket:"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
 		close();
 		return -1;			
-	}
-
-	
+	}	
 
 	return 0;
 }
 
-void ServerSocket::accept(ClientSocket& socket)
+int ServerSocket::accept(ClientSocket& socket)
 {
 	if(!isSocketValid())
-		return;
+		return -1;
 
 	int newsocket;
 
-	while((newsocket=::accept(m_socket,0,0))==INVALID_SOCKET);
+	newsocket=::accept(m_socket,0,0);
 	
-	socket.m_socket=newsocket;	
+	if(newsocket==INVALID_SOCKET)
+	{
+#ifdef WIN32
+		if(WSAGetLastError()!=WSAEWOULDBLOCK)		
+#else
+		if(errno!=EWOULDBLOCK)	
+#endif
+		{
+			std::cerr<<"accept failed: "<<SocketCore::getInstance().getErrorMessage()<<std::endl;	
+		}
+		
+		return -1;
+	}
+	
+#ifdef WIN32		
+	unsigned long nonblock=1;
+	if(ioctlsocket(newsocket,FIONBIO,&nonblock)==SOCKET_ERROR)		
+#else
+	int flags=fcntl(m_socket,F_GETFL,0);
+	if(fcntl(newsocket,F_SETFL,flags|O_NONBLOCK)==-1)		
+#endif
+	{
+		std::cerr<<"Cannot set socket to non-blocking mode: "<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+		close();
+	}	
+
+	socket.m_socket=newsocket;
+	
+	return 0;
 }
 

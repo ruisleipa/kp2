@@ -5,6 +5,7 @@
 #endif
 
 #include <iostream>
+#include <errno.h>
 
 #include "socketcore.hpp"
 
@@ -29,6 +30,18 @@ int ClientSocket::open(std::string host,int port)
 			continue;			
 		}
 		
+#ifdef WIN32		
+		unsigned long nonblock=1;
+		if(ioctlsocket(m_socket,FIONBIO,&nonblock)==SOCKET_ERROR)		
+#else
+		int flags=fcntl(m_socket,F_GETFL,0);
+		if(fcntl(m_socket,F_SETFL,flags|O_NONBLOCK)==-1)		
+#endif
+		{
+			std::cerr<<"Cannot set socket to non-blocking mode: "<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+			close();
+		}
+		
 		break;
 	}
 	
@@ -48,48 +61,52 @@ int ClientSocket::read(char* data,int size)
 	if(!isSocketValid())
 		return 0;
 
-	int read;
-
-	while(size)
+	int res=recv(m_socket,data,size,0);
+	
+	if(res==SOCKET_ERROR)
 	{
-		read=recv(m_socket,data,size,0);
-		
-		if(read==-1)
+#ifdef WIN32
+		if(WSAGetLastError()!=WSAEWOULDBLOCK)		
+#else
+		if(errno!=EWOULDBLOCK)	
+#endif
 		{
-			//error
+			std::cerr<<"Reading from socket failed: "<<SocketCore::getInstance().getErrorMessage()<<std::endl;	
 		}
 		
-		if(read==0)
-		{
-			close();
-			return 0;
-		}
-		
-		data+=read;
-		size-=read;
+		return 0;
 	}
 	
-	return 1;
+	if(res==0)
+	{
+		close();
+		return -1;
+	}
+	
+	return res;
 }
 
-void ClientSocket::write(const char* data,int size)
+int ClientSocket::write(const char* data,int size)
 {
 	if(!isSocketValid())
-		return;
+		return 0;
 
-	int sent;
-
-	while(size)
-	{
-		sent=send(m_socket,data,size,0);
+	int res=send(m_socket,data,size,0);
 	
-		if(sent==-1)
+	if(res==SOCKET_ERROR)
+	{
+#ifdef WIN32
+		if(WSAGetLastError()!=WSAEWOULDBLOCK)		
+#else
+		if(errno!=EWOULDBLOCK)	
+#endif
 		{
-			//error
-		}		
-			
-		data+=sent;
-		size-=sent;
-	}	
+			std::cerr<<"Writing to socket failed: "<<SocketCore::getInstance().getErrorMessage()<<std::endl;	
+		}
+		
+		return 0;
+	}
+	
+	return res;	
 }
 

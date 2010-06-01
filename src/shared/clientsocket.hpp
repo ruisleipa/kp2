@@ -11,7 +11,7 @@ class ClientSocket : public Socket
 		int open(std::string host,int port);
 
 		int read(char* data,int size);
-		void write(const char* data,int size);
+		int write(const char* data,int size);
 
 	protected:
 		friend class ServerSocket;

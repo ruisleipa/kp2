@@ -8,7 +8,7 @@ class ServerSocket : public Socket
 	public:
 		int open(int port);
 	
-		void accept(ClientSocket& socket);
+		int accept(ClientSocket& socket);
 
 };
 
