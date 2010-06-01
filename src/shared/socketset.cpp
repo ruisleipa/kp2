@@ -39,7 +39,7 @@ void SocketSet::remove(Socket* socket)
 	
 	FD_CLR((*s).first,&m_fd_set);
 	
-	if((*s).first<m_highest_fd)
+	if((*s).first==m_highest_fd)
 	{
 		int i=m_highest_fd-1;
 		m_highest_fd=0;
