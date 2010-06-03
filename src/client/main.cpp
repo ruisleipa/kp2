@@ -4,6 +4,7 @@
 #include "events.hpp"
 #include "ui.hpp"
 #include "sdl.hpp"
+#include "connection.hpp"
 #include "shared/string.hpp"
 
 #include "mainmenu.hpp"
@@ -133,7 +134,9 @@ int main(int argc,char** argv)
 		catch(ExitException)
 		{
 			break;			
-		}			
+		}
+		
+		Connection::getInstance().processMessages();			
 			
 		Graphics::getInstance().enterGuiMode();
 		

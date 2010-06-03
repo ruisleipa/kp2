@@ -36,6 +36,13 @@ SRC = src/client/main.cpp \
 	src/client/localgamemenu.cpp \
 	src/client/newlocalgamemenu.cpp \
 	src/client/sdl.cpp \
+	src/shared/serversocket.cpp \
+	src/shared/clientsocket.cpp \
+	src/shared/socket.cpp \
+	src/shared/socketset.cpp \
+	src/shared/socketcore.cpp \
+	src/shared/socketactivity.cpp \
+	src/shared/packet.cpp \
 	src/shared/string.cpp \
 	src/shared/assert.cpp \
 	src/shared/inifile.cpp
