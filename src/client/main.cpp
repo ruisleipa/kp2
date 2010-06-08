@@ -120,6 +120,10 @@ int main(int argc,char** argv)
 
 	rootwindow.resize(graphics);
 
+	Texture cursor;
+	cursor.load("data/images/cursor.png");
+	cursor.setFilter(NEAREST);
+
 	Connection connection;
 
 	//init sound	
@@ -161,8 +165,11 @@ int main(int argc,char** argv)
 		SDL_GetMouseState(&x,&y);
 		
 		Vector2D cursorpos=Vector2D(x,y)/graphics.getDisplaySize();
+		Vector2D cursorsize=Vector2D(32,32)/graphics.getDisplaySize();
 		
+		cursor.draw(cursorpos,cursorsize);
 		
+		/*
 		glBindTexture(GL_TEXTURE_2D,0);
 		
 		glBegin(GL_TRIANGLES);
@@ -170,6 +177,7 @@ int main(int argc,char** argv)
 		glVertex2f(cursorpos.getX()+0.01,cursorpos.getY());
 		glVertex2f(cursorpos.getX(),cursorpos.getY()+0.01*graphics.getAspectRatio());
 		glEnd();
+		*/
 		graphics.exitGuiMode();
 						
 		SDL_GL_SwapBuffers();
