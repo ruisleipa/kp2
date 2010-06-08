@@ -31,6 +31,8 @@ class SettingsMenu : public Window
 		Select m_fullscreen_select;
 		Label m_vsync_label; 
 		Select m_vsync_select;
+		Label m_filter_label; 
+		Select m_filter_select;
 		
 		class BackButton: public Button
 		{
