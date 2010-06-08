@@ -61,7 +61,7 @@ int main(int argc,char** argv)
 	//init graphics
 	IniFile videosettings(VIDEO_CONFIG);
 
-	int width,height,fullscreen,vsync;
+	int width,height,fullscreen,vsync,filter;
 
 	if(!videosettings.getValue(width,"width") || !videosettings.getValue(height,"height"))
 	{
@@ -73,6 +73,8 @@ int main(int argc,char** argv)
 		fullscreen=0;
 	if(!videosettings.getValue(vsync,"vsync"))
 		vsync=1;
+	if(!videosettings.getValue(filter,"filter"))
+		filter=LINEAR;
 
 	Sdl sdl;
 	
@@ -186,11 +188,13 @@ int main(int argc,char** argv)
 	Vector2D displaysize=graphics.getDisplaySize();
 	fullscreen=graphics.isFullScreen();
 	vsync=graphics.isVsynced();
+	filter=Texture::getFilterLimit();		
 	
 	videosettings.setValue("fullscreen",fullscreen);
 	videosettings.setValue("vsync",vsync);
 	videosettings.setValue("width",displaysize.getX());
 	videosettings.setValue("height",displaysize.getY());
+	videosettings.setValue("filter",filter);
 	
 	videosettings.save(VIDEO_CONFIG);
 }

@@ -18,6 +18,7 @@ SettingsMenu::SettingsMenu(Graphics& graphics):
 	m_resolution_label.setText("Näyttötila:");
 	m_fullscreen_label.setText("Koko ruutu:");
 	m_vsync_label.setText("Vsync:");	
+	m_filter_label.setText("Tekstuurisuodatin:");	
 	
 	m_modes=m_graphics.getVideoModes();
 	std::vector<Vector2D>::iterator i;
@@ -37,6 +38,9 @@ SettingsMenu::SettingsMenu(Graphics& graphics):
 	m_vsync_select.addItem("ei");
 	m_vsync_select.addItem("kyllä");
 	
+	m_filter_select.addItem("nopein");
+	m_filter_select.addItem("hyvä");
+	m_filter_select.addItem("paras");
 	
 	m_back_button.setText("Takaisin");
 	m_apply_button.setText("Ota käyttöön");
@@ -48,10 +52,12 @@ SettingsMenu::SettingsMenu(Graphics& graphics):
 	addWidget(&m_resolution_label);
 	addWidget(&m_fullscreen_label);
 	addWidget(&m_vsync_label);	
+	addWidget(&m_filter_label);	
 			
 	addWidget(&m_resolution_select);
 	addWidget(&m_fullscreen_select);	
 	addWidget(&m_vsync_select);
+	addWidget(&m_filter_select);
 		
 	addWidget(&m_back_button);	
 	addWidget(&m_apply_button);
@@ -78,6 +84,10 @@ void SettingsMenu::resize(Graphics& graphics)
 	m_vsync_label.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
+	m_filter_label.setPosition(buttonpos);
+	m_filter_label.autoSize();
+	buttonpos+=BUTTON_HEIGHT;
+	
 	buttonpos=CONTENT_POSITION;
 	buttonpos.setX(0.5);
 	
@@ -91,7 +101,11 @@ void SettingsMenu::resize(Graphics& graphics)
 
 	m_vsync_select.setPosition(buttonpos);
 	m_vsync_select.autoSize();
-	buttonpos+=BUTTON_HEIGHT;	
+	buttonpos+=BUTTON_HEIGHT;
+
+	m_filter_select.setPosition(buttonpos);
+	m_filter_select.autoSize();
+	buttonpos+=BUTTON_HEIGHT;
 	
 	m_back_button.setPosition(BACK_BUTTON_POSITION);
 	m_back_button.autoSize();
@@ -123,6 +137,8 @@ void SettingsMenu::updateDisplayOptions()
 	
 	m_vsync_select.setIndex(m_graphics.isVsynced());
 	
+	m_filter_select.setIndex(Texture::getFilterLimit());
+
 	m_resolution_select.autoSize();	
 	m_fullscreen_select.autoSize();
 	m_vsync_select.autoSize();
@@ -137,6 +153,8 @@ void SettingsMenu::BackButton::onClick()
 void SettingsMenu::ApplyButton::onClick()
 {
 	SettingsMenu* menu=dynamic_cast<SettingsMenu*>(getParent());
+	
+	Texture::setFilterLimit((TextureFilter)menu->m_filter_select.getIndex());
 	
 	Vector2D mode=menu->m_modes[menu->m_resolution_select.getIndex()];
 	bool fullscreen=menu->m_fullscreen_select.getIndex();
