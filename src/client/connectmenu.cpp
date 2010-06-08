@@ -12,7 +12,7 @@ ConnectMenu::ConnectMenu()
 	m_background_texture.load("data/images/connectmenu.png");
 	m_background.setTexture(&m_background_texture);
 	
-	m_title.setFont(Ui::getInstance().getFont("title"));
+	m_title.setFont(Font("title"));
 	m_title.setText("Verkkopeli");			
 	
 	m_hostname_label.setText("Palvelimen osoite");
@@ -79,7 +79,7 @@ void ConnectMenu::onActivate()
 
 void ConnectMenu::BackButton::onClick()
 {
-	Ui::getInstance().goToPreviousView();
+	//Ui::getInstance().goToPreviousView();
 }
 
 void ConnectMenu::ConnectButton::onClick()
@@ -90,6 +90,6 @@ void ConnectMenu::ConnectButton::onClick()
 	
 	int port=std::atoi(menu->m_port_field.getText().c_str());
 	
-	Connection::getInstance().connect(hostname,port);
+//	Connection::getInstance().connect(hostname,port);
 }
 

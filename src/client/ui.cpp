@@ -45,13 +45,6 @@ void Ui::mouseMove(MouseEvent event)
 	getActiveView()->mouseMove(event);
 }
 
-Ui& Ui::getInstance()
-{
-	static Ui instance;
-
-	return instance;
-}
-
 void Ui::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -136,19 +129,6 @@ void Ui::removeView(std::string name)
 	getActiveView()->onActivate();
 
 	m_views.erase(name);
-}
-
-void Ui::setFont(std::string name,Font* font)
-{
-	m_fonts[name]=font;
-}
-
-Font* Ui::getFont(std::string name)
-{
-	if(m_fonts.find(name)!=m_fonts.end())
-		return m_fonts[name];
-	else
-		return 0;
 }
 
 View* Ui::getActiveView()

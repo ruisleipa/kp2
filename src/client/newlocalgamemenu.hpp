@@ -1,20 +1,20 @@
 #ifndef __NEWLOCALGAMEMENU_HPP
 #define __NEWLOCALGAMEMENU_HPP
 
-#include "view.hpp"
+#include "window.hpp"
 #include "label.hpp"
 #include "select.hpp"
 #include "button.hpp"
 #include "image.hpp"
 #include "field.hpp"
 
-class NewLocalGameMenu : public View
+class NewLocalGameMenu : public Window
 {
 	public:
 		NewLocalGameMenu();
 
-		virtual void calculateLayout();
-		virtual void onActivate();
+		virtual void resize(Graphics& graphics);
+		virtual void onShow();
 		
 	private:
 

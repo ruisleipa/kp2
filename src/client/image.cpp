@@ -27,7 +27,7 @@ bool Image::getStrecthed()
 	return m_stretched;
 }
 
-void Image::draw()
+void Image::draw(Graphics& graphics)
 {
 	if(!m_texture)
 		return;
@@ -37,7 +37,7 @@ void Image::draw()
 	if(!m_stretched)
 	{
 		image_size=m_texture->getSize();
-		image_size.setX(image_size.getX()/Graphics::getInstance().getAspectRatio());
+		image_size.setX(image_size.getX()/graphics.getAspectRatio());
 		Vector2D size=getSize();
 	
 		float ratio;

@@ -18,14 +18,14 @@ MainMenu::MainMenu()
 	
 	addWidget(&m_title);
 	
-	addWidget(&m_net_game_button);
+	//addWidget(&m_net_game_button);
 	addWidget(&m_local_game_button);
 	addWidget(&m_about_button);
 	addWidget(&m_settings_button);
 	addWidget(&m_quit_button);
 }
 
-void MainMenu::calculateLayout()
+void MainMenu::resize(Graphics& graphics)
 {
 	m_background.setSize(Vector2D(1,1));
 
@@ -34,9 +34,9 @@ void MainMenu::calculateLayout()
 	
 	Vector2D buttonpos=CONTENT_POSITION;
 
-	m_net_game_button.setPosition(buttonpos);
-	m_net_game_button.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
+	//m_net_game_button.setPosition(buttonpos);
+	//m_net_game_button.autoSize();
+	//buttonpos+=BUTTON_HEIGHT;
 	
 	m_local_game_button.setPosition(buttonpos);
 	m_local_game_button.autoSize();
@@ -57,7 +57,7 @@ void MainMenu::calculateLayout()
 
 void MainMenu::NetGameButton::onClick()
 {
-	Ui::getInstance().goToView("connectmenu");
+	//getParent()->getParent()->goToView("connectmenu");
 }
 
 MainMenu::NetGameButton::NetGameButton()
@@ -67,12 +67,13 @@ MainMenu::NetGameButton::NetGameButton()
 
 void MainMenu::LocalGameButton::onClick()
 {
-	Ui::getInstance().goToView("localgamemenu");
+	getParent()->setVisible(false);
+	((Container*)getParent()->getParent())->getWidget("localgamemenu")->setVisible(true);
 }
 
 MainMenu::LocalGameButton::LocalGameButton()
 {
-	setText("Paikallinen peli");
+	setText("Yksinpeli");
 }
 
 void MainMenu::AboutButton::onClick()
@@ -87,7 +88,8 @@ MainMenu::AboutButton::AboutButton()
 
 void MainMenu::SettingsButton::onClick()
 {
-	Ui::getInstance().goToView("settingsmenu");
+	getParent()->setVisible(false);
+	((Container*)getParent()->getParent())->getWidget("settingsmenu")->setVisible(true);
 }
 
 MainMenu::SettingsButton::SettingsButton()

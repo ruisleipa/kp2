@@ -1,6 +1,7 @@
 #include "texture.hpp"
 
-#include "graphics.hpp"
+std::set<Texture*> Texture::m_textures;
+TextureFilter Texture::m_filter_limit;
 
 static void CheckGL()
 {
@@ -26,14 +27,14 @@ void Texture::init()
 
 Texture::Texture()
 {
-	Graphics::getInstance().addTexture(this);
+	Texture::addManagedTexture(this);
 
 	init();
 }
 
 Texture::Texture(std::string filename)
 {
-	Graphics::getInstance().addTexture(this);
+	Texture::addManagedTexture(this);
 
 	init();
 	load(filename);
@@ -41,7 +42,7 @@ Texture::Texture(std::string filename)
 
 Texture::~Texture()
 {
-	Graphics::getInstance().removeTexture(this);
+	Texture::removeManagedTexture(this);
 
 	free();	
 }
@@ -79,7 +80,7 @@ void Texture::copy(const Texture& b)
 
 Texture::Texture(const Texture& b)
 {
-	Graphics::getInstance().addTexture(this);
+	Texture::addManagedTexture(this);
 
 	copy(b);
 }
@@ -176,13 +177,16 @@ void Texture::setFilter(TextureFilter filter)
 {
 	m_filter=filter;
 	
+	if(filter>m_filter_limit)
+		filter=m_filter_limit;
+	
 	if(!m_texture)
 		return;
 
 	GLint min;
 	GLint max;
 
-	switch(m_filter)
+	switch(filter)
 	{
 		default:
 		case NEAREST:
@@ -432,6 +436,38 @@ void Texture::deleteTexture()
 
 GLuint Texture::getTexture()
 {
-	return m_texture;		
+	return m_texture;
+}
+
+void Texture::setFilterLimit(TextureFilter filter)
+{
+	m_filter_limit=filter;
+}
+
+TextureFilter Texture::getFilterLimit()
+{
+	return m_filter_limit;
+}
+
+
+void Texture::addManagedTexture(Texture* texture)
+{
+	if(texture)
+		Texture::m_textures.insert(texture);
+}
+
+void Texture::removeManagedTexture(Texture* texture)
+{
+	Texture::m_textures.erase(texture);
+}
+
+void Texture::reuploadTextures()
+{
+	std::set<Texture*>::iterator i;
+		
+	for(i=Texture::m_textures.begin();i!=Texture::m_textures.end();++i)
+	{
+		(*i)->reuploadTexture();
+	}
 }
 

@@ -1,14 +1,11 @@
 #include "label.hpp"
 
-#include "ui.hpp"
-
-void Label::draw()
+void Label::draw(Graphics& graphics)
 {
-	if(getFont())
-		getFont()->draw(getWideText(),getPosition());
+	getFont().draw(getWideText(),getPosition());
 }
 
 Label::Label()
 {
-	setFont(Ui::getInstance().getFont("Label"));
+	setFont(Font("Label"));
 }

@@ -3,9 +3,6 @@
 #include "shared/string.hpp"
 #include "assert.hpp"
 #include "scissor.hpp"
-#include "ui.hpp"
-
-#include <GL/gl.h>
 
 void Select::onChange()
 {
@@ -65,11 +62,10 @@ void Select::setIndex(int index)
 	}
 }
 
-Select::Select()
+Select::Select():
+	m_index(-1)
 {
-	m_index=-1;
-
-	setFont(Ui::getInstance().getFont("Select"));
-	setActiveFont(Ui::getInstance().getFont("Select.active"));
+	setFont(Font("Select"));
+	setActiveFont(Font("Select.active"));
 }
 

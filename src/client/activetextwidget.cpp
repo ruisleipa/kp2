@@ -5,12 +5,12 @@
 Sound ActiveTextWidget::m_mouse_over_sound;
 Sound ActiveTextWidget::m_mouse_down_sound;
 
-void ActiveTextWidget::setActiveFont(Font* font)
+void ActiveTextWidget::setActiveFont(Font font)
 {
 	m_active_font=font;
 }
 
-Font* ActiveTextWidget::getActiveFont()
+Font& ActiveTextWidget::getActiveFont()
 {
 	return m_active_font;
 }
@@ -36,11 +36,11 @@ void ActiveTextWidget::mouseDown(MouseEvent event)
 	m_mouse_down_sound.play();
 }
 
-void ActiveTextWidget::draw()
+void ActiveTextWidget::draw(Graphics& graphics)
 {
-	/*glBindTexture(GL_TEXTURE_2D,0);
+	glBindTexture(GL_TEXTURE_2D,0);
 
-	m_color.apply();
+/*	Color(1,1,1).apply();
 	
 	Vector2D begin=getPosition();
 	Vector2D end=getPosition()+getSize();
@@ -51,13 +51,15 @@ void ActiveTextWidget::draw()
 		glVertex2f(end.getX(),end.getY());
 		glVertex2f(begin.getX(),end.getY());
 	glEnd();*/
-
+	
 	float spread=float(SDL_GetTicks()-m_mouse_over_time)/100.0;
 	
 	if(spread>1.0)
 	{
 		m_animate=false;
 	}
+	
+	Scissor scissor(graphics);
 	
 	if(m_animate)
 	{	
@@ -68,15 +70,13 @@ void ActiveTextWidget::draw()
 		Vector2D bottomposition=getPosition()+Vector2D(0,0.5+(spread/2.0))*getSize();
 		Vector2D size=Vector2D(1,0.5-spread/2.0)*getSize();	
 		
-		Scissor::set(topposition,size);
+		scissor.set(topposition,size);
 		
-		if(getFont())
-			getFont()->draw(getWideText(),getPosition());
+		getFont().draw(getWideText(),getPosition());
 			
-		Scissor::set(bottomposition,size);
+		scissor.set(bottomposition,size);
 		
-		if(getFont())
-			getFont()->draw(getWideText(),getPosition());		
+		getFont().draw(getWideText(),getPosition());		
 		
 		//we add some to the size so there arent any gaps between
 		//the center and the other pieces		
@@ -84,31 +84,26 @@ void ActiveTextWidget::draw()
 	
 		Vector2D centersize=Vector2D(1,spread+0.1)*getSize();
 		
-		Scissor::set(centerposition,centersize);
-		
-		if(getActiveFont())
-			getActiveFont()->draw(getWideText(),getPosition());
+		scissor.set(centerposition,centersize);
+		getActiveFont().draw(getWideText(),getPosition());
 	}
 	else
 	{
-		if(getFont() && !m_mouse_over)
+		if(!m_mouse_over)
 		{
-			getFont()->draw(getWideText(),getPosition());
+			getFont().draw(getWideText(),getPosition());
 		}
-		
-		if(getActiveFont() && m_mouse_over)
+		else
 		{
-			getActiveFont()->draw(getWideText(),getPosition());
+			getActiveFont().draw(getWideText(),getPosition());
 		}
 	}
 }
 
-ActiveTextWidget::ActiveTextWidget()
+ActiveTextWidget::ActiveTextWidget():
+	m_mouse_over(false),
+	m_animate(false)
 {
-	m_active_font=0;
-	m_mouse_over=false;
-	m_animate=false;
-	
 	m_mouse_over_sound.load("data/sounds/mouseover.wav");
 	m_mouse_down_sound.load("data/sounds/click.wav");
 }

@@ -1,16 +1,16 @@
 #ifndef __MAINMENU_HPP
 #define __MAINMENU_HPP
 
-#include "view.hpp"
+#include "window.hpp"
 #include "button.hpp"
 #include "image.hpp"
 
-class MainMenu : public View
+class MainMenu : public Window
 {
 	public:
 		MainMenu();
 		
-		virtual void calculateLayout();
+		virtual void resize(Graphics& graphics);
 
 	private:
 

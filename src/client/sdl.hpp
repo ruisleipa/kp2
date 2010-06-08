@@ -6,12 +6,9 @@
 class Sdl
 {
 	public:
-		static Sdl& getInstance();
-
-		~Sdl();
-
-	private:
 		Sdl();
+		~Sdl();
+	private:
 };
 
 #endif // __SDL_HPP

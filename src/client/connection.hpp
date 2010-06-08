@@ -11,9 +11,7 @@ const int BUFFERSIZE=512;
 
 class Connection
 {
-	public:
-		static Connection& getInstance();
-		
+	public:				
 		void connect(std::string hostname,int port);
 		
 		void addMessageHandler(uint16_t id,MessageHandler* handler);
@@ -22,9 +20,7 @@ class Connection
 		
 		void processMessages();
 
-	private:
-		Connection();
-		
+	private:		
 		std::map<int,MessageHandler*> m_handlers;
 		
 		ClientSocket m_socket;

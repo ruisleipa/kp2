@@ -2,10 +2,14 @@
 #include "inifile.hpp"
 #include "font.hpp"
 #include "events.hpp"
-#include "ui.hpp"
 #include "sdl.hpp"
+#include "container.hpp"
 #include "connection.hpp"
+#include "ui.hpp"
+
 #include "shared/string.hpp"
+
+#include "container.hpp"
 
 #include "mainmenu.hpp"
 #include "settingsmenu.hpp"
@@ -21,27 +25,27 @@
 
 void ActivateConsole()
 {
-    AllocConsole();
-    
-    HANDLE newConsoleInput = GetStdHandle(STD_INPUT_HANDLE);
-    HANDLE newConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-    HANDLE newConsoleError = GetStdHandle(STD_ERROR_HANDLE);
-    
-    int inFd = _open_osfhandle((long)newConsoleInput, _O_TEXT);
-    int outFd = _open_osfhandle((long)newConsoleOutput, _O_TEXT);
-    int errorFd = _open_osfhandle((long)newConsoleError, _O_TEXT);
-    
-    FILE* consoleIn = _fdopen(inFd, "r");
-    FILE* consoleOut = _fdopen(outFd, "w");
-    FILE* consoleError = _fdopen(errorFd, "w");
-    
-    setvbuf(consoleIn, NULL, _IONBF, 0);
-    setvbuf(consoleOut, NULL, _IONBF, 0);
-    setvbuf(consoleError, NULL, _IONBF, 0);
-    
-    *stdin = *consoleIn;
-    *stdout = *consoleOut;
-    *stderr = *consoleError;
+	AllocConsole();
+
+	HANDLE newConsoleInput = GetStdHandle(STD_INPUT_HANDLE);
+	HANDLE newConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE newConsoleError = GetStdHandle(STD_ERROR_HANDLE);
+
+	int inFd = _open_osfhandle((long)newConsoleInput, _O_TEXT);
+	int outFd = _open_osfhandle((long)newConsoleOutput, _O_TEXT);
+	int errorFd = _open_osfhandle((long)newConsoleError, _O_TEXT);
+
+	FILE* consoleIn = _fdopen(inFd, "r");
+	FILE* consoleOut = _fdopen(outFd, "w");
+	FILE* consoleError = _fdopen(errorFd, "w");
+
+	setvbuf(consoleIn, NULL, _IONBF, 0);
+	setvbuf(consoleOut, NULL, _IONBF, 0);
+	setvbuf(consoleError, NULL, _IONBF, 0);
+
+	*stdin = *consoleIn;
+	*stdout = *consoleOut;
+	*stderr = *consoleError;
 }
 
 #endif
@@ -70,46 +74,51 @@ int main(int argc,char** argv)
 	if(!videosettings.getValue(vsync,"vsync"))
 		vsync=1;
 
-	Sdl::getInstance();
+	Sdl sdl;
 	
 	SDL_WM_SetCaption("Kiihdytyspeli 2","Kiihdytyspeli 2");
 	SDL_ShowCursor(false);
 	
-	Graphics::getInstance().setVideoMode(width,height,32,fullscreen,vsync,true);
+	Events events(sdl);
+	Graphics graphics(sdl,events);	
+	
+	graphics.setVideoMode(width,height,32,fullscreen,vsync,true);
+	Texture::setFilterLimit((TextureFilter)filter);
 
-	//init ui
+	FontFace fontface(graphics,"data/fonts/freesans.ttf",64);
+
+	Font::setFontType("title",&fontface,TITLE_SIZE.getY(),Color(0,0,0));
+	Font::setFontType("Label",&fontface,ITEM_HEIGHT,Color(0,0,0));
+	Font::setFontType("Button",&fontface,ITEM_HEIGHT,Color(0,0,0));
+	Font::setFontType("Button.active",&fontface,ITEM_HEIGHT,Color(0.95,0.95,0.95));
+	Font::setFontType("Select",&fontface,ITEM_HEIGHT,Color(0,0,0));
+	Font::setFontType("Select.active",&fontface,ITEM_HEIGHT,Color(0.95,0.95,0.95));
+	Font::setFontType("Field",&fontface,ITEM_HEIGHT,Color(0,0,0));
 	
-	FontFace fontface("data/fonts/freesans.ttf",64);
-	Font font(&fontface,ITEM_HEIGHT,Color(0,0,0));
-	Font passivefont(&fontface,ITEM_HEIGHT,Color(0,0,0));	
-	Font activefont(&fontface,ITEM_HEIGHT,Color(0.95,0.95,0.95));
-	Font titlefont(&fontface,TITLE_SIZE.getY(),Color(0,0,0));
+	Window rootwindow;
 	
-	Ui::getInstance().setFont("title",&titlefont);
-	Ui::getInstance().setFont("Label",&passivefont);
-	Ui::getInstance().setFont("Button",&font);
-	Ui::getInstance().setFont("Button.active",&activefont);
-	Ui::getInstance().setFont("Select",&font);
-	Ui::getInstance().setFont("Select.active",&activefont);
-	Ui::getInstance().setFont("Field",&passivefont);
-	
-	Events::getInstance().setEventListener(&Ui::getInstance());
-	
+	events.setEventListener(&rootwindow);
+
 	MainMenu mainmenu;
-	SettingsMenu settingsmenu;
+	SettingsMenu settingsmenu(graphics);
 	ConnectMenu connectmenu;
 	LocalGameMenu localgamemenu;
 	NewLocalGameMenu newlocalgamemenu;
 	
-	Ui::getInstance().addView("mainmenu",&mainmenu);
-	Ui::getInstance().addView("settingsmenu",&settingsmenu);
-	Ui::getInstance().addView("connectmenu",&connectmenu);
-	Ui::getInstance().addView("localgamemenu",&localgamemenu);
-	Ui::getInstance().addView("newlocalgamemenu",&newlocalgamemenu);
+	rootwindow.addWidget("mainmenu",&mainmenu);
+	rootwindow.addWidget("settingsmenu",&settingsmenu);
+	rootwindow.addWidget("connectmenu",&connectmenu);
+	rootwindow.addWidget("localgamemenu",&localgamemenu);
+	rootwindow.addWidget("newlocalgamemenu",&newlocalgamemenu);
 	
-	Ui::getInstance().goToView("mainmenu");	
-	
-	Ui::getInstance().calculateLayouts();
+	settingsmenu.setVisible(false);
+	connectmenu.setVisible(false);
+	localgamemenu.setVisible(false);
+	newlocalgamemenu.setVisible(false);
+
+	rootwindow.resize(graphics);
+
+	Connection connection;
 
 	//init sound	
 	/*
@@ -129,19 +138,19 @@ int main(int argc,char** argv)
 	{
 		try
 		{
-			Events::getInstance().processEvents();
+			events.processEvents(graphics);
 		}
 		catch(ExitException)
 		{
 			break;			
 		}
 		
-		Connection::getInstance().processMessages();			
+		connection.processMessages();			
 			
-		Graphics::getInstance().enterGuiMode();
+		graphics.enterGuiMode();
 		
-		Ui::getInstance().draw();
-		
+		rootwindow.draw(graphics);
+
 		Color(1,1,1).apply();
 		fontface.draw(convertToWideString((int)fps),Vector2D(0.75,0.001),0.05);
 		
@@ -149,17 +158,17 @@ int main(int argc,char** argv)
 		
 		SDL_GetMouseState(&x,&y);
 		
-		Vector2D cursorpos=Vector2D(x,y)/Graphics::getInstance().getDisplaySize();
+		Vector2D cursorpos=Vector2D(x,y)/graphics.getDisplaySize();
+		
 		
 		glBindTexture(GL_TEXTURE_2D,0);
 		
 		glBegin(GL_TRIANGLES);
 		glVertex2f(cursorpos.getX(),cursorpos.getY());
 		glVertex2f(cursorpos.getX()+0.01,cursorpos.getY());
-		glVertex2f(cursorpos.getX(),cursorpos.getY()+0.01*Graphics::getInstance().getAspectRatio());
+		glVertex2f(cursorpos.getX(),cursorpos.getY()+0.01*graphics.getAspectRatio());
 		glEnd();
-		
-		Graphics::getInstance().exitGuiMode();
+		graphics.exitGuiMode();
 						
 		SDL_GL_SwapBuffers();
 		
@@ -174,9 +183,9 @@ int main(int argc,char** argv)
 	}
 	
 	//save settings
-	Vector2D displaysize=Graphics::getInstance().getDisplaySize();
-	fullscreen=Graphics::getInstance().isFullscreen();
-	vsync=Graphics::getInstance().isVsynced();	
+	Vector2D displaysize=graphics.getDisplaySize();
+	fullscreen=graphics.isFullScreen();
+	vsync=graphics.isVsynced();
 	
 	videosettings.setValue("fullscreen",fullscreen);
 	videosettings.setValue("vsync",vsync);

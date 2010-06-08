@@ -1,14 +1,10 @@
 #include "field.hpp"
 
-#include "ui.hpp"
 #include "scissor.hpp"
 
-void Field::draw()
-{
-	if(!getFont())
-		return;	
-				
-	float cursorpos=getFont()->getTextSize(getWideText().substr(0,m_cursorpos)).getX();
+void Field::draw(Graphics& graphics)
+{				
+	float cursorpos=getFont().getTextSize(getWideText().substr(0,m_cursorpos)).getX();
 		
 	float textoffset=-(cursorpos+0.02-getSize().getX());
 	
@@ -27,7 +23,8 @@ void Field::draw()
 	Vector2D begin=getPosition();
 	Vector2D end=begin+getSize();
 	
-	Scissor::reset();
+	Scissor scissor(graphics);
+	scissor.reset();
 	
 	Color(0,0,0).apply();
 	glBindTexture(GL_TEXTURE_2D,0);
@@ -47,9 +44,9 @@ void Field::draw()
 		glEnd();
 	}
 	
-	Scissor::set(getPosition(),getSize());
+	scissor.set(getPosition(),getSize());
 	
-	getFont()->draw(getWideText(),getPosition()+Vector2D(textoffset,0));
+	getFont().draw(getWideText(),getPosition()+Vector2D(textoffset,0));
 }
 
 void Field::keyDown(KeyEvent event)
@@ -120,12 +117,11 @@ void Field::blur()
 	m_focused=false;
 }
 
-Field::Field()
+Field::Field():
+	m_cursorpos(0),
+	m_focused(false)
 {
-	m_cursorpos=0;
-	m_focused=false;
-	
-	setFont(Ui::getInstance().getFont("Field"));
+	setFont(Font("Field"));
 }
 
 bool Field::doAutoSizeOnChange()

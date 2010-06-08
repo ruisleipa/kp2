@@ -3,29 +3,26 @@
 #include "sdl.hpp"
 #include "assert.hpp"
 #include "ui.hpp"
+#include "texture.hpp"
+#include "events.hpp"
 
 #include <iostream>
 #include <cstdlib>
 #include <GL/glew.h>
 
-Graphics& Graphics::getInstance()
-{
-	static Graphics instance;
-
-	return instance;
-}
-
 void Graphics::printVideoInfo()
 {
-	std::cout<<"Video mode: "<<m_screen_width<<"x"<<m_screen_height<<"x"<<m_bpp;
+	Vector2D displaysize=getDisplaySize();
+
+	std::cout<<"Video mode: "<<displaysize.getX()<<"x"<<displaysize.getY()<<"x"<<getBitsPerPixel();
 	
-	if(m_doublebuffer)
+	if(isDoubleBuffered())
 		std::cout<<" doublebuffered";
 	
-	if(m_vsync)
+	if(isVsynced())
 		std::cout<<" vsynced";
 	
-	if(m_fullscreen)
+	if(isFullScreen())
 		std::cout<<" fullscreen";
 
 	std::cout<<std::endl;
@@ -33,7 +30,9 @@ void Graphics::printVideoInfo()
 
 float Graphics::getAspectRatio()
 {
-	return float(m_screen_width)/float(m_screen_height);
+	Vector2D displaysize=getDisplaySize();
+
+	return displaysize.getX()/displaysize.getY();
 }
 
 void Graphics::enterGuiMode()
@@ -73,23 +72,9 @@ int Graphics::setVideoMode(int width,int height,int bpp,bool fullscreen,bool vsy
 		return -1;
 	}
 	
-	m_screen_width = m_surface->w;
-	m_screen_height = m_surface->h;
-	m_bpp = m_surface->format->BitsPerPixel;
-	m_fullscreen = m_surface->flags & SDL_FULLSCREEN;
+	Vector2D displaysize=getDisplaySize();
 	
-	int value;
-	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
-		std::cerr << "SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, ) returned -1" << std::endl;
-	else
-		m_doublebuffer = value;
-		
-	if (SDL_GL_GetAttribute(SDL_GL_SWAP_CONTROL, &value) == -1)
-		std::cerr << "SDL_GL_GetAttribute(SDL_GL_SWAP_CONTROL,) returned -1" << std::endl;
-	else
-		m_vsync = value;
-	
-	glViewport(0, 0, m_screen_width, m_screen_height);
+	glViewport(0,0,displaysize.getX(),displaysize.getY());
 	glEnable(GL_TEXTURE_2D);
 	
 	glEnable(GL_BLEND);
@@ -105,9 +90,9 @@ int Graphics::setVideoMode(int width,int height,int bpp,bool fullscreen,bool vsy
 
 	printVideoInfo();
 	
-	refreshTextures();
+	Texture::reuploadTextures();
 	
-	Ui::getInstance().calculateLayouts();
+	m_events.resize(*this);
 	
 	return 0;
 }
@@ -157,55 +142,52 @@ std::vector<Vector2D> Graphics::getVideoModes()
 	return final;
 }
 
-bool Graphics::isVsynced()
+bool Graphics::isDoubleBuffered()
 {
-	return m_vsync;
+	int value;
+
+	SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER,&value);
+
+	return value;
 }
 
-bool Graphics::isFullscreen()
+bool Graphics::isVsynced()
 {
-	return m_fullscreen;
+	int value;
+
+	SDL_GL_GetAttribute(SDL_GL_SWAP_CONTROL,&value);
+
+	return value;
+}
+
+bool Graphics::isFullScreen()
+{
+	return m_surface->flags & SDL_FULLSCREEN;
+}
+
+int Graphics::getBitsPerPixel()
+{
+	return m_surface->format->BitsPerPixel;	
 }
 
 void Graphics::resize(Vector2D size)
 {
 	std::cout<<size<<std::endl;
 
-	setVideoMode(size.getX(),size.getY(),m_bpp,m_fullscreen,m_vsync,m_doublebuffer);
+	setVideoMode(size.getX(),size.getY(),getBitsPerPixel(),isFullScreen(),isVsynced(),isDoubleBuffered());
 }
 
 Vector2D Graphics::getDisplaySize()
 {
-	return Vector2D(m_screen_width,m_screen_height);
+	return Vector2D(m_surface->w,m_surface->h);
 }
 
-Graphics::Graphics()
+Graphics::Graphics(Sdl& sdl,Events& events):
+	m_sdl(sdl), 
+	m_events(events),
+	m_surface(0)
 {
-	//make sure SDL is initalized
-	Sdl::getInstance();	
-}
 
-void Graphics::addTexture(Texture* texture)
-{
-	assert(texture != 0);
-
-	if(texture)
-		m_textures.insert(texture);
-}
-
-void Graphics::removeTexture(Texture* texture)
-{
-	m_textures.erase(texture);
-}
-
-void Graphics::refreshTextures()
-{
-	std::set<Texture*>::iterator i;
-		
-	for(i=m_textures.begin();i!=m_textures.end();++i)
-	{
-		(*i)->reuploadTexture();
-	}
 }
 
 Graphics::~Graphics()

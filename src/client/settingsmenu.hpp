@@ -1,21 +1,24 @@
 #ifndef __SETTINGSMENU_HPP
 #define __SETTINGSMENU_HPP
 
-#include "view.hpp"
+#include "window.hpp"
 #include "label.hpp"
 #include "select.hpp"
 #include "button.hpp"
 #include "image.hpp"
 
-class SettingsMenu : public View
+class SettingsMenu : public Window
 {
 	public:
-		SettingsMenu();
+		SettingsMenu(Graphics& graphics);
 
-		virtual void calculateLayout();
-		virtual void onActivate();
-		
+		virtual void resize(Graphics& graphics);
+		virtual void onShow();
+	
+		void updateDisplayOptions();
+			
 	private:
+		Graphics& m_graphics;
 
 		Texture m_background_texture;
 		Image m_background;

@@ -14,8 +14,8 @@ class TextWidget : public Widget
 		void setText(std::wstring text);
 		std::wstring getWideText();
 	
-		void setFont(Font* font);
-		Font* getFont();
+		void setFont(Font font);
+		Font& getFont();
 		
 		void autoSize();
 		
@@ -24,10 +24,8 @@ class TextWidget : public Widget
 	protected:
 		virtual bool doAutoSizeOnChange();
 	
-	private:
-		
-	
-		Font* m_font;
+	private:	
+		Font m_font;
 		
 		std::wstring m_text;
 };

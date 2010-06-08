@@ -2,20 +2,18 @@
 
 #include "sdl.hpp"
 #include "graphics.hpp"
+#include "keyevent.hpp"
+#include "mouseevent.hpp"
+#include "eventlistener.hpp"
 
-Events& Events::getInstance()
-{
-	static Events instance;
-
-	return instance;
-}
+#include <iostream>
 
 void Events::setEventListener(EventListener* event_listener)
 {
 	m_event_listener=event_listener;
 }
 
-void Events::processEvents()
+void Events::processEvents(Graphics& graphics)
 {
 	SDL_Event sdl_event;
 
@@ -51,8 +49,9 @@ void Events::processEvents()
 		else if(sdl_event.type == SDL_MOUSEBUTTONDOWN)
 		{
 			SDL_MouseButtonEvent& button = sdl_event.button;
-			Vector2D pos(button.x, button.y);
-					
+			Vector2D pos=Vector2D(button.x, button.y);
+			pos/=graphics.getDisplaySize();
+							
 			MouseEvent event(pos, 1 << (button.button-1));
 			
 			m_event_listener->mouseDown(event);
@@ -60,8 +59,9 @@ void Events::processEvents()
 		else if(sdl_event.type == SDL_MOUSEBUTTONUP)
 		{
 			SDL_MouseButtonEvent& button = sdl_event.button;
-			Vector2D pos(button.x, button.y);
-					
+			Vector2D pos=Vector2D(button.x, button.y);
+			pos/=graphics.getDisplaySize();
+									
 			MouseEvent event(pos, 1 << (button.button-1));
 			
 			m_event_listener->mouseUp(event);
@@ -69,7 +69,8 @@ void Events::processEvents()
 		else if(sdl_event.type == SDL_MOUSEMOTION)
 		{
 			SDL_MouseMotionEvent& motion = sdl_event.motion;
-			Vector2D pos(motion.x, motion.y);
+			Vector2D pos=Vector2D(motion.x, motion.y);
+			pos/=graphics.getDisplaySize();
 					
 			MouseEvent event(pos, motion.state);
 			
@@ -79,16 +80,20 @@ void Events::processEvents()
 		{
 			SDL_ResizeEvent& resize = sdl_event.resize;
 		
-			Graphics::getInstance().resize(Vector2D(resize.w,resize.h));
+			graphics.resize(Vector2D(resize.w,resize.h));
 		}
 	}
 }
 
-Events::Events()
+void Events::resize(Graphics& graphics)
 {
-	//make sure SDL is initalized
-	Sdl::getInstance();
+	m_event_listener->resize(graphics);
+}
 
+Events::Events(Sdl& sdl): 
+	m_sdl(sdl), 
+	m_event_listener(&m_default_listener)
+{
 	SDL_EnableUNICODE(true);
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
 }

@@ -11,7 +11,7 @@ NewLocalGameMenu::NewLocalGameMenu()
 	m_background_texture.load("data/images/newlocalgamemenu.png");
 	m_background.setTexture(&m_background_texture);
 	
-	m_title.setFont(Ui::getInstance().getFont("title"));
+	m_title.setFont(Font("title"));
 	m_title.setText("Uusi peli");			
 	
 	m_name_label.setText("Nimi:");
@@ -38,7 +38,7 @@ NewLocalGameMenu::NewLocalGameMenu()
 	addWidget(&m_start_button);
 }
 
-void NewLocalGameMenu::calculateLayout()
+void NewLocalGameMenu::resize(Graphics& graphics)
 {
 	m_background.setSize(Vector2D(1,1));
 		
@@ -74,7 +74,7 @@ void NewLocalGameMenu::calculateLayout()
 
 }
 
-void NewLocalGameMenu::onActivate()
+void NewLocalGameMenu::onShow()
 {
 	m_name_field.setText("");
 	m_difficulty_select.setIndex(1);
@@ -82,7 +82,8 @@ void NewLocalGameMenu::onActivate()
 
 void NewLocalGameMenu::BackButton::onClick()
 {
-	Ui::getInstance().goToPreviousView();
+	getParent()->setVisible(false);
+	((Container*)getParent()->getParent())->getWidget("localgamemenu")->setVisible(true);
 }
 
 void NewLocalGameMenu::StartButton::onClick()

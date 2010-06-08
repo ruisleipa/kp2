@@ -1,18 +1,14 @@
 #ifndef __GRAPHICS_HPP
 #define __GRAPHICS_HPP
 
-#include <SDL/SDL.h>
-
+class Events;
+#include "sdl.hpp"
 #include "vector2d.hpp"
-#include "texture.hpp"
-#include <set>
 #include <vector>
 
 class Graphics
 {
 	public:
-		static Graphics& getInstance();
-
 		Vector2D getDisplaySize();
 
 		void printVideoInfo();
@@ -20,8 +16,10 @@ class Graphics
 		int setVideoMode(int width,int height,int bpp,bool fullscreen,bool vsync,bool doublebuffer);
 		std::vector<Vector2D> getVideoModes();
 		
+		bool isDoubleBuffered();
 		bool isVsynced();
-		bool isFullscreen();
+		bool isFullScreen();
+		int getBitsPerPixel();
 		
 		void resize(Vector2D size);
 		
@@ -29,29 +27,14 @@ class Graphics
 		
 		void enterGuiMode();
 		void exitGuiMode();
-
+		
+		Graphics(Sdl& sdl,Events& events);
 		~Graphics();
 
 	private:
-
-		void addTexture(Texture* texture);
-		void removeTexture(Texture* texture);
-		void refreshTextures();
-		
-		friend class Texture;
-	
-		Graphics();
-
-		SDL_Surface* m_surface;
-		
-		std::set<Texture*> m_textures;
-
-		int m_screen_width;
-		int m_screen_height;
-		int m_bpp;
-		bool m_fullscreen;
-		bool m_vsync;
-		bool m_doublebuffer;
+		Sdl& m_sdl;
+		Events& m_events;
+		SDL_Surface* m_surface;		
 };
 
 #endif // __GRAPHICS_HPP

@@ -1,33 +1,9 @@
 #include "widget.hpp"
 
 #include <iostream>
-
 #include <cmath>
-
-void Widget::keyDown(KeyEvent event)
-{
-
-}
-
-void Widget::keyUp(KeyEvent event)
-{
-
-}
-
-void Widget::mouseDown(MouseEvent event)
-{
-
-}
-
-void Widget::mouseUp(MouseEvent event)
-{
-
-}
-
-void Widget::mouseMove(MouseEvent event)
-{
-
-}
+#include "keyevent.hpp"
+#include "mouseevent.hpp"
 
 void Widget::mouseOn()
 {
@@ -49,7 +25,17 @@ void Widget::focus()
 
 }
 
-void Widget::draw()
+void Widget::draw(Graphics& graphics)
+{
+
+}
+
+void Widget::onShow()
+{
+
+}
+
+void Widget::onHide()
 {
 
 }
@@ -74,9 +60,26 @@ Vector2D Widget::getSize()
 	return m_size;
 }
 
-Widget::Widget()
+void Widget::setVisible(bool visible)
 {
-	m_parent=0;
+	m_visible=visible;
+	
+	if(visible)
+		onShow();
+	else
+		onHide();
+}	
+
+bool Widget::getVisible()
+{
+	return m_visible;
+}
+
+Widget::Widget():
+	m_parent(0),
+	m_visible(true)
+{
+
 }
 
 Widget::~Widget()
@@ -84,12 +87,13 @@ Widget::~Widget()
 
 }
 
-View* Widget::getParent()
+Widget* Widget::getParent()
 {
 	return m_parent;
 }
 
-void Widget::setParent(View* view)
+void Widget::setParent(Widget* view)
 {
 	m_parent=view;
 }
+

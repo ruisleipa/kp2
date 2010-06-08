@@ -2,7 +2,6 @@
 
 #include "shared/string.hpp"
 #include "assert.hpp"
-#include "ui.hpp"
 
 #include <GL/gl.h>
 
@@ -23,7 +22,7 @@ void Button::mouseDown(MouseEvent event)
 
 Button::Button()
 {
-	setFont(Ui::getInstance().getFont("Button"));
-	setActiveFont(Ui::getInstance().getFont("Button.active"));
+	setFont(Font("Button"));
+	setActiveFont(Font("Button.active"));
 }
 

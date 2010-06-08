@@ -28,25 +28,24 @@ std::wstring TextWidget::getWideText()
 	return m_text;
 }
 
-void TextWidget::setFont(Font* font)
+void TextWidget::setFont(Font font)
 {
 	m_font=font;
 }
 
-Font* TextWidget::getFont()
+Font& TextWidget::getFont()
 {
 	return m_font;
 }
 
 void TextWidget::autoSize()
 {
-	if(m_font)
-		setSize(m_font->getTextSize(m_text));
+	setSize(m_font.getTextSize(m_text));
 }
 
 TextWidget::TextWidget()
 {
-	m_font=0;
+	
 }
 
 bool TextWidget::doAutoSizeOnChange()

@@ -7,13 +7,6 @@
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_net.h>
 
-Sdl& Sdl::getInstance()
-{
-	static Sdl instance;
-
-	return instance;
-}
-
 Sdl::Sdl()
 {
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)

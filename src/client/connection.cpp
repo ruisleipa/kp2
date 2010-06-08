@@ -2,13 +2,6 @@
 
 #include <iostream>
 
-Connection& Connection::getInstance()
-{
-	static Connection instance;
-
-	return instance;
-}
-
 void Connection::connect(std::string hostname,int port)
 {
 	m_socket.open(hostname,port);
@@ -120,8 +113,4 @@ void Connection::addMessageHandler(uint16_t id,MessageHandler* handler)
 	Connection::m_handlers[id]=handler;
 }
 
-Connection::Connection()
-{
-
-}
 

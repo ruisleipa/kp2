@@ -1,10 +1,9 @@
 #ifndef __EVENTS_HPP
 #define __EVENTS_HPP
 
-#include "keyevent.hpp"
-#include "mouseevent.hpp"
-
 #include "eventlistener.hpp"
+class Sdl;
+class Graphics;
 
 class ExitException
 {
@@ -14,20 +13,19 @@ class ExitException
 class Events
 {
 	public:
-		static Events& getInstance();
-
-		void processEvents();
+		void processEvents(Graphics& graphics);
+		void resize(Graphics& graphics);
 		
 		void setEventListener(EventListener* event_listener);
 
+		Events(Sdl& sdl);
 		~Events();
 
 	private:
-		Events();
+		Sdl& m_sdl;
+		EventListener* m_event_listener;	
 		
-		EventListener* m_event_listener;
-		
-		
+		EventListener m_default_listener;	
 };
 
 #endif // __EVENTS_HPP

@@ -6,7 +6,7 @@
 class Field : public TextWidget
 {
 	public:
-		virtual void draw();
+		virtual void draw(Graphics& graphics);
 		virtual void keyDown(KeyEvent event);
 		
 		virtual void focus();

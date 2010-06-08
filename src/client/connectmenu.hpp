@@ -1,13 +1,13 @@
 #ifndef __CONNECTMENU_HPP
 #define __CONNECTMENU_HPP
 
-#include "view.hpp"
+#include "container.hpp"
 #include "label.hpp"
 #include "button.hpp"
 #include "image.hpp"
 #include "field.hpp"
 
-class ConnectMenu : public View
+class ConnectMenu : public Container
 {
 	public:
 		ConnectMenu();

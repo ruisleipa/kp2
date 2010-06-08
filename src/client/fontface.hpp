@@ -3,7 +3,7 @@
 
 #include "texture.hpp"
 #include "vector2d.hpp"
-#include "color.hpp"
+#include "graphics.hpp"
 #include <SDL/SDL_ttf.h>
 #include <map>
 
@@ -30,8 +30,9 @@ class FontFace
 		void draw(std::wstring str,Vector2D pos,float char_height);
 		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size);
 		Vector2D getTextSize(std::wstring str,float char_height);
-		FontFace();
-		FontFace(std::string fontfile,int fontsize);
+
+		FontFace(Graphics& graphics);
+		FontFace(Graphics& graphics,std::string fontfile,int fontsize);
 		~FontFace();
 
 	private:
@@ -44,6 +45,7 @@ class FontFace
 
 		TTF_Font* m_font;
 		int m_height;
+		Graphics& m_graphics;
 		std::map<unsigned long,FontPage> m_font_pages;
 };
 

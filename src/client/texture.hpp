@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <set>
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
@@ -44,13 +45,16 @@ class Texture
 		
 		void setFilter(TextureFilter filter);
 		TextureFilter getFilter();
+		
+		static void setFilterLimit(TextureFilter filter);
+		static TextureFilter getFilterLimit();
 				
 		int isEmpty();
 		
 		Vector2D getSize();
 		
-		void reuploadTexture();
-		
+		static void reuploadTextures();	
+				
 		Texture();
 		Texture(std::string filename);
 		Texture(const Texture&);
@@ -58,7 +62,6 @@ class Texture
 		~Texture();
 
 	private:
-		
 		int createTexture();
 		void deleteTexture();
 	
@@ -81,6 +84,19 @@ class Texture
 		int m_image_height;
 		int m_texture_width;
 		int m_texture_height;
+				
+		static TextureFilter m_filter_limit;
+		
+		/*
+		These are for texture reuploading in the case of OpenGl context
+		loss on some platforms.
+		*/		
+		void reuploadTexture();
+		
+		static void addManagedTexture(Texture* texture);
+		static void removeManagedTexture(Texture* texture);
+		static std::set<Texture*> m_textures;
+
 };
 
 #endif // __TEXTURE_HPP

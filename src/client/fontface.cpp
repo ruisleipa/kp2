@@ -2,16 +2,19 @@
 
 #include "graphics.hpp"
 
-FontFace::FontFace()
+FontFace::FontFace(Graphics& graphics):
+	m_graphics(graphics),
+	m_height(0),
+	m_font(0)
 {
-	m_height=0;
-	m_font=0;
+
 }
 
-FontFace::FontFace(std::string fontfile,int fontsize)
+FontFace::FontFace(Graphics& graphics,std::string fontfile,int fontsize):
+	m_graphics(graphics),
+	m_height(0),
+	m_font(0)
 {
-	m_height=0;
-	m_font=0;
 	load(fontfile,fontsize);
 }
 
@@ -79,7 +82,7 @@ void FontFace::draw(std::wstring str,Vector2D pos,float char_height)
 			int rectangle_index=str[i]%FONT_PAGE_SIZE;
 			LetterRectangle& letterinfo=m_font_pages[page].letter_rectangles[rectangle_index];
 			
-			char_size.setX(char_height*(letterinfo.size.getX()/letterinfo.size.getY())/Graphics::getInstance().getAspectRatio());
+			char_size.setX(char_height*(letterinfo.size.getX()/letterinfo.size.getY())/m_graphics.getAspectRatio());
 			
 			font_page.letters.drawClipped(char_pos,char_size,letterinfo.position,letterinfo.size);
 
@@ -156,7 +159,7 @@ Vector2D FontFace::getTextSize(std::wstring str,float char_height)
 			int rectangle_index=str[i]%FONT_PAGE_SIZE;
 			LetterRectangle& letterinfo=font_page.letter_rectangles[rectangle_index];
 			
-			w+=char_height*(letterinfo.size.getX()/letterinfo.size.getY())/Graphics::getInstance().getAspectRatio();
+			w+=char_height*(letterinfo.size.getX()/letterinfo.size.getY())/m_graphics.getAspectRatio();
 		}
 		else
 		{

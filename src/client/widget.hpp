@@ -1,13 +1,13 @@
 #ifndef __WIDGET_HPP
 #define __WIDGET_HPP
 
+#include "eventlistener.hpp"
+#include "vector2d.hpp"
 #include "keyevent.hpp"
 #include "mouseevent.hpp"
-#include "vector2d.hpp"
+#include "graphics.hpp"
 
-class View;
-
-class Widget
+class Widget: public EventListener
 {
 	public:
 		void setPosition(Vector2D position);	
@@ -16,15 +16,8 @@ class Widget
 		void setSize(Vector2D size);	
 		Vector2D getSize();
 		
-		Widget();
-		virtual ~Widget();
-		
-		virtual void keyDown(KeyEvent event);
-		virtual void keyUp(KeyEvent event);
-		
-		virtual void mouseDown(MouseEvent event);
-		virtual void mouseUp(MouseEvent event);
-		virtual void mouseMove(MouseEvent event);
+		void setVisible(bool visible);
+		bool getVisible();
 		
 		virtual void mouseOn();
 		virtual void mouseOut();
@@ -32,21 +25,28 @@ class Widget
 		virtual void blur();
 		virtual void focus();
 		
-		virtual void draw();
-
+		virtual void draw(Graphics& graphics);
+		
+		virtual void onShow();
+		virtual void onHide();
+		
+		Widget* getParent();
+		
+		Widget();
+		virtual ~Widget();
 	
-	protected:
-		View* getParent();
+	protected:		
+		void setParent(Widget* view);
 	
 	private:
-		void setParent(View* view);
-	
 		Vector2D m_position;
 		Vector2D m_size;
 
-		View* m_parent;
+		Widget* m_parent;
 		
-		friend class View;
+		bool m_visible;
+		
+		friend class Container;
 };
 
 #endif // __WIDGET_HPP

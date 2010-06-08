@@ -6,19 +6,20 @@
 #include "graphics.hpp"
 #include "shared/string.hpp"
 
-SettingsMenu::SettingsMenu()
+SettingsMenu::SettingsMenu(Graphics& graphics):
+	m_graphics(graphics)
 {
 	m_background_texture.load("data/images/settingsmenu.png");
 	m_background.setTexture(&m_background_texture);
 	
-	m_title.setFont(Ui::getInstance().getFont("title"));
+	m_title.setFont(Font("title"));
 	m_title.setText("Asetukset");			
 	
 	m_resolution_label.setText("Näyttötila:");
 	m_fullscreen_label.setText("Koko ruutu:");
 	m_vsync_label.setText("Vsync:");	
 	
-	m_modes=Graphics::getInstance().getVideoModes();
+	m_modes=m_graphics.getVideoModes();
 	std::vector<Vector2D>::iterator i;
 	
 	for(i=m_modes.begin();i!=m_modes.end();++i)
@@ -36,6 +37,7 @@ SettingsMenu::SettingsMenu()
 	m_vsync_select.addItem("ei");
 	m_vsync_select.addItem("kyllä");
 	
+	
 	m_back_button.setText("Takaisin");
 	m_apply_button.setText("Ota käyttöön");
 
@@ -46,16 +48,16 @@ SettingsMenu::SettingsMenu()
 	addWidget(&m_resolution_label);
 	addWidget(&m_fullscreen_label);
 	addWidget(&m_vsync_label);	
-		
+			
 	addWidget(&m_resolution_select);
 	addWidget(&m_fullscreen_select);	
 	addWidget(&m_vsync_select);
-	
+		
 	addWidget(&m_back_button);	
 	addWidget(&m_apply_button);
 }
 
-void SettingsMenu::calculateLayout()
+void SettingsMenu::resize(Graphics& graphics)
 {
 	m_background.setSize(Vector2D(1,1));
 		
@@ -99,9 +101,14 @@ void SettingsMenu::calculateLayout()
 
 }
 
-void SettingsMenu::onActivate()
+void SettingsMenu::onShow()
 {
-	Vector2D displaysize=Graphics::getInstance().getDisplaySize();
+	updateDisplayOptions();
+}
+
+void SettingsMenu::updateDisplayOptions()
+{
+	Vector2D displaysize=m_graphics.getDisplaySize();
 	
 	for(int i=0;i<m_modes.size();++i)
 	{
@@ -112,9 +119,9 @@ void SettingsMenu::onActivate()
 		}			
 	}		
 
-	m_fullscreen_select.setIndex(Graphics::getInstance().isFullscreen());
+	m_fullscreen_select.setIndex(m_graphics.isFullScreen());
 	
-	m_vsync_select.setIndex(Graphics::getInstance().isVsynced());
+	m_vsync_select.setIndex(m_graphics.isVsynced());
 	
 	m_resolution_select.autoSize();	
 	m_fullscreen_select.autoSize();
@@ -123,7 +130,8 @@ void SettingsMenu::onActivate()
 
 void SettingsMenu::BackButton::onClick()
 {
-	Ui::getInstance().goToPreviousView();
+	getParent()->setVisible(false);
+	((Container*)getParent()->getParent())->getWidget("mainmenu")->setVisible(true);
 }
 
 void SettingsMenu::ApplyButton::onClick()
@@ -134,6 +142,8 @@ void SettingsMenu::ApplyButton::onClick()
 	bool fullscreen=menu->m_fullscreen_select.getIndex();
 	bool vsync=menu->m_vsync_select.getIndex();
 	
-	Graphics::getInstance().setVideoMode(mode.getX(),mode.getY(),32,fullscreen,vsync,true);
+	menu->m_graphics.setVideoMode(mode.getX(),mode.getY(),32,fullscreen,vsync,true);
+	
+	menu->updateDisplayOptions();
 }
 

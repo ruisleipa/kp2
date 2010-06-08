@@ -5,44 +5,48 @@ define MAKEDEPEND
 	$(CXX) $(CXXFLAGS) -MM -MF $3 -MP -MT $2 $1
 endef
 	
-SRC = src/client/main.cpp \
-	src/client/connection.cpp \
-	src/client/graphics.cpp \
-	src/client/vector2d.cpp \
-	src/client/font.cpp \
-	src/client/texture.cpp \
-	src/client/events.cpp \
-	src/client/color.cpp \
-	src/client/keyevent.cpp \
-	src/client/mouseevent.cpp \
-	src/client/assert.cpp \
-	src/client/view.cpp \
-	src/client/widget.cpp \
-	src/client/button.cpp \
-	src/client/fontface.cpp \
-	src/client/scissor.cpp \
-	src/client/image.cpp \
-	src/client/label.cpp \
-	src/client/field.cpp \
-	src/client/select.cpp \
-	src/client/sounds.cpp \
-	src/client/sound.cpp \
-	src/client/ui.cpp \
-	src/client/textwidget.cpp \
+SRC = \
 	src/client/activetextwidget.cpp \
-	src/client/mainmenu.cpp \
-	src/client/settingsmenu.cpp \
+	src/client/assert.cpp \
+	src/client/button.cpp \
+	src/client/color.cpp \
+	src/client/connection.cpp \
 	src/client/connectmenu.cpp \
+	src/client/container.cpp \
+	src/client/eventlistener.cpp \
+	src/client/events.cpp \
+	src/client/field.cpp \
+	src/client/fontcollection.cpp \
+	src/client/font.cpp \
+	src/client/fontface.cpp \
+	src/client/graphics.cpp \
+	src/client/image.cpp \
+	src/client/keyevent.cpp \
+	src/client/label.cpp \
 	src/client/localgamemenu.cpp \
+	src/client/main.cpp \
+	src/client/mainmenu.cpp \
+	src/client/mouseevent.cpp \
 	src/client/newlocalgamemenu.cpp \
+	src/client/scissor.cpp \
 	src/client/sdl.cpp \
-	src/shared/serversocket.cpp \
+	src/client/select.cpp \
+	src/client/settingsmenu.cpp \
+	src/client/sound.cpp \
+	src/client/sounds.cpp \
+	src/client/texture.cpp \
+	src/client/textwidget.cpp \
+	src/client/vector2d.cpp \
+	src/client/widget.cpp \
+	src/client/window.cpp \
+	src/shared/assert.cpp \
 	src/shared/clientsocket.cpp \
+	src/shared/inifile.cpp \
+	src/shared/packet.cpp \
+	src/shared/serversocket.cpp \
+	src/shared/socketactivity.cpp \
+	src/shared/socketcore.cpp \
 	src/shared/socket.cpp \
 	src/shared/socketset.cpp \
-	src/shared/socketcore.cpp \
-	src/shared/socketactivity.cpp \
-	src/shared/packet.cpp \
-	src/shared/string.cpp \
-	src/shared/assert.cpp \
-	src/shared/inifile.cpp
+	src/shared/string.cpp
+

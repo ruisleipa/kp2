@@ -3,8 +3,6 @@
 
 #include "activetextwidget.hpp"
 
-
-
 class Button : public ActiveTextWidget
 {
 	public:

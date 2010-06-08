@@ -9,14 +9,14 @@
 class ActiveTextWidget : public TextWidget
 {
 	public:
-		void setActiveFont(Font* font);
-		Font* getActiveFont();
+		void setActiveFont(Font font);
+		Font& getActiveFont();
 		
 		virtual void mouseOn();
 		virtual void mouseOut();		
 		virtual void mouseDown(MouseEvent);
 		
-		virtual void draw();
+		virtual void draw(Graphics& graphics);
 		
 		ActiveTextWidget();
 	
@@ -25,7 +25,7 @@ class ActiveTextWidget : public TextWidget
 		bool isMouseOver();
 	
 	private:	
-		Font* m_active_font;
+		Font m_active_font;
 		
 		bool m_mouse_over;	
 		bool m_animate;

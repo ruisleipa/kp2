@@ -1,19 +1,19 @@
 #ifndef __LOCALGAMEMENU_HPP
 #define __LOCALGAMEMENU_HPP
 
-#include "view.hpp"
+#include "window.hpp"
 #include "label.hpp"
 #include "button.hpp"
 #include "image.hpp"
 #include "field.hpp"
 
-class LocalGameMenu : public View
+class LocalGameMenu : public Window
 {
 	public:
 		LocalGameMenu();
 
-		virtual void calculateLayout();
-		virtual void onActivate();
+		virtual void resize(Graphics& graphics);
+		virtual void onShow();
 		
 	private:
 

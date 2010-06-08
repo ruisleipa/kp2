@@ -12,7 +12,7 @@ LocalGameMenu::LocalGameMenu()
 	m_background_texture.load("data/images/localgamemenu.png");
 	m_background.setTexture(&m_background_texture);
 	
-	m_title.setFont(Ui::getInstance().getFont("title"));
+	m_title.setFont(Font("title"));
 	m_title.setText("Yksinpeli");			
 	
 	m_new_game_button.setText("Uusi peli");
@@ -31,7 +31,7 @@ LocalGameMenu::LocalGameMenu()
 	addWidget(&m_back_button);	
 }
 
-void LocalGameMenu::calculateLayout()
+void LocalGameMenu::resize(Graphics& graphics)
 {
 	m_background.setSize(Vector2D(1,1));
 		
@@ -52,18 +52,20 @@ void LocalGameMenu::calculateLayout()
 	m_back_button.autoSize();
 }
 
-void LocalGameMenu::onActivate()
+void LocalGameMenu::onShow()
 {
 
 }
 
 void LocalGameMenu::BackButton::onClick()
 {
-	Ui::getInstance().goToPreviousView();
+	getParent()->setVisible(false);
+	((Container*)getParent()->getParent())->getWidget("mainmenu")->setVisible(true);
 }
 
 void LocalGameMenu::NewGameButton::onClick()
 {
-	Ui::getInstance().goToView("newlocalgamemenu");
+	getParent()->setVisible(false);
+	((Container*)getParent()->getParent())->getWidget("newlocalgamemenu")->setVisible(true);
 }
 
