@@ -1,5 +1,4 @@
 #include "graphics.hpp"
-#include "inifile.hpp"
 #include "font.hpp"
 #include "events.hpp"
 #include "sdl.hpp"
@@ -8,6 +7,7 @@
 #include "ui.hpp"
 
 #include "shared/string.hpp"
+#include "shared/inifile.hpp"
 
 #include "container.hpp"
 
