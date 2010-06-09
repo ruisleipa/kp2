@@ -43,6 +43,7 @@ class FontFace
 
 		int loadPage(unsigned int pagenum);
 
+		std::string m_name;
 		TTF_Font* m_font;
 		int m_height;
 		Graphics& m_graphics;

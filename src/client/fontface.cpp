@@ -2,6 +2,8 @@
 
 #include "graphics.hpp"
 
+#include <sstream>
+
 FontFace::FontFace(Graphics& graphics):
 	m_graphics(graphics),
 	m_height(0),
@@ -31,6 +33,8 @@ int FontFace::load(std::string fontfile,int fontsize)
 	}
 
 	unload();
+	
+	m_name=fontfile;
 
 	m_font=TTF_OpenFont(fontfile.c_str(),fontsize);
 
@@ -56,6 +60,7 @@ void FontFace::unload()
 		m_font=0;
 	}
 
+	m_name="";
 	m_height=0;
 }
 
@@ -302,7 +307,10 @@ int FontFace::loadPage(unsigned int pagenum)
 		}	
 	}
 	
-	m_font_pages[pagenum].letters.loadSurface(letters,0);
+	std::stringstream tag;
+	tag<<m_name<<": Page "<<pagenum;
+	
+	m_font_pages[pagenum].letters.loadSurface(letters,tag.str());
 	m_font_pages[pagenum].letters.setFilter(TRILINEAR);
 	SDL_FreeSurface(letters);	
 
