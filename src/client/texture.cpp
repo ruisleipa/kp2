@@ -1,5 +1,7 @@
 #include "texture.hpp"
 
+#include "shared/string.hpp"
+
 std::set<Texture*> Texture::m_textures;
 TextureFilter Texture::m_filter_limit;
 
@@ -32,7 +34,7 @@ Texture::Texture()
 	init();
 }
 
-Texture::Texture(std::string filename)
+Texture::Texture(const std::string& filename)
 {
 	Texture::addManagedTexture(this);
 
@@ -108,6 +110,7 @@ void Texture::freeSurface()
 	{
 		SDL_FreeSurface(m_surface);	
 		m_surface=0;
+		m_tag="";
 	}
 }
 
@@ -215,7 +218,6 @@ void Texture::setFilter(TextureFilter filter)
 
 void Texture::reuploadTexture()
 {
-	m_texture=0;
 	createTexture();
 }
 
@@ -224,7 +226,12 @@ TextureFilter Texture::getFilter()
 	return m_filter;
 }
 
-int Texture::loadSurface(SDL_Surface* surface,SDL_Rect*)
+int Texture::loadSurface(SDL_Surface* surface)
+{
+	loadSurface(surface,convertToString(surface));
+}
+
+int Texture::loadSurface(SDL_Surface* surface,const std::string& tag)
 {
 	if(!surface)
 		return -1;
@@ -232,12 +239,33 @@ int Texture::loadSurface(SDL_Surface* surface,SDL_Rect*)
 	if(!(surface->w && surface->h))
 		return -1;	
 		
-	free();	
+	free();
 	
+	m_tag=tag;
+		
 	m_image_width=surface->w;
 	m_image_height=surface->h;
 	m_texture_width=powerOfTwo(surface->w);
 	m_texture_height=powerOfTwo(surface->h);
+	
+	int size=(m_texture_width*m_texture_height*4);
+	std::string unit="B";
+	
+	
+	
+	if(size>1023)
+	{
+		size/=1024;
+		unit="kB";
+	}
+	
+	if(size>1023)
+	{
+		size/=1024;
+		unit="MB";
+	}
+	
+	std::cout<<"Surface: \""<<m_tag<<"\" "<<m_texture_width<<"x"<<m_texture_height<<" size: "<<size<<" "<<unit<<std::endl;
 	
 	m_surface=SDL_CreateRGBSurface(SDL_SWSURFACE,m_texture_width,m_texture_height,32,RGBAMASK);
 	SDL_SetAlpha(m_surface, 0,SDL_ALPHA_OPAQUE);
@@ -278,7 +306,7 @@ int Texture::loadSurface(SDL_Surface* surface,SDL_Rect*)
 	return 0;	
 }
 
-int Texture::load(std::string filename)
+int Texture::load(const std::string& filename)
 {
 	SDL_Surface* image=IMG_Load(filename.c_str());
 	if(!image)
@@ -287,7 +315,7 @@ int Texture::load(std::string filename)
 		return 0;
 	}
 	
-	int ret=loadSurface(image,0);	
+	int ret=loadSurface(image,filename);	
 	
 	SDL_FreeSurface(image);
 	

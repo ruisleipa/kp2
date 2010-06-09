@@ -35,8 +35,9 @@ enum TextureFilter {NEAREST,LINEAR,TRILINEAR};
 class Texture
 {
 	public:
-		int load(std::string);
-		int loadSurface(SDL_Surface* surface,SDL_Rect*);
+		int load(const std::string& filename);
+		int loadSurface(SDL_Surface* surface);
+		int loadSurface(SDL_Surface* surface,const std::string& tag);
 		
 		void draw(Vector2D position,Vector2D size);
 		void drawClipped(Vector2D position,Vector2D size,Vector2D clip_position,Vector2D clip_size);		
@@ -56,7 +57,7 @@ class Texture
 		static void reuploadTextures();	
 				
 		Texture();
-		Texture(std::string filename);
+		Texture(const std::string& filename);
 		Texture(const Texture&);
 		Texture& operator=(const Texture&);
 		~Texture();
@@ -69,6 +70,8 @@ class Texture
 		void copy(const Texture&);
 
 		SDL_Surface* downScale(SDL_Surface* surface,int x_ratio,int y_ratio);
+
+		std::string m_tag;
 
 		//General stuff
 		void free();	
