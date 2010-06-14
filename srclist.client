@@ -32,12 +32,6 @@ SRC = \
 	src/client/vector2d.cpp \
 	src/client/widget.cpp \
 	src/client/window.cpp \
-	src/physics/brake.cpp \
-	src/physics/clutch.cpp \
-	src/physics/engine.cpp \
-	src/physics/gearbox.cpp \
-	src/physics/tire.cpp \
-	src/physics/vehicle.cpp \
 	src/shared/assert.cpp \
 	src/shared/clientsocket.cpp \
 	src/shared/inifile.cpp \
