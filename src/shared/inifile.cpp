@@ -1,11 +1,11 @@
 #include "inifile.hpp"
 
-bool IniFile::getValue(std::string& var,const std::string& key)
+bool IniFile::getValue(const std::string& key,std::string& value)
 {
 	if(m_values.find(key) == m_values.end())
 		return false;
 	
-	var=m_values[key];
+	value=m_values[key];
 	return true;
 }
 
@@ -17,7 +17,7 @@ bool IniFile::setValue(const std::string& key,const std::string& str)
 }
 
 
-int IniFile::load(std::string filename)
+int IniFile::load(const std::string& filename)
 {
 	std::ifstream file(filename.c_str(),std::ios_base::in);
 	
@@ -54,7 +54,7 @@ int IniFile::load(std::string filename)
 
 
 
-int IniFile::save(std::string filename)
+int IniFile::save(const std::string& filename)
 {
 	std::ofstream file(filename.c_str(),std::ios_base::trunc);
 	
@@ -76,7 +76,12 @@ int IniFile::save(std::string filename)
 	return 0;
 }
 
-IniFile::IniFile(std::string filename)
+IniFile::IniFile()
+{
+
+}
+
+IniFile::IniFile(const std::string& filename)
 {
 	load(filename);
 }

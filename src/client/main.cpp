@@ -63,17 +63,17 @@ int main(int argc,char** argv)
 
 	int width,height,fullscreen,vsync,filter;
 
-	if(!videosettings.getValue(width,"width") || !videosettings.getValue(height,"height"))
+	if(!videosettings.getValue("width",width) || !videosettings.getValue("height",height))
 	{
 		width=640;
 		height=480;
 	}
 
-	if(!videosettings.getValue(fullscreen,"fullscreen"))
+	if(!videosettings.getValue("fullscreen",fullscreen))
 		fullscreen=0;
-	if(!videosettings.getValue(vsync,"vsync"))
+	if(!videosettings.getValue("vsync",vsync))
 		vsync=1;
-	if(!videosettings.getValue(filter,"filter"))
+	if(!videosettings.getValue("filter",filter))
 		filter=LINEAR;
 
 	Sdl sdl;
