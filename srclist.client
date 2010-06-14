@@ -9,7 +9,6 @@ SRC = \
 	src/client/eventlistener.cpp \
 	src/client/events.cpp \
 	src/client/field.cpp \
-	src/client/fontcollection.cpp \
 	src/client/font.cpp \
 	src/client/fontface.cpp \
 	src/client/graphics.cpp \
