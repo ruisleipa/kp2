@@ -1,10 +1,3 @@
-CXX = g++
-CXXFLAGS = -g -I./src/
-MAKEDEPEND = $(CXX) -MM $(CXXFLAGS) -o $*.d $<
-define MAKEDEPEND
-	$(CXX) $(CXXFLAGS) -MM -MF $3 -MP -MT $2 $1
-endef
-	
 SRC = src/server/main.cpp \
 	src/server/connection.cpp \
 	src/shared/serversocket.cpp \

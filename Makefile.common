@@ -1,9 +1,10 @@
-include Makefile.server.common
 
-WINDOWS_LIBS = -lmingw32 -mwindows
-SDL_LIBS = -lSDLmain -lSDL -lSDL_net
-LIBS = $(WINDOWS_LIBS) $(SDL_LIBS) 
-BIN = kp2_server.exe
+CXX = g++
+CXXFLAGS = -g -I./src/
+MAKEDEPEND = $(CXX) -MM $(CXXFLAGS) -o $*.d $<
+define MAKEDEPEND
+	$(CXX) $(CXXFLAGS) -MM -MF $3 -MP -MT $2 $1
+endef
 
 OBJ = $(SRC:.cpp=.o)
 DEPS = $(SRC:.cpp=.d)
@@ -26,5 +27,4 @@ ifneq "$(MAKECMDGOALS)" "clean"
   -include $(DEPS)
 
 endif
-
 

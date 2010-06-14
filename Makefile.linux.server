@@ -1,0 +1,7 @@
+include srclist.server
+
+LIBS = -lSDL -lSDL_net
+BIN = kp2_server
+
+include Makefile.common
+

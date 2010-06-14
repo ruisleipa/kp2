@@ -1,0 +1,10 @@
+include srclist.server
+
+WINDOWS_LIBS = -lmingw32 -mwindows
+SDL_LIBS = -lSDLmain -lSDL -lSDL_ttf -lSDL_image -lSDL_net
+LIBS = $(WINDOWS_LIBS) $(SDL_LIBS) -lopengl32 -lglew32 -lglu32 -lalut -lopenal32
+BIN = kp2_client.exe
+
+include Makefile.common
+
+
