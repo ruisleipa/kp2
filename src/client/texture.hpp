@@ -69,7 +69,7 @@ class Texture
 		void init();
 		void copy(const Texture&);
 
-		SDL_Surface* downScale(SDL_Surface* surface,int x_ratio,int y_ratio);
+		SDL_Surface* scaleAndFlip(SDL_Surface* surface,int x_ratio,int y_ratio);
 
 		std::string m_tag;
 
