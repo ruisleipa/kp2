@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "widget.hpp"
-#include "fontcollection.hpp"
 
 class Container : public Widget
 {
@@ -42,7 +41,6 @@ class Container : public Widget
 		};
 
 		std::vector<TaggedWidget> m_widgets;
-		FontCollection m_font_collection;
 };
 
 #endif // __CONTAINER_HPP
