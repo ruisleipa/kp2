@@ -2,7 +2,7 @@
 #define __EVENTS_HPP
 
 #include "eventlistener.hpp"
-class Sdl;
+#include "sdl.hpp"
 class Graphics;
 
 class ExitException
@@ -17,6 +17,8 @@ class Events
 		void resize(Graphics& graphics);
 		
 		void setEventListener(EventListener* event_listener);
+		
+		bool isKeyDown(SDLKey key);
 
 		Events(Sdl& sdl);
 		~Events();

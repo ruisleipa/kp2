@@ -1,6 +1,5 @@
 #include "events.hpp"
 
-#include "sdl.hpp"
 #include "graphics.hpp"
 #include "keyevent.hpp"
 #include "mouseevent.hpp"
@@ -11,6 +10,13 @@
 void Events::setEventListener(EventListener* event_listener)
 {
 	m_event_listener=event_listener;
+}
+
+bool Events::isKeyDown(SDLKey key)
+{
+	uint8_t* keys=SDL_GetKeyState(0);
+
+	return keys[key];
 }
 
 void Events::processEvents(Graphics& graphics)
