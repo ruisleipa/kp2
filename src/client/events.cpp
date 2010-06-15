@@ -30,15 +30,28 @@ void Events::processEvents(Graphics& graphics)
 			throw ExitException();
 		}
 		
-		if(m_event_listener == 0)
+		if(m_event_listener == &m_default_listener)
+		{
+			/*
+			This key is checked so that apps with no eventlistener
+			can quit easily. This is handy especially when you have
+			accidentally set no eventlistener in a fullscreen
+			program.
+			*/		
+			if(sdl_event.type == SDL_KEYDOWN)
+			{
+				SDL_keysym& keysym = sdl_event.key.keysym;
+		
+				if(keysym.sym==SDLK_ESCAPE)
+					throw ExitException();
+			}		
+		
 			continue;
+		}
 		
 		if(sdl_event.type == SDL_KEYDOWN)
 		{
 			SDL_keysym& keysym = sdl_event.key.keysym;
-		
-			if(keysym.sym==SDLK_ESCAPE)
-				exit(0);
 		
 			KeyEvent event(keysym.unicode, keysym.sym);
 			
