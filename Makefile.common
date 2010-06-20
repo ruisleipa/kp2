@@ -1,7 +1,6 @@
 
 CXX = g++
 CXXFLAGS = -g -I./src/
-MAKEDEPEND = $(CXX) -MM $(CXXFLAGS) -o $*.d $<
 define MAKEDEPEND
 	$(CXX) $(CXXFLAGS) -MM -MF $3 -MP -MT $2 $1
 endef
@@ -17,6 +16,7 @@ $(BIN): $(OBJ)
 clean:
 	-rm $(BIN)
 	-rm $(OBJ)
+	-rm $(DEPS)
 
 %.o: %.cpp
 	$(call MAKEDEPEND,$<,$@,$(subst .o,.d,$@))

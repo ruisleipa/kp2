@@ -1,8 +1,7 @@
 include srclist.server
 
 WINDOWS_LIBS = -lmingw32 -mwindows
-SDL_LIBS = -lSDLmain -lSDL -lSDL_net
-LIBS = $(WINDOWS_LIBS) $(SDL_LIBS) 
+LIBS = $(WINDOWS_LIBS) -lws2_32
 BIN = kp2_server.exe
 
 include Makefile.common
