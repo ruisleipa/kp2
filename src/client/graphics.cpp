@@ -5,6 +5,7 @@
 #include "ui.hpp"
 #include "texture.hpp"
 #include "events.hpp"
+#include "shared/inifile.hpp"
 
 #include <iostream>
 #include <cstdlib>
@@ -182,16 +183,53 @@ Vector2D Graphics::getDisplaySize()
 	return Vector2D(m_surface->w,m_surface->h);
 }
 
+const std::string VIDEO_CONFIG="cfg/video.cfg";
+
 Graphics::Graphics(Sdl& sdl,Events& events):
 	m_sdl(sdl), 
 	m_events(events),
 	m_surface(0)
 {
+	IniFile videosettings(VIDEO_CONFIG);
 
+	int width,height,fullscreen,vsync,filter;
+
+	if(!videosettings.getValue("width",width) || !videosettings.getValue("height",height))
+	{
+		width=640;
+		height=480;
+	}
+
+	if(!videosettings.getValue("fullscreen",fullscreen))
+		fullscreen=0;
+	if(!videosettings.getValue("vsync",vsync))
+		vsync=1;
+	if(!videosettings.getValue("filter",filter))
+		filter=LINEAR;
+		
+	SDL_WM_SetCaption("Kiihdytyspeli 2","Kiihdytyspeli 2");
+	
+	setVideoMode(width,height,32,fullscreen,vsync,true);
+	Texture::setFilterLimit((TextureFilter)filter);
 }
 
 Graphics::~Graphics()
 {
+	IniFile videosettings(VIDEO_CONFIG);
+
+	int width,height,fullscreen,vsync,filter;
 	
+	Vector2D displaysize=getDisplaySize();
+	fullscreen=isFullScreen();
+	vsync=isVsynced();
+	filter=Texture::getFilterLimit();		
+	
+	videosettings.setValue("fullscreen",fullscreen);
+	videosettings.setValue("vsync",vsync);
+	videosettings.setValue("width",displaysize.getX());
+	videosettings.setValue("height",displaysize.getY());
+	videosettings.setValue("filter",filter);
+	
+	videosettings.save(VIDEO_CONFIG);
 }
 

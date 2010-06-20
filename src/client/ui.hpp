@@ -1,7 +1,44 @@
 #ifndef __UI_HPP
 #define __UI_HPP
 
+#include <memory>
+
 #include "vector2d.hpp"
+#include "fontloader.hpp"
+#include "events.hpp"
+
+#include "container.hpp"
+
+#include "mainmenu.hpp"
+#include "settingsmenu.hpp"
+#include "connectmenu.hpp"
+#include "localgamemenu.hpp"
+#include "newlocalgamemenu.hpp"
+
+#include "graphics.hpp"
+
+class Ui
+{
+	public:
+		void draw();
+	
+		Ui(Events& events,Graphics& graphics);
+
+	private:			
+		Events& m_events;
+		Graphics& m_graphics;
+		
+		FontLoader m_font_loader;
+		
+		Window m_root_window;
+		
+		MainMenu m_mainmenu;
+		SettingsMenu m_settingsmenu;
+		ConnectMenu m_connectmenu;
+		LocalGameMenu m_localgamemenu;
+		NewLocalGameMenu m_newlocalgamemenu;
+		
+};
 
 const float PADDING=0.02;
 const float ITEM_HEIGHT=0.06;

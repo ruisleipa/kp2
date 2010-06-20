@@ -214,6 +214,7 @@ void Texture::setFilter(TextureFilter filter)
 
 void Texture::reuploadTexture()
 {
+	m_texture=0;
 	createTexture();
 }
 
@@ -475,13 +476,19 @@ GLuint Texture::getTexture()
 void Texture::setFilterLimit(TextureFilter filter)
 {
 	m_filter_limit=filter;
+	
+	std::set<Texture*>::iterator i;
+		
+	for(i=Texture::m_textures.begin();i!=Texture::m_textures.end();++i)
+	{
+		(*i)->setFilter((*i)->getFilter());
+	}
 }
 
 TextureFilter Texture::getFilterLimit()
 {
 	return m_filter_limit;
 }
-
 
 void Texture::addManagedTexture(Texture* texture)
 {
@@ -496,11 +503,13 @@ void Texture::removeManagedTexture(Texture* texture)
 
 void Texture::reuploadTextures()
 {
+#ifdef WIN32
 	std::set<Texture*>::iterator i;
 		
 	for(i=Texture::m_textures.begin();i!=Texture::m_textures.end();++i)
 	{
 		(*i)->reuploadTexture();
 	}
+#endif
 }
 

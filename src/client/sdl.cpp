@@ -15,12 +15,6 @@ Sdl::Sdl()
 		exit(1);
 	}
 	
-	if(SDLNet_Init() == -1)
-	{
-		std::cerr<<"SDLNet_Init Failed: "<<SDLNet_GetError()<<std::endl;
-		exit(1);
-	}
-	
 	if(TTF_Init() == -1)
 	{
 		std::cerr<<"TTF_Init Failed: "<<TTF_GetError()<<std::endl;
@@ -31,6 +25,5 @@ Sdl::Sdl()
 Sdl::~Sdl()
 {
 	TTF_Quit();
-	SDLNet_Quit();
 	SDL_Quit();
 }

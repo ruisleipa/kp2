@@ -1,5 +1,6 @@
 SRC = \
 	src/client/activetextwidget.cpp \
+	src/client/application.cpp \
 	src/client/assert.cpp \
 	src/client/button.cpp \
 	src/client/color.cpp \
@@ -11,6 +12,7 @@ SRC = \
 	src/client/field.cpp \
 	src/client/font.cpp \
 	src/client/fontface.cpp \
+	src/client/fontloader.cpp \
 	src/client/graphics.cpp \
 	src/client/image.cpp \
 	src/client/keyevent.cpp \
@@ -28,6 +30,7 @@ SRC = \
 	src/client/sounds.cpp \
 	src/client/texture.cpp \
 	src/client/textwidget.cpp \
+	src/client/ui.cpp \
 	src/client/vector2d.cpp \
 	src/client/widget.cpp \
 	src/client/window.cpp \
