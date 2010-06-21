@@ -17,14 +17,14 @@ bool IniFile::setValue(const std::string& key,const std::string& str)
 }
 
 
-int IniFile::load(const std::string& filename)
+bool IniFile::load(const std::string& filename)
 {
 	std::ifstream file(filename.c_str(),std::ios_base::in);
 	
 	if(!file.good())	
 	{
 		std::cerr<<"Cannot open file "<<filename<<" for reading"<<std::endl;
-		return -1;
+		return false;
 	}
 	
 	std::string line;
@@ -49,19 +49,19 @@ int IniFile::load(const std::string& filename)
 	
 	file.close();
 	
-	return 0;
+	return true;
 }
 
 
 
-int IniFile::save(const std::string& filename)
+bool IniFile::save(const std::string& filename)
 {
 	std::ofstream file(filename.c_str(),std::ios_base::trunc);
 	
 	if(!file.good())	
 	{
 		std::cerr<<"Cannot open file "<<filename<<" for writing"<<std::endl;
-		return -1;
+		return false;
 	}
 	
 	std::map<std::string,std::string>::iterator i;
@@ -73,7 +73,7 @@ int IniFile::save(const std::string& filename)
 	
 	file.close();
 	
-	return 0;
+	return true;
 }
 
 IniFile::IniFile()

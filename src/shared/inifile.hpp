@@ -21,8 +21,8 @@ class IniFile
 		bool setValue(const std::string& key,const T& value);
 		bool setValue(const std::string& key,const std::string& value);
 		
-		int load(const std::string& filename);
-		int save(const std::string& filename);
+		bool load(const std::string& filename);
+		bool save(const std::string& filename);
 
 		IniFile();
 		IniFile(const std::string& filename);
