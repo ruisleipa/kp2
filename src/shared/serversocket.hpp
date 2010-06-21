@@ -3,10 +3,12 @@
 
 #include "clientsocket.hpp"
 
+#include <string>
+
 class ServerSocket : public Socket
 {
 	public:
-		int open(int port);
+		int open(const std::string& host,int port);
 	
 		int accept(ClientSocket& socket);
 

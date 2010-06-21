@@ -15,11 +15,11 @@
 
 #include "socketcore.hpp"
 
-int ServerSocket::open(int port)
+int ServerSocket::open(const std::string& host,int port)
 {
 	close();
 
-	getAddresses(0,port,true);
+	getAddresses(host.c_str(),port,true);
 	
 	addrinfo* p;
 	int yes=1;
