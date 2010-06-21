@@ -9,7 +9,7 @@
 
 #include "socketcore.hpp"
 
-int ClientSocket::open(std::string host,int port)
+bool ClientSocket::open(const std::string& host,int port)
 {
 	close();
 
@@ -49,11 +49,11 @@ int ClientSocket::open(std::string host,int port)
 	
 	if(p==0)
 	{
-		std::cerr<<"Cannot connect to \""<<host<<"\" port "<<port<<":"<<SocketCore::getInstance().getErrorMessage()<<std::endl;
-		return -1;
+		std::cerr<<"Cannot connect to \""<<host<<"\" port "<<port<<": "<<SocketCore::getInstance().getErrorMessage()<<std::endl;
+		return false;
 	}
 
-	return 0;
+	return true;
 }
 
 int ClientSocket::read(char* data,int size)

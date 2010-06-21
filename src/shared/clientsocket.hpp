@@ -8,7 +8,7 @@
 class ClientSocket : public Socket
 {
 	public:
-		int open(std::string host,int port);
+		bool open(const std::string& host,int port);
 
 		int read(char* data,int size);
 		int write(const char* data,int size);
