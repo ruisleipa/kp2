@@ -31,9 +31,7 @@ void Graphics::printVideoInfo()
 
 float Graphics::getAspectRatio()
 {
-	Vector2D displaysize=getDisplaySize();
-
-	return displaysize.getX()/displaysize.getY();
+	return m_aspect_ratio;
 }
 
 void Graphics::enterGuiMode()
@@ -73,7 +71,19 @@ int Graphics::setVideoMode(int width,int height,int bpp,bool fullscreen,bool vsy
 		return -1;
 	}
 	
-	Vector2D displaysize=getDisplaySize();
+	Vector2D displaysize=getDisplaySize();	
+		
+	if(fullscreen)
+	{
+		std::vector<Vector2D> modelist=getVideoModes();
+		Vector2D biggestmode=modelist.back();
+		
+		m_aspect_ratio=biggestmode.getX()/biggestmode.getY();
+	}
+	else
+	{
+		m_aspect_ratio=displaysize.getX()/displaysize.getY();
+	}
 	
 	glViewport(0,0,displaysize.getX(),displaysize.getY());
 	glEnable(GL_TEXTURE_2D);
@@ -98,7 +108,7 @@ int Graphics::setVideoMode(int width,int height,int bpp,bool fullscreen,bool vsy
 	return 0;
 }
 
-class Compare
+class ModeCompare
 {
 	public:
 		bool operator() (const Vector2D& lhs, const Vector2D& rhs) const
@@ -112,7 +122,7 @@ class Compare
 
 std::vector<Vector2D> Graphics::getVideoModes()
 {
-	std::set<Vector2D,Compare> modelist;
+	std::set<Vector2D,ModeCompare> modelist;
 	
 	SDL_Rect** modes = SDL_ListModes(NULL, SDL_OPENGL|SDL_FULLSCREEN);
 
@@ -133,7 +143,7 @@ std::vector<Vector2D> Graphics::getVideoModes()
 	}
 	
 	std::vector<Vector2D> final;
-	std::set<Vector2D,Compare>::iterator i;
+	std::set<Vector2D,ModeCompare>::iterator i;
 		
 	for(i=modelist.begin();i!=modelist.end();++i)
 	{
@@ -188,7 +198,8 @@ const std::string VIDEO_CONFIG="cfg/video.cfg";
 Graphics::Graphics(Sdl& sdl,Events& events):
 	m_sdl(sdl), 
 	m_events(events),
-	m_surface(0)
+	m_surface(0),
+	m_aspect_ratio(1)
 {
 	IniFile videosettings(VIDEO_CONFIG);
 
