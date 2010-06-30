@@ -52,6 +52,8 @@ class Widget: public EventListener
 	protected:		
 		void setParent(Widget* view);
 		
+		Widget* getRootWidget(const std::string& tag);
+		
 		/*
 		These are the functions that implement object specific handler
 		for an event.

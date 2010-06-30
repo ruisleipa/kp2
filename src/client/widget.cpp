@@ -206,3 +206,27 @@ void Widget::setParent(Widget* view)
 	m_parent=view;
 }
 
+Widget* Widget::getRootWidget(const std::string& tag)
+{
+	Container* container=(Container*)getParent();
+	
+	if(container == 0)
+	{
+		std::cerr<<"Trying to get root widget \""<<tag<<"\" on a non-child widget."<<std::endl;
+	}
+	
+	while(container->getParent())
+	{
+		container=(Container*)container->getParent();
+	}
+	
+	Widget* widget=container->getWidget(tag);
+	
+	if(widget == 0)
+	{
+		std::cerr<<"Cannot find root widget \""<<tag<<"\". Will crash."<<std::endl;
+	}
+	
+	return widget;
+}
+
