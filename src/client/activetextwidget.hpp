@@ -18,6 +18,8 @@ class ActiveTextWidget : public TextWidget
 		
 		virtual void onDraw(Graphics& graphics);
 		
+		virtual void autoSize();
+		
 		ActiveTextWidget();
 	
 	protected:
@@ -26,6 +28,7 @@ class ActiveTextWidget : public TextWidget
 	
 	private:	
 		Font m_active_font;
+		Font m_border_font;
 		
 		bool m_mouse_over;	
 		bool m_animate;

@@ -38,7 +38,6 @@ void ActiveTextWidget::onMouseDown(MouseEvent event)
 
 void ActiveTextWidget::onDraw(Graphics& graphics)
 {
-	glBindTexture(GL_TEXTURE_2D,0);
 
 /*	Color(1,1,1).apply();
 	
@@ -56,10 +55,19 @@ void ActiveTextWidget::onDraw(Graphics& graphics)
 	
 	float spread=float(SDL_GetTicks()-m_mouse_over_time)/100.0;
 	
+	Vector2D pixelsize=Vector2D(1,1)/graphics.getDisplaySize();
+	
 	if(spread>1.0)
 	{
 		m_animate=false;
 	}
+		
+	position+=pixelsize;	
+		
+	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(1,0));	
+	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(1,0));
+	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(0,1));
+	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(0,1));
 	
 	Scissor scissor(graphics);
 	
@@ -108,4 +116,14 @@ ActiveTextWidget::ActiveTextWidget():
 {
 	m_mouse_over_sound.load("data/sounds/mouseover.wav");
 	m_mouse_down_sound.load("data/sounds/click.wav");
+	
+	m_border_font=Font("Textborder");
+}
+
+void ActiveTextWidget::autoSize()
+{
+	//needed for the bordered look
+	//TODO: better calculation (this is an ugly hack :P)
+	TextWidget::autoSize();
+	setSize(getSize()+Vector2D(0.005,0));
 }

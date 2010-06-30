@@ -17,7 +17,7 @@ class TextWidget : public Widget
 		void setFont(Font font);
 		Font& getFont();
 		
-		void autoSize();
+		virtual void autoSize();
 		
 		TextWidget();
 	
