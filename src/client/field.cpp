@@ -27,7 +27,7 @@ void Field::onDraw(Graphics& graphics)
 	scissor.reset();
 	
 	Color(0,0,0).apply();
-	glBindTexture(GL_TEXTURE_2D,0);
+	Texture().bind();
 	
 	glBegin(GL_LINE_LOOP);
 	glVertex2d(begin.getX(),begin.getY());

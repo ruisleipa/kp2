@@ -39,6 +39,8 @@ class Texture
 		int loadSurface(SDL_Surface* surface);
 		int loadSurface(SDL_Surface* surface,const std::string& tag);
 		
+		void bind();
+		
 		void draw(Vector2D position,Vector2D size);
 		void drawClipped(Vector2D position,Vector2D size,Vector2D clip_position,Vector2D clip_size);		
 		
@@ -99,6 +101,8 @@ class Texture
 		static void addManagedTexture(Texture* texture);
 		static void removeManagedTexture(Texture* texture);
 		static std::set<Texture*> m_textures;
+		
+		static GLuint m_binded_texture;
 
 };
 

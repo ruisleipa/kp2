@@ -3,6 +3,7 @@
 #include "shared/string.hpp"
 
 std::set<Texture*> Texture::m_textures;
+GLuint Texture::m_binded_texture=0;
 TextureFilter Texture::m_filter_limit;
 
 static void CheckGL()
@@ -204,7 +205,7 @@ void Texture::setFilter(TextureFilter filter)
 			break;
 	}
 
-	glBindTexture(GL_TEXTURE_2D,m_texture);
+	bind();
 
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,max);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,min);
@@ -439,7 +440,7 @@ int Texture::createTexture()
 		return -1;
 	}
 
-	glBindTexture(GL_TEXTURE_2D,m_texture);
+	bind();
 	glPixelStorei(GL_UNPACK_ALIGNMENT,4);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
@@ -466,6 +467,15 @@ void Texture::deleteTexture()
 
 	glDeleteTextures(1,&m_texture);
 	m_texture=0;
+}
+
+void Texture::bind()
+{
+	if(m_texture == m_binded_texture)
+		return;
+		
+	glBindTexture(GL_TEXTURE_2D,m_texture);
+	m_binded_texture=m_texture;
 }
 
 GLuint Texture::getTexture()
