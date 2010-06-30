@@ -4,6 +4,7 @@
 #include "widget.hpp"
 
 #include "texture.hpp"
+#include "color.hpp"
 
 class Image : public Widget
 {
@@ -14,6 +15,12 @@ class Image : public Widget
 		void setStretched(bool stretch);
 		bool getStrecthed();
 		
+		void setFill(bool fill);
+		bool getFill();
+		
+		void setColor(Color color);
+		Color getColor();		
+		
 		virtual void onDraw(Graphics& graphics);
 		
 		Image();
@@ -21,6 +28,8 @@ class Image : public Widget
 	private:
 		Texture* m_texture;	
 		bool m_stretched;
+		bool m_fill;
+		Color m_color;
 
 };
 
