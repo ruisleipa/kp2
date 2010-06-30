@@ -2,7 +2,7 @@
 
 void Ui::draw()
 {
-	m_root_window.draw(m_graphics);
+	m_root_window.doDraw(m_graphics);
 }
 
 Ui::Ui(Events& events,Graphics& graphics):
@@ -29,6 +29,6 @@ Ui::Ui(Events& events,Graphics& graphics):
 	m_localgamemenu.setVisible(false);
 	m_newlocalgamemenu.setVisible(false);
 
-	m_root_window.resize(m_graphics);
+	m_root_window.doResize(m_graphics);
 }
 

@@ -63,7 +63,7 @@ SettingsMenu::SettingsMenu(Graphics& graphics):
 	addWidget(&m_apply_button);
 }
 
-void SettingsMenu::resize(Graphics& graphics)
+void SettingsMenu::onResize(Graphics& graphics)
 {
 	m_background.setSize(Vector2D(1,1));
 		

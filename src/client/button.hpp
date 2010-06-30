@@ -8,7 +8,7 @@ class Button : public ActiveTextWidget
 	public:
 		virtual void onClick();
 	
-		virtual void mouseDown(MouseEvent event);
+		virtual void onMouseDown(MouseEvent event);
 		
 		Button();
 		

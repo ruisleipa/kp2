@@ -55,7 +55,7 @@ void Events::processEvents(Graphics& graphics)
 		
 			KeyEvent event(keysym.unicode, keysym.sym);
 			
-			m_event_listener->keyDown(event);
+			m_event_listener->doKeyDown(event);
 		}
 		else if(sdl_event.type == SDL_KEYUP)
 		{
@@ -63,7 +63,7 @@ void Events::processEvents(Graphics& graphics)
 		
 			KeyEvent event(keysym.unicode, keysym.sym);
 			
-			m_event_listener->keyUp(event);
+			m_event_listener->doKeyUp(event);
 		}
 		else if(sdl_event.type == SDL_MOUSEBUTTONDOWN)
 		{
@@ -73,7 +73,7 @@ void Events::processEvents(Graphics& graphics)
 							
 			MouseEvent event(pos, 1 << (button.button-1));
 			
-			m_event_listener->mouseDown(event);
+			m_event_listener->doMouseDown(event);
 		}
 		else if(sdl_event.type == SDL_MOUSEBUTTONUP)
 		{
@@ -83,7 +83,7 @@ void Events::processEvents(Graphics& graphics)
 									
 			MouseEvent event(pos, 1 << (button.button-1));
 			
-			m_event_listener->mouseUp(event);
+			m_event_listener->doMouseUp(event);
 		}
 		else if(sdl_event.type == SDL_MOUSEMOTION)
 		{
@@ -93,7 +93,7 @@ void Events::processEvents(Graphics& graphics)
 					
 			MouseEvent event(pos, motion.state);
 			
-			m_event_listener->mouseMove(event);
+			m_event_listener->doMouseMove(event);
 		}
 		else if(sdl_event.type == SDL_VIDEORESIZE)
 		{
@@ -106,7 +106,7 @@ void Events::processEvents(Graphics& graphics)
 
 void Events::resize(Graphics& graphics)
 {
-	m_event_listener->resize(graphics);
+	m_event_listener->doResize(graphics);
 }
 
 Events::Events(Sdl& sdl): 

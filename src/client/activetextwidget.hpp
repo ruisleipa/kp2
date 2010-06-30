@@ -12,11 +12,11 @@ class ActiveTextWidget : public TextWidget
 		void setActiveFont(Font font);
 		Font& getActiveFont();
 		
-		virtual void mouseOn();
-		virtual void mouseOut();		
-		virtual void mouseDown(MouseEvent);
+		virtual void onMouseOn();
+		virtual void onMouseOut();		
+		virtual void onMouseDown(MouseEvent);
 		
-		virtual void draw(Graphics& graphics);
+		virtual void onDraw(Graphics& graphics);
 		
 		ActiveTextWidget();
 	

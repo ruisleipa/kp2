@@ -10,11 +10,11 @@ void Button::onClick()
 
 }
 
-void Button::mouseDown(MouseEvent event)
+void Button::onMouseDown(MouseEvent event)
 {
 	if(event.isButtonDown(MouseEvent::LEFT) || event.isButtonDown(MouseEvent::RIGHT))
 	{
-		ActiveTextWidget::mouseDown(event);
+		ActiveTextWidget::onMouseDown(event);
 		
 		onClick();
 	}

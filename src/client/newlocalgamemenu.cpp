@@ -38,7 +38,7 @@ NewLocalGameMenu::NewLocalGameMenu()
 	addWidget(&m_start_button);
 }
 
-void NewLocalGameMenu::resize(Graphics& graphics)
+void NewLocalGameMenu::onResize(Graphics& graphics)
 {
 	m_background.setSize(Vector2D(1,1));
 		

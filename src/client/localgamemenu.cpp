@@ -31,7 +31,7 @@ LocalGameMenu::LocalGameMenu()
 	addWidget(&m_back_button);	
 }
 
-void LocalGameMenu::resize(Graphics& graphics)
+void LocalGameMenu::onResize(Graphics& graphics)
 {
 	m_background.setSize(Vector2D(1,1));
 		

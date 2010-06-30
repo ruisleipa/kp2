@@ -8,14 +8,14 @@ class Graphics;
 class EventListener
 {
 	public:
-		virtual void keyDown(KeyEvent event);
-		virtual void keyUp(KeyEvent event);
+		virtual void doKeyDown(KeyEvent event);
+		virtual void doKeyUp(KeyEvent event);
 		
-		virtual void mouseDown(MouseEvent event);
-		virtual void mouseUp(MouseEvent event);
-		virtual void mouseMove(MouseEvent event);
+		virtual void doMouseDown(MouseEvent event);
+		virtual void doMouseUp(MouseEvent event);
+		virtual void doMouseMove(MouseEvent event);
 	
-		virtual void resize(Graphics& graphics);
+		virtual void doResize(Graphics& graphics);
 };
 
 #endif // __KEYEVENT_HPP

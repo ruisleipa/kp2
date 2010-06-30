@@ -9,9 +9,9 @@ void Select::onChange()
 	
 }
 
-void Select::mouseDown(MouseEvent event)
+void Select::onMouseDown(MouseEvent event)
 {
-	ActiveTextWidget::mouseDown(event);
+	ActiveTextWidget::onMouseDown(event);
 
 	if(m_index == -1)
 		return;

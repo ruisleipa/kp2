@@ -2,7 +2,7 @@
 
 #include "scissor.hpp"
 
-void Field::draw(Graphics& graphics)
+void Field::onDraw(Graphics& graphics)
 {				
 	float cursorpos=getFont().getTextSize(getWideText().substr(0,m_cursorpos)).getX();
 		
@@ -49,7 +49,7 @@ void Field::draw(Graphics& graphics)
 	getFont().draw(getWideText(),getPosition()+Vector2D(textoffset,0));
 }
 
-void Field::keyDown(KeyEvent event)
+void Field::onKeyDown(KeyEvent event)
 {
 	std::wstring text=getWideText();
 
@@ -107,12 +107,12 @@ void Field::keyDown(KeyEvent event)
 	}
 }
 
-void Field::focus()
+void Field::onFocus()
 {
 	m_focused=true;
 }
 
-void Field::blur()
+void Field::onBlur()
 {
 	m_focused=false;
 }

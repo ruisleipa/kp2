@@ -27,7 +27,7 @@ bool Image::getStrecthed()
 	return m_stretched;
 }
 
-void Image::draw(Graphics& graphics)
+void Image::onDraw(Graphics& graphics)
 {
 	if(!m_texture)
 		return;
@@ -60,7 +60,7 @@ void Image::draw(Graphics& graphics)
 	
 	Color(1,1,1).apply();
 	
-	m_texture->draw(getPosition(),image_size);
+	m_texture->draw(getScreenPosition(),image_size);
 }
 
 Image::Image()

@@ -10,7 +10,7 @@ class Select : public ActiveTextWidget
 	public:
 		virtual void onChange();
 	
-		virtual void mouseDown(MouseEvent event);
+		virtual void onMouseDown(MouseEvent event);
 		
 		Select();
 		

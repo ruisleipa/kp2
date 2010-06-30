@@ -6,7 +6,7 @@
 class Label : public TextWidget
 {
 	public:
-		virtual void draw(Graphics& graphics);
+		virtual void onDraw(Graphics& graphics);
 		
 		Label();
 		

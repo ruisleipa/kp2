@@ -6,11 +6,11 @@
 class Field : public TextWidget
 {
 	public:
-		virtual void draw(Graphics& graphics);
-		virtual void keyDown(KeyEvent event);
+		virtual void onDraw(Graphics& graphics);
+		virtual void onKeyDown(KeyEvent event);
 		
-		virtual void focus();
-		virtual void blur();
+		virtual void onFocus();
+		virtual void onBlur();
 		
 		Field();
 	

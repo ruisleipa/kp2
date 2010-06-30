@@ -13,7 +13,7 @@ class NewLocalGameMenu : public Window
 	public:
 		NewLocalGameMenu();
 
-		virtual void resize(Graphics& graphics);
+		virtual void onResize(Graphics& graphics);
 		virtual void onShow();
 		
 	private:

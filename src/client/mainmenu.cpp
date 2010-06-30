@@ -25,7 +25,7 @@ MainMenu::MainMenu()
 	addWidget(&m_quit_button);
 }
 
-void MainMenu::resize(Graphics& graphics)
+void MainMenu::onResize(Graphics& graphics)
 {
 	m_background.setSize(Vector2D(1,1));
 

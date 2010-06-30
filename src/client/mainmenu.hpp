@@ -10,7 +10,7 @@ class MainMenu : public Window
 	public:
 		MainMenu();
 		
-		virtual void resize(Graphics& graphics);
+		virtual void onResize(Graphics& graphics);
 
 	private:
 

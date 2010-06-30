@@ -14,7 +14,7 @@ class Image : public Widget
 		void setStretched(bool stretch);
 		bool getStrecthed();
 		
-		virtual void draw(Graphics& graphics);
+		virtual void onDraw(Graphics& graphics);
 		
 		Image();
 		

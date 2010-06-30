@@ -12,6 +12,7 @@ class Widget: public EventListener
 	public:
 		void setPosition(Vector2D position);	
 		Vector2D getPosition();
+		Vector2D getScreenPosition();
 		
 		void setSize(Vector2D size);	
 		Vector2D getSize();
@@ -19,16 +20,29 @@ class Widget: public EventListener
 		void setVisible(bool visible);
 		bool getVisible();
 		
-		virtual void mouseOn();
-		virtual void mouseOut();
+		/*
+		These are the functions for signaling that an event has
+		happened.		
+		*/		
+		virtual void doKeyDown(KeyEvent event);
+		virtual void doKeyUp(KeyEvent event);				
 		
-		virtual void blur();
-		virtual void focus();
+		virtual void doMouseDown(MouseEvent event);
+		virtual void doMouseUp(MouseEvent event);
+		virtual void doMouseMove(MouseEvent event);	
 		
-		virtual void draw(Graphics& graphics);
+		virtual void doResize(Graphics& graphics);		
 		
-		virtual void onShow();
-		virtual void onHide();
+		virtual void doMouseOn();
+		virtual void doMouseOut();		
+		
+		virtual void doBlur();
+		virtual void doFocus();	
+		
+		virtual void doDraw(Graphics& graphics);		
+		
+		virtual void doShow();
+		virtual void doHide();
 		
 		Widget* getParent();
 		
@@ -37,6 +51,30 @@ class Widget: public EventListener
 	
 	protected:		
 		void setParent(Widget* view);
+		
+		/*
+		These are the functions that implement object specific handler
+		for an event.
+		*/		
+		virtual void onKeyDown(KeyEvent event);
+		virtual void onKeyUp(KeyEvent event);
+		
+		virtual void onMouseDown(MouseEvent event);
+		virtual void onMouseUp(MouseEvent event);
+		virtual void onMouseMove(MouseEvent event);
+	
+		virtual void onResize(Graphics& graphics);
+		
+		virtual void onMouseOn();
+		virtual void onMouseOut();	
+		
+		virtual void onBlur();
+		virtual void onFocus();	
+		
+		virtual void onDraw(Graphics& graphics);
+		
+		virtual void onShow();
+		virtual void onHide();
 	
 	private:
 		Vector2D m_position;

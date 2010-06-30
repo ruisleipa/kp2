@@ -12,7 +12,7 @@ class SettingsMenu : public Window
 	public:
 		SettingsMenu(Graphics& graphics);
 
-		virtual void resize(Graphics& graphics);
+		virtual void onResize(Graphics& graphics);
 		virtual void onShow();
 	
 		void updateDisplayOptions();

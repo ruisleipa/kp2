@@ -14,78 +14,92 @@
 #include <GL/gl.h>
 #include <SDL/SDL.h>
 
-void Container::keyDown(KeyEvent event)
+void Container::doKeyDown(KeyEvent event)
 {
+	Widget::doKeyDown(event);
+
 	if(m_focused)
-		m_focused->keyDown(event);
+		m_focused->doKeyDown(event);
 }
 
-void Container::keyUp(KeyEvent event)
+void Container::doKeyUp(KeyEvent event)
 {
+	Widget::doKeyUp(event);
+
 	if(m_focused)
-		m_focused->keyUp(event);
+		m_focused->doKeyUp(event);
 }
 
-void Container::mouseDown(MouseEvent event)
+void Container::doMouseDown(MouseEvent event)
 {
+	Widget::doMouseDown(event);
+
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 	
 	if(widget != m_focused)
 	{
 		if(m_focused)
-			m_focused->blur();
+			m_focused->doBlur();
 	
 		m_focused=widget;
 		
 		if(m_focused)
-			m_focused->focus();
+			m_focused->doFocus();
 	}
 	
 	if(widget)
-		widget->mouseDown(event);
+		widget->doMouseDown(event);
 }
 
-void Container::mouseUp(MouseEvent event)
+void Container::doMouseUp(MouseEvent event)
 {
+	Widget::doMouseUp(event);
+
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 
 	if(widget)
-		widget->mouseUp(event);
+		widget->doMouseUp(event);
 }
 
-void Container::mouseMove(MouseEvent event)
+void Container::doMouseMove(MouseEvent event)
 {
+	Widget::doMouseMove(event);
+	
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 	
 	if(widget != m_mouse_over)
 	{
 		if(m_mouse_over)
-			m_mouse_over->mouseOut();
+			m_mouse_over->doMouseOut();
 	
 		m_mouse_over=widget;
 		
 		if(m_mouse_over)
-			m_mouse_over->mouseOn();
+			m_mouse_over->doMouseOn();
 	}
 	
 	if(m_mouse_over)
-		m_mouse_over->mouseMove(event);
+		m_mouse_over->doMouseMove(event);
 }
 
-void Container::resize(Graphics& graphics)
+void Container::doResize(Graphics& graphics)
 {
+	Widget::doResize(graphics);
+
 	std::vector<TaggedWidget>::iterator i;
 	
 	for(i=m_widgets.begin();i!=m_widgets.end();++i)
 	{
 		Widget* widget=(*i).m_widget;
 	
-		widget->resize(graphics);
+		widget->doResize(graphics);
 	}	
 }
 
-void Container::draw(Graphics& graphics)
+void Container::doDraw(Graphics& graphics)
 {
+	Widget::doDraw(graphics);
+	
 	std::vector<TaggedWidget>::iterator i;
 	
 	Scissor scissor(graphics);
@@ -97,7 +111,9 @@ void Container::draw(Graphics& graphics)
 		if(!widget->getVisible())
 			continue;
 	
-		scissor.set(widget->getPosition(),widget->getSize());
+		Vector2D start=getScreenPosition()+widget->getPosition();
+	
+		scissor.set(start,widget->getSize());
 		
 		/*	
 		Vector2D begin=(*i)->getPosition();
@@ -118,7 +134,7 @@ void Container::draw(Graphics& graphics)
 		glEnd();
 		*/	
 	
-		widget->draw(graphics);
+		widget->doDraw(graphics);
 	}
 	
 	scissor.reset();
@@ -163,16 +179,6 @@ Widget* Container::getWidget(std::string tag)
 	return 0;	
 }
 
-void Container::calculateLayout()
-{
-
-}
-
-void Container::onActivate()
-{
-
-}
-
 Container::Container():
 	m_mouse_over(0),
 	m_focused(0)
@@ -191,8 +197,8 @@ Widget* Container::findWidgetUnderPoint(Vector2D point)
 		if(!widget->getVisible())
 			continue;
 	
-		Vector2D begin=widget->getPosition();
-		Vector2D end=(widget->getPosition()+widget->getSize());
+		Vector2D begin=getScreenPosition()+widget->getPosition();
+		Vector2D end=begin+widget->getSize();
 		
 		bool y=point.getY()>=begin.getY() && point.getY()<=end.getY();
 		bool x=point.getX()>=begin.getX() && point.getX()<=end.getX();
