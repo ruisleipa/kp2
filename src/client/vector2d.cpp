@@ -12,27 +12,27 @@ Vector2D::Vector2D(float x,float y)
 	m_y=y;
 }
 
-Vector2D Vector2D::operator+(const Vector2D& a)
+Vector2D Vector2D::operator+(const Vector2D& a) const
 {
 	return Vector2D(a.m_x+m_x,a.m_y+m_y);
 }
 
-Vector2D Vector2D::operator-(const Vector2D& a)
+Vector2D Vector2D::operator-(const Vector2D& a) const
 {
 	return Vector2D(m_x-a.m_x,m_y-a.m_y);	
 }
 
-Vector2D Vector2D::operator*(const Vector2D& a)
+Vector2D Vector2D::operator*(const Vector2D& a) const
 {
 	return Vector2D(m_x*a.m_x,m_y*a.m_y);	
 }
 
-Vector2D Vector2D::operator/(const Vector2D& a)
+Vector2D Vector2D::operator/(const Vector2D& a) const
 {
 	return Vector2D(m_x/a.m_x,m_y/a.m_y);	
 }
 
-Vector2D Vector2D::operator/(float a)
+Vector2D Vector2D::operator/(float a) const
 {
 	if(!a)
 		a=1;
@@ -40,7 +40,7 @@ Vector2D Vector2D::operator/(float a)
 	return Vector2D(m_x/a,m_y/a);	
 }
 
-Vector2D Vector2D::operator*(float a)
+Vector2D Vector2D::operator*(float a) const
 {
 	return Vector2D(m_x*a,m_y*a);	
 }
