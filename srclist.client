@@ -17,6 +17,7 @@ SRC = \
 	src/client/image.cpp \
 	src/client/keyevent.cpp \
 	src/client/label.cpp \
+	src/client/listbox.cpp \
 	src/client/localgamemenu.cpp \
 	src/client/main.cpp \
 	src/client/mainmenu.cpp \
