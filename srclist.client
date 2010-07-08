@@ -40,9 +40,8 @@ SRC = \
 	src/shared/outputredirector.cpp \
 	src/shared/packet.cpp \
 	src/shared/serversocket.cpp \
-	src/shared/socketactivity.cpp \
-	src/shared/socketcore.cpp \
 	src/shared/socket.cpp \
+	src/shared/socketactivity.cpp \
 	src/shared/socketset.cpp \
 	src/shared/string.cpp
 

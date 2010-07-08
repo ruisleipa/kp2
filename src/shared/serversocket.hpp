@@ -1,17 +1,17 @@
 #ifndef __SERVERSOCKET_HPP
 #define __SERVERSOCKET_HPP
 
+#include "socket.hpp"
 #include "clientsocket.hpp"
 
 #include <string>
 
-class ServerSocket : public Socket
+class ServerSocket: public Socket
 {
 	public:
-		int open(const std::string& host,int port);
+		bool open(const std::string& hostname,int port);
 	
-		int accept(ClientSocket& socket);
-
+		bool accept(ClientSocket& socket);
 };
 
 #endif // __SERVERSOCKET_HPP

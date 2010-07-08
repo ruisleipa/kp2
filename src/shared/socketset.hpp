@@ -13,7 +13,8 @@
 
 #endif
 
-#include <map>
+#include <set>
+#include <vector>
 
 #include "socket.hpp"
 #include "socketactivity.hpp"
@@ -23,21 +24,24 @@ class SocketSet
 	public:
 		void add(Socket* socket);
 		void remove(Socket* socket);
-		
+			
 		SocketActivity waitForActivity();
 
 		SocketSet();
 		~SocketSet();
 		
 	private:
-		std::map<int,Socket*> m_sockets;
-		int m_highest_fd;		
-		fd_set m_fd_set;
+		SocketSet(const SocketSet&);
+		SocketSet& operator=(const SocketSet&);
+	
+		void updateActivity();
+		void socketClosed(Socket* socket);
+	
+		std::set<Socket*> m_sockets;
+		std::vector<Socket*> m_readable_sockets;
+		std::vector<Socket*> m_writable_sockets;
 		
-		int m_current_active;
-		fd_set m_readable_sockets;
-		fd_set m_writable_sockets;
-		bool m_first_wait;
+		friend class Socket;
 };
 
 #endif // __SOCKETSET_HPP

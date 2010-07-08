@@ -5,15 +5,18 @@
 
 #include <string>
 
-class ClientSocket : public Socket
+class ClientSocket: public Socket
 {
 	public:
-		bool open(const std::string& host,int port);
-
+		bool connect(const std::string& hostname,int port);
+	
 		int read(char* data,int size);
-		int write(const char* data,int size);
+		int write(const char* data,int size);		
+		
+		ClientSocket();		
 
 	protected:
+				
 		friend class ServerSocket;
 };
 

@@ -4,7 +4,6 @@ SRC = src/server/main.cpp \
 	src/shared/clientsocket.cpp \
 	src/shared/socket.cpp \
 	src/shared/socketset.cpp \
-	src/shared/socketcore.cpp \
 	src/shared/socketactivity.cpp \
 	src/shared/packet.cpp \
 	src/shared/assert.cpp \

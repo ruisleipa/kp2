@@ -83,8 +83,8 @@ int main(int argc,char** argv)
 			
 			ClientSocket* newconnection=new ClientSocket;
 			
-			if(socket.accept(*newconnection)==0)
-			{			
+			if(socket.accept(*newconnection) == true)
+			{	
 				set.add(newconnection);
 				connections[newconnection];
 			
@@ -92,10 +92,9 @@ int main(int argc,char** argv)
 			}
 		}
 		else
-		{		
-			ClientSocket* conn=(ClientSocket*)activity.getSocket();
+		{			
+			ClientSocket* conn=(ClientSocket*)activity.getSocket();			
 			
-			if(activity.canRead())
 			{
 				int read;
 			
@@ -127,15 +126,7 @@ int main(int argc,char** argv)
 				}
 			}
 			
-			if(activity.canWrite())
-			{
-				int written;
 			
-				/*
-				Write as long as can be written.
-				*/				
-				connections[conn].writeToClient(conn);
-			}
 		}
 	}
 }
