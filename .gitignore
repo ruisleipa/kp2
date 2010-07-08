@@ -1,0 +1,11 @@
+data
+gamedata
+*.d
+*.o
+*.dll
+stderr.txt
+stdout.txt
+*.log
+*.bak
+*.cfg
+*.res
