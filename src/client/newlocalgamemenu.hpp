@@ -8,15 +8,18 @@
 #include "image.hpp"
 #include "field.hpp"
 
+#include "connection.hpp"
+
 class NewLocalGameMenu : public Window
 {
 	public:
-		NewLocalGameMenu();
+		NewLocalGameMenu(Connection& connection);
 
 		virtual void onResize(Graphics& graphics);
 		virtual void onShow();
 		
 	private:
+		Connection& m_connection;
 
 		Texture m_background_texture;
 		Image m_background;

@@ -59,6 +59,7 @@ void Select::setIndex(int index)
 		m_index=index;
 		
 		setText(m_items[m_index]);
+		autoSize();
 	}
 }
 

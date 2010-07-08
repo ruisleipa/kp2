@@ -1,8 +1,10 @@
 #include "fontface.hpp"
 
 #include "graphics.hpp"
+#include "shared/string.hpp"
 
 #include <sstream>
+#include <iterator>
 
 FontFace::FontFace(Graphics& graphics):
 	m_graphics(graphics),
@@ -64,8 +66,6 @@ void FontFace::unload()
 	m_height=0;
 }
 
-
-
 void FontFace::draw(std::wstring str,Vector2D pos,float char_height)
 {
 	if(!m_font)
@@ -80,11 +80,28 @@ void FontFace::draw(std::wstring str,Vector2D pos,float char_height)
 		if (str[i]>=0x20)
 		{
 			unsigned int page=str[i]/FONT_PAGE_SIZE;
+			int rectangle_index=str[i]%FONT_PAGE_SIZE;
 
+			/*
+			This is a workaround to a problem where using large
+			amount of different qlyphs causes memory usage to grow
+			way too large. We only allow basic glyphs (page 0).
+			Page 32 is allowed because the euro sign resides there.
+			If a glyph doesn't reside on those pages, we display a
+			question mark instead.
+			TODO: Rework the class to use some kind of glyph level
+			caching. Not a top priority however.
+			*/
+			if(page!=0 && page!=32)
+			{
+				page='?'/FONT_PAGE_SIZE;
+				rectangle_index='?'%FONT_PAGE_SIZE;
+			}
+			
 			loadPage(page);
 
 			FontPage& font_page=m_font_pages[page];
-			int rectangle_index=str[i]%FONT_PAGE_SIZE;
+			
 			LetterRectangle& letterinfo=m_font_pages[page].letter_rectangles[rectangle_index];
 			
 			char_size.setX(char_height*(letterinfo.size.getX()/letterinfo.size.getY())/m_graphics.getAspectRatio());
@@ -108,43 +125,128 @@ void FontFace::draw(std::wstring str,Vector2D pos,float char_height)
 		}
 	}
 }
-#if 0
-void FontFace::drawWrapped(std::wstring str,float x,float y,float height,float area_width,float area_height)
+
+void FontFace::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float char_height)
 {
+#if 0
+	float row_size = 0;
+	int rows_processed = 0;
+	size_t word_start = 0, word_end = 0;
 	std::wstring res_str, stub;
 	res_str.clear();
 	stub.clear();
-	size_t word_start, word_end;
-	word_start = word_end = 0;
-	int max_rows = area_width / getTextSize(L"X").getY() + 1;
-	int rows_processed = 0;
 
-	while ((word_end != std::wstring::npos) && (rows_processed <= max_rows))
+	while (word_end != std::wstring::npos)
 	{
-		word_start = word_end + 1;
-		word_end = str.find(L" ",word_start);
-		stub = str.substr(word_start-1,word_end - word_start + 1);
-
-		if (getTextSize(res_str + stub).getX() > size.getX())
+		//If text goes beyond our boundaries, it'll be cropped anyway.
+		if (getTextSize(L"X",char_height).getY()*rows_processed >= size.getY())
 		{
+			stub = str.substr(word_start);
+			res_str += stub;
+			break;
+		}
+		
+
+		word_start = word_end+1;
+		//we want to skip those whitespaces,
+		//but we still must cut from the beginning of the string
+		if (word_end == 0)
+			word_start = 0;
+
+		word_end = str.find(L" ",word_start);
+		row_size += getTextSize(stub + L" ",char_height).getX();
+
+		stub = str.substr(word_start,word_end-word_start);
+		
+		
+		if(stub.find(L"\n") != std::wstring::npos)
+		{
+			row_size = 0;
+			rows_processed++;
+		}
+		if (getTextSize(stub,char_height).getX()+row_size >= size.getX())
+		{
+			row_size = 0;
 			res_str += L"\n";
-			//remember that space on front of stub?
-			res_str += stub.substr(1);
-			++rows_processed;
+			rows_processed++;
+		}		
+		
+		res_str += stub + L" ";
+	}
+
+	draw(res_str, pos, char_height);
+	
+#else
+	/*
+	Split the input to words
+	*/	
+	std::wstringstream ss(str);
+	std::vector<std::wstring> words;
+	
+	while(!ss.eof())
+	{
+		std::wstring word;
+		
+		std::getline(ss,word,ss.widen(' '));
+		
+		size_t newlinepos;
+		
+		while((newlinepos=word.find(L"\n")) != std::string::npos)
+		{
+			words.push_back(word.substr(0,newlinepos+1));
+			word.erase(0,newlinepos+1);
+		}		
+		
+		if(word.size())
+			words.push_back(word);
+	}	
+
+	/*
+	Do layout.
+	*/	
+	int max_rows = size.getY() / getTextSize(L"X",char_height).getY() + 1;
+	Vector2D rowsize;
+	std::wstring final_string;
+	
+	std::vector<std::wstring>::iterator i;
+	
+	for(i=words.begin();i!=words.end();++i)
+	{
+		rowsize+=getTextSize((*i),char_height);
+	
+		if(rowsize.getX()>size.getX())
+		{
+			final_string.append(L"\n");
+			final_string.append((*i));
+			final_string.append(L" ");
+			
+			rowsize=Vector2D(0,0);			
+			rowsize+=getTextSize((*i),char_height);
+			rowsize+=getTextSize(L" ",char_height);
+		}
+		else if((*i).at((*i).size()-1)=='\n')
+		{
+			final_string.append((*i));
+		
+			rowsize=Vector2D(0,0);
 		}
 		else
 		{
-			res_str += stub;
+			final_string.append((*i));
+			final_string.append(L" ");
+			
+			rowsize+=getTextSize(L" ",char_height);
 		}
 	}
 
-	draw(res_str, x, y, height);
-}
+	draw(final_string, pos, char_height);
 #endif
+}
+
 Vector2D FontFace::getTextSize(std::wstring str,float char_height)
 {
 	if(!m_font)
-	{std::cout<<"asd"<<std::endl;
+	{
 		return Vector2D(0,0);
 	}
 
@@ -249,6 +351,8 @@ int FontFace::loadPage(unsigned int pagenum)
 			
 		}		
 	}
+	
+	
 
 	if(texture_width==0)
 	{

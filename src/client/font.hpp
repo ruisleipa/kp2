@@ -12,7 +12,11 @@ class Font
 {
 	public:
 		void draw(std::wstring str,Vector2D pos);
+		void draw(std::wstring str,Vector2D pos,Color color);
+		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size);
+		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size,Color color);
 		Vector2D getTextSize(std::wstring str);
+		Color getColor();
 		
 		static void setFontType(std::string name,FontFace* font_face,float size,Color color);
 		

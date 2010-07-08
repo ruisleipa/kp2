@@ -13,12 +13,48 @@ void Font::draw(std::wstring str,Vector2D pos)
 	m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
 }
 
+void Font::draw(std::wstring str,Vector2D pos,Color color)
+{
+	if(!m_font_type)
+		return;
+		
+	color.apply();
+	m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
+}
+
+void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size)
+{
+	if(!m_font_type)
+		return;
+		
+	m_font_type->m_color.apply();
+	//m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
+	m_font_type->m_font_face->drawWrapped(str,pos,size,m_font_type->m_size);
+}
+
+void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,Color color)
+{
+	if(!m_font_type)
+		return;
+		
+	color.apply();
+	m_font_type->m_font_face->drawWrapped(str,pos,size,m_font_type->m_size);
+}
+
 Vector2D Font::getTextSize(std::wstring str)
 {
 	if(!m_font_type)
 		return Vector2D(0,0);
 	
 	return m_font_type->m_font_face->getTextSize(str,m_font_type->m_size);
+}
+
+Color Font::getColor()
+{
+	if(!m_font_type)
+		return Color();
+		
+	return m_font_type->m_color;
 }
 
 Font::Font(std::string type):

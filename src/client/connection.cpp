@@ -4,7 +4,9 @@
 
 #include "shared/inifile.hpp"
 #include "shared/packet.hpp"
+#include "sdl.hpp"
 #include "sound.hpp"
+
 
 bool Connection::connect(std::string hostname,int port)
 {

@@ -1,16 +1,5 @@
-#include "graphics.hpp"
-#include "font.hpp"
-#include "events.hpp"
-#include "sdl.hpp"
-#include "container.hpp"
-#include "connection.hpp"
-#include "ui.hpp"
-
 #include "application.hpp"
 #include "shared/outputredirector.hpp"
-
-#include "shared/string.hpp"
-#include "shared/inifile.hpp"
 
 #ifdef WIN32
 
@@ -45,8 +34,6 @@ void ActivateConsole()
 
 #endif
 
-const std::string VIDEO_CONFIG="cfg/video.cfg";
-
 int main(int argc,char** argv)
 {
 	OutputRedirector redirect("client.log");
@@ -56,6 +43,6 @@ int main(int argc,char** argv)
 #endif
 	Application application;	
 
-	application.enterMainLoop();	
+	application.enterMainLoop();
 }
 

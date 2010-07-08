@@ -3,6 +3,10 @@ SRC = \
 	src/client/application.cpp \
 	src/client/assert.cpp \
 	src/client/button.cpp \
+	src/client/carshopmenu.cpp \
+	src/client/carlistmenu.cpp \
+	src/client/garagemenu.cpp \
+	src/client/careermenu.cpp \
 	src/client/color.cpp \
 	src/client/connection.cpp \
 	src/client/connectmenu.cpp \
@@ -30,6 +34,9 @@ SRC = \
 	src/client/sound.cpp \
 	src/client/texture.cpp \
 	src/client/textwidget.cpp \
+	src/client/tuningmenu.cpp \
+	src/client/partshopmenu.cpp \
+	src/client/installpartsmenu.cpp \
 	src/client/ui.cpp \
 	src/client/vector2d.cpp \
 	src/client/widget.cpp \

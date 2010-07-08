@@ -28,7 +28,7 @@ class FontFace
 	public:
 		int load(std::string fontfile,int fontsize);
 		void draw(std::wstring str,Vector2D pos,float char_height);
-		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size);
+		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float char_height);
 		Vector2D getTextSize(std::wstring str,float char_height);
 
 		FontFace(Graphics& graphics);
