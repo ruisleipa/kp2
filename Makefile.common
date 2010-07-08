@@ -17,12 +17,9 @@ clean:
 	-rm $(BIN) $(OBJ) $(DEPS) $(RES)
 
 %.o: %.cpp
-	$(call MAKEDEPEND,$<,$@,$(subst .o,.d,$@))
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -MD -c $< -o $@
 
 ifneq "$(MAKECMDGOALS)" "clean"
-
-  -include $(DEPS)
-
+-include $(DEPS)
 endif
 
