@@ -5,11 +5,14 @@
 #include "shared/inifile.hpp"
 #include "shared/serversocket.hpp"
 #include "shared/socketset.hpp"
+#include "shared/outputredirector.hpp"
 
 #include "connection.hpp"
 
 int main(int argc,char** argv)
 {
+	OutputRedirector redirec("server.log");
+
 	std::cout<<"Kiihdytyspeli 2 server"<<std::endl;
 	
 	std::string config="cfg/server.cfg";

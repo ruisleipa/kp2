@@ -37,6 +37,7 @@ SRC = \
 	src/shared/assert.cpp \
 	src/shared/clientsocket.cpp \
 	src/shared/inifile.cpp \
+	src/shared/outputredirector.cpp \
 	src/shared/packet.cpp \
 	src/shared/serversocket.cpp \
 	src/shared/socketactivity.cpp \

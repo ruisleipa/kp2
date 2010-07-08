@@ -7,6 +7,7 @@
 #include "ui.hpp"
 
 #include "application.hpp"
+#include "shared/outputredirector.hpp"
 
 #include "shared/string.hpp"
 #include "shared/inifile.hpp"
@@ -48,6 +49,8 @@ const std::string VIDEO_CONFIG="cfg/video.cfg";
 
 int main(int argc,char** argv)
 {
+	OutputRedirector redirect("client.log");
+
 #ifdef WIN32
 	//ActivateConsole();
 #endif

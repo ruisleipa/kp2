@@ -8,4 +8,5 @@ SRC = src/server/main.cpp \
 	src/shared/socketactivity.cpp \
 	src/shared/packet.cpp \
 	src/shared/assert.cpp \
+	src/shared/outputredirector.cpp \
 	src/shared/inifile.cpp
