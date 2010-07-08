@@ -27,7 +27,6 @@ SRC = \
 	src/client/select.cpp \
 	src/client/settingsmenu.cpp \
 	src/client/sound.cpp \
-	src/client/sounds.cpp \
 	src/client/texture.cpp \
 	src/client/textwidget.cpp \
 	src/client/ui.cpp \
