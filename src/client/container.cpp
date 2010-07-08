@@ -140,6 +140,20 @@ void Container::doDraw(Graphics& graphics)
 	scissor.reset();
 }
 
+void Container::doConnectionEvent(Connection& connection)
+{
+	Widget::doConnectionEvent(connection);
+
+	std::vector<TaggedWidget>::iterator i;
+	
+	for(i=m_widgets.begin();i!=m_widgets.end();++i)
+	{
+		Widget* widget=(*i).m_widget;
+	
+		widget->doConnectionEvent(connection);
+	}	
+}
+
 void Container::addWidget(Widget* widget)
 {
 	assert(widget != 0);

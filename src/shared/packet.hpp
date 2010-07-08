@@ -13,21 +13,34 @@ class EndOfDataException
 class Packet
 {
 	public:
-		void write(uint16_t value);
-		void write(uint32_t value);
-		void write(std::string value);
+		const Packet& operator<<(uint16_t value);
+		const Packet& operator<<(uint32_t value);
+		const Packet& operator<<(int16_t value);
+		const Packet& operator<<(int32_t value);
+		const Packet& operator<<(float value);
+		const Packet& operator<<(const std::string& value);
 		
-		void read(uint16_t& value);
-		void read(uint32_t& value);
-		void read(std::string& value);
+		const Packet& operator>>(uint16_t& value);
+		const Packet& operator>>(uint32_t& value);
+		const Packet& operator>>(int16_t& value);
+		const Packet& operator>>(int32_t& value);
+		const Packet& operator>>(float& value);
+		const Packet& operator>>(std::string& value);
+				
+		std::string getString() const;
 		
-		std::string getString();
+		uint16_t getType() const;
+		void setType(uint16_t type);		
 		
-		Packet(std::string str);
+		void readFromBuffer(std::string& buffer);
+		
 		Packet();
+		
+		friend std::ostream& operator<<(std::ostream& stream,const Packet& packet);
 
 	private:
-		std::stringstream m_buffer;
+		uint16_t m_type;
+		std::stringstream m_payload;
 };
 
 #endif // __PACKET_HPP

@@ -2,9 +2,13 @@
 
 #include <iostream>
 
-void Connection::connect(std::string hostname,int port)
+#include "shared/inifile.hpp"
+#include "shared/packet.hpp"
+#include "sound.hpp"
+
+bool Connection::connect(std::string hostname,int port)
 {
-	m_socket.open(hostname,port);
+	return m_socket.connect(hostname,port);
 }
 
 void Connection::processMessages()
@@ -42,70 +46,152 @@ void Connection::processMessages()
 		m_send_buffer.erase(0,written);
 	}
 	
-	uint16_t length;
-	uint16_t type;
-	
-	while(m_receive_buffer.size()>=4)
+	while(1)
 	{
-		/*
-		We have a headerful of data in the buffer. Now we need to check
-		if there is a complete packet in the buffer. The size of the
-		packet is in the header, so we check the size with the value
-		from the header.
-		*/		
-		m_receive_buffer.copy((char*)&length,sizeof(length));
-		m_receive_buffer.copy((char*)&type,sizeof(type),2);	
+		Packet message;
 	
-		length=ntohs(length);
-		type=ntohs(type);
-	
-		/*
-		If there is no enough data we quit the loop.
-		*/
-		if(m_receive_buffer.size()<length)
-			break;	
-	
-		std::cout<<"cmd len: "<<length<<" type: "<<type<<std::endl;
-	
-		/*
-		There was a complete packet in the buffer. Now we give the 
-		packet to the appropriate handler object. The handler object is 
-		fetched by the type field in the packet header.
-		*/			
-		std::map<int,MessageHandler*>::iterator i;
-		
-		i=Connection::m_handlers.find(type);
-		
-		if(i!=Connection::m_handlers.end())
+		try
+		{
+			message.readFromBuffer(m_receive_buffer);
+		}
+		catch(EndOfDataException)
 		{
 			/*
-			There is an handler for the packet type. We create a
-			buffers for the packet and we pass the 
-			buffers by reference to the handler.
-			*/			
-			Packet packet(m_receive_buffer.substr(4,length-4));
-			
-			try		
-			{	
-				(*i).second->process(packet);
-			}
-			catch(EndOfDataException)
-			{
-				std::cerr<<"Malformed packet of type "<<type<<std::endl;
-			}
+			We don't have enough data for a packet, so we return.
+			*/
+			return;
 		}
 		
-		/*
-		After the packet has been handled, it is removed from the
-		receive buffer.
-		*/
-		m_receive_buffer.erase(0,length);
+		try
+		{			
+			uint16_t type=message.getType();
+			
+			if(type==PLAYER_NAME)
+			{
+				message>>m_name;
+			}
+			else if(type==PLAYER_MONEY)
+			{
+				int32_t money;
+				message>>money;
+				m_money=money;
+			}
+			else if(type==CARSHOP_LIST)
+			{
+				m_carshop_vehicles.clear();
+				
+				uint32_t num_cars;
+				
+				message>>num_cars;
+				
+				for(int i=0;i<num_cars;i++)
+				{				
+					Vehicle vehicle;
+					message>>vehicle;
+					
+					m_carshop_vehicles.push_back(vehicle);				
+				}				
+			}
+			else if(type==CARSHOP_BUY)
+			{
+				uint32_t success;
+				
+				message>>success;
+				
+				if(success==0)
+				{
+					m_cash.play();
+				}
+				else
+				{
+					
+				}
+
+				Packet packet;
+				packet.setType(PLAYER_MONEY);
+				writeToServer(packet);
+				
+				packet.setType(GARAGE_LIST);		
+				writeToServer(packet);
+								
+			}
+			else if(type==GARAGE_LIST)
+			{
+				m_player_vehicles.clear();
+				
+				uint32_t num_cars;
+				
+				message>>num_cars;
+				
+				for(int i=0;i<num_cars;i++)
+				{				
+					Vehicle vehicle;
+					message>>vehicle;
+					
+					m_player_vehicles.push_back(vehicle);				
+				}					
+			}	
+			
+			m_event_listener->doConnectionEvent(*this);
+		}
+		catch(EndOfDataException)
+		{
+			std::cerr<<"Invalid packet!"<<std::endl;
+			std::cerr<<message<<std::endl;
+	
+			return;
+		}
 	}
 }
 
-void Connection::writeToServer(const char* data,int size)
+void Connection::setName(const std::string& name)
 {
-	m_send_buffer.append(data,size);
+	Packet packet;
+	packet.setType(PLAYER_NAME);
+	packet<<name;
+	
+	writeToServer(packet);
+}
+
+const std::string& Connection::getName() const
+{
+	return m_name;
+}
+
+int Connection::getMoney() const
+{
+	return m_money;
+}
+
+void Connection::buyCar(int index)
+{
+	Packet packet;
+	packet.setType(CARSHOP_BUY);
+	packet<<uint32_t(index);
+	
+	writeToServer(packet);
+}
+
+std::vector<Vehicle> Connection::getCarshopVehicles() const
+{
+	return m_carshop_vehicles;
+}
+
+std::vector<Vehicle> Connection::getPlayerVehicles() const
+{
+	return m_player_vehicles;
+}
+
+void Connection::writeToServer(const Packet& packet)
+{
+	std::string str=packet.getString();
+
+	m_send_buffer.append(str.c_str(),str.size());
+}
+
+void Connection::setEventListener(EventListener* event_listener)
+{
+	m_event_listener=event_listener;
 }
 
 void Connection::addMessageHandler(uint16_t id,MessageHandler* handler)
@@ -113,4 +199,44 @@ void Connection::addMessageHandler(uint16_t id,MessageHandler* handler)
 	Connection::m_handlers[id]=handler;
 }
 
+bool Connection::startLocalServer()
+{
+	IniFile settings;
+	
+	settings.setValue("Server.LocalServer",1);
+	settings.setValue("Server.QuitWhenEmpty",1);	
+	settings.setValue("Server.ConnectionLimit",1);
 
+	settings.save("cfg/singleplayer.cfg");
+
+	std::string cmd;
+	std::string args="-port 31000 -config cfg/singleplayer.cfg";
+
+#ifdef WIN32
+	cmd+="start kp2_server.exe ";
+	cmd+=args;
+#else
+	cmd+="./kp2_server ";
+	cmd+=args;
+	cmd+=" &";
+#endif		
+
+	system(cmd.c_str());
+	
+	SDL_Delay(2000);
+	
+	for(int i=0;i<10;i++)
+	{	
+		if(connect("localhost",31000))
+			return true;
+	}
+	
+	return false;
+}
+
+Connection::Connection():
+	m_event_listener(&m_default_listener)
+{
+
+	m_cash.load("data/sounds/kassa.wav");
+}		

@@ -7,5 +7,8 @@ SRC = src/server/main.cpp \
 	src/shared/socketactivity.cpp \
 	src/shared/packet.cpp \
 	src/shared/assert.cpp \
+	src/shared/player.cpp \
+	src/shared/vehicle.cpp \
+	src/shared/directory.cpp \
 	src/shared/outputredirector.cpp \
 	src/shared/inifile.cpp

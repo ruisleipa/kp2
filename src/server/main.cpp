@@ -5,6 +5,7 @@
 #include "shared/inifile.hpp"
 #include "shared/serversocket.hpp"
 #include "shared/socketset.hpp"
+#include "shared/protocol.hpp"
 #include "shared/outputredirector.hpp"
 
 #include "connection.hpp"
@@ -17,8 +18,11 @@ int main(int argc,char** argv)
 	
 	std::string config="cfg/server.cfg";
 	int port=31000;
+	bool local=true;
+	bool quit_when_empty=false;
+	int connection_limit=8;
 	
-	for(int i=0;i<argc;i++)
+	for(int i=1;i<argc;i++)
 	{
 		std::string arg=argv[i];
 
@@ -32,8 +36,7 @@ int main(int argc,char** argv)
 			
 			config=argv[++i];		
 		}
-			
-		if(arg==std::string("-port"))
+		else if(arg==std::string("-port"))
 		{
 			if(i==argc-1)
 			{
@@ -50,14 +53,34 @@ int main(int argc,char** argv)
 			}
 			
 			port=num;
-		}			
+		}
+		else
+		{
+			std::cerr<<"unknown parameter \""<<arg<<"\""<<std::endl;
+		}
 	}
 	
 	std::cout<<"Listening on port: "<<port<<std::endl;
 	
 	ServerSocket socket;
-	socket.open(port);
 	
+	if(local)
+		socket.open("localhost",port);
+	else
+		socket.open("",port);
+	
+	
+	IniFile portfile;
+	
+	if(portfile.load("serverport.tmp"))
+	{
+		std::cerr<<"Server already running!"<<std::endl;
+		return 1;
+	}
+		
+	portfile.setValue("port",port);
+	portfile.save("serverport.tmp");
+		
 	SocketSet set;
 	set.add(&socket);
 	
@@ -65,12 +88,20 @@ int main(int argc,char** argv)
 	
 	IniFile inifile(config);
 	
+	inifile.getValue("Server.LocalServer",local);
+	inifile.getValue("Server.QuitWhenEmpty",quit_when_empty);	
+	inifile.getValue("Server.ConnectionLimit",connection_limit);
+	
+	if(local)
+		std::cout<<"Starting local server."<<std::endl;
+		
+	if(quit_when_empty)
+		std::cout<<"Quitting when empty."<<std::endl;
+		
+	std::cout<<"Connection limit: "<<connection_limit<<std::endl;
+	
 	std::map<ClientSocket*,Connection> connections;
-	
-	const int BUFFERSIZE=1024;
-	
-	char buf[BUFFERSIZE];
-	
+
 	while(1)
 	{
 		SocketActivity activity;
@@ -85,6 +116,13 @@ int main(int argc,char** argv)
 			
 			if(socket.accept(*newconnection) == true)
 			{	
+				if(connections.size()==connection_limit)
+				{
+					delete newconnection;
+				
+					continue;
+				}
+			
 				set.add(newconnection);
 				connections[newconnection];
 			
@@ -95,39 +133,33 @@ int main(int argc,char** argv)
 		{			
 			ClientSocket* conn=(ClientSocket*)activity.getSocket();			
 			
+			if(connections[conn].readFromClient((ClientSocket*)activity.getSocket()) == false)
 			{
-				int read;
+				set.remove(conn);
+				connections.erase(conn);
 			
-				/*
-				Read as long as there is data to read (reads more than
-				zero bytes).
-				*/
-				while((read=conn->read(buf,BUFFERSIZE))>0)
-				{
-					std::cout<<"Got "<<read<<" bytes."<<std::endl;
-
-					connections[conn].readFromClient(buf,read);
-				}
-						
-				/*
-				ClientSocket::read returns -1 when the connection has
-				been closed. We remove the connection from our tables.
-				*/
-				if(read==-1)
-				{
-					set.remove(conn);
-					connections.erase(conn);
+				delete conn;
+		
+				std::cout<<"Connection closed"<<std::endl;
 				
-					delete conn;
-			
-					std::cout<<"Connection closed"<<std::endl;
-					
+				if(connections.size()==0 && quit_when_empty)
+				{
+					break;
+				}
+				else
+				{
+					std::cout<<"continue"<<std::endl;
 					continue;
 				}
+					
 			}
 			
 			
 		}
 	}
+	
+	std::cout<<"Server shutting down..."<<std::endl;
+	
+	remove("serverport.tmp");
 }
 
