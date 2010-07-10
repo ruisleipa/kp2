@@ -15,8 +15,8 @@ LocalGameMenu::LocalGameMenu()
 	m_title.setFont(Font("title"));
 	m_title.setText("Yksinpeli");			
 	
-	m_new_game_button.setText("Uusi peli");
-	m_load_game_button.setText("Lataa peli");
+	m_new_game_button.setText("Uusi tilanne");
+	m_load_game_button.setText("Lataa tilanne");
 	//m_save_game_button.setText("Tallenna peli");
 	
 	m_back_button.setText("Peruuta");

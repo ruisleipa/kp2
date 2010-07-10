@@ -2,50 +2,53 @@
 #define __SOCKET_HPP
 
 #include <string>
-
-#ifdef WIN32
-
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <wspiapi.h>
-
-#else
-
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <fcntl.h> 
-
-#endif
-
-#include <vector>
+#include <set>
 
 class SocketSet;
 
 class Socket
 {
-	public:
+	public:		
+		void captureSocket(int socket);
+		int releaseSocket();
+		
+		Socket();
+		
+		virtual ~Socket();
+		
+	protected:
+		bool connectImpl(const std::string& hostname,const int port);
+		bool bindImpl(const std::string& hostname,const int port);
+		
+		bool acceptImpl(int& socket);
+		
+		int readImpl(char* data,int size);
+		int writeImpl(const char* data,int size);
+		
+		mutable int m_socket;
+		
+	private:
+		Socket(const Socket&);
+		Socket& operator=(const Socket&);	
+	
+		bool isWritePending();
+		void commitWrite();
+		
+		bool setNonBlock(int socket);	
+
 		void close();
 	
-		Socket();
-		virtual ~Socket();
-
-	protected:
-		int getAddresses(const char* host,int port,bool passive);
-		addrinfo* nextAddress();
-		void freeAddresses();
-		bool isSocketValid();
-
-		int m_socket;
+		std::string getErrorMessage();		
 		
-		std::vector<SocketSet*> m_socket_sets;
+		std::string m_write_buffer;
+		
+		std::set<SocketSet*> m_socket_sets;
 		
 		friend class SocketSet;
 		
-	private:
-		addrinfo* m_addrs;
-		addrinfo* m_curr_addr;
+#ifdef WIN32			
+		static int m_winsock_ref_count;
+#endif
 		
 };
 

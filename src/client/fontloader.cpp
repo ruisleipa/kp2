@@ -21,5 +21,6 @@ FontLoader::FontLoader(Graphics& graphics):
 	Font::setFontType("Select",&m_fontface,ITEM_HEIGHT,PASSIVE);
 	Font::setFontType("Select.active",&m_fontface,ITEM_HEIGHT,ACTIVE);
 	Font::setFontType("Field",&m_fontface,ITEM_HEIGHT,NORMAL);	
+	Font::setFontType("Listbox",&m_fontface,0.03,NORMAL);	
 }
 

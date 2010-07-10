@@ -1,10 +1,11 @@
 #include "texture.hpp"
 
 #include "shared/string.hpp"
+#include "assert.hpp"
 
 std::set<Texture*> Texture::m_textures;
+TextureFilter Texture::m_filter_limit=LINEAR;
 GLuint Texture::m_binded_texture=0;
-TextureFilter Texture::m_filter_limit;
 
 static void CheckGL()
 {
@@ -66,7 +67,7 @@ void Texture::copy(const Texture& b)
 		if(SDL_MUSTLOCK(b.m_surface))
 			SDL_LockSurface(b.m_surface);
 
-		memcpy(m_surface->pixels,b.m_surface->pixels,4*m_texture_height*m_texture_width);
+		memcpy(m_surface->pixels,b.m_surface->pixels,4*b.m_surface->h*b.m_surface->w);
 
 		if(SDL_MUSTLOCK(m_surface))
 			SDL_UnlockSurface(m_surface);
@@ -77,6 +78,7 @@ void Texture::copy(const Texture& b)
 	m_filter=b.m_filter;
 	m_image_width=b.m_image_width;
 	m_image_height=b.m_image_height;
+	m_tag=b.m_tag;
 	createTexture();
 	setFilter(m_filter);
 }
@@ -119,18 +121,20 @@ void Texture::draw(Vector2D position,Vector2D size)
 {
 	float iw=m_image_width;
 	float ih=m_image_height;
+	float tw=m_texture_width;
+	float th=m_texture_height;
 	
-	glBindTexture(GL_TEXTURE_2D,m_texture);
+	bind();
 	
 	glBegin(GL_QUADS);
 	
-		glTexCoord2f(0, 1);
+		glTexCoord2f(0, -(1));
 		glVertex2d(position.getX(),position.getY());
-		glTexCoord2f(1, 1);
+		glTexCoord2f(iw/tw, -(1));
 		glVertex2d(position.getX()+size.getX(),position.getY());	
-		glTexCoord2f(1, 0);
+		glTexCoord2f(iw/tw, -(1.0-ih/th));
 		glVertex2d(position.getX()+size.getX(),position.getY()+size.getY());
-		glTexCoord2f(0, 0);
+		glTexCoord2f(0, -(1.0-ih/th));
 		glVertex2d(position.getX(),position.getY()+size.getY());
 	
 	glEnd();
@@ -145,18 +149,20 @@ void Texture::drawClipped(Vector2D position,Vector2D size,Vector2D clip_position
 	
 	float iw=m_image_width;
 	float ih=m_image_height;
+	float tw=m_texture_width;
+	float th=m_texture_height;
 	
-	glBindTexture(GL_TEXTURE_2D,m_texture);
+	bind();
 	
 	glBegin(GL_QUADS);
 	
-		glTexCoord2f(sx/iw,1.0-sy/ih);
+		glTexCoord2f(sx/tw,-(1.0-sy/th));
 		glVertex2d(position.getX(),position.getY());		
-		glTexCoord2f(ex/iw,1.0-sy/ih);
+		glTexCoord2f(ex/tw,-(1.0-sy/th));
 		glVertex2d(position.getX()+size.getX(),position.getY());		
-		glTexCoord2f(ex/iw,1.0-ey/ih);
+		glTexCoord2f(ex/tw,-(1.0-ey/th));
 		glVertex2d(position.getX()+size.getX(),position.getY()+size.getY());		
-		glTexCoord2f(sx/iw,1.0-ey/ih);
+		glTexCoord2f(sx/tw,-(1.0-ey/th));
 		glVertex2d(position.getX(),position.getY()+size.getY());
 	
 	glEnd();
@@ -246,51 +252,60 @@ int Texture::loadSurface(SDL_Surface* surface,const std::string& tag)
 	m_texture_width=powerOfTwo(surface->w);
 	m_texture_height=powerOfTwo(surface->h);
 	
-	int size=(m_texture_width*m_texture_height*4);
-	std::string unit="B";	
-	
-	if(size>1023)
-	{
-		size/=1024;
-		unit="kB";
-	}
-	
-	if(size>1023)
-	{
-		size/=1024;
-		unit="MB";
-	}
-	
-	std::cout<<"Surface: \""<<m_tag<<"\" "<<m_texture_width<<"x"<<m_texture_height<<" size: "<<size<<" "<<unit<<std::endl;
-	
-	m_surface=SDL_CreateRGBSurface(SDL_SWSURFACE,surface->w,surface->h,32,RGBAMASK);
+	m_surface=SDL_CreateRGBSurface(SDL_SWSURFACE,m_texture_width,m_texture_height,32,RGBAMASK);
 	SDL_SetAlpha(m_surface, 0,SDL_ALPHA_OPAQUE);
-	SDL_SetAlpha(surface,0,SDL_ALPHA_OPAQUE);
+	SDL_SetAlpha(surface,0,SDL_ALPHA_OPAQUE);	
 	
-	SDL_BlitSurface(surface,0,m_surface,0);	
+	SDL_BlitSurface(surface,0,m_surface,0);
 	
 	int max_tex_size;
 	
-	int w=m_texture_width;
-	int h=m_texture_height;
-	
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE,&max_tex_size);
+		
+	int bigside=std::max(m_texture_width,m_texture_height);
+	int downscalefactor=0;
 	
-	if(w > max_tex_size)
-		w = max_tex_size;
-
-	if(h > max_tex_size)
-		h = max_tex_size;
-
-	SDL_Surface* tmpsurface=scaleAndFlip(m_surface,w,h);
-	SDL_FreeSurface(m_surface);
-	m_surface=tmpsurface;
-
-	if(!m_surface)
+	while(bigside > max_tex_size)
 	{
-		std::cerr<<"cannot allocate a surface for scaling"<<std::endl;	
-		return -1;
+		bigside = bigside >> 1;
+		downscalefactor++;
+	}	
+	
+	if(downscalefactor)
+	{
+		SDL_Surface* tmpsurface=downScale(m_surface,downscalefactor);
+		SDL_FreeSurface(m_surface);
+		m_surface=tmpsurface;
 	}
+	
+	if(SDL_MUSTLOCK(m_surface))
+		SDL_LockSurface(m_surface);
+		
+	uint32_t* px=(uint32_t*)m_surface->pixels;
+	
+	if(m_image_width != m_surface->h)
+	{
+		for(int x=0; x<m_surface->w; x++)
+		{
+			px[(m_surface->h-1)*m_surface->w+x]=px[x];
+		}
+	}
+	
+	/*if(m_image_width != m_surface->w)
+	{
+		for(int y=0; y<m_surface->h; y++)
+		{
+			px[y*m_surface->w+m_surface->w-1]=px[y*m_surface->w];
+		}
+	}
+	
+	if((m_image_width != m_surface->w) || (m_image_width != m_surface->h))
+	{
+		px[m_surface->h*m_surface->w-1]=px[0];
+	}*/
+	
+	if(SDL_MUSTLOCK(m_surface))
+		SDL_UnlockSurface(m_surface);	
 
 	createTexture();
 
@@ -300,6 +315,7 @@ int Texture::loadSurface(SDL_Surface* surface,const std::string& tag)
 int Texture::load(const std::string& filename)
 {
 	SDL_Surface* image=IMG_Load(filename.c_str());
+	
 	if(!image)
 	{
 		std::cout<<"failed to load file "<<filename<<std::endl;
@@ -309,7 +325,7 @@ int Texture::load(const std::string& filename)
 	int ret=loadSurface(image,filename);	
 	
 	SDL_FreeSurface(image);
-	
+		
 	return ret;
 }
 
@@ -324,109 +340,124 @@ struct Pixel
 	uint8_t v[4];
 };
 
-SDL_Surface* Texture::scaleAndFlip(SDL_Surface* surface,int w,int h)
+inline uint32_t divide(uint32_t a,uint32_t b,uint32_t c,uint32_t d)
 {
-	SDL_Surface* dstsurface=SDL_CreateRGBSurface(SDL_SWSURFACE,w,h,32,RGBAMASK);
+	uint8_t p[4]={0,0,0,0};
+	
+	for(int i=0;i<4;i++)
+	{
+		p[i]+=(a&0xff)>>2;
+		a>>=8;
+		p[i]+=(b&0xff)>>2;
+		b>>=8;
+		p[i]+=(c&0xff)>>2;
+		c>>=8;
+		p[i]+=(d&0xff)>>2;
+		d>>=8;
+	}
 
-	if(!dstsurface)
+	return p[0] | p[1]<<8 | p[2]<<16 | p[3]<<24;
+}
+
+SDL_Surface* Texture::downScale(SDL_Surface* surface,int factor)
+{
+	assert(surface != 0);
+	
+	if(!surface)
+	{
 		return 0;
+	}
 
 	if(SDL_MUSTLOCK(surface))
 		SDL_LockSurface(surface);
-
-	if(SDL_MUSTLOCK(dstsurface))
-		SDL_LockSurface(dstsurface);
-
-	Pixel* src=(Pixel*)surface->pixels;
-	Pixel* dst=(Pixel*)dstsurface->pixels;
+		
+	uint32_t* px=(uint32_t*)surface->pixels;
 	
-	/*
-	These are the steps that are made in the source surface per pixel in the
-	destination surface.
-	*/
-	float xstep=float(surface->w)/float(w);
-	float ystep=float(surface->h)/float(h);
+	int cw=surface->w;
+	int ch=surface->h;
+	int w=surface->w;
+	int h=surface->h;
+	int row=surface->w*4;
 	
-	float src_x=0;
-	float src_y=0;
+	uint32_t a;
+	uint32_t b;
+	uint32_t c;
+	uint32_t d;
 	
-	float xratio=0;
-	float yratio=0;
-	float xratioinv=0;
-	float yratioinv=0;
-	
-	int offset;
-	int dstoffset=(h-1)*w;
-	
-	Pixel avg[2];
-	Pixel* pixels[4];
-	
-	for(int dst_y=0;dst_y<h;dst_y++)
+	while(factor--)
 	{	
-		offset=int(src_y)*surface->w;
-	
-		/*
-		For some reason	that I don't fully understand these ratios are
-		"upside down". I guess it may have something to do with the
-		flipping.
-		*/
-		yratioinv=src_y-int(src_y);
-		yratio=1.0-yratioinv;
-		
-		src_x=0;
-	
-		for(int dst_x=0;dst_x<w;dst_x++)
+		if(cw > 1 && ch > 1)
 		{
-			/*
-			For some reason	that I don't fully understand these ratios are
-			"upside down". I guess it may have something to do with the
-			flipping.
-			*/
+			cw = cw / 2;
+			ch = ch / 2;
 		
-			xratioinv=src_x-int(src_x);
-			xratio=1.0-xratioinv;
-			
-			pixels[0]=&src[offset + int(src_x)];
-			pixels[1]=&src[offset + int(src_x+1)];
-			pixels[2]=&src[offset + surface->w + int(src_x)];
-			pixels[3]=&src[offset + surface->w + int(src_x+1)];
-		
-			avg[0].v[0]=pixels[0]->v[0]*xratio + pixels[1]->v[0]*xratioinv;
-			avg[0].v[1]=pixels[0]->v[1]*xratio + pixels[1]->v[1]*xratioinv;
-			avg[0].v[2]=pixels[0]->v[2]*xratio + pixels[1]->v[2]*xratioinv;
-			avg[0].v[3]=pixels[0]->v[3]*xratio + pixels[1]->v[3]*xratioinv;
-			
-			avg[1].v[0]=pixels[2]->v[0]*xratio + pixels[3]->v[0]*xratioinv;
-			avg[1].v[1]=pixels[2]->v[1]*xratio + pixels[3]->v[1]*xratioinv;
-			avg[1].v[2]=pixels[2]->v[2]*xratio + pixels[3]->v[2]*xratioinv;
-			avg[1].v[3]=pixels[2]->v[3]*xratio + pixels[3]->v[3]*xratioinv;
-		
-			dst[dstoffset+dst_x].v[0]=avg[0].v[0]*yratio + avg[1].v[0]*yratioinv;
-			dst[dstoffset+dst_x].v[1]=avg[0].v[1]*yratio + avg[1].v[1]*yratioinv;
-			dst[dstoffset+dst_x].v[2]=avg[0].v[2]*yratio + avg[1].v[2]*yratioinv;
-			dst[dstoffset+dst_x].v[3]=avg[0].v[3]*yratio + avg[1].v[3]*yratioinv;
-			
-			src_x+=xstep;
-			
-			if(src_x>surface->w-1)
-				src_x=surface->w-1;
+			for(int y=0;y<ch;y++)
+			{	
+				for(int x=0;x<cw;x++)
+				{
+					a=px[(x*2)+(y*2)*w];
+					b=px[(x*2)+(y*2)*w+1];
+					c=px[(x*2)+(y*2+1)*w];
+					d=px[(x*2)+(y*2+1)*w+1];
+					
+					px[x+y*w]=divide(a,b,c,d);
+					px[x+y*w]=px[x+y*w];
+				}
+			}
 		}
+		else if(cw > 1 && ch == 1)
+		{
+			cw = cw / 2;
 		
-		src_y+=ystep;
-		dstoffset-=w;
+			int y=0;
+			
+			for(int x=0;x<cw;x++)
+			{
+				a=px[(x*2)+(y)*w];
+				b=px[(x*2)+(y)*w+1];
+				c=px[(x*2)+(y+1)*w];
+				d=px[(x*2)+(y+1)*w+1];
+				
+				px[x+y*w]=divide(a,b,c,d);
+				px[x+y*w]=px[x+y*w];
+			}			
+		}
+		else if(cw == 1 && ch > 1)
+		{
+			ch = ch / 2;
+			
+			int x=0;
 		
-		if(src_y>surface->h-2)
-			src_y=surface->h-2;
+			for(int y=0;y<ch;y++)
+			{	
+				a=px[(x)+(y*2)*w];
+				b=px[(x)+(y*2)*w+1];
+				c=px[(x)+(y*2+1)*w];
+				d=px[(x)+(y*2+1)*w+1];
+					
+				px[x+y*w]=divide(a,b,c,d);
+				px[x+y*w]=px[x+y*w];
+			}
+		}
+		else if(cw == 1 && ch == 1)
+		{
+			break;
+		}		
 	}
-	
+
 	if(SDL_MUSTLOCK(surface))
 		SDL_UnlockSurface(surface);
+		
+	SDL_Surface* newsurface=SDL_CreateRGBSurface(SDL_SWSURFACE,cw,ch,32,RGBAMASK);
+	SDL_Rect size;
+	size.x = 0;
+	size.y = 0;
+	size.w = cw;
+	size.h = ch;
 	
-	if(SDL_MUSTLOCK(dstsurface))
-		SDL_UnlockSurface(dstsurface);
-
-	return dstsurface;
-
+	SDL_BlitSurface(surface,&size,newsurface,0);
+	
+	return newsurface;
 }
 
 int Texture::createTexture()
@@ -442,8 +473,8 @@ int Texture::createTexture()
 
 	bind();
 	glPixelStorei(GL_UNPACK_ALIGNMENT,4);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
 
 	if(SDL_MUSTLOCK(m_surface))
 		SDL_LockSurface(m_surface);
@@ -521,5 +552,62 @@ void Texture::reuploadTextures()
 		(*i)->reuploadTexture();
 	}
 #endif
+}
+
+void Texture::printTextureList()
+{
+	std::set<Texture*>::iterator i;
+	
+	size_t totalsize=0;
+	
+	for(i=Texture::m_textures.begin();i!=Texture::m_textures.end();++i)
+	{
+		totalsize+=(*i)->printInfo();
+	}
+	
+	std::string unit="B";	
+	
+	if(totalsize>1023)
+	{
+		totalsize/=1024;
+		unit="kB";
+	}
+	
+	if(totalsize>1023)
+	{
+		totalsize/=1024;
+		unit="MB";
+	}
+	
+	std::cout<<"---Textures---"<<std::endl;
+	std::cout<<"Total texture size: "<<totalsize<<" "<<unit<<std::endl;
+}
+
+int Texture::printInfo()
+{
+	if(!m_surface)
+		return 0;
+	
+	int size=(m_surface->w*m_surface->h*4);
+	std::string unit="B";	
+	
+	if(size>1023)
+	{
+		size/=1024;
+		unit="kB";
+	}
+	
+	if(size>1023)
+	{
+		size/=1024;
+		unit="MB";
+	}
+	
+	std::cout << "---Texture---" << std::endl;
+	std::cout << "Tag: " << m_tag << std::endl;
+	std::cout << "Size: " << size << " "<< unit << std::endl;
+	std::cout << "Dimensions: " << m_surface->w << "x" << m_surface->h  << std::endl;
+
+	return m_surface->w*m_surface->h*4;
 }
 

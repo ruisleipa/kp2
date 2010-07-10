@@ -1,106 +1,159 @@
 #include "connection.hpp"
 
+#include "shared/packet.hpp"
+#include "shared/protocol.hpp"
+#include "shared/directory.hpp"
+
 #include <sstream>
 #include <algorithm>
 #include <iostream>
 
-std::map<int,Command*> Connection::m_commands;
-
-void Connection::readFromClient(char* data,int size)
+bool Connection::readFromClient(ClientSocket* socket)
 {
-	m_receive_buffer.append(data,size);
-	
-	uint16_t length;
-	uint16_t type;
-	
-	while(m_receive_buffer.size()>=4)
+	int read;
+
+	/*
+	Read as long as there is data to read (reads more than
+	zero bytes).
+	*/
+	while((read=socket->read(m_buffer,BUFFER_SIZE))>0)
 	{
-		/*
-		We have a headerful of data in the buffer. Now we need to check
-		if there is a complete packet in the buffer. The size of the
-		packet is in the header, so we check the size with the value
-		from the header.
-		*/		
-		m_receive_buffer.copy((char*)&length,sizeof(length));
-		m_receive_buffer.copy((char*)&type,sizeof(type),2);	
+		std::cout<<"Got "<<read<<" bytes."<<std::endl;
+
+		m_receive_buffer.append(m_buffer,read);
+	}
 	
-		length=ntohs(length);
-		type=ntohs(type);
+	/*
+	ClientSocket::read returns -1 when the connection has
+	been closed. We signal this to our caller.
+	*/
+	if(read==-1)
+	{
+		return false;
+	}
 	
-		/*
-		If there is no enough data we quit the loop.
-		*/
-		if(m_receive_buffer.size()<length)
-			break;	
+	while(1)
+	{
+		Packet request;
 	
-		std::cout<<"cmd len: "<<length<<" type: "<<type<<std::endl;
-	
-		/*
-		There was a complete packet in the buffer. Now we give the 
-		packet to the appropriate handler object. The handler object is 
-		fetched by the type field in the packet header.
-		*/			
-		std::map<int,Command*>::iterator i;
-		
-		i=Connection::m_commands.find(type);
-		
-		if(i!=Connection::m_commands.end())
+		try
+		{
+			request.readFromBuffer(m_receive_buffer);
+		}
+		catch(EndOfDataException)
 		{
 			/*
-			There is an handler for the packet type. We create
-			buffers for the packet and the response. We pass the 
-			buffers by reference to the handler.
-			*/			
-			Packet packet(m_receive_buffer.substr(4,length-4));
-			
-			Packet response;
-			
-			try		
-			{	
-				(*i).second->process(packet,response);
-			}
-			catch(EndOfDataException)
-			{
-				std::cerr<<"Malformed packet of type "<<type<<std::endl;
-				m_receive_buffer.erase(0,length);
-				continue;
-			}			
-			
-			/*
-			After handling, a packet header is appended to the
-			send buffer. Then the buffer is appended to the send
-			buffer for sending back to he client.
+			We don't have enough data for a packet, so we return.
 			*/
-			std::string responsestr=response.getString();
-			
-			uint16_t len=htons((uint16_t)(responsestr.size()+4));
-						
-			m_send_buffer.append((char*)&len,sizeof(len));
-			m_send_buffer.append((char*)&type,sizeof(type));	
-			m_send_buffer+=response.getString();
+			return true;			
 		}
 		
-		/*
-		After the packet has been handled, it is removed from the
-		receive buffer.
-		*/
-		m_receive_buffer.erase(0,length);
+		Packet response;	
+		
+		try
+		{			
+			uint16_t type=request.getType();
+			
+			std::cout<<(int)type<<std::endl;
+			
+			if(type==PLAYER_NAME)
+			{
+				//TODO: do duplicate name checking
+				std::string newname;
+				request>>newname;
+				
+				m_player.setName(newname);
+				
+				response.setType(PLAYER_NAME);
+				response<<m_player.getName();
+			}
+			else if(type==PLAYER_MONEY)
+			{
+				response.setType(PLAYER_MONEY);
+				response<<int32_t(m_player.getMoney());
+			}
+			else if(type==CARSHOP_LIST)
+			{
+				response.setType(CARSHOP_LIST);
+				
+				std::vector<Vehicle>::iterator i;
+				
+				response<<uint32_t(m_carshop_vehicles.size());
+				
+				for(i=m_carshop_vehicles.begin();i!=m_carshop_vehicles.end();++i)
+				{
+					response<<(*i);
+				}				
+			}
+			else if(type==CARSHOP_BUY)
+			{
+				uint32_t carindex;
+				
+				request>>carindex;
+				
+				if(carindex >= m_carshop_vehicles.size())
+					continue;
+					
+				response.setType(CARSHOP_BUY);
+				
+				if(m_player.changeMoney(-1000))
+				{
+					m_player_vehicles.push_back(m_carshop_vehicles[carindex]);
+					
+					response<<uint32_t(0);
+				}
+				else
+				{
+					response<<uint32_t(1);
+				}		
+			}
+			else if(type==GARAGE_LIST)
+			{
+				response.setType(GARAGE_LIST);
+				
+				std::vector<Vehicle>::iterator i;
+				
+				response<<uint32_t(m_player_vehicles.size());
+				
+				for(i=m_player_vehicles.begin();i!=m_player_vehicles.end();++i)
+				{
+					response<<(*i);
+				}				
+			}			
+			else
+			{
+				continue;
+			}
+		}
+		catch(EndOfDataException)
+		{
+			std::cerr<<"Invalid packet!"<<std::endl;
+			std::cerr<<request<<std::endl;		
+			return false;
+		}		
+		
+		std::string responsestr=response.getString();
+	
+		socket->write(responsestr.c_str(),responsestr.size());	
 	}
+	
+	return true;
 }
 
-void Connection::writeToClient(ClientSocket* socket)
+Connection::Connection()
 {
-	int written;
-
-	while((written=socket->write(m_send_buffer.c_str(),m_send_buffer.size()))>0)
+	std::vector<std::string> files;
+	std::vector<std::string>::iterator i;
+	
+	files=readDirectory("gamedata/vehicles/");
+	
+	for(i=files.begin();i!=files.end();++i)
 	{
-		m_send_buffer.erase(0,written);
+		Vehicle vehicle;
+		
+		if(vehicle.load("gamedata/vehicles/" + (*i)))
+			m_carshop_vehicles.push_back(vehicle);
 	}
-}
-
-void Connection::addCommand(uint16_t id,Command* command)
-{
-	Connection::m_commands[id]=command;
 }
 
 

@@ -25,8 +25,11 @@ class Sound
 		void setLooping(bool);
 
 	private:
-
-		bool m_was_core_init;
+		void initSounds();
+	
+		static int m_sound_sys_ref_count;
+		static bool m_sound_sys_init_tried;
+		static bool m_sound_sys_init_success;
 
 		ALuint m_buffer;		// Buffers hold sound data.
 		ALuint m_source;		// Sources are points emitting sound.

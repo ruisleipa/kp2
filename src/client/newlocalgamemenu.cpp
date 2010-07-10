@@ -5,14 +5,16 @@
 #include "ui.hpp"
 #include "graphics.hpp"
 #include "shared/string.hpp"
+#include "shared/packet.hpp"
 
-NewLocalGameMenu::NewLocalGameMenu()
+NewLocalGameMenu::NewLocalGameMenu(Connection& connection):
+	m_connection(connection)
 {
 	m_background_texture.load("data/images/newlocalgamemenu.png");
 	m_background.setTexture(&m_background_texture);
 	
 	m_title.setFont(Font("title"));
-	m_title.setText("Uusi peli");			
+	m_title.setText("Uusi tilanne");			
 	
 	m_name_label.setText("Nimi:");
 	m_difficulty_label.setText("Vaikeusaste:");
@@ -83,11 +85,31 @@ void NewLocalGameMenu::onShow()
 void NewLocalGameMenu::BackButton::onClick()
 {
 	getParent()->setVisible(false);
-	((Container*)getParent()->getParent())->getWidget("localgamemenu")->setVisible(true);
+	((Container*)getParent()->getParent())->getWidget("localgamemenu")->setVisible(true);	
 }
 
 void NewLocalGameMenu::StartButton::onClick()
 {
+	NewLocalGameMenu* menu=dynamic_cast<NewLocalGameMenu*>(getParent());
 
+	if(menu->m_connection.startLocalServer())
+	{
+		Packet packet;
+		packet.setType(PLAYER_NAME);
+		packet<<menu->m_name_field.getText();
+		
+		menu->m_connection.writeToServer(packet);
+		
+		Packet packet2;
+		packet2.setType(PLAYER_MONEY);
+		
+		menu->m_connection.writeToServer(packet2);
+		
+		packet2.setType(CARSHOP_LIST);		
+		menu->m_connection.writeToServer(packet2);
+	
+		getParent()->setVisible(false);
+		((Container*)getParent()->getParent())->getWidget("careermenu")->setVisible(true);
+	}
 }
 

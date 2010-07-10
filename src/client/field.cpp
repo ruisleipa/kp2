@@ -11,20 +11,22 @@ void Field::onDraw(Graphics& graphics)
 	if(textoffset>0.001)
 		textoffset=0.001;
 	
-	cursorpos+=getPosition().getX()+textoffset;
+	cursorpos+=getScreenPosition().getX()+textoffset;
 	
 	#if 0
 	glBegin(GL_LINES);
-	glVertex2d(getPosition().getX(),getPosition().getY()+getSize().getY()*0.8);
-	glVertex2d(getPosition().getX()+getSize().getX(),getPosition().getY()+getSize().getY()*0.8);
+	glVertex2d(getScreenPosition().getX(),getScreenPosition().getY()+getSize().getY()*0.8);
+	glVertex2d(getScreenPosition().getX()+getSize().getX(),getScreenPosition().getY()+getSize().getY()*0.8);
 	glEnd();
 	#endif
 
-	Vector2D begin=getPosition();
+	Vector2D begin=getScreenPosition();
 	Vector2D end=begin+getSize();
 	
 	Scissor scissor(graphics);
 	scissor.reset();
+	
+	
 	
 	Color(0,0,0).apply();
 	Texture().bind();
@@ -39,14 +41,14 @@ void Field::onDraw(Graphics& graphics)
 	if(m_focused && (SDL_GetTicks()/750)%2)
 	{
 		glBegin(GL_LINES);
-		glVertex2d(cursorpos,getPosition().getY());
-		glVertex2d(cursorpos,getPosition().getY()+getSize().getY());
+		glVertex2d(cursorpos,getScreenPosition().getY());
+		glVertex2d(cursorpos,getScreenPosition().getY()+getSize().getY());
 		glEnd();
 	}
 	
-	scissor.set(getPosition(),getSize());
-	
-	getFont().draw(getWideText(),getPosition()+Vector2D(textoffset,0));
+	scissor.set(getScreenPosition(),getSize());
+	//glClear(GL_COLOR_BUFFER_BIT);
+	getFont().draw(getWideText(),getScreenPosition()+Vector2D(textoffset,0));
 }
 
 void Field::onKeyDown(KeyEvent event)

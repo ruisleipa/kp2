@@ -4,6 +4,12 @@ WINDOWS_LIBS = -lmingw32 -mwindows
 SDL_LIBS = -lSDLmain -lSDL -lSDL_ttf -lSDL_image
 LIBS = $(WINDOWS_LIBS) $(SDL_LIBS) -lws2_32 -lopengl32 -lglew32 -lglu32 -lalut -lopenal32
 BIN = kp2_client.exe
+RES = kp2.res
+
+all_hack: all
+
+$(RES): kp2.ico
+	windres kp2.rc -O coff -o $(RES)
 
 include Makefile.common
 

@@ -9,10 +9,12 @@ void Application::enterMainLoop()
 {
 	//loadCursor();
 
+	Texture::printTextureList();
+	
 	int frames=0;
 	int time=SDL_GetTicks();
 	float fps=0;
-		
+	
 	while(1)
 	{
 		try
@@ -24,6 +26,8 @@ void Application::enterMainLoop()
 			break;			
 		}
 		
+		glClear(GL_COLOR_BUFFER_BIT);
+		
 		m_connection.processMessages();			
 			
 		m_graphics.enterGuiMode();
@@ -31,7 +35,7 @@ void Application::enterMainLoop()
 		m_ui.draw();
 
 		Color(1,1,1).apply();
-		m_fps_font.draw(convertToWideString((int)fps),Vector2D(0.75,0.001),0.05);		
+		m_fps_font.draw(convertToWideString((int)fps),Vector2D(0.75,0.001),0.02);		
 		
 		//drawCursor();
 		
@@ -77,7 +81,7 @@ Application::Application():
 	m_connection(),
 	m_fps_font(m_graphics),
 	m_cursor(),
-	m_ui(m_events,m_graphics)	
+	m_ui(m_events,m_graphics,m_connection)	
 {
 	m_fps_font.load("data/fonts/freesans.ttf",32);
 }

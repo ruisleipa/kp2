@@ -57,6 +57,7 @@ class Texture
 		Vector2D getSize();
 		
 		static void reuploadTextures();	
+		static void printTextureList();	
 				
 		Texture();
 		Texture(const std::string& filename);
@@ -67,11 +68,14 @@ class Texture
 	private:
 		int createTexture();
 		void deleteTexture();
+		
+		int printInfo();
+		
 	
 		void init();
 		void copy(const Texture&);
 
-		SDL_Surface* scaleAndFlip(SDL_Surface* surface,int x_ratio,int y_ratio);
+		SDL_Surface* downScale(SDL_Surface* surface,int factor);
 
 		std::string m_tag;
 

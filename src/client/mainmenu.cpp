@@ -10,6 +10,7 @@ MainMenu::MainMenu()
 {
 	m_background_texture.load("data/images/mainmenu.png");
 	m_background.setTexture(&m_background_texture);
+	m_background.setFill(true);
 	
 	m_title_texture.load("data/images/kp2_txt.png");
 	m_title.setTexture(&m_title_texture);

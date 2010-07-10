@@ -4,23 +4,36 @@
 #include <stdint.h>
 #include <map>
 #include <string>
+#include <vector>
 
 #include "shared/clientsocket.hpp"
-#include "command.hpp"
+#include "shared/player.hpp"
+#include "shared/vehicle.hpp"
+
+class CheatDetectedException
+{
+
+};
 
 class Connection
 {
 	public:
-		void readFromClient(char* data,int size);
-		void writeToClient(ClientSocket* socket);
+		bool readFromClient(ClientSocket* socket);
 		
-		static void addCommand(uint16_t id,Command* command);
+		const Player& getPlayerInfo();		
+		void setPlayerInfo(const Player& playerinfo);	
+
+		Connection();
 		
 	private:
-		static std::map<int,Command*> m_commands;
+		Player m_player;
+		
+		std::vector<Vehicle> m_carshop_vehicles;
+		std::vector<Vehicle> m_player_vehicles;		
 	
-		std::string m_receive_buffer;
-		std::string m_send_buffer;
+		std::string m_receive_buffer;		
+		static const int BUFFER_SIZE=512;		
+		char m_buffer[BUFFER_SIZE];
 };
 
 #endif // __CONNECTION_HPP

@@ -16,6 +16,8 @@ class Container : public Widget
 		virtual void doResize(Graphics& graphics);
 		virtual void doDraw(Graphics& graphics);
 		
+		virtual void doConnectionEvent(Connection& connection);
+		
 		void addWidget(Widget* widget);
 		void addWidget(std::string tag,Widget* widget);
 		

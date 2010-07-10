@@ -7,6 +7,7 @@
 #include "widget.hpp"
 #include "keyevent.hpp"
 #include "mouseevent.hpp"
+#include "texture.hpp"
 #include "shared/string.hpp"
 
 #include <iostream>
@@ -32,8 +33,6 @@ void Container::doKeyUp(KeyEvent event)
 
 void Container::doMouseDown(MouseEvent event)
 {
-	Widget::doMouseDown(event);
-
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 	
 	if(widget != m_focused)
@@ -49,6 +48,8 @@ void Container::doMouseDown(MouseEvent event)
 	
 	if(widget)
 		widget->doMouseDown(event);
+		
+	Widget::doMouseDown(event);
 }
 
 void Container::doMouseUp(MouseEvent event)
@@ -116,15 +117,15 @@ void Container::doDraw(Graphics& graphics)
 		scissor.set(start,widget->getSize());
 		
 		/*	
-		Vector2D begin=(*i)->getPosition();
-		Vector2D end=begin+(*i)->getSize();
+		Vector2D begin=start;
+		Vector2D end=begin+widget->getSize();
 	
-		glBindTexture(GL_TEXTURE_2D,0);
+		Texture().bind();
 		
-		if((*i)==m_focused)		
-			Color(1,0,0).apply();
+		if(widget==m_focused)		
+			Color(1,0,0,1).apply();
 		else
-			Color(0,1,0).apply();
+			Color(0,1,0,1).apply();
 
 		glBegin(GL_QUADS);
 			glVertex2f(begin.getX(),begin.getY());
@@ -132,12 +133,26 @@ void Container::doDraw(Graphics& graphics)
 			glVertex2f(end.getX(),	end.getY());
 			glVertex2f(begin.getX(),end.getY());
 		glEnd();
-		*/	
+		*/
 	
 		widget->doDraw(graphics);
 	}
 	
 	scissor.reset();
+}
+
+void Container::doConnectionEvent(Connection& connection)
+{
+	Widget::doConnectionEvent(connection);
+
+	std::vector<TaggedWidget>::iterator i;
+	
+	for(i=m_widgets.begin();i!=m_widgets.end();++i)
+	{
+		Widget* widget=(*i).m_widget;
+	
+		widget->doConnectionEvent(connection);
+	}	
 }
 
 void Container::addWidget(Widget* widget)

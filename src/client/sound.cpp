@@ -4,24 +4,34 @@
 
 #include <iostream>
 #include <cstdlib>
-#include "sounds.hpp"
+
+int Sound::m_sound_sys_ref_count=0;
+bool Sound::m_sound_sys_init_tried=false;
+bool Sound::m_sound_sys_init_success=false;
 
 Sound::Sound()
 {
-	m_was_core_init=Sounds::getInstance().wasInit();
 	m_buffer = 0;
 	m_source = NULL;
 	m_playing = false;
+	
+	m_sound_sys_ref_count++;
 }
 
 Sound::~Sound()
 {
 	unload();
+	
+	if(m_sound_sys_init_success && --m_sound_sys_ref_count==0)
+		alutExit();
 }
 
 int Sound::load(std::string fname)
 {
-	if(!m_was_core_init)
+	if(!m_sound_sys_init_tried)
+		initSounds();
+		
+	if(!m_sound_sys_init_success)
 		return -1;
 
 	unload();
@@ -63,9 +73,6 @@ int Sound::load(std::string fname)
 
 void Sound::unload()
 {
-	if(!m_was_core_init)
-		return;
-	
 	stop();
 
 	if (m_source)
@@ -85,7 +92,7 @@ void Sound::unload()
 
 void Sound::setVolume(float volume)
 {
-	if(!m_was_core_init)
+	if(!m_source)
 		return;
 	
 	alSourcef(m_source, AL_GAIN, volume);
@@ -93,7 +100,7 @@ void Sound::setVolume(float volume)
 
 void Sound::setPitch(float pitch)
 {
-	if(!m_was_core_init)
+	if(!m_source)
 		return;
 	
 	alSourcef(m_source, AL_PITCH, pitch);
@@ -101,7 +108,7 @@ void Sound::setPitch(float pitch)
 
 void Sound::setLooping(bool inf)
 {
-	if(!m_was_core_init)
+	if(!m_source)
 		return;
 	
 	if (inf)
@@ -112,7 +119,7 @@ void Sound::setLooping(bool inf)
 
 void Sound::setPos(float x, float y)
 {
-	if(!m_was_core_init)
+	if(!m_source)
 		return;
 	
 	ALfloat SourcePos[] = {x, y, 0.0f};
@@ -121,7 +128,7 @@ void Sound::setPos(float x, float y)
 
 void Sound::setVel(float vel_x, float vel_y)
 {
-	if(!m_was_core_init)
+	if(!m_source)
 		return;
 	
 	ALfloat SourceVel[] = {vel_x, vel_y, 0.0f};
@@ -130,7 +137,7 @@ void Sound::setVel(float vel_x, float vel_y)
 
 int Sound::play()
 {
-	if(!m_was_core_init)
+	if(!m_source)
 		return -1;
 	
 	if (m_source && m_buffer)
@@ -142,7 +149,7 @@ int Sound::play()
 
 int Sound::pause()
 {
-	if(!m_was_core_init)
+	if(!m_source)
 		return -1;
 	
 	m_playing = false;
@@ -155,7 +162,7 @@ int Sound::pause()
 
 int Sound::stop()
 {
-	if(!m_was_core_init)
+	if(!m_source)
 		return -1;
 	
 	m_playing = false;
@@ -164,4 +171,20 @@ int Sound::stop()
 	else
 		return -1;
 	return 0;
+}
+
+void Sound::initSounds()
+{
+	std::cout<<"init"<<std::endl;
+
+	m_sound_sys_init_tried=true;	
+	
+	if(alutInit(NULL, NULL) == AL_FALSE)
+	{
+		std::cerr<<"alutInit(NULL,NULL) failed"<<std::endl;
+		std::cerr<<alutGetErrorString(alutGetError())<<"\n";
+		return;
+	}	
+
+	m_sound_sys_init_success=true;	
 }

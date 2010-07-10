@@ -3,6 +3,10 @@ SRC = \
 	src/client/application.cpp \
 	src/client/assert.cpp \
 	src/client/button.cpp \
+	src/client/carshopmenu.cpp \
+	src/client/carlistmenu.cpp \
+	src/client/garagemenu.cpp \
+	src/client/careermenu.cpp \
 	src/client/color.cpp \
 	src/client/connection.cpp \
 	src/client/connectmenu.cpp \
@@ -17,6 +21,7 @@ SRC = \
 	src/client/image.cpp \
 	src/client/keyevent.cpp \
 	src/client/label.cpp \
+	src/client/listbox.cpp \
 	src/client/localgamemenu.cpp \
 	src/client/main.cpp \
 	src/client/mainmenu.cpp \
@@ -27,9 +32,11 @@ SRC = \
 	src/client/select.cpp \
 	src/client/settingsmenu.cpp \
 	src/client/sound.cpp \
-	src/client/sounds.cpp \
 	src/client/texture.cpp \
 	src/client/textwidget.cpp \
+	src/client/tuningmenu.cpp \
+	src/client/partshopmenu.cpp \
+	src/client/installpartsmenu.cpp \
 	src/client/ui.cpp \
 	src/client/vector2d.cpp \
 	src/client/widget.cpp \
@@ -37,11 +44,13 @@ SRC = \
 	src/shared/assert.cpp \
 	src/shared/clientsocket.cpp \
 	src/shared/inifile.cpp \
+	src/shared/outputredirector.cpp \
 	src/shared/packet.cpp \
+	src/shared/player.cpp \
+	src/shared/vehicle.cpp \
 	src/shared/serversocket.cpp \
-	src/shared/socketactivity.cpp \
-	src/shared/socketcore.cpp \
 	src/shared/socket.cpp \
+	src/shared/socketactivity.cpp \
 	src/shared/socketset.cpp \
 	src/shared/string.cpp
 

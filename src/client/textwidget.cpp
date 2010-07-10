@@ -50,6 +50,6 @@ TextWidget::TextWidget()
 
 bool TextWidget::doAutoSizeOnChange()
 {
-	return true;
+	return false;
 }
 

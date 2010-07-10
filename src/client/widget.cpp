@@ -72,6 +72,11 @@ void Widget::doHide()
 	onHide();
 }
 
+void Widget::doConnectionEvent(Connection& connection)
+{
+	onConnectionEvent(connection);
+}
+
 void Widget::onKeyDown(KeyEvent event)
 {
 	
@@ -133,6 +138,11 @@ void Widget::onShow()
 }
 
 void Widget::onHide()
+{
+
+}
+
+void Widget::onConnectionEvent(Connection& connection)
 {
 
 }

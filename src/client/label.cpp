@@ -2,7 +2,7 @@
 
 void Label::onDraw(Graphics& graphics)
 {
-	getFont().draw(getWideText(),getScreenPosition());
+	getFont().drawWrapped(getWideText(),getScreenPosition(),getSize());
 }
 
 Label::Label()

@@ -10,21 +10,16 @@ DEPS = $(SRC:.cpp=.d)
 
 all: $(BIN)
 
-$(BIN): $(OBJ)
-	$(CXX) $(OBJ) $(LIBS) $(CXXFLAGS) -o $(BIN)
+$(BIN): $(OBJ) $(RES)
+	$(CXX) $(OBJ) $(LIBS) $(RES) $(CXXFLAGS) -o $(BIN)
 
 clean:
-	-rm $(BIN)
-	-rm $(OBJ)
-	-rm $(DEPS)
+	-rm $(BIN) $(OBJ) $(DEPS) $(RES)
 
 %.o: %.cpp
-	$(call MAKEDEPEND,$<,$@,$(subst .o,.d,$@))
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -MD -c $< -o $@
 
 ifneq "$(MAKECMDGOALS)" "clean"
-
-  -include $(DEPS)
-
+-include $(DEPS)
 endif
 

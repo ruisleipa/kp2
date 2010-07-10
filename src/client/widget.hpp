@@ -44,6 +44,9 @@ class Widget: public EventListener
 		virtual void doShow();
 		virtual void doHide();
 		
+		virtual void doConnectionEvent(Connection& connection);
+		
+		
 		Widget* getParent();
 		
 		Widget();
@@ -77,6 +80,8 @@ class Widget: public EventListener
 		
 		virtual void onShow();
 		virtual void onHide();
+		
+		virtual void onConnectionEvent(Connection& connection);
 	
 	private:
 		Vector2D m_position;
