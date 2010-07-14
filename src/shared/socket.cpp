@@ -17,7 +17,8 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include <fcntl.h> 
+#include <fcntl.h>
+#include <errno.h>
 
 #endif
 
@@ -25,6 +26,10 @@
 
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET -1
+#endif
+
+#ifndef SOCKET_ERROR
+#define SOCKET_ERROR -1
 #endif
 
 #ifdef WIN32
@@ -325,10 +330,12 @@ Socket::~Socket()
 		(*i)->remove(this);
 	}
 	
+#ifdef WIN32	
 	if(--m_winsock_ref_count == 0)
 	{
 		WSACleanup();
 	}
+#endif
 }
 
 bool Socket::setNonBlock(int socket)
