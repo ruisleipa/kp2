@@ -50,8 +50,8 @@ float Timer::getTime() const
 	timespec time;
 
 	if(clock_gettime(CLOCK_MONOTONIC,&time) == -1)
-		throw TimerException("Timer::getTime(): QueryPerformanceCounter failed");
+		throw TimerException("Timer::getTime(): clock_gettime failed");
 	
-	return time.tv_sec+float(t.tv_nsec)/1000000000.0;
+	return time.tv_sec+float(time.tv_nsec)/1000000000.0;
 #endif	
 }
