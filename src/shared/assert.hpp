@@ -1,5 +1,5 @@
-#ifndef __ASSERT_HPP
-#define __ASSERT_HPP
+#ifndef ASSERT_HPP
+#define ASSERT_HPP
 
 void _assert(const char* e,const char* file,int line);
 
@@ -9,6 +9,6 @@ void _assert(const char* e,const char* file,int line);
 #define assert(x) ((void)0)
 #endif
 
-#endif // __ASSERT_HPP
+#endif // ASSERT_HPP
 
 

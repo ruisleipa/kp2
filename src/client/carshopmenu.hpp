@@ -1,5 +1,5 @@
-#ifndef __CARSHOPMENU_HPP
-#define __CARSHOPMENU_HPP
+#ifndef CARSHOPMENU_HPP
+#define CARSHOPMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -47,4 +47,4 @@ class CarshopMenu : public Container
 				
 };
 
-#endif // __CARSHOPMENU_HPP
+#endif // CARSHOPMENU_HPP

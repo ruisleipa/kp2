@@ -1,5 +1,5 @@
-#ifndef __STRING_HPP
-#define __STRING_HPP
+#ifndef STRING_HPP
+#define STRING_HPP
 
 #include <string>
 #include <sstream>

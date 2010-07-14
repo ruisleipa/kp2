@@ -1,5 +1,5 @@
-#ifndef __COLOR_HPP
-#define __COLOR_HPP
+#ifndef COLOR_HPP
+#define COLOR_HPP
 
 /** Color is a class that stores information of a certain color.
  * The class stores values of red, green and blue. It also stores a value of transparency, called alpha. Every color element is a float value between 0.0 and 1.0.

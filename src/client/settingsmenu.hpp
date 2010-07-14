@@ -1,5 +1,5 @@
-#ifndef __SETTINGSMENU_HPP
-#define __SETTINGSMENU_HPP
+#ifndef SETTINGSMENU_HPP
+#define SETTINGSMENU_HPP
 
 #include "window.hpp"
 #include "label.hpp"
@@ -49,4 +49,4 @@ class SettingsMenu : public Window
 		std::vector<Vector2D> m_modes;
 };
 
-#endif // __SETTINGSMENU_HPP
+#endif // SETTINGSMENU_HPP

@@ -1,5 +1,5 @@
-#ifndef __SERVERSOCKET_HPP
-#define __SERVERSOCKET_HPP
+#ifndef SERVERSOCKET_HPP
+#define SERVERSOCKET_HPP
 
 #include "socket.hpp"
 #include "clientsocket.hpp"
@@ -14,4 +14,4 @@ class ServerSocket: public Socket
 		bool accept(ClientSocket& socket);
 };
 
-#endif // __SERVERSOCKET_HPP
+#endif // SERVERSOCKET_HPP

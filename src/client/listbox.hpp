@@ -1,5 +1,5 @@
-#ifndef __LISTBOX_HPP
-#define __LISTBOX_HPP
+#ifndef LISTBOX_HPP
+#define LISTBOX_HPP
 
 #include "activetextwidget.hpp"
 
@@ -36,5 +36,5 @@ class Listbox : public TextWidget
 		std::vector<std::wstring> m_items;
 };
 
-#endif // __LISTBOX_HPP
+#endif // LISTBOX_HPP
 

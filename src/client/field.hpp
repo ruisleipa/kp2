@@ -1,5 +1,5 @@
-#ifndef __FIELD_HPP
-#define __FIELD_HPP
+#ifndef FIELD_HPP
+#define FIELD_HPP
 
 #include "textwidget.hpp"
 
@@ -23,4 +23,4 @@ class Field : public TextWidget
 		bool m_focused;
 };
 
-#endif // __FIELD_HPP
+#endif // FIELD_HPP

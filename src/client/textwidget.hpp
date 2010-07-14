@@ -1,5 +1,5 @@
-#ifndef __TEXTWIDGET_HPP
-#define __TEXTWIDGET_HPP
+#ifndef TEXTWIDGET_HPP
+#define TEXTWIDGET_HPP
 
 #include "widget.hpp"
 #include "font.hpp"
@@ -30,4 +30,4 @@ class TextWidget : public Widget
 		std::wstring m_text;
 };
 
-#endif // __TEXTWIDGET_HPP
+#endif // TEXTWIDGET_HPP

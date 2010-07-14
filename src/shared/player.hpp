@@ -1,5 +1,5 @@
-#ifndef __PLAYER_HPP
-#define __PLAYER_HPP
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 #include <string>
 
@@ -22,5 +22,5 @@ class Player
 		int32_t m_money;
 };
 
-#endif // __PLAYER_HPP
+#endif // PLAYER_HPP
 

@@ -1,5 +1,5 @@
-#ifndef __SELECT_HPP
-#define __SELECT_HPP
+#ifndef SELECT_HPP
+#define SELECT_HPP
 
 #include "activetextwidget.hpp"
 
@@ -26,5 +26,5 @@ class Select : public ActiveTextWidget
 		std::vector<std::wstring> m_items;
 };
 
-#endif // __SELECT_HPP
+#endif // SELECT_HPP
 

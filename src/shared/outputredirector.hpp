@@ -1,5 +1,5 @@
-#ifndef __OUTPUTREDIRECTOR_HPP
-#define __OUTPUTREDIRECTOR_HPP
+#ifndef OUTPUTREDIRECTOR_HPP
+#define OUTPUTREDIRECTOR_HPP
 
 #include <iostream>
 #include <fstream>
@@ -16,5 +16,5 @@ class OutputRedirector
 		std::streambuf* m_cerr_buffer;
 };
 
-#endif // __OUTPUTREDIRECTOR_HPP
+#endif // OUTPUTREDIRECTOR_HPP
 

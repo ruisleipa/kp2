@@ -1,5 +1,5 @@
-#ifndef __INSTALLPARTSMENU_HPP
-#define __INSTALLPARTSMENU_HPP
+#ifndef INSTALLPARTSMENU_HPP
+#define INSTALLPARTSMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -39,4 +39,4 @@ class InstallpartsMenu : public Container
 		}m_sell_button;
 };
 
-#endif // __INSTALLPARTSMENU_HPP
+#endif // INSTALLPARTSMENU_HPP

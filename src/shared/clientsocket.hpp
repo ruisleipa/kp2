@@ -1,5 +1,5 @@
-#ifndef __CLIENTSOCKET_HPP
-#define __CLIENTSOCKET_HPP
+#ifndef CLIENTSOCKET_HPP
+#define CLIENTSOCKET_HPP
 
 #include "socket.hpp"
 
@@ -20,5 +20,5 @@ class ClientSocket: public Socket
 		friend class ServerSocket;
 };
 
-#endif // __CLIENTSOCKET_HPP
+#endif // CLIENTSOCKET_HPP
 

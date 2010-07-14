@@ -1,5 +1,5 @@
-#ifndef __SDL_HPP
-#define __SDL_HPP
+#ifndef SDL_HPP
+#define SDL_HPP
 
 #include <SDL/SDL.h>
 
@@ -11,4 +11,4 @@ class Sdl
 	private:
 };
 
-#endif // __SDL_HPP
+#endif // SDL_HPP

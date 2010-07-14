@@ -1,5 +1,5 @@
-#ifndef __CAREERMENU_HPP
-#define __CAREERMENU_HPP
+#ifndef CAREERMENU_HPP
+#define CAREERMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -58,4 +58,4 @@ class CareerMenu : public Container
 
 };
 
-#endif // __CAREERMENU_HPP
+#endif // CAREERMENU_HPP

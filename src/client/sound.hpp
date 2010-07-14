@@ -1,5 +1,5 @@
-#ifndef __SOUND_HPP
-#define __SOUND_HPP
+#ifndef SOUND_HPP
+#define SOUND_HPP
 
 #include <AL/al.h>
 #include <AL/alc.h>

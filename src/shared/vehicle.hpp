@@ -1,5 +1,5 @@
-#ifndef __VEHICLE_HPP
-#define __VEHICLE_HPP
+#ifndef VEHICLE_HPP
+#define VEHICLE_HPP
 
 #include <string>
 
@@ -38,5 +38,5 @@ class Vehicle
 		float m_drag;
 };
 
-#endif // __VEHICLE_HPP
+#endif // VEHICLE_HPP
 

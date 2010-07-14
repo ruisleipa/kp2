@@ -1,5 +1,5 @@
-#ifndef __SCISSOR_HPP
-#define __SCISSOR_HPP
+#ifndef SCISSOR_HPP
+#define SCISSOR_HPP
 
 class Vector2D;
 class Graphics;
@@ -17,4 +17,4 @@ class Scissor
 
 };
 
-#endif // __SCISSOR_HPP
+#endif // SCISSOR_HPP

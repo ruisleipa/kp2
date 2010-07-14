@@ -1,5 +1,5 @@
-#ifndef __PACKET_HPP
-#define __PACKET_HPP
+#ifndef PACKET_HPP
+#define PACKET_HPP
 
 #include <sstream>
 #include <string>
@@ -43,5 +43,5 @@ class Packet
 		std::stringstream m_payload;
 };
 
-#endif // __PACKET_HPP
+#endif // PACKET_HPP
 

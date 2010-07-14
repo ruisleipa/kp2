@@ -1,5 +1,5 @@
-#ifndef __IMAGE_HPP
-#define __IMAGE_HPP
+#ifndef IMAGE_HPP
+#define IMAGE_HPP
 
 #include "widget.hpp"
 
@@ -33,5 +33,5 @@ class Image : public Widget
 
 };
 
-#endif // __IMAGE_HPP
+#endif // IMAGE_HPP
 

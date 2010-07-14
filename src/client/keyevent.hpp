@@ -1,5 +1,5 @@
-#ifndef __KEYEVENT_HPP
-#define __KEYEVENT_HPP
+#ifndef KEYEVENT_HPP
+#define KEYEVENT_HPP
 
 #include <SDL/SDL.h>
 #include <stdint.h>
@@ -18,4 +18,4 @@ class KeyEvent
 		
 };
 
-#endif // __KEYEVENT_HPP
+#endif // KEYEVENT_HPP

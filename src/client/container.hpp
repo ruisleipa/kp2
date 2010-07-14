@@ -1,5 +1,5 @@
-#ifndef __CONTAINER_HPP
-#define __CONTAINER_HPP
+#ifndef CONTAINER_HPP
+#define CONTAINER_HPP
 
 #include <vector>
 #include "widget.hpp"
@@ -42,5 +42,5 @@ class Container : public Widget
 		std::vector<TaggedWidget> m_widgets;
 };
 
-#endif // __CONTAINER_HPP
+#endif // CONTAINER_HPP
 

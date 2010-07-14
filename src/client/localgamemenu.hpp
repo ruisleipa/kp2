@@ -1,5 +1,5 @@
-#ifndef __LOCALGAMEMENU_HPP
-#define __LOCALGAMEMENU_HPP
+#ifndef LOCALGAMEMENU_HPP
+#define LOCALGAMEMENU_HPP
 
 #include "window.hpp"
 #include "label.hpp"
@@ -37,4 +37,4 @@ class LocalGameMenu : public Window
 		}m_back_button;
 };
 
-#endif // __LOCALGAMEMENU_HPP
+#endif // LOCALGAMEMENU_HPP

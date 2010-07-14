@@ -1,5 +1,5 @@
-#ifndef __BUTTON_HPP
-#define __BUTTON_HPP
+#ifndef BUTTON_HPP
+#define BUTTON_HPP
 
 #include "activetextwidget.hpp"
 
@@ -16,5 +16,5 @@ class Button : public ActiveTextWidget
 		
 };
 
-#endif // __BUTTON_HPP
+#endif // BUTTON_HPP
 

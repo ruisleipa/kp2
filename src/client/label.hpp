@@ -1,5 +1,5 @@
-#ifndef __LABEL_HPP
-#define __LABEL_HPP
+#ifndef LABEL_HPP
+#define LABEL_HPP
 
 #include "textwidget.hpp"
 
@@ -13,4 +13,4 @@ class Label : public TextWidget
 	private:
 };
 
-#endif // __LABEL_HPP
+#endif // LABEL_HPP

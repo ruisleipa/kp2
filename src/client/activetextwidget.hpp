@@ -1,5 +1,5 @@
-#ifndef __ACTIVETEXTWIDGET_HPP
-#define __ACTIVETEXTWIDGET_HPP
+#ifndef ACTIVETEXTWIDGET_HPP
+#define ACTIVETEXTWIDGET_HPP
 
 #include "textwidget.hpp"
 #include "font.hpp"
@@ -39,4 +39,4 @@ class ActiveTextWidget : public TextWidget
 		static Sound m_mouse_down_sound;
 };
 
-#endif // __ACTIVETEXTWIDGET_HPP
+#endif // ACTIVETEXTWIDGET_HPP

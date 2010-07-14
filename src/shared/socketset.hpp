@@ -1,5 +1,5 @@
-#ifndef __SOCKETSET_HPP
-#define __SOCKETSET_HPP
+#ifndef SOCKETSET_HPP
+#define SOCKETSET_HPP
 
 #ifdef WIN32
 
@@ -44,5 +44,5 @@ class SocketSet
 		friend class Socket;
 };
 
-#endif // __SOCKETSET_HPP
+#endif // SOCKETSET_HPP
 

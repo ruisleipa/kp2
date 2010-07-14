@@ -1,5 +1,5 @@
-#ifndef __CARLISTMENU_HPP
-#define __CARLISTMENU_HPP
+#ifndef CARLISTMENU_HPP
+#define CARLISTMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -49,4 +49,4 @@ class CarlistMenu : public Container
 		}m_select_button;				
 };
 
-#endif // __CARLISTMENU_HPP
+#endif // CARLISTMENU_HPP

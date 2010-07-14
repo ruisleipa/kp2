@@ -1,5 +1,5 @@
-#ifndef __FONTLOADER_HPP
-#define __FONTLOADER_HPP
+#ifndef FONTLOADER_HPP
+#define FONTLOADER_HPP
 
 #include "fontface.hpp"
 
@@ -12,4 +12,4 @@ class FontLoader
 		FontFace m_fontface;		
 };
 
-#endif // __FONTLOADER_HPP
+#endif // FONTLOADER_HPP

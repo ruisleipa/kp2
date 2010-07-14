@@ -1,5 +1,5 @@
-#ifndef __NEWLOCALGAMEMENU_HPP
-#define __NEWLOCALGAMEMENU_HPP
+#ifndef NEWLOCALGAMEMENU_HPP
+#define NEWLOCALGAMEMENU_HPP
 
 #include "window.hpp"
 #include "label.hpp"
@@ -45,4 +45,4 @@ class NewLocalGameMenu : public Window
 		}m_start_button;
 };
 
-#endif // __NEWLOCALGAMEMENU_HPP
+#endif // NEWLOCALGAMEMENU_HPP

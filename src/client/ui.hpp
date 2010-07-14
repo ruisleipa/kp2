@@ -1,5 +1,5 @@
-#ifndef __UI_HPP
-#define __UI_HPP
+#ifndef UI_HPP
+#define UI_HPP
 
 #include <memory>
 
@@ -80,4 +80,4 @@ const Vector2D CAREER_SIDEBAR_SIZE(CAREER_SIDEBAR_WIDTH,1);
 
 const Vector2D TAB_SPACING(0.02,0);
 
-#endif // __UI_HPP
+#endif // UI_HPP

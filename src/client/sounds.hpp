@@ -1,5 +1,5 @@
-#ifndef __SOUNDS_HPP
-#define __SOUNDS_HPP
+#ifndef SOUNDS_HPP
+#define SOUNDS_HPP
 
 class Sounds
 {
@@ -21,4 +21,4 @@ class Sounds
 		bool m_was_init;
 };
 
-#endif // __SOUNDS_HPP
+#endif // SOUNDS_HPP

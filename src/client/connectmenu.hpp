@@ -1,5 +1,5 @@
-#ifndef __CONNECTMENU_HPP
-#define __CONNECTMENU_HPP
+#ifndef CONNECTMENU_HPP
+#define CONNECTMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -42,4 +42,4 @@ class ConnectMenu : public Container
 		std::vector<Vector2D> m_modes;
 };
 
-#endif // __CONNECTMENU_HPP
+#endif // CONNECTMENU_HPP

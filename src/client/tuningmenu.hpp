@@ -1,5 +1,5 @@
-#ifndef __TUNINGMENU_HPP
-#define __TUNINGMENU_HPP
+#ifndef TUNINGMENU_HPP
+#define TUNINGMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -54,4 +54,4 @@ class TuningMenu : public Container
 		
 };
 
-#endif // __TUNINGMENU_HPP
+#endif // TUNINGMENU_HPP

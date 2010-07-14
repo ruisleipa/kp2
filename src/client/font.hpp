@@ -1,5 +1,5 @@
-#ifndef __FONT_HPP
-#define __FONT_HPP
+#ifndef FONT_HPP
+#define FONT_HPP
 
 #include "fontface.hpp"
 #include "color.hpp"

@@ -1,5 +1,5 @@
-#ifndef __GARAGEMENU_HPP
-#define __GARAGEMENU_HPP
+#ifndef GARAGEMENU_HPP
+#define GARAGEMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -43,4 +43,4 @@ class GarageMenu : public Container
 		
 };
 
-#endif // __GARAGEMENU_HPP
+#endif // GARAGEMENU_HPP

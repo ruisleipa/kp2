@@ -1,5 +1,5 @@
-#ifndef __SOCKETACTIVITY_HPP
-#define __SOCKETACTIVITY_HPP
+#ifndef SOCKETACTIVITY_HPP
+#define SOCKETACTIVITY_HPP
 
 class Socket;
 
@@ -19,5 +19,5 @@ class SocketActivity
 		bool m_can_read;		
 };
 
-#endif // __SOCKETACTIVITY_HPP
+#endif // SOCKETACTIVITY_HPP
 

@@ -1,5 +1,5 @@
-#ifndef __TEXTURE_HPP
-#define __TEXTURE_HPP
+#ifndef TEXTURE_HPP
+#define TEXTURE_HPP
 
 #include <string>
 #include <iostream>
@@ -110,4 +110,4 @@ class Texture
 
 };
 
-#endif // __TEXTURE_HPP
+#endif // TEXTURE_HPP

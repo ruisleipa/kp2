@@ -1,5 +1,5 @@
-#ifndef __MOUSEEVENT_HPP
-#define __MOUSEEVENT_HPP
+#ifndef MOUSEEVENT_HPP
+#define MOUSEEVENT_HPP
 
 #include <stdint.h>
 #include "vector2d.hpp"
@@ -29,4 +29,4 @@ class MouseEvent
 		
 };
 
-#endif // __MOUSEEVENT_HPP
+#endif // MOUSEEVENT_HPP

@@ -1,5 +1,5 @@
-#ifndef __EVENTLISTENER_HPP
-#define __EVENTLISTENER_HPP
+#ifndef EVENTLISTENER_HPP
+#define EVENTLISTENER_HPP
 
 class KeyEvent;
 class MouseEvent;
@@ -21,4 +21,4 @@ class EventListener
 		virtual void doConnectionEvent(Connection& connection);
 };
 
-#endif // __KEYEVENT_HPP
+#endif // KEYEVENT_HPP

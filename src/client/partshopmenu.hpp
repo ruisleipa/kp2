@@ -1,5 +1,5 @@
-#ifndef __PARTSHOPMENU_HPP
-#define __PARTSHOPMENU_HPP
+#ifndef PARTSHOPMENU_HPP
+#define PARTSHOPMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -37,4 +37,4 @@ class PartshopMenu : public Container
 		}m_buy_button;
 };
 
-#endif // __PARTSHOPMENU_HPP
+#endif // PARTSHOPMENU_HPP

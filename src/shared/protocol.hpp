@@ -1,5 +1,5 @@
-#ifndef __PROTOCOL_HPP
-#define __PROTOCOL_HPP
+#ifndef PROTOCOL_HPP
+#define PROTOCOL_HPP
 
 /*
 Any of the messages can come to the client without a request. I.e. the client
@@ -80,5 +80,5 @@ const uint16_t PLAYERS_LIST=7000;
 
 
 
-#endif // __PROTOCOL_HPP
+#endif // PROTOCOL_HPP
 

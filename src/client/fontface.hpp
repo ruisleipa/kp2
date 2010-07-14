@@ -1,5 +1,5 @@
-#ifndef __FONTFACE_HPP
-#define __FONTFACE_HPP
+#ifndef FONTFACE_HPP
+#define FONTFACE_HPP
 
 #include "texture.hpp"
 #include "vector2d.hpp"

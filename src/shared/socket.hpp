@@ -1,5 +1,5 @@
-#ifndef __SOCKET_HPP
-#define __SOCKET_HPP
+#ifndef SOCKET_HPP
+#define SOCKET_HPP
 
 #include <string>
 #include <set>
@@ -52,5 +52,5 @@ class Socket
 		
 };
 
-#endif // __SOCKET_HPP
+#endif // SOCKET_HPP
 

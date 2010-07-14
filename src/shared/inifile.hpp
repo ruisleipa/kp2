@@ -1,5 +1,5 @@
-#ifndef __INIFILE_HPP
-#define __INIFILE_HPP
+#ifndef INIFILE_HPP
+#define INIFILE_HPP
 
 #include <string>
 #include <iostream>
@@ -67,5 +67,5 @@ bool IniFile::getValue(const std::string& key,T& value)
 	return true;
 }
 
-#endif // __INIFILE_HPP
+#endif // INIFILE_HPP
 

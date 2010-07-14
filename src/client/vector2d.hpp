@@ -1,5 +1,5 @@
-#ifndef __VECTOR2D_HPP
-#define __VECTOR2D_HPP
+#ifndef VECTOR2D_HPP
+#define VECTOR2D_HPP
 
 #include <ostream>
 
@@ -42,4 +42,4 @@ class Vector2D
 		float m_y;		
 };
 
-#endif // __VECTOR2D_HPP
+#endif // VECTOR2D_HPP

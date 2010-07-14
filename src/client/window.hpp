@@ -1,5 +1,5 @@
-#ifndef __WINDOW_HPP
-#define __WINDOW_HPP
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
 
 #include "container.hpp"
 
@@ -10,5 +10,5 @@ class Window : public Container
 
 };
 
-#endif // __WINDOW_HPP
+#endif // WINDOW_HPP
 

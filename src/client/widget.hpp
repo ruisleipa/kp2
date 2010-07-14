@@ -1,5 +1,5 @@
-#ifndef __WIDGET_HPP
-#define __WIDGET_HPP
+#ifndef WIDGET_HPP
+#define WIDGET_HPP
 
 #include "eventlistener.hpp"
 #include "vector2d.hpp"
@@ -94,4 +94,4 @@ class Widget: public EventListener
 		friend class Container;
 };
 
-#endif // __WIDGET_HPP
+#endif // WIDGET_HPP

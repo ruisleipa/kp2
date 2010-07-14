@@ -1,5 +1,5 @@
-#ifndef __MAINMENU_HPP
-#define __MAINMENU_HPP
+#ifndef MAINMENU_HPP
+#define MAINMENU_HPP
 
 #include "window.hpp"
 #include "button.hpp"
@@ -57,4 +57,4 @@ class MainMenu : public Window
 		
 };
 
-#endif // __MAINMENU_HPP
+#endif // MAINMENU_HPP

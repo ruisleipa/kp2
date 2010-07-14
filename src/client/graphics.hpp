@@ -1,5 +1,5 @@
-#ifndef __GRAPHICS_HPP
-#define __GRAPHICS_HPP
+#ifndef GRAPHICS_HPP
+#define GRAPHICS_HPP
 
 class Events;
 #include "sdl.hpp"
@@ -38,4 +38,4 @@ class Graphics
 		float m_aspect_ratio;		
 };
 
-#endif // __GRAPHICS_HPP
+#endif // GRAPHICS_HPP

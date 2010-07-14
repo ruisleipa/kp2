@@ -1,5 +1,5 @@
-#ifndef __CONNECTION_HPP
-#define __CONNECTION_HPP
+#ifndef CONNECTION_HPP
+#define CONNECTION_HPP
 
 #include <stdint.h>
 #include <map>
@@ -36,5 +36,5 @@ class Connection
 		char m_buffer[BUFFER_SIZE];
 };
 
-#endif // __CONNECTION_HPP
+#endif // CONNECTION_HPP
 

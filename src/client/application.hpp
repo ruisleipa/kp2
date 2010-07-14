@@ -1,5 +1,5 @@
-#ifndef __APPLICATION_HPP
-#define __APPLICATION_HPP
+#ifndef APPLICATION_HPP
+#define APPLICATION_HPP
 
 #include <memory>
 

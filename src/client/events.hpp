@@ -1,5 +1,5 @@
-#ifndef __EVENTS_HPP
-#define __EVENTS_HPP
+#ifndef EVENTS_HPP
+#define EVENTS_HPP
 
 #include "eventlistener.hpp"
 #include "sdl.hpp"
@@ -30,4 +30,4 @@ class Events
 		EventListener m_default_listener;	
 };
 
-#endif // __EVENTS_HPP
+#endif // EVENTS_HPP
