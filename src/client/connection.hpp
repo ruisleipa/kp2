@@ -4,11 +4,15 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <tr1/memory>
 
 #include "shared/clientsocket.hpp"
 #include "shared/player.hpp"
 #include "shared/vehicle.hpp"
 #include "shared/protocol.hpp"
+#include "shared/part.hpp"
+#include "shared/engine.hpp"
+#include "shared/cylinderhead.hpp"
 
 #include "eventlistener.hpp"
 #include "sound.hpp"
@@ -35,18 +39,32 @@ class Connection
 		
 		void buyCar(int index);
 		
-		std::vector<Vehicle> getCarshopVehicles() const;
-		std::vector<Vehicle> getPlayerVehicles() const;	
+		int getCarshopVehicleMaxId() const;
+		bool getCarshopVehicle(int index,Vehicle& vehicle) const;
 		
-	private:		
+		int getPlayerVehicleMaxId() const;		
+		bool getPlayerVehicle(int index,Vehicle& vehicle) const;		
+		
+		int getPartshopPartMaxId() const;		
+		bool getPartshopPart(int index,Part& part) const;		
+		template<typename T>
+		bool getPartshopPartOfType(int index,Part& part) const;
+		template<typename T>
+		bool getPartshopPartOfTypeSubtyped(int index,T& part) const;	
+		
+	private:
+		template<typename T>
+		std::tr1::shared_ptr<Part> getPartFromPacket(Packet& packet);
+	
 		/*
 		Connection data.
 		*/
 		std::string m_name;
 		int m_money;
 		
-		std::vector<Vehicle> m_carshop_vehicles;
-		std::vector<Vehicle> m_player_vehicles;	
+		std::map<int,Vehicle> m_carshop_vehicles;
+		std::map<int,Vehicle> m_player_vehicles;
+		std::map<int,std::tr1::shared_ptr<Part> > m_partshop_parts;
 	
 		/*
 		Event handling variables.
@@ -65,6 +83,62 @@ class Connection
 		std::string m_send_buffer;						
 		char m_buffer[BUFFERSIZE];
 };
+
+template<typename T>
+bool Connection::getPartshopPartOfType(int index,Part& part) const
+{
+	std::map<int,std::tr1::shared_ptr<Part> >::const_iterator i;
+	
+	i=m_partshop_parts.find(index);
+	
+	if(i==m_partshop_parts.end())
+	{
+		return false;
+	}
+	
+	T* ptr=dynamic_cast<T*>(i->second.get());
+	
+	if(!ptr)
+		return false;
+	
+	part=*((*i).second.get());
+	
+	return true;
+}
+
+template<typename T>
+bool Connection::getPartshopPartOfTypeSubtyped(int index,T& part) const
+{
+	std::map<int,std::tr1::shared_ptr<Part> >::const_iterator i;
+	
+	i=m_partshop_parts.find(index);
+	
+	if(i==m_partshop_parts.end())
+	{
+		return false;
+	}
+	
+	T* ptr=dynamic_cast<T*>(i->second.get());
+	
+	if(!ptr)
+		return false;	
+	
+	part=*ptr;
+	
+	return true;
+}
+
+template<typename T>
+std::tr1::shared_ptr<Part> Connection::getPartFromPacket(Packet& packet)
+{
+	T* part=new T;
+						
+	std::tr1::shared_ptr<Part> ptr(part);
+	
+	packet>>(*part);
+
+	return ptr;
+}
 
 #endif
 

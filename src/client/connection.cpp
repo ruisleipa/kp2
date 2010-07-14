@@ -4,6 +4,10 @@
 
 #include "shared/inifile.hpp"
 #include "shared/packet.hpp"
+
+#include "shared/engine.hpp"
+#include "shared/cylinderhead.hpp"
+
 #include "sdl.hpp"
 #include "sound.hpp"
 
@@ -23,8 +27,6 @@ void Connection::processMessages()
 	*/
 	while((read=m_socket.read(m_buffer,BUFFERSIZE))>0)
 	{
-		std::cout<<"Got "<<read<<" bytes."<<std::endl;
-
 		m_receive_buffer.append(m_buffer,read);
 	}
 			
@@ -43,8 +45,6 @@ void Connection::processMessages()
 	*/
 	while((written=m_socket.write(m_send_buffer.c_str(),m_send_buffer.size()))>0)
 	{
-		std::cout<<"Written "<<written<<" bytes."<<std::endl;
-
 		m_send_buffer.erase(0,written);
 	}
 	
@@ -88,10 +88,14 @@ void Connection::processMessages()
 				
 				for(int i=0;i<num_cars;i++)
 				{				
+					uint32_t vehicle_id;
+					
+					message>>vehicle_id;
+				
 					Vehicle vehicle;
 					message>>vehicle;
 					
-					m_carshop_vehicles.push_back(vehicle);				
+					m_carshop_vehicles[vehicle_id]=vehicle;	
 				}				
 			}
 			else if(type==CARSHOP_BUY)
@@ -126,13 +130,54 @@ void Connection::processMessages()
 				message>>num_cars;
 				
 				for(int i=0;i<num_cars;i++)
-				{				
+				{
+					uint32_t vehicle_id;
+					
+					message>>vehicle_id;
+				
 					Vehicle vehicle;
 					message>>vehicle;
 					
-					m_player_vehicles.push_back(vehicle);				
+					m_player_vehicles[vehicle_id]=vehicle;						
 				}					
-			}	
+			}
+			else if(type==PARTSHOP_LIST)
+			{
+				m_partshop_parts.clear();
+				
+				uint32_t num_parts;
+				
+				message>>num_parts;
+				
+				for(int i=0;i<num_parts;i++)
+				{				
+					uint32_t part_id;
+					uint16_t type_id;
+					
+					message>>part_id;
+					message>>type_id;
+					
+					std::tr1::shared_ptr<Part> ptr;
+					
+					if(type_id==PART_TYPE_ID_ENGINE)
+						ptr=getPartFromPacket<Engine>(message);
+					else if(type_id==PART_TYPE_ID_CYLINDERHEAD)
+						ptr=getPartFromPacket<CylinderHead>(message);
+					else
+						continue;
+						
+					m_partshop_parts[part_id]=ptr;									
+				}
+
+				std::map<int,std::tr1::shared_ptr<Part> >::iterator i;
+				
+				for(i=m_partshop_parts.begin();i!=m_partshop_parts.end();++i)
+				{
+					Part* part=i->second.get();
+					
+					std::cout<<part->getName()<<" "<<part->getPrice()<<std::endl;
+				}	
+			}
 			
 			m_event_listener->doConnectionEvent(*this);
 		}
@@ -174,14 +219,70 @@ void Connection::buyCar(int index)
 	writeToServer(packet);
 }
 
-std::vector<Vehicle> Connection::getCarshopVehicles() const
+int Connection::getCarshopVehicleMaxId() const
 {
-	return m_carshop_vehicles;
+	if(m_carshop_vehicles.empty())
+		return 0;
+		
+	return m_carshop_vehicles.rbegin()->first;
 }
 
-std::vector<Vehicle> Connection::getPlayerVehicles() const
+bool Connection::getCarshopVehicle(int index,Vehicle& vehicle) const
 {
-	return m_player_vehicles;
+	std::map<int,Vehicle>::const_iterator i;
+	
+	i=m_carshop_vehicles.find(index);
+
+	if(i == m_carshop_vehicles.end())
+		return false;
+
+	vehicle=i->second;
+
+	return true;
+}
+
+int Connection::getPlayerVehicleMaxId() const
+{
+	if(m_player_vehicles.empty())
+		return 0;
+		
+	return m_player_vehicles.rbegin()->first;
+}
+		
+bool Connection::getPlayerVehicle(int index,Vehicle& vehicle) const
+{
+	std::map<int,Vehicle>::const_iterator i;
+	
+	i=m_player_vehicles.find(index);
+
+	if(i == m_player_vehicles.end())
+		return false;
+	
+	vehicle=i->second;
+	
+	return true;
+}		
+
+int Connection::getPartshopPartMaxId() const
+{
+	if(m_partshop_parts.empty())
+		return 0;
+		
+	return m_partshop_parts.rbegin()->first;
+}
+		
+bool Connection::getPartshopPart(int index,Part& part) const
+{
+	std::map<int,std::tr1::shared_ptr<Part> >::const_iterator i;
+	
+	i=m_partshop_parts.find(index);
+
+	if(i == m_partshop_parts.end())
+		return false;
+	
+	part=*(i->second.get());
+	
+	return true;
 }
 
 void Connection::writeToServer(const Packet& packet)
@@ -194,11 +295,6 @@ void Connection::writeToServer(const Packet& packet)
 void Connection::setEventListener(EventListener* event_listener)
 {
 	m_event_listener=event_listener;
-}
-
-void Connection::addMessageHandler(uint16_t id,MessageHandler* handler)
-{
-	Connection::m_handlers[id]=handler;
 }
 
 bool Connection::startLocalServer()

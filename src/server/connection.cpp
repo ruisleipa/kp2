@@ -2,11 +2,11 @@
 
 #include "shared/packet.hpp"
 #include "shared/protocol.hpp"
-#include "shared/directory.hpp"
 
 #include <sstream>
 #include <algorithm>
 #include <iostream>
+#include <limits>
 
 bool Connection::readFromClient(ClientSocket* socket)
 {
@@ -18,8 +18,6 @@ bool Connection::readFromClient(ClientSocket* socket)
 	*/
 	while((read=socket->read(m_buffer,BUFFER_SIZE))>0)
 	{
-		std::cout<<"Got "<<read<<" bytes."<<std::endl;
-
 		m_receive_buffer.append(m_buffer,read);
 	}
 	
@@ -76,13 +74,14 @@ bool Connection::readFromClient(ClientSocket* socket)
 			{
 				response.setType(CARSHOP_LIST);
 				
-				std::vector<Vehicle>::iterator i;
+				std::map<int,Vehicle>::iterator i;
 				
 				response<<uint32_t(m_carshop_vehicles.size());
 				
 				for(i=m_carshop_vehicles.begin();i!=m_carshop_vehicles.end();++i)
 				{
-					response<<(*i);
+					response<<uint32_t(i->first);
+					response<<i->second;
 				}				
 			}
 			else if(type==CARSHOP_BUY)
@@ -91,14 +90,30 @@ bool Connection::readFromClient(ClientSocket* socket)
 				
 				request>>carindex;
 				
-				if(carindex >= m_carshop_vehicles.size())
+				std::map<int,Vehicle>::iterator i;
+				
+				i=m_carshop_vehicles.find(carindex);
+					
+				if(i==m_carshop_vehicles.end())
 					continue;
 					
 				response.setType(CARSHOP_BUY);
 				
 				if(m_player.changeMoney(-1000))
 				{
-					m_player_vehicles.push_back(m_carshop_vehicles[carindex]);
+					std::map<int,Vehicle>::iterator i;
+					
+					for(int id=0;id<std::numeric_limits<int>::max();id++)
+					{
+						i=m_player_vehicles.find(id);
+					
+						if(i!=m_player_vehicles.end())
+							continue;
+							
+						m_player_vehicles[id]=m_carshop_vehicles[carindex];
+						
+						break;
+					}
 					
 					response<<uint32_t(0);
 				}
@@ -111,15 +126,50 @@ bool Connection::readFromClient(ClientSocket* socket)
 			{
 				response.setType(GARAGE_LIST);
 				
-				std::vector<Vehicle>::iterator i;
+				std::map<int,Vehicle>::iterator i;
 				
 				response<<uint32_t(m_player_vehicles.size());
 				
 				for(i=m_player_vehicles.begin();i!=m_player_vehicles.end();++i)
 				{
-					response<<(*i);
+					response<<uint32_t(i->first);
+					response<<i->second;
 				}				
-			}			
+			}
+			else if(type==PARTSHOP_LIST)
+			{
+				response.setType(PARTSHOP_LIST);
+				
+				std::map<int,std::tr1::shared_ptr<Part> >::iterator i;
+				
+				response<<uint32_t(m_partshop_parts.size());
+				
+				for(i=m_partshop_parts.begin();i!=m_partshop_parts.end();++i)
+				{
+					response<<uint32_t(i->first);
+					
+					Part* part=i->second.get();
+										
+					/*
+					Try to send the part in every type.
+					When the correct type is found, short-
+					circuiting will stop the evaluation.
+					*/					
+					
+					bool typefound=
+					(				
+						writePartToPacket<Engine>(response,part,PART_TYPE_ID_ENGINE) ||
+						writePartToPacket<CylinderHead>(response,part,PART_TYPE_ID_CYLINDERHEAD)						
+					);
+				}
+
+				for(i=m_partshop_parts.begin();i!=m_partshop_parts.end();++i)
+				{
+					Part* part=i->second.get();
+					
+					std::cout<<part->getName()<<" "<<part->getPrice()<<std::endl;
+				}					
+			}	
 			else
 			{
 				continue;
@@ -145,15 +195,22 @@ Connection::Connection()
 	std::vector<std::string> files;
 	std::vector<std::string>::iterator i;
 	
-	files=readDirectory("gamedata/vehicles/");
+	files=readDirectory("gamedata/vehicles/","cfg");
+	
+	int id=0;
 	
 	for(i=files.begin();i!=files.end();++i)
 	{
 		Vehicle vehicle;
 		
 		if(vehicle.load("gamedata/vehicles/" + (*i)))
-			m_carshop_vehicles.push_back(vehicle);
+		{
+			m_carshop_vehicles[id++]=vehicle;
+		}
 	}
+	
+	loadPartsFromDirectory<Engine>("gamedata/parts/engines/");
+	loadPartsFromDirectory<CylinderHead>("gamedata/parts/cylinderheads/");
 }
 
 

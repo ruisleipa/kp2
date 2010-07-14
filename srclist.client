@@ -50,6 +50,9 @@ SRC = \
 	src/shared/packet.cpp \
 	src/shared/player.cpp \
 	src/shared/vehicle.cpp \
+	src/shared/part.cpp \
+	src/shared/engine.cpp \
+	src/shared/cylinderhead.cpp \
 	src/shared/serversocket.cpp \
 	src/shared/socket.cpp \
 	src/shared/socketactivity.cpp \

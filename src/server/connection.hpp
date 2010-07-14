@@ -6,9 +6,16 @@
 #include <string>
 #include <vector>
 
+#include <tr1/memory>
+
 #include "shared/clientsocket.hpp"
 #include "shared/player.hpp"
 #include "shared/vehicle.hpp"
+#include "shared/part.hpp"
+#include "shared/engine.hpp"
+#include "shared/cylinderhead.hpp"
+
+#include "shared/directory.hpp"
 
 class CheatDetectedException
 {
@@ -26,15 +33,60 @@ class Connection
 		Connection();
 		
 	private:
+		template<typename T>
+		void loadPartsFromDirectory(const std::string& directory);
+		template<typename T>
+		bool writePartToPacket(Packet& packet,Part* part,uint16_t type_id);
+	
 		Player m_player;
 		
-		std::vector<Vehicle> m_carshop_vehicles;
-		std::vector<Vehicle> m_player_vehicles;		
+		std::map<int,Vehicle> m_carshop_vehicles;
+		std::map<int,Vehicle> m_player_vehicles;
+		std::map<int,std::tr1::shared_ptr<Part> > m_partshop_parts;
 	
 		std::string m_receive_buffer;		
 		static const int BUFFER_SIZE=512;		
 		char m_buffer[BUFFER_SIZE];
 };
+
+template<typename T>
+void Connection::loadPartsFromDirectory(const std::string& directory)
+{
+	std::vector<std::string> files;
+	std::vector<std::string>::iterator i;
+	
+	files=readDirectory(directory);
+	
+	int id=0;
+	
+	for(i=files.begin();i!=files.end();++i)
+	{
+		T* part=new T;
+		
+		std::tr1::shared_ptr<Part> ptr(part);		
+
+		if(part->load(directory + (*i)))
+		{
+			m_partshop_parts[id++]=ptr;
+		}
+	}
+}
+
+template<typename T>
+bool Connection::writePartToPacket(Packet& packet,Part* part,uint16_t type_id)
+{
+	T* ptr=dynamic_cast<T*>(part);
+					
+	if(ptr)
+	{
+		packet<<type_id;
+		packet<<*ptr;
+		
+		return true;
+	}
+	
+	return false;
+}
 
 #endif // CONNECTION_HPP
 
