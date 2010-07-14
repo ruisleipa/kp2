@@ -1,6 +1,6 @@
 #include "inifile.hpp"
 
-static std::string trim(const std::string& str,const std::string& chars="\t ")
+static std::string trim(const std::string& str,const std::string& chars=" \t\n\v\f\r")
 {
 	size_t begin=str.find_first_not_of(chars);
 	size_t end=str.find_last_not_of(chars);
