@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <map>
+#include <errno.h>
+#include <stdlib.h>
 
 #include "string.hpp"
 #include "assert.hpp"
