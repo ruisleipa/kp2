@@ -4,8 +4,8 @@ OutputRedirector::OutputRedirector(const std::string& filename)
 {
 	m_filestream.open(filename.c_str(),std::ios_base::trunc);
 	
-	std::streambuf* m_cout_buffer = std::cout.rdbuf();
-	std::streambuf* m_cerr_buffer = std::cerr.rdbuf();
+	m_cout_buffer = std::cout.rdbuf();
+	m_cerr_buffer = std::cerr.rdbuf();
 	
 	std::cout.rdbuf(m_filestream.rdbuf());
 	std::cerr.rdbuf(m_filestream.rdbuf());
