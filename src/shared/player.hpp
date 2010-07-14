@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include <string>
+#include <stdint.h>
 
 class Packet;
 

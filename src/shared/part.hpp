@@ -2,6 +2,7 @@
 #define PART_HPP
 
 #include <string>
+#include <stdint.h>
 
 #include "packet.hpp"
 
