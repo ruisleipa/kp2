@@ -35,6 +35,10 @@ void TuningMenu::onResize(Graphics& graphics)
 	
 	Vector2D buttonpos=TITLE_POSITION;
 
+	m_buy_button.setPosition(buttonpos);
+	m_buy_button.autoSize();
+	buttonpos+=m_buy_button.getSize()*Vector2D(1,0)+TAB_SPACING;	
+	
 	m_install_button.setPosition(buttonpos);
 	m_install_button.autoSize();
 	buttonpos+=m_install_button.getSize()*Vector2D(1,0)+TAB_SPACING;
@@ -42,10 +46,6 @@ void TuningMenu::onResize(Graphics& graphics)
 	m_machining_button.setPosition(buttonpos);
 	m_machining_button.autoSize();
 	buttonpos+=m_machining_button.getSize()*Vector2D(1,0)+TAB_SPACING;
-	
-	m_buy_button.setPosition(buttonpos);
-	m_buy_button.autoSize();
-	buttonpos+=m_buy_button.getSize()*Vector2D(1,0)+TAB_SPACING;	
 	
 	m_adjust_button.setPosition(buttonpos);
 	m_adjust_button.autoSize();
