@@ -1,9 +1,5 @@
-
 CXX = g++
-CXXFLAGS = -g -I./src/
-define MAKEDEPEND
-	$(CXX) $(CXXFLAGS) -MM -MF $3 -MP -MT $2 $1
-endef
+CXXFLAGS = -g -I./src/ -Wall
 
 OBJ = $(SRC:.cpp=.o)
 DEPS = $(SRC:.cpp=.d)
