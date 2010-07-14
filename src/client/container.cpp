@@ -33,6 +33,8 @@ void Container::doKeyUp(KeyEvent event)
 
 void Container::doMouseDown(MouseEvent event)
 {
+	Widget::doMouseDown(event);
+
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 	
 	if(widget != m_focused)
@@ -48,8 +50,7 @@ void Container::doMouseDown(MouseEvent event)
 	
 	if(widget)
 		widget->doMouseDown(event);
-		
-	Widget::doMouseDown(event);
+
 }
 
 void Container::doMouseUp(MouseEvent event)
