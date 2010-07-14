@@ -8,7 +8,8 @@
 #include "shared/string.hpp"
 #include "connection.hpp"
 
-PartshopMenu::PartshopMenu()
+PartshopMenu::PartshopMenu(Connection& connection):
+	m_connection(connection)
 {
 	m_background_texture.load("data/images/carlistmenu.png");
 	m_background.setTexture(&m_background_texture);
@@ -19,24 +20,37 @@ PartshopMenu::PartshopMenu()
 	
 	m_category_info.setText("Tähän tulee kategoriainfo.");	
 		
-	m_category_list.addItem("Moottorit");
-	m_category_list.addItem("Kannet");
-	m_category_list.addItem("Nokat");	
-	m_category_list.addItem("Kaasarit");
+	m_category_list.addItem("Lisävarusteet");
+	m_category_list.addItem("Nokka-akselit");
+	m_category_list.addItem("Ahtimet");	
+	m_category_list.addItem("Kytkimet");
+	m_category_list.addItem("Jäähdyttimet");
+	m_category_list.addItem("Kannet",PART_TYPE_ID_CYLINDERHEAD);
+	m_category_list.addItem("Tasauspyörästöt");	
+	m_category_list.addItem("Moottorit",PART_TYPE_ID_ENGINE);
+	m_category_list.addItem("Pakosarjat");
+	m_category_list.addItem("Pakoputkistot");
+	m_category_list.addItem("Bensansyöttö");	
+	m_category_list.addItem("Bensapumput");
+	m_category_list.addItem("Ruiskut");
+	m_category_list.addItem("Imusarjat");
+	m_category_list.addItem("Renkaat");	
+	m_category_list.addItem("Vaihteistot");
 	
-	m_part_list.addItem("1.0 L s4");
-	m_part_list.addItem("1.1 L s4");
-	m_part_list.addItem("1.4 L s4");	
-	m_part_list.addItem("1.6 L s4");
-
 	m_buy_button.setText("Osta");
 	
 	addWidget(&m_background);
-	addWidget(&m_category_info);
-	addWidget(&m_category_list);
-	addWidget(&m_part_image);
-	addWidget(&m_part_price);
-	addWidget(&m_part_list);	
+	
+	m_top_row.addWidget(&m_category_info);
+	m_top_row.addWidget(&m_part_image);
+	
+	addWidget(&m_top_row);
+	
+	m_bottom_row.addWidget(&m_category_list);
+	m_bottom_row.addWidget(&m_part_list);
+	m_bottom_row.addWidget(&m_part_price);
+	
+	addWidget(&m_bottom_row);	
 	
 	addWidget(&m_buy_button);	
 }
@@ -48,17 +62,9 @@ void PartshopMenu::onResize(Graphics& graphics)
 	
 	m_background.setSize(CAREER_SUBMENU_SIZE);
 	
-	m_category_info.setPosition(Vector2D(PADDING,PADDING));
-	m_category_info.setSize(CAREER_SUBMENU_SIZE/2-Vector2D(PADDING*1.5,PADDING*1.5));
-
-	m_part_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(0.5,0)+Vector2D(0,PADDING));
-	m_part_image.setSize(CAREER_SUBMENU_SIZE*Vector2D(0.5,0.5)-Vector2D(PADDING,PADDING));
-	
-	m_category_list.setPosition(CAREER_SUBMENU_SIZE*Vector2D(0,0.5)+Vector2D(PADDING,0));
-	m_category_list.setSize(CAREER_SUBMENU_SIZE/2-Vector2D(PADDING*1.5,PADDING*1.5));
-	
-	m_part_list.setPosition(CAREER_SUBMENU_SIZE*Vector2D(0.5,0.5)+Vector2D(PADDING,PADDING)/2.0);
-	m_part_list.setSize(CAREER_SUBMENU_SIZE/2-Vector2D(PADDING*1.5,PADDING*1.5));
+	m_top_row.setSize(CAREER_SUBMENU_SIZE*Vector2D(1,0.3));	
+	m_bottom_row.setSize(CAREER_SUBMENU_SIZE*Vector2D(1,0.7));	
+	m_bottom_row.setPosition(CAREER_SUBMENU_SIZE*Vector2D(0,0.3));	
 	
 	m_buy_button.autoSize();
 	m_buy_button.setPosition(CAREER_SUBMENU_SIZE*Vector2D(0.5,1)-m_buy_button.getSize()*Vector2D(0,1)-Vector2D(0,PADDING));	
@@ -66,6 +72,42 @@ void PartshopMenu::onResize(Graphics& graphics)
 
 void PartshopMenu::onShow()
 {
+	
+}
+
+void PartshopMenu::CategoryList::onChange()
+{
+	if(!getParent())
+		return;
+	
+	PartshopMenu* menu=dynamic_cast<PartshopMenu*>(getParent()->getParent());
+	
+	if(!menu)
+		return;
+	
+	int part_type=menu->m_category_list.getCurrentItemTag();
+	
+	menu->m_part_list.clearItems();
+	
+	for(int i=0;i<=menu->m_connection.getPartshopPartMaxId();++i)
+	{
+		Part part;
+	
+		bool success=false;
+	
+		if(part_type==PART_TYPE_ID_ENGINE)
+		{
+			success=menu->m_connection.getPartshopPartOfType<Engine>(i,part);
+			std::cout<<success<<std::endl;
+		}
+		else if(part_type==PART_TYPE_ID_CYLINDERHEAD)
+			success=menu->m_connection.getPartshopPartOfType<CylinderHead>(i,part);
+		
+		if(!success)
+			continue;
+	
+		menu->m_part_list.addItem(part.getName(),i);
+	}
 
 }
 

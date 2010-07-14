@@ -58,13 +58,14 @@ void CarshopMenu::onConnectionEvent(Connection& connection)
 {
 	m_car_list.clearItems();
 	
-	m_vehicles=connection.getCarshopVehicles();
-	
-	std::vector<Vehicle>::iterator i;
-	
-	for(i=m_vehicles.begin();i!=m_vehicles.end();++i)
+	for(int i=0;i<=connection.getCarshopVehicleMaxId();++i)
 	{
-		m_car_list.addItem((*i).getName());
+		Vehicle vehicle;
+	
+		if(connection.getCarshopVehicle(i,vehicle))
+		{
+			m_car_list.addItem(vehicle.getName(),i);
+		}
 	}	
 }
 
@@ -72,17 +73,22 @@ void CarshopMenu::CarListbox::onChange()
 {
 	CarshopMenu* menu=dynamic_cast<CarshopMenu*>(getParent());
 	
-	int carindex=menu->m_car_list.getIndex();
+	Vehicle vehicle;
 	
-	menu->m_car_name.setText(menu->m_vehicles[carindex].getName());
+	if(!menu->m_connection.getCarshopVehicle(menu->m_car_list.getCurrentItemTag(),vehicle))
+	{
+		return;
+	}
+	
+	menu->m_car_name.setText(vehicle.getName());
 		
 	std::string image="gamedata/vehicles/";
-	image+=menu->m_vehicles[carindex].getImageName();
+	image+=vehicle.getImageName();
 	menu->m_car_texture.load(image);
 	menu->m_car_image.setSize(menu->m_car_texture.getSize()/400);
 	menu->m_car_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(1,0)-menu->m_car_image.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
 	
-	menu->m_car_info.setText(menu->m_vehicles[carindex].getGeneralInfoString());
+	menu->m_car_info.setText(vehicle.getGeneralInfoString());
 }
 
 void CarshopMenu::BuyButton::onClick()

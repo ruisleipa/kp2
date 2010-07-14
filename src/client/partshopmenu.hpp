@@ -2,6 +2,7 @@
 #define PARTSHOPMENU_HPP
 
 #include "container.hpp"
+#include "columnlayoutcontainer.hpp"
 #include "label.hpp"
 #include "button.hpp"
 #include "image.hpp"
@@ -11,24 +12,34 @@
 class PartshopMenu : public Container
 {
 	public:
-		PartshopMenu();
+		PartshopMenu(Connection& connection);
 
 		virtual void onResize(Graphics& graphics);
 		virtual void onShow();
 		
 	private:
+		Connection& m_connection;
+	
 		Texture m_background_texture;
 		Image m_background;
 		
-		Texture m_part_texture;
-		Image m_part_image;
+		ColumnLayoutContainer m_top_row;
 		
+		Texture m_part_texture;
+		Image m_part_image;		
 		Label m_category_info;
 		
-		Listbox m_category_list;
+		ColumnLayoutContainer m_bottom_row;
 		
-		Label m_part_price;		
+		class CategoryList: public Listbox
+		{
+			public:				
+				void onChange();
+		}m_category_list;
+		
 		Listbox m_part_list;
+		
+		Label m_part_price;
 		
 		class BuyButton: public Button
 		{

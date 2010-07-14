@@ -7,7 +7,8 @@
 #include "shared/string.hpp"
 #include "connection.hpp"
 
-TuningMenu::TuningMenu()
+TuningMenu::TuningMenu(Connection& connection):
+	m_partshopmenu(connection)
 {
 	m_install_button.setText("Asenna osia");
 	m_machining_button.setText("Työstöt");

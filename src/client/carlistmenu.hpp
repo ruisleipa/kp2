@@ -13,12 +13,14 @@
 class CarlistMenu : public Container
 {
 	public:
-		CarlistMenu();
+		CarlistMenu(Connection& connection);
 
 		virtual void onResize(Graphics& graphics);
 		virtual void onConnectionEvent(Connection& connection);
 		
 	private:
+		Connection& m_connection;
+	
 		Texture m_background_texture;
 		Image m_background;
 		

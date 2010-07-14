@@ -18,7 +18,7 @@ Ui::Ui(Events& events,Graphics& graphics,Connection& connection):
 	m_newlocalgamemenu(m_connection),
 	m_careermenu(),
 	m_garagemenu(m_connection),
-	m_tuningmenu()
+	m_tuningmenu(m_connection)
 {
 	m_events.setEventListener(&m_root_window);
 	m_connection.setEventListener(&m_root_window);

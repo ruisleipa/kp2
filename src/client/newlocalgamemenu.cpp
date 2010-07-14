@@ -107,6 +107,9 @@ void NewLocalGameMenu::StartButton::onClick()
 		
 		packet2.setType(CARSHOP_LIST);		
 		menu->m_connection.writeToServer(packet2);
+		
+		packet2.setType(PARTSHOP_LIST);		
+		menu->m_connection.writeToServer(packet2);
 	
 		getParent()->setVisible(false);
 		((Container*)getParent()->getParent())->getWidget("careermenu")->setVisible(true);

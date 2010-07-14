@@ -13,7 +13,7 @@
 class TuningMenu : public Container
 {
 	public:
-		TuningMenu();
+		TuningMenu(Connection& connection);
 
 		virtual void onResize(Graphics& graphics);
 		virtual void onHide();

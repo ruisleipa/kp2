@@ -8,7 +8,8 @@
 #include "shared/string.hpp"
 #include "connection.hpp"
 
-CarlistMenu::CarlistMenu()
+CarlistMenu::CarlistMenu(Connection& connection):
+	m_connection(connection)
 {
 	m_background_texture.load("data/images/carlistmenu.png");
 	m_background.setTexture(&m_background_texture);
@@ -62,13 +63,14 @@ void CarlistMenu::onConnectionEvent(Connection& connection)
 {
 	m_car_list.clearItems();
 	
-	m_vehicles=connection.getPlayerVehicles();
-	
-	std::vector<Vehicle>::iterator i;
-	
-	for(i=m_vehicles.begin();i!=m_vehicles.end();++i)
+	for(int i=0;i<=connection.getPlayerVehicleMaxId();++i)
 	{
-		m_car_list.addItem((*i).getName());
+		Vehicle vehicle;
+	
+		if(connection.getPlayerVehicle(i,vehicle))
+		{
+			m_car_list.addItem(vehicle.getName(),i);
+		}
 	}
 }
 
@@ -76,17 +78,23 @@ void CarlistMenu::CarListbox::onChange()
 {
 	CarlistMenu* menu=dynamic_cast<CarlistMenu*>(getParent());
 	
-	int carindex=menu->m_car_list.getIndex();
+	Vehicle vehicle;
 	
-	menu->m_car_name.setText(menu->m_vehicles[carindex].getName());
+	if(!menu->m_connection.getPlayerVehicle(menu->m_car_list.getCurrentItemTag(),vehicle))
+	{
+		std::cout<<menu->m_car_list.getCurrentItemTag()<<std::endl;
+		return;
+	}
 	
+	menu->m_car_name.setText(vehicle.getName());
+		
 	std::string image="gamedata/vehicles/";
-	image+=menu->m_vehicles[carindex].getImageName();
+	image+=vehicle.getImageName();
 	menu->m_car_texture.load(image);
 	menu->m_car_image.setSize(menu->m_car_texture.getSize()/400);
 	menu->m_car_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(1,0)-menu->m_car_image.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
 	
-	menu->m_car_info.setText(menu->m_vehicles[carindex].getGeneralInfoString());
+	menu->m_car_info.setText(vehicle.getGeneralInfoString());
 }
 
 void CarlistMenu::SellButton::onClick()

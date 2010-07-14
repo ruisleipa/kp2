@@ -10,7 +10,8 @@
 
 GarageMenu::GarageMenu(Connection& connection):
 	m_connection(connection),
-	m_carshopmenu(m_connection)
+	m_carshopmenu(m_connection),
+	m_carlistmenu(m_connection)
 {
 	m_carshop_button.setText("Autokauppa");
 	m_carlist_button.setText("Autotalli");
