@@ -25,6 +25,10 @@ class Container : public Widget
 		
 		Container();
 		Container(const Container&);
+		
+	protected:
+		int getWidgetCount();
+		Widget* getWidget(int index);
 	
 	private:
 		Widget* findWidgetUnderPoint(Vector2D point);

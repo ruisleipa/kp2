@@ -194,6 +194,21 @@ Widget* Container::getWidget(std::string tag)
 	return 0;	
 }
 
+int Container::getWidgetCount()
+{
+	return m_widgets.size();
+}
+
+Widget* Container::getWidget(int index)
+{
+	if(index >= 0 && index < m_widgets.size())
+		return m_widgets[index].m_widget;
+	else
+		std::cerr << "Requested invalid widget of index " << index << "." << std::endl;
+
+	return 0;	
+}
+
 Container::Container():
 	m_mouse_over(0),
 	m_focused(0)
