@@ -2,6 +2,7 @@
 #define LISTBOX_HPP
 
 #include "activetextwidget.hpp"
+#include "timer.hpp"
 
 #include <vector>
 
@@ -14,26 +15,43 @@ class Listbox : public TextWidget
 		virtual void onChange();
 	
 		virtual void onMouseDown(MouseEvent event);
+		virtual void onMouseUp(MouseEvent event);
+		virtual void onMouseOut();
 		
 		Listbox();
 		
-		void addItem(std::string item);
+		void addItem(std::string item,int tag=0);
 		void clearItems();
 		
+		int getCurrentItemTag();
+		std::string getCurrentItemString();
+		
 		int getIndex();
-		void setIndex(int index);
+		void setIndex(int index);		
 		
 		virtual bool doAutoSizeOnChange();
 		
 	private:
-		int m_index;
+		int m_index;		
+		
+		float m_scroll_offset;
+		float m_scroll_pending;
+		Timer m_scroll_timer;
+
+		float m_button_height;
 		
 		static Texture m_arrow_up;
 		static Texture m_arrow_down;
-		static bool m_textures_loaded;
-		float m_button_height;
+		static bool m_textures_loaded;		
 		
-		std::vector<std::wstring> m_items;
+		class Item
+		{
+			public:
+				std::wstring m_string;
+				int m_tag;
+		};
+		
+		std::vector<Item> m_items;
 };
 
 #endif // LISTBOX_HPP

@@ -4,6 +4,9 @@
 #include "assert.hpp"
 #include "scissor.hpp"
 
+#include <algorithm>
+#include <cmath>
+
 Texture Listbox::m_arrow_up;
 Texture Listbox::m_arrow_down;
 bool Listbox::m_textures_loaded=false;
@@ -14,54 +17,89 @@ void Listbox::onChange()
 }
 
 const float BAR_WIDTH=0.02;
+const float SCROLL_DEFAULT_STEP=0.4;
+const float SCROLL_RATE=1;
+
+static float sign(float value)
+{
+	if(value > 0.0)
+		return 1.0;
+	else if(value < 0.0)
+		return -1.0;
+	else
+		return 0.0;
+}
 
 void Listbox::onDraw(Graphics& graphics)
 {
-	Vector2D begin=getScreenPosition();
-	Vector2D end=begin+getSize();	
+	/*
+	Update the list position.
+	*/	
 	
+	float scroll=SCROLL_RATE*m_scroll_timer.getSeconds()*sign(m_scroll_pending);
+	
+	if(fabs(scroll) > fabs(m_scroll_pending))
+		scroll=m_scroll_pending;
+	
+	m_scroll_pending-=scroll;
+	m_scroll_offset+=scroll;
+
+	m_scroll_timer.reset();
+
+	if(m_scroll_offset>0.0)
+	{
+		m_scroll_offset=0;
+		m_scroll_pending=0;
+	}	
+	
+	float min_offset=(getFont().getTextSize(L"")*m_items.size()).getY();
+	
+	min_offset-=getSize().getY();
+	
+	if(min_offset<0.0)
+		min_offset=0;
+	
+	if(m_scroll_offset<-min_offset)
+	{
+		m_scroll_offset=-min_offset;
+		m_scroll_pending=0;
+	}
+	
+	/*
+	Draw
+	*/
+	Vector2D begin=getScreenPosition();
+	Vector2D end=begin+getSize();
+		
 	Scissor scissor(graphics);
 	
-	scissor.reset();
-	
+	/*
+	Draw list.
+	*/
 	Texture().bind();
-	Color(0,0,0).apply();
+	Color(1,1,1,0.2).apply();
 	
-	glBegin(GL_LINE_LOOP);
+	glBegin(GL_QUADS);
 			
 	glVertex2f(begin.getX(),begin.getY());
-	glVertex2f(end.getX(),begin.getY());
-	glVertex2f(end.getX(),end.getY());
-	glVertex2f(begin.getX(),end.getY());
-				
-	glEnd();
-	
-	glBegin(GL_LINES);
-			
 	glVertex2f(end.getX()-BAR_WIDTH,begin.getY());
 	glVertex2f(end.getX()-BAR_WIDTH,end.getY());
+	glVertex2f(begin.getX(),end.getY());
+				
+	glEnd();	
 	
-	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+BAR_WIDTH*graphics.getAspectRatio());
-	glVertex2f(end.getX(),begin.getY()+BAR_WIDTH*graphics.getAspectRatio());
+	scissor.set(begin+Vector2D(0.001,0.001),getSize()-Vector2D(0.001,0.001)-Vector2D(BAR_WIDTH,0));
 	
-	glVertex2f(end.getX()-BAR_WIDTH,end.getY()-BAR_WIDTH*graphics.getAspectRatio());
-	glVertex2f(end.getX(),end.getY()-BAR_WIDTH*graphics.getAspectRatio());
-	
-	glEnd();			
-	
-	m_arrow_up.draw(begin+Vector2D(getSize().getX()-BAR_WIDTH,0),Vector2D(BAR_WIDTH,BAR_WIDTH*graphics.getAspectRatio()));
-	m_arrow_down.draw(begin+Vector2D(getSize().getX()-BAR_WIDTH,getSize().getY()-BAR_WIDTH*graphics.getAspectRatio()),Vector2D(BAR_WIDTH,BAR_WIDTH*graphics.getAspectRatio()));
-	
-	scissor.set(begin+Vector2D(0.001,0.001),end-Vector2D(0.001,0.001)-Vector2D(BAR_WIDTH,0));
+	Vector2D listbegin=Vector2D(0,m_scroll_offset)+getScreenPosition();
 	
 	for(int i=0;i<m_items.size();++i)
 	{
 		if(i == m_index)
 		{
 			Texture().bind();
-			Color(0.5,0.5,0.5,0.5).apply();
+			Color(1,1,1).apply();
 			
-			Vector2D textbegin=getScreenPosition()+getFont().getTextSize(L"")*i;
+			Vector2D textbegin=listbegin+getFont().getTextSize(L"")*i;
 			Vector2D textend=textbegin+getFont().getTextSize(L"")+getSize()*Vector2D(1,0)-Vector2D(BAR_WIDTH,0);			
 						
 			glBegin(GL_QUADS);
@@ -78,8 +116,67 @@ void Listbox::onDraw(Graphics& graphics)
 			Color(1,1,1).apply();
 		}		
 	
-		getFont().draw(m_items[i],getScreenPosition()+getFont().getTextSize(L"")*i);
-	}	
+		getFont().draw(m_items[i].m_string,listbegin+getFont().getTextSize(L"")*i);
+	}
+	
+	scissor.reset();
+	
+	/*
+	Draw the thumb.
+	*/
+	float thumb_lenght=getSize().getY();
+	thumb_lenght /= (getFont().getTextSize(L"")*m_items.size()).getY();
+	thumb_lenght = std::min(1.0f,thumb_lenght);
+	thumb_lenght *= getSize().getY()-m_button_height-m_button_height;
+	float thumb_pos=-m_scroll_offset;
+	thumb_pos /= (getFont().getTextSize(L"")*m_items.size()).getY();
+	thumb_pos *= getSize().getY()-m_button_height-m_button_height;
+	
+	Texture().bind();
+	Color(1,1,1,0.5).apply();
+	
+	glBegin(GL_QUADS);
+			
+	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+m_button_height+thumb_pos);
+	glVertex2f(end.getX(),begin.getY()+m_button_height+thumb_pos);
+	glVertex2f(end.getX(),begin.getY()+m_button_height+thumb_pos+thumb_lenght);
+	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+m_button_height+thumb_pos+thumb_lenght);
+				
+	glEnd();
+	
+	/*
+	Draw borders.
+	*/
+	Texture().bind();
+	Color(0,0,0).apply();
+	
+	glBegin(GL_LINE_LOOP);
+			
+	glVertex2f(begin.getX(),begin.getY());
+	glVertex2f(end.getX(),begin.getY());
+	glVertex2f(end.getX(),end.getY());
+	glVertex2f(begin.getX(),end.getY());
+				
+	glEnd();
+	
+	/*
+	Draw scroll bar.
+	*/
+	glBegin(GL_LINES);
+			
+	glVertex2f(end.getX()-BAR_WIDTH,begin.getY());
+	glVertex2f(end.getX()-BAR_WIDTH,end.getY());
+	
+	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+m_button_height);
+	glVertex2f(end.getX(),begin.getY()+m_button_height);
+	
+	glVertex2f(end.getX()-BAR_WIDTH,end.getY()-m_button_height);
+	glVertex2f(end.getX(),end.getY()-m_button_height);
+	
+	glEnd();			
+	
+	m_arrow_up.draw(Vector2D(end.getX()-BAR_WIDTH,begin.getY()),Vector2D(BAR_WIDTH,m_button_height));
+	m_arrow_down.draw(Vector2D(end.getX()-BAR_WIDTH,end.getY()-m_button_height),Vector2D(BAR_WIDTH,m_button_height));	
 }
 
 void Listbox::onResize(Graphics& graphics)
@@ -88,41 +185,98 @@ void Listbox::onResize(Graphics& graphics)
 }
 
 void Listbox::onMouseDown(MouseEvent event)
-{
+{		
+	if(event.isButtonDown(MouseEvent::WHEELUP))
+	{
+		if(m_scroll_pending<0)
+			m_scroll_pending=0;
+		
+		m_scroll_pending+=SCROLL_DEFAULT_STEP;
+
+		return;
+	}
+
+	if(event.isButtonDown(MouseEvent::WHEELDOWN))
+	{
+		if(m_scroll_pending>0)
+			m_scroll_pending=0;
+	
+		m_scroll_pending-=SCROLL_DEFAULT_STEP;
+
+		return;
+	}
+	
 	Vector2D inner=event.getPosition()-getScreenPosition();
 	
 	if(inner.getX() < getSize().getX() - BAR_WIDTH)
 	{
-		float y=inner.getY();
+		float y=inner.getY()-m_scroll_offset;
 		
 		setIndex(y/getFont().getTextSize(L"").getY());
 	}
 	else
-	{
-		if(inner.getY() < m_button_height)
-		{
-			setIndex(getIndex()-1);
+	{	
+		if(event.isButtonDown(MouseEvent::LEFT) || event.isButtonDown(MouseEvent::RIGHT))
+		{		
+			if(inner.getY() < m_button_height)
+			{
+				m_scroll_pending=SCROLL_DEFAULT_STEP;
+				m_scroll_timer.reset();
+			}
+			
+			if(inner.getY() > getSize().getY() - m_button_height)
+			{
+				m_scroll_pending=-SCROLL_DEFAULT_STEP;
+				m_scroll_timer.reset();
+			}
 		}
 		
-		if(inner.getY() > getSize().getY() - m_button_height)
-		{
-			setIndex(getIndex()+1);
-		}
+		
 	}
 }
 
-void Listbox::addItem(std::string item)
+void Listbox::onMouseUp(MouseEvent event)
+{
+	//m_scroll_pending=0;
+}
+
+void Listbox::onMouseOut()
+{
+	//m_scroll_pending=0;
+}
+
+void Listbox::addItem(std::string item,int tag)
 {
 	if(m_index == -1)
 		setIndex(0);
 		
-	m_items.push_back(convertToWideString(item));
+	Item newitem;
+	newitem.m_string=convertToWideString(item);
+	newitem.m_tag=tag;
+		
+	m_items.push_back(newitem);
 }
 
 void Listbox::clearItems()
 {
 	m_items.clear();
 	m_index=-1;
+}
+
+int Listbox::getCurrentItemTag()
+{
+	if(m_index == -1)
+		return 0;
+		
+	return m_items[m_index].m_tag;
+}
+
+std::string Listbox::getCurrentItemString()
+{
+	if(m_index == -1)
+		return "";
+		
+	return convertToString(m_items[m_index].m_string);
 }
 
 int Listbox::getIndex()
@@ -142,6 +296,8 @@ void Listbox::setIndex(int index)
 
 Listbox::Listbox():
 	m_index(-1),
+	m_scroll_offset(0.0),
+	m_scroll_pending(0),
 	m_button_height(0)
 {
 	setFont(Font("Listbox"));
