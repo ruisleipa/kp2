@@ -1,6 +1,7 @@
 #include "packet.hpp"
 
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 
 #ifdef WIN32
@@ -179,18 +180,45 @@ std::ostream& operator<<(std::ostream& stream,const Packet& packet)
 
 	stream << "---Packet---" << std::endl;
 	stream << "Size: " << str.size() << std::endl;
-	stream << "Type: " << std::hex << packet.m_type  << std::endl;
+	stream << "Type: " << packet.m_type << std::endl;
 	stream << "Content: " << std::endl;
 	
-	for(int i=0;i<str.size();i++)
+	int hex_i=0;
+	int char_i=0;
+	
+	const int bytes_per_row=20;
+	
+	while(hex_i < str.size() && char_i < str.size())
 	{
-		stream << str[i] << " ";
+		int i=0;
+	
+		while(i < bytes_per_row && hex_i < str.size())
+		{
+			stream << std::setw(2) << std::setfill('0') << std::hex;
+			stream << (unsigned int)((unsigned char)(str[hex_i])) << " ";
+			
+			hex_i++;
+			i++;
+		}
 		
-		/*
-		Make a newline after every 30 bytes.
-		*/
-		if(i != 0 && i%30==0)
-			stream << std::endl;
+		i=0;
+		
+		while(i < bytes_per_row && char_i < str.size())
+		{
+			if(isprint(str[char_i]))
+			{
+				stream << str[char_i];
+			}
+			else
+			{
+				stream << ".";
+			}
+
+			char_i++;
+			i++;
+		}
+		
+		stream << std::endl;
 	}
 	
 	stream << std::dec;
