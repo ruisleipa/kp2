@@ -36,18 +36,28 @@ float Graphics::getAspectRatio()
 
 void Graphics::enterGuiMode()
 {
+	if(m_gui)
+		return;
+	
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();	
 	glOrtho(0,1,1,0,0,1);
 	glMatrixMode(GL_MODELVIEW);
+	
+	m_gui=true;
 }
 
 void Graphics::exitGuiMode()
 {
+	if(!m_gui)
+		return;
+	
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
+	
+	m_gui=false;
 }
 
 int Graphics::setVideoMode(int width,int height,int bpp,bool fullscreen,bool vsync,bool doublebuffer)
@@ -63,7 +73,14 @@ int Graphics::setVideoMode(int width,int height,int bpp,bool fullscreen,bool vsy
 	if(fullscreen)
 		flags|=SDL_FULLSCREEN;
 	
+	bool gui=m_gui;
+	
+	exitGuiMode();
+	
 	m_surface = SDL_SetVideoMode(width, height, bpp, flags);
+	
+	if(gui)
+		enterGuiMode();
 
 	if(!m_surface)
 	{
@@ -199,7 +216,8 @@ Graphics::Graphics(Sdl& sdl,Events& events):
 	m_sdl(sdl), 
 	m_events(events),
 	m_surface(0),
-	m_aspect_ratio(1)
+	m_aspect_ratio(1),
+	m_gui(false)
 {
 	IniFile videosettings(VIDEO_CONFIG);
 

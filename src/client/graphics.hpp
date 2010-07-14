@@ -35,7 +35,8 @@ class Graphics
 		Sdl& m_sdl;
 		Events& m_events;
 		SDL_Surface* m_surface;		
-		float m_aspect_ratio;		
+		float m_aspect_ratio;
+		bool m_gui;
 };
 
 #endif // GRAPHICS_HPP
