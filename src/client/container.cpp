@@ -113,10 +113,9 @@ void Container::doDraw(Graphics& graphics)
 			continue;
 	
 		Vector2D start=getScreenPosition()+widget->getPosition();
+#if 0
+		scissor.reset();
 	
-		scissor.set(start,widget->getSize());
-		
-		/*	
 		Vector2D begin=start;
 		Vector2D end=begin+widget->getSize();
 	
@@ -127,13 +126,14 @@ void Container::doDraw(Graphics& graphics)
 		else
 			Color(0,1,0,1).apply();
 
-		glBegin(GL_QUADS);
+		glBegin(GL_LINE_LOOP);
 			glVertex2f(begin.getX(),begin.getY());
 			glVertex2f(end.getX(),	begin.getY());
 			glVertex2f(end.getX(),	end.getY());
 			glVertex2f(begin.getX(),end.getY());
 		glEnd();
-		*/
+#endif
+		scissor.set(start,widget->getSize());
 	
 		widget->doDraw(graphics);
 	}
