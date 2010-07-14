@@ -150,15 +150,12 @@ void Container::doConnectionEvent(Connection& connection)
 	for(i=m_widgets.begin();i!=m_widgets.end();++i)
 	{
 		Widget* widget=(*i).m_widget;
-	
 		widget->doConnectionEvent(connection);
 	}	
 }
 
 void Container::addWidget(Widget* widget)
 {
-	assert(widget != 0);
-	
 	if(widget)
 	{
 		addWidget(convertToString(widget),widget);
@@ -167,8 +164,6 @@ void Container::addWidget(Widget* widget)
 
 void Container::addWidget(std::string tag,Widget* widget)
 {
-	assert(widget != 0);
-	
 	if(widget)
 	{
 		TaggedWidget tagged_widget;
