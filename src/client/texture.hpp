@@ -69,8 +69,7 @@ class Texture
 		int createTexture();
 		void deleteTexture();
 		
-		int printInfo();
-		
+		int printInfo();		
 	
 		void init();
 		void copy(const Texture&);
@@ -105,8 +104,6 @@ class Texture
 		static void addManagedTexture(Texture* texture);
 		static void removeManagedTexture(Texture* texture);
 		static std::set<Texture*> m_textures;
-		
-		static GLuint m_binded_texture;
 
 };
 

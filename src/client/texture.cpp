@@ -2,20 +2,17 @@
 
 #include "shared/string.hpp"
 #include "assert.hpp"
+#include <iostream>
 
 std::set<Texture*> Texture::m_textures;
 TextureFilter Texture::m_filter_limit=LINEAR;
-GLuint Texture::m_binded_texture=0;
 
 static void CheckGL()
 {
-	GLenum errflag;
-	bool errors = false;
-	while ((errflag = glGetError()) != GL_NO_ERROR)
-	{
-		errors = true;
-		std::cerr << "GL error: " << gluErrorString(errflag) << "\n";
-	}
+	GLenum error=glGetError();
+		
+	if(error != GL_NO_ERROR)
+		std::cerr << "GL error: " << gluErrorString(error) << std::endl;
 }
 
 void Texture::init()
@@ -166,8 +163,6 @@ void Texture::drawClipped(Vector2D position,Vector2D size,Vector2D clip_position
 		glVertex2d(position.getX(),position.getY()+size.getY());
 	
 	glEnd();
-	
-	glPopMatrix();
 }
 
 static unsigned int powerOfTwo(unsigned int n)
@@ -502,11 +497,16 @@ void Texture::deleteTexture()
 
 void Texture::bind()
 {
-	if(m_texture == m_binded_texture)
+	GLint texture;
+	
+	glGetIntegerv(GL_TEXTURE_BINDING_2D,&texture);
+	
+	if(m_texture == texture)
 		return;
-		
+
 	glBindTexture(GL_TEXTURE_2D,m_texture);
-	m_binded_texture=m_texture;
+
+	CheckGL();
 }
 
 GLuint Texture::getTexture()
