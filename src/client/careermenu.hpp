@@ -25,8 +25,6 @@ class CareerMenu : public Container
 		Texture m_sidebar_texture;
 		Image m_sidebar;
 		
-		
-		
 		Label m_info_label;
 			
 		class GarageButton: public Button
@@ -54,7 +52,7 @@ class CareerMenu : public Container
 		}m_race_button;
 		
 		std::vector<Texture> m_background_files;
-		int m_bg_time;
+		Timer m_bg_chage_timer;
 
 };
 

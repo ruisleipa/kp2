@@ -8,8 +8,7 @@
 #include "shared/string.hpp"
 #include "connection.hpp"
 
-CareerMenu::CareerMenu():
-	m_bg_time(SDL_GetTicks())
+CareerMenu::CareerMenu()
 {
 	m_background_files.push_back(Texture("data/images/backgrounds/block.png"));
 	m_background_files.push_back(Texture("data/images/backgrounds/brakedisk.png"));
@@ -54,7 +53,7 @@ CareerMenu::CareerMenu():
 
 void CareerMenu::onDraw(Graphics& graphics)
 {
-	float alpha=(SDL_GetTicks()-m_bg_time)/100.0;
+	float alpha=m_bg_chage_timer.getSeconds()*10.0;
 	if(alpha > 1.0)
 		alpha = 1.0;
 	
@@ -115,7 +114,7 @@ void CareerMenu::changeBackground()
 	m_background_back.setTexture(m_background.getTexture());
 	m_background.setTexture(&m_background_files.at(i));
 	
-	m_bg_time=SDL_GetTicks();
+	m_bg_chage_timer.reset();
 }
 
 void CareerMenu::GarageButton::onClick()

@@ -38,7 +38,7 @@ void Field::onDraw(Graphics& graphics)
 	glVertex2d(begin.getX(),end.getY());
 	glEnd();
 	
-	if(m_focused && (SDL_GetTicks()/750)%2)
+	if(m_focused && int(m_blink_timer.getSeconds()/0.750)%2)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(cursorpos,getScreenPosition().getY());
@@ -112,6 +112,8 @@ void Field::onKeyDown(KeyEvent event)
 void Field::onFocus()
 {
 	m_focused=true;
+	
+	m_blink_timer.reset();
 }
 
 void Field::onBlur()

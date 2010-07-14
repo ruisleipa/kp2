@@ -34,6 +34,7 @@ SRC = \
 	src/client/sound.cpp \
 	src/client/texture.cpp \
 	src/client/textwidget.cpp \
+	src/client/timer.cpp \
 	src/client/tuningmenu.cpp \
 	src/client/partshopmenu.cpp \
 	src/client/installpartsmenu.cpp \

@@ -2,6 +2,7 @@
 #define FIELD_HPP
 
 #include "textwidget.hpp"
+#include "timer.hpp"
 
 class Field : public TextWidget
 {
@@ -20,6 +21,7 @@ class Field : public TextWidget
 	private:
 		size_t m_cursorpos;
 		
+		Timer m_blink_timer;
 		bool m_focused;
 };
 

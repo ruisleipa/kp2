@@ -3,6 +3,7 @@
 
 #include "textwidget.hpp"
 #include "font.hpp"
+#include "timer.hpp"
 
 #include "sound.hpp"
 
@@ -33,7 +34,7 @@ class ActiveTextWidget : public TextWidget
 		bool m_mouse_over;	
 		bool m_animate;
 
-		int m_mouse_over_time;
+		Timer m_mouse_over_timer;
 		
 		static Sound m_mouse_over_sound;
 		static Sound m_mouse_down_sound;

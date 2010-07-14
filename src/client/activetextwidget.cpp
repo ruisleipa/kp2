@@ -17,12 +17,13 @@ Font& ActiveTextWidget::getActiveFont()
 
 void ActiveTextWidget::onMouseOn()
 {
-	m_mouse_over_time=SDL_GetTicks();
 	m_animate=true;
 	m_mouse_over=true;
 	
 	m_mouse_over_sound.stop();
-	m_mouse_over_sound.play();
+	m_mouse_over_sound.play();	
+
+	m_mouse_over_timer.reset();
 }
 
 void ActiveTextWidget::onMouseOut()
@@ -51,7 +52,7 @@ void ActiveTextWidget::onDraw(Graphics& graphics)
 {
 	Vector2D position=getScreenPosition();
 	
-	float spread=float(SDL_GetTicks()-m_mouse_over_time)/100.0;
+	float spread=m_mouse_over_timer.getSeconds()*10.0;
 	
 	Vector2D pixelsize=Vector2D(1,1)/graphics.getDisplaySize();
 	

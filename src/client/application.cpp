@@ -1,9 +1,10 @@
 #include "application.hpp"
 
 #include "shared/string.hpp"
+#include "timer.hpp"
 
-/* in milliseconds */
-const float FPS_UPDATE_RATE=1000.0;
+/* in seconds */
+const float FPS_UPDATE_RATE=1.0;
 
 void Application::enterMainLoop()
 {
@@ -12,7 +13,7 @@ void Application::enterMainLoop()
 	Texture::printTextureList();
 	
 	int frames=0;
-	int time=SDL_GetTicks();
+	Timer timer;
 	float fps=0;
 	
 	while(1)
@@ -45,10 +46,10 @@ void Application::enterMainLoop()
 		
 		frames++;
 		
-		if(SDL_GetTicks()-FPS_UPDATE_RATE>=time)
+		if(timer.getSeconds()>FPS_UPDATE_RATE)
 		{
-			fps=static_cast<float>(frames)/(static_cast<float>(SDL_GetTicks()-time)/1000.0);
-			time=SDL_GetTicks();
+			fps=static_cast<float>(frames)/(timer.getSeconds());
+			timer.reset();
 			frames=0;
 		}
 	}
