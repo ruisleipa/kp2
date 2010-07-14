@@ -3,6 +3,7 @@
 #include "shared/string.hpp"
 #include "assert.hpp"
 #include <iostream>
+#include <stdint.h>
 
 std::set<Texture*> Texture::m_textures;
 TextureFilter Texture::m_filter_limit=LINEAR;
