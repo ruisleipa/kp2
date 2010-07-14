@@ -29,6 +29,8 @@ class IniFile
 				
 	private:
 		std::map<std::string,std::string> m_values;
+		
+		std::string m_filename;
 	
 };
 
@@ -52,7 +54,14 @@ template<typename T>
 bool IniFile::getValue(const std::string& key,T& value)
 {
 	if(m_values.find(key) == m_values.end())
+	{
+		std::cerr << "Requested key ";
+		std::cerr << '"' << key << '"';
+		std::cerr << " not found in IniFile originally loaded from ";
+		std::cerr << '"' << m_filename << '"' << std::endl;
 		return false;
+	}
+		
 	T temp;
 	
 	std::stringstream ss;

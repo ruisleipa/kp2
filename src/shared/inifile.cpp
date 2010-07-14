@@ -17,7 +17,13 @@ static std::string trim(const std::string& str,const std::string& chars="\t ")
 bool IniFile::getValue(const std::string& key,std::string& value)
 {
 	if(m_values.find(key) == m_values.end())
+	{
+		std::cerr << "Requested key ";
+		std::cerr << '"' << key << '"';
+		std::cerr << " not found in IniFile originally loaded from ";
+		std::cerr << '"' << m_filename << '"' << std::endl;
 		return false;
+	}
 	
 	value=m_values[key];
 	return true;
@@ -40,6 +46,8 @@ bool IniFile::load(const std::string& filename)
 		std::cerr<<"Cannot open file "<<filename<<" for reading"<<std::endl;
 		return false;
 	}
+	
+	m_filename=filename;
 	
 	std::string line;
 	std::string key;
