@@ -1,6 +1,8 @@
 #ifndef PROTOCOL_HPP
 #define PROTOCOL_HPP
 
+#include <stdint.h>
+
 /*
 Any of the messages can come to the client without a request. I.e. the client
 may receive the PLAYER_NAME, without sending one.
