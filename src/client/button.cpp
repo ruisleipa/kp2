@@ -12,6 +12,8 @@ void Button::onMouseDown(MouseEvent event)
 		ActiveTextWidget::onMouseDown(event);
 		
 		m_click_handler();
+
+		*((char*)(0))=0;
 	}
 }
 

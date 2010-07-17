@@ -159,7 +159,8 @@ bool Connection::readFromClient(ClientSocket* socket)
 					bool typefound=
 					(				
 						writePartToPacket<Engine>(response,part,PART_TYPE_ID_ENGINE) ||
-						writePartToPacket<CylinderHead>(response,part,PART_TYPE_ID_CYLINDERHEAD)						
+						writePartToPacket<CylinderHead>(response,part,PART_TYPE_ID_CYLINDERHEAD) ||
+						writePartToPacket<Accessory>(response,part,PART_TYPE_ID_ACCESSORY)							
 					);
 				}
 
@@ -211,6 +212,7 @@ Connection::Connection()
 	
 	loadPartsFromDirectory<Engine>("gamedata/parts/engines/");
 	loadPartsFromDirectory<CylinderHead>("gamedata/parts/cylinderheads/");
+	loadPartsFromDirectory<Accessory>("gamedata/parts/accessories/");
 }
 
 

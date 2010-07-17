@@ -11,9 +11,11 @@
 #include "shared/clientsocket.hpp"
 #include "shared/player.hpp"
 #include "shared/vehicle.hpp"
+
 #include "shared/part.hpp"
 #include "shared/engine.hpp"
 #include "shared/cylinderhead.hpp"
+#include "shared/accessory.hpp"
 
 #include "shared/directory.hpp"
 
@@ -57,7 +59,12 @@ void Connection::loadPartsFromDirectory(const std::string& directory)
 	
 	files=readDirectory(directory);
 	
-	int id=0;
+	int id;
+	
+	if(m_partshop_parts.rbegin()==m_partshop_parts.rend())
+		id=0;
+	else
+		id=m_partshop_parts.rbegin()->first;
 	
 	for(i=files.begin();i!=files.end();++i)
 	{

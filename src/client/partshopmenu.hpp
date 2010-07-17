@@ -36,7 +36,7 @@ class PartshopMenu : public Container
 		Listbox m_category_list;		
 		Listbox m_part_list;
 		
-		Label m_part_price;
+		Label m_part_info;
 		
 		Button m_buy_button;
 };

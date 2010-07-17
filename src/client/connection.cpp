@@ -6,9 +6,6 @@
 #include "shared/inifile.hpp"
 #include "shared/packet.hpp"
 
-#include "shared/engine.hpp"
-#include "shared/cylinderhead.hpp"
-
 #include "sdl.hpp"
 #include "sound.hpp"
 
@@ -163,6 +160,8 @@ void Connection::processMessages()
 						ptr=getPartFromPacket<Engine>(message);
 					else if(type_id==PART_TYPE_ID_CYLINDERHEAD)
 						ptr=getPartFromPacket<CylinderHead>(message);
+					else if(type_id==PART_TYPE_ID_ACCESSORY)
+						ptr=getPartFromPacket<Accessory>(message);
 					else
 						continue;
 						

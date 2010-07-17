@@ -13,7 +13,7 @@ FontLoader::FontLoader(Graphics& graphics):
 	m_fontface.load("data/fonts/freesans.ttf",64);
 
 	Font::setFontType("title",&m_fontface,TITLE_SIZE.getY(),NORMAL);
-	Font::setFontType("small",&m_fontface,ITEM_HEIGHT*0.75,NORMAL);
+	Font::setFontType("small",&m_fontface,0.03,NORMAL);
 	Font::setFontType("Label",&m_fontface,ITEM_HEIGHT,NORMAL);
 	Font::setFontType("Textborder",&m_fontface,ITEM_HEIGHT,BORDER);
 	Font::setFontType("Button",&m_fontface,ITEM_HEIGHT,PASSIVE);

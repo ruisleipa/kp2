@@ -10,9 +10,11 @@
 #include "shared/player.hpp"
 #include "shared/vehicle.hpp"
 #include "shared/protocol.hpp"
+
 #include "shared/part.hpp"
 #include "shared/engine.hpp"
 #include "shared/cylinderhead.hpp"
+#include "shared/accessory.hpp"
 
 #include "eventlistener.hpp"
 #include "sound.hpp"

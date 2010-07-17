@@ -11,8 +11,23 @@ These are the part type IDs for serialization. These should make sure that a
 serialized part object isn't mistaken for another type.
 */
 
-const uint16_t PART_TYPE_ID_ENGINE=0x0000;
-const uint16_t PART_TYPE_ID_CYLINDERHEAD=0x0001;
+const uint16_t PART_TYPE_ID_ACCESSORY=0;
+const uint16_t PART_TYPE_ID_CAMSHAFT=1;
+const uint16_t PART_TYPE_ID_CHARGER=2;
+const uint16_t PART_TYPE_ID_CLUTCH=3;
+const uint16_t PART_TYPE_ID_COOLER=4;
+const uint16_t PART_TYPE_ID_CYLINDERHEAD=5;
+const uint16_t PART_TYPE_ID_DIFFERENTIAL=6;
+const uint16_t PART_TYPE_ID_ENGINE=7;
+const uint16_t PART_TYPE_ID_EXHAUSTMANIFOLD=8;
+const uint16_t PART_TYPE_ID_EXHAUSTPIPE=9;
+const uint16_t PART_TYPE_ID_FUELINTAKE=10;
+const uint16_t PART_TYPE_ID_FUELPUMP=11;
+const uint16_t PART_TYPE_ID_INJECTOR=12;
+const uint16_t PART_TYPE_ID_INTAKEMANIFOLD=13;
+const uint16_t PART_TYPE_ID_TIRE=14;
+const uint16_t PART_TYPE_ID_TRANSMISSION=15;
+
 
 const int CYLINDER_ALIGNMENT_S=0;
 const int CYLINDER_ALIGNMENT_V=1;

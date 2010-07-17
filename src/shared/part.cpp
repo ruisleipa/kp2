@@ -9,10 +9,10 @@ bool Part::load(const std::string& filename)
 	if(!file.load(filename)) return false;
 	
 	if(!file.getValue("name",m_name)) return false;
-	if(!file.getValue("weight",m_weight)) return false;
 	if(!file.getValue("price",m_price)) return false;
 	file.getValue("info",m_info);
-		
+	file.getValue("weight",m_weight);
+	
 	return true;
 }
 
@@ -36,12 +36,20 @@ int Part::getPrice() const
 	return m_price;
 }
 
-Part::Part(const std::string& filename)
+Part::Part(const std::string& filename):
+	m_name(""),
+	m_info(""),
+	m_weight(0),
+	m_price(0)
 {
 	load(filename);
 }
 
-Part::Part()
+Part::Part():
+	m_name(""),
+	m_info(""),
+	m_weight(0),
+	m_price(0)
 {
 	
 }

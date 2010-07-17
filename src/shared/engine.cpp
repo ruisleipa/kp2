@@ -18,13 +18,22 @@ bool Engine::load(const std::string& filename)
 	if(!file.getValue("engine_type",camshaft_position)) return false;
 	
 	if(camshaft_position=="ohv")
+	{
 		m_camshaft_position=CAMSHAFT_POSITION_OHV;
+	}
 	else if(camshaft_position=="cih")
+	{
 		m_camshaft_position=CAMSHAFT_POSITION_CIH;
+	}
 	else if(camshaft_position=="ohc")
+	{
 		m_camshaft_position=CAMSHAFT_POSITION_OHC;
+	}
 	else
+	{
+		std::cerr<<"Invalid 'engine_type' in '"<<filename<<"'"<<std::endl;
 		return false;
+	}
 		
 	/*
 	Load cylinder alignment.
@@ -34,11 +43,18 @@ bool Engine::load(const std::string& filename)
 	if(!file.getValue("engine_block",cylinder_alignment)) return false;
 	
 	if(cylinder_alignment.at(0)=='s')
+	{
 		m_cylinder_alignment=CYLINDER_ALIGNMENT_S;
+	}
 	else if(cylinder_alignment.at(0)=='v')
+	{
 		m_cylinder_alignment=CYLINDER_ALIGNMENT_V;
+	}
 	else
-		return false;	
+	{
+		std::cerr<<"Invalid 'engine_block' in '"<<filename<<"'"<<std::endl;
+		return false;
+	}
 	
 	/*
 	Load compression ratio.

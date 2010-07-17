@@ -18,9 +18,11 @@ PartshopMenu::PartshopMenu(Connection& connection):
 	m_part_texture.load("data/images/parts/engine.jpg");
 	m_part_image.setTexture(&m_part_texture);
 	
+	m_part_info.setFont(Font("small"));
+	
 	m_category_info.setText("Tähän tulee kategoriainfo.");	
 		
-	m_category_list.addItem("Lisävarusteet");
+	m_category_list.addItem("Lisävarusteet",PART_TYPE_ID_ACCESSORY);
 	m_category_list.addItem("Nokka-akselit");
 	m_category_list.addItem("Ahtimet");	
 	m_category_list.addItem("Kytkimet");
@@ -50,7 +52,7 @@ PartshopMenu::PartshopMenu(Connection& connection):
 	
 	m_bottom_row.addWidget(&m_category_list);
 	m_bottom_row.addWidget(&m_part_list);
-	m_bottom_row.addWidget(&m_part_price);
+	m_bottom_row.addWidget(&m_part_info);
 	
 	addWidget(&m_bottom_row);	
 	
@@ -90,9 +92,12 @@ void PartshopMenu::categoryChangeHandler()
 		bool success=false;
 	
 		if(part_type==PART_TYPE_ID_ENGINE)
-			success=m_connection.getPartshopPartOfType<Engine>(i,part);
+			success=menu->m_connection.getPartshopPartOfType<Engine>(i,part);
 		else if(part_type==PART_TYPE_ID_CYLINDERHEAD)
-			success=m_connection.getPartshopPartOfType<CylinderHead>(i,part);
+			success=menu->m_connection.getPartshopPartOfType<CylinderHead>(i,part);
+		else if(part_type==PART_TYPE_ID_ACCESSORY)
+			success=menu->m_connection.getPartshopPartOfType<Accessory>(i,part);
+
 		
 		if(!success)
 			continue;
@@ -101,3 +106,22 @@ void PartshopMenu::categoryChangeHandler()
 	}
 }
 
+void PartshopMenu::partChange()
+{
+	if(!getParent())
+		return;
+	
+	PartshopMenu* menu=dynamic_cast<PartshopMenu*>(getParent()->getParent());
+	
+	if(!menu)
+		return;
+	
+	int part_id=menu->m_part_list.getCurrentItemTag();
+	
+	Part part;
+	
+	menu->m_connection.getPartshopPart(part_id,part);
+	
+	menu->m_part_info.setText(part.getInfo());
+
+}
