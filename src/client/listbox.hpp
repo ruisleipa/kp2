@@ -3,6 +3,7 @@
 
 #include "activetextwidget.hpp"
 #include "timer.hpp"
+#include "callback/callback.hpp"
 
 #include <vector>
 
@@ -10,13 +11,13 @@ class Listbox : public TextWidget
 {
 	public:
 		virtual void onDraw(Graphics& graphics);
-		virtual void onResize(Graphics& graphics);
-	
-		virtual void onChange();
+		virtual void onResize(Graphics& graphics);		
 	
 		virtual void onMouseDown(MouseEvent event);
 		virtual void onMouseUp(MouseEvent event);
 		virtual void onMouseOut();
+		
+		void setChangeHandler(Callback0 handler);
 		
 		Listbox();
 		
@@ -39,6 +40,8 @@ class Listbox : public TextWidget
 		Timer m_scroll_timer;
 
 		float m_button_height;
+		
+		Callback0 m_change_handler;
 		
 		static Texture m_arrow_up;
 		static Texture m_arrow_down;

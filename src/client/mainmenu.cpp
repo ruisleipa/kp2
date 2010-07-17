@@ -15,6 +15,19 @@ MainMenu::MainMenu()
 	m_title_texture.load("data/images/kp2_txt.png");
 	m_title.setTexture(&m_title_texture);
 	
+	m_net_game_button.setText("Verkkopeli");	
+	
+	m_local_game_button.setText("Yksinpeli");
+	m_local_game_button.setClickHandler(Callback0(this,&MainMenu::localgameClickHandler));
+	
+	m_about_button.setText("Tietoja pelistä");
+	
+	m_settings_button.setText("Asetukset");
+	m_settings_button.setClickHandler(Callback0(this,&MainMenu::settingsClickHandler));
+	
+	m_quit_button.setText("Lopeta");
+	m_quit_button.setClickHandler(Callback0(this,&MainMenu::quitClickHandler));
+	
 	addWidget(&m_background);
 	
 	addWidget(&m_title);
@@ -56,59 +69,31 @@ void MainMenu::onResize(Graphics& graphics)
 	buttonpos+=BUTTON_HEIGHT;
 }
 
-void MainMenu::NetGameButton::onClick()
+void MainMenu::netgameClickHandler()
 {
-	//getParent()->getParent()->goToView("connectmenu");
+
 }
 
-MainMenu::NetGameButton::NetGameButton()
+void MainMenu::localgameClickHandler()
 {
-	setText("Verkkopeli");
+	setVisible(false);
+	getRootWidget("localgamemenu")->setVisible(true);
 }
 
-void MainMenu::LocalGameButton::onClick()
+void MainMenu::aboutClickHandler()
 {
-	getParent()->setVisible(false);
-	((Container*)getParent()->getParent())->getWidget("localgamemenu")->setVisible(true);
+
 }
 
-MainMenu::LocalGameButton::LocalGameButton()
+void MainMenu::settingsClickHandler()
 {
-	setText("Yksinpeli");
+	setVisible(false);
+	getRootWidget("settingsmenu")->setVisible(true);
 }
 
-void MainMenu::AboutButton::onClick()
-{
-	
-}
-
-MainMenu::AboutButton::AboutButton()
-{
-	setText("Tietoja pelistä");
-}
-
-void MainMenu::SettingsButton::onClick()
-{
-	getParent()->setVisible(false);
-	((Container*)getParent()->getParent())->getWidget("settingsmenu")->setVisible(true);
-}
-
-MainMenu::SettingsButton::SettingsButton()
-{
-	setText("Asetukset");
-}
-
-void MainMenu::QuitButton::onClick()
+void MainMenu::quitClickHandler()
 {
 	throw ExitException();
 }
-
-MainMenu::QuitButton::QuitButton()
-{
-	setText("Lopeta");
-}
-
-
-
 
 

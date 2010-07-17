@@ -15,11 +15,14 @@ CarshopMenu::CarshopMenu(Connection& connection):
 	m_background.setTexture(&m_background_texture);
 	m_background.setStretched(true);
 
-	m_car_list.setFont(Font("small"));	
+	m_car_list.setFont(Font("small"));
+	m_car_list.setChangeHandler(Callback0(this,&CarshopMenu::carlistChange));
+		
 	m_car_info.setFont(Font("small"));
 	m_car_image.setTexture(&m_car_texture);
 	
 	m_buy_button.setText("Osta auto");
+	m_buy_button.setClickHandler(Callback0(this,&CarshopMenu::buyClick));
 				
 	addWidget(&m_background);
 	addWidget(&m_car_list);
@@ -69,32 +72,28 @@ void CarshopMenu::onConnectionEvent(Connection& connection)
 	}	
 }
 
-void CarshopMenu::CarListbox::onChange()
+void CarshopMenu::carlistChange()
 {
-	CarshopMenu* menu=dynamic_cast<CarshopMenu*>(getParent());
-	
 	Vehicle vehicle;
 	
-	if(!menu->m_connection.getCarshopVehicle(menu->m_car_list.getCurrentItemTag(),vehicle))
+	if(!m_connection.getCarshopVehicle(m_car_list.getCurrentItemTag(),vehicle))
 	{
 		return;
 	}
 	
-	menu->m_car_name.setText(vehicle.getName());
+	m_car_name.setText(vehicle.getName());
 		
 	std::string image="gamedata/vehicles/";
 	image+=vehicle.getImageName();
-	menu->m_car_texture.load(image);
-	menu->m_car_image.setSize(menu->m_car_texture.getSize()/400);
-	menu->m_car_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(1,0)-menu->m_car_image.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
+	m_car_texture.load(image);
+	m_car_image.setSize(m_car_texture.getSize()/400);
+	m_car_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(1,0)-m_car_image.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
 	
-	menu->m_car_info.setText(vehicle.getGeneralInfoString());
+	m_car_info.setText(vehicle.getGeneralInfoString());
 }
 
-void CarshopMenu::BuyButton::onClick()
+void CarshopMenu::buyClick()
 {
-	CarshopMenu* menu=dynamic_cast<CarshopMenu*>(getParent());
-	
-	menu->m_connection.buyCar(menu->m_car_list.getIndex());
+	m_connection.buyCar(m_car_list.getIndex());
 }
 

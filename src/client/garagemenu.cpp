@@ -14,7 +14,9 @@ GarageMenu::GarageMenu(Connection& connection):
 	m_carlistmenu(m_connection)
 {
 	m_carshop_button.setText("Autokauppa");
+	m_carshop_button.setClickHandler(Callback0(this,&GarageMenu::carshopClick));
 	m_carlist_button.setText("Autotalli");
+	m_carlist_button.setClickHandler(Callback0(this,&GarageMenu::carlistClick));
 	
 	addWidget(&m_carshop_button);
 	addWidget(&m_carlist_button);	
@@ -48,23 +50,19 @@ void GarageMenu::onHide()
 	m_carlistmenu.setVisible(false);
 }
 
-void GarageMenu::CarshopButton::onClick()
+void GarageMenu::carshopClick()
 {
-	GarageMenu* menu=dynamic_cast<GarageMenu*>(getParent());
-	
-	menu->m_carshopmenu.setVisible(true);
-	menu->m_carlistmenu.setVisible(false);
+	m_carshopmenu.setVisible(true);
+	m_carlistmenu.setVisible(false);
 	
 	CareerMenu* careermenu=dynamic_cast<CareerMenu*>(getRootWidget("careermenu"));
 	careermenu->changeBackground();
 }
 
-void GarageMenu::CarlistButton::onClick()
+void GarageMenu::carlistClick()
 {
-	GarageMenu* menu=dynamic_cast<GarageMenu*>(getParent());
-	
-	menu->m_carshopmenu.setVisible(false);
-	menu->m_carlistmenu.setVisible(true);
+	m_carshopmenu.setVisible(false);
+	m_carlistmenu.setVisible(true);
 	
 	CareerMenu* careermenu=dynamic_cast<CareerMenu*>(getRootWidget("careermenu"));
 	careermenu->changeBackground();

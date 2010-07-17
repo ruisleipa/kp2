@@ -18,6 +18,8 @@ class PartshopMenu : public Container
 		virtual void onShow();
 		
 	private:
+		void categoryChangeHandler();
+	
 		Connection& m_connection;
 	
 		Texture m_background_texture;
@@ -31,21 +33,12 @@ class PartshopMenu : public Container
 		
 		ColumnLayoutContainer m_bottom_row;
 		
-		class CategoryList: public Listbox
-		{
-			public:				
-				void onChange();
-		}m_category_list;
-		
+		Listbox m_category_list;		
 		Listbox m_part_list;
 		
 		Label m_part_price;
 		
-		class BuyButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_buy_button;
+		Button m_buy_button;
 };
 
 #endif // PARTSHOPMENU_HPP

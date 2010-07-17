@@ -19,6 +19,11 @@ class CareerMenu : public Container
 		void changeBackground();
 		
 	private:
+		void garageButtonClick();
+		void tuningButtonClick();
+		void financeButtonClick();
+		void raceButtonClick();
+		
 		Image m_background;
 		Image m_background_back;
 		
@@ -27,29 +32,10 @@ class CareerMenu : public Container
 		
 		Label m_info_label;
 			
-		class GarageButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_garage_button;
-		
-		class TuningButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_tuning_button;
-		
-		class FinanceButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_finance_button;
-		
-		class RaceButton: public Button
-		{
-			public:	
-				void onClick();
-		}m_race_button;
+		Button m_garage_button;
+		Button m_tuning_button;
+		Button m_finance_button;
+		Button m_race_button;
 		
 		std::vector<Texture> m_background_files;
 		Timer m_bg_chage_timer;

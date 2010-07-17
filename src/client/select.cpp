@@ -4,11 +4,6 @@
 #include "assert.hpp"
 #include "scissor.hpp"
 
-void Select::onChange()
-{
-	
-}
-
 void Select::onMouseDown(MouseEvent event)
 {
 	ActiveTextWidget::onMouseDown(event);

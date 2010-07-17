@@ -33,9 +33,13 @@ CareerMenu::CareerMenu()
 	m_background_back.setFill(true);
 	
 	m_garage_button.setText("Autot");
+	m_garage_button.setClickHandler(Callback0(this,&CareerMenu::garageButtonClick));
 	m_tuning_button.setText("Viritys");
+	m_tuning_button.setClickHandler(Callback0(this,&CareerMenu::tuningButtonClick));
 	m_finance_button.setText("Raha-asiat");
+	m_finance_button.setClickHandler(Callback0(this,&CareerMenu::financeButtonClick));
 	m_race_button.setText("Kisat");
+	m_race_button.setClickHandler(Callback0(this,&CareerMenu::raceButtonClick));
 	
 	addWidget(&m_background);
 	addWidget(&m_background_back);
@@ -117,25 +121,25 @@ void CareerMenu::changeBackground()
 	m_bg_chage_timer.reset();
 }
 
-void CareerMenu::GarageButton::onClick()
+void CareerMenu::garageButtonClick()
 {
 	getRootWidget("garagemenu")->setVisible(true);
 	getRootWidget("tuningmenu")->setVisible(false);
 }
 
-void CareerMenu::TuningButton::onClick()
+void CareerMenu::tuningButtonClick()
 {
 	getRootWidget("garagemenu")->setVisible(false);
 	getRootWidget("tuningmenu")->setVisible(true);
 }
 
-void CareerMenu::FinanceButton::onClick()
+void CareerMenu::financeButtonClick()
 {
 	getRootWidget("garagemenu")->setVisible(false);
 	getRootWidget("tuningmenu")->setVisible(false);
 }
 
-void CareerMenu::RaceButton::onClick()
+void CareerMenu::raceButtonClick()
 {
 	getRootWidget("garagemenu")->setVisible(false);
 	getRootWidget("tuningmenu")->setVisible(false);

@@ -37,6 +37,8 @@ PartshopMenu::PartshopMenu(Connection& connection):
 	m_category_list.addItem("Renkaat");	
 	m_category_list.addItem("Vaihteistot");
 	
+	m_category_list.setChangeHandler(Callback0(this,&PartshopMenu::categoryChangeHandler));
+	
 	m_buy_button.setText("Osta");
 	
 	addWidget(&m_background);
@@ -75,44 +77,27 @@ void PartshopMenu::onShow()
 	
 }
 
-void PartshopMenu::CategoryList::onChange()
-{
-	if(!getParent())
-		return;
+void PartshopMenu::categoryChangeHandler()
+{	
+	int part_type=m_category_list.getCurrentItemTag();
 	
-	PartshopMenu* menu=dynamic_cast<PartshopMenu*>(getParent()->getParent());
+	m_part_list.clearItems();
 	
-	if(!menu)
-		return;
-	
-	int part_type=menu->m_category_list.getCurrentItemTag();
-	
-	menu->m_part_list.clearItems();
-	
-	for(int i=0;i<=menu->m_connection.getPartshopPartMaxId();++i)
+	for(int i=0;i<=m_connection.getPartshopPartMaxId();++i)
 	{
 		Part part;
 	
 		bool success=false;
 	
 		if(part_type==PART_TYPE_ID_ENGINE)
-		{
-			success=menu->m_connection.getPartshopPartOfType<Engine>(i,part);
-			std::cout<<success<<std::endl;
-		}
+			success=m_connection.getPartshopPartOfType<Engine>(i,part);
 		else if(part_type==PART_TYPE_ID_CYLINDERHEAD)
-			success=menu->m_connection.getPartshopPartOfType<CylinderHead>(i,part);
+			success=m_connection.getPartshopPartOfType<CylinderHead>(i,part);
 		
 		if(!success)
 			continue;
 	
-		menu->m_part_list.addItem(part.getName(),i);
+		m_part_list.addItem(part.getName(),i);
 	}
-
-}
-
-void PartshopMenu::BuyButton::onClick()
-{
-
 }
 

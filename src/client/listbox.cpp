@@ -11,11 +11,6 @@ Texture Listbox::m_arrow_up;
 Texture Listbox::m_arrow_down;
 bool Listbox::m_textures_loaded=false;
 
-void Listbox::onChange()
-{
-	
-}
-
 const float BAR_WIDTH=0.02;
 const float SCROLL_DEFAULT_STEP=0.4;
 const float SCROLL_RATE=1;
@@ -245,6 +240,11 @@ void Listbox::onMouseOut()
 	//m_scroll_pending=0;
 }
 
+void Listbox::setChangeHandler(Callback0 handler)
+{
+	m_change_handler=handler;
+}
+
 void Listbox::addItem(std::string item,int tag)
 {
 	if(m_index == -1)
@@ -290,7 +290,7 @@ void Listbox::setIndex(int index)
 	{
 		m_index=index;
 		
-		onChange();
+		m_change_handler();
 	}
 }
 

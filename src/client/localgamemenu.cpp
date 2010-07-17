@@ -16,10 +16,13 @@ LocalGameMenu::LocalGameMenu()
 	m_title.setText("Yksinpeli");			
 	
 	m_new_game_button.setText("Uusi tilanne");
+	m_new_game_button.setClickHandler(Callback0(this,&LocalGameMenu::newClickHandler));
 	m_load_game_button.setText("Lataa tilanne");
+	
 	//m_save_game_button.setText("Tallenna peli");
 	
 	m_back_button.setText("Peruuta");
+	m_back_button.setClickHandler(Callback0(this,&LocalGameMenu::backClickHandler));
 	
 	addWidget(&m_background);
 	
@@ -57,15 +60,15 @@ void LocalGameMenu::onShow()
 
 }
 
-void LocalGameMenu::BackButton::onClick()
+void LocalGameMenu::backClickHandler()
 {
-	getParent()->setVisible(false);
-	((Container*)getParent()->getParent())->getWidget("mainmenu")->setVisible(true);
+	setVisible(false);
+	getRootWidget("mainmenu")->setVisible(true);
 }
 
-void LocalGameMenu::NewGameButton::onClick()
+void LocalGameMenu::newClickHandler()
 {
-	getParent()->setVisible(false);
-	((Container*)getParent()->getParent())->getWidget("newlocalgamemenu")->setVisible(true);
+	setVisible(false);
+	getRootWidget("newlocalgamemenu")->setVisible(true);
 }
 

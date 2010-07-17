@@ -16,6 +16,8 @@ class LocalGameMenu : public Window
 		virtual void onShow();
 		
 	private:
+		void backClickHandler();
+		void newClickHandler();
 
 		Texture m_background_texture;
 		Image m_background;

@@ -24,7 +24,9 @@ NewLocalGameMenu::NewLocalGameMenu(Connection& connection):
 	m_difficulty_select.addItem("vaikea");
 
 	m_back_button.setText("Peruuta");
+	m_back_button.setClickHandler(Callback0(this,&NewLocalGameMenu::backClickHandler));
 	m_start_button.setText("Aloita");
+	m_start_button.setClickHandler(Callback0(this,&NewLocalGameMenu::startClickHandler));
 
 	addWidget(&m_background);
 	
@@ -82,37 +84,35 @@ void NewLocalGameMenu::onShow()
 	m_difficulty_select.setIndex(1);
 }
 
-void NewLocalGameMenu::BackButton::onClick()
+void NewLocalGameMenu::backClickHandler()
 {
-	getParent()->setVisible(false);
-	((Container*)getParent()->getParent())->getWidget("localgamemenu")->setVisible(true);	
+	setVisible(false);
+	getRootWidget("localgamemenu")->setVisible(true);	
 }
 
-void NewLocalGameMenu::StartButton::onClick()
+void NewLocalGameMenu::startClickHandler()
 {
-	NewLocalGameMenu* menu=dynamic_cast<NewLocalGameMenu*>(getParent());
-
-	if(menu->m_connection.startLocalServer())
+	if(m_connection.startLocalServer())
 	{
 		Packet packet;
 		packet.setType(PLAYER_NAME);
-		packet<<menu->m_name_field.getText();
+		packet<<m_name_field.getText();
 		
-		menu->m_connection.writeToServer(packet);
+		m_connection.writeToServer(packet);
 		
 		Packet packet2;
 		packet2.setType(PLAYER_MONEY);
 		
-		menu->m_connection.writeToServer(packet2);
+		m_connection.writeToServer(packet2);
 		
 		packet2.setType(CARSHOP_LIST);		
-		menu->m_connection.writeToServer(packet2);
+		m_connection.writeToServer(packet2);
 		
 		packet2.setType(PARTSHOP_LIST);		
-		menu->m_connection.writeToServer(packet2);
+		m_connection.writeToServer(packet2);
 	
-		getParent()->setVisible(false);
-		((Container*)getParent()->getParent())->getWidget("careermenu")->setVisible(true);
+		setVisible(false);
+		getRootWidget("careermenu")->setVisible(true);
 	}
 }
 

@@ -19,38 +19,20 @@ class TuningMenu : public Container
 		virtual void onHide();
 		
 	private:
+		void installClick();
+		void buyClick();
+		void dynoClick();
+		void adjustClick();
+		void machiningClick();
+	
 		PartshopMenu m_partshopmenu;
 		InstallpartsMenu m_installpartsmenu;
 		
-		class InstallButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_install_button;
-		
-		class BuyButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_buy_button;
-		
-		class DynoButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_dyno_button;
-		
-		class AdjustButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_adjust_button;
-		
-		class MachiningButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_machining_button;
+		Button m_install_button;
+		Button m_buy_button;
+		Button m_dyno_button;
+		Button m_adjust_button;
+		Button m_machining_button;
 		
 };
 

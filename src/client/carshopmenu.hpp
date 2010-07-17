@@ -19,6 +19,9 @@ class CarshopMenu : public Container
 		virtual void onConnectionEvent(Connection& connection);
 		
 	private:
+		void carlistChange();
+		void buyClick();
+	
 		Connection& m_connection;
 	
 		Texture m_background_texture;

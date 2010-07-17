@@ -26,17 +26,8 @@ class InstallpartsMenu : public Container
 		Label m_car_part_list;		
 		Listbox m_part_list;
 		
-		class InstallButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_install_button;
-		
-		class SellButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_sell_button;
+		Button m_install_button;
+		Button m_sell_button;
 };
 
 #endif // INSTALLPARTSMENU_HPP

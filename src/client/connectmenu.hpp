@@ -16,6 +16,8 @@ class ConnectMenu : public Container
 		virtual void onActivate();
 		
 	private:
+		void backClickHandler();
+		void connectClickHandler();
 
 		Texture m_background_texture;
 		Image m_background;
@@ -27,17 +29,8 @@ class ConnectMenu : public Container
 		Label m_port_label;
 		Field m_port_field;
 				
-		class BackButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_back_button;
-		
-		class ConnectButton: public Button
-		{
-			public:	
-				void onClick();
-		}m_connect_button;
+		Button m_back_button;
+		Button m_connect_button;
 
 		std::vector<Vector2D> m_modes;
 };

@@ -19,7 +19,10 @@ ConnectMenu::ConnectMenu()
 	m_port_label.setText("Palvelimen portti");
 	
 	m_back_button.setText("Peruuta");
+	m_back_button.setClickHandler(Callback0(this,&ConnectMenu::backClickHandler));
+	
 	m_connect_button.setText("Yhdistä");
+	m_connect_button.setClickHandler(Callback0(this,&ConnectMenu::connectClickHandler));
 
 	addWidget(&m_background);
 	
@@ -77,18 +80,16 @@ void ConnectMenu::onActivate()
 	m_port_field.setText("");
 }
 
-void ConnectMenu::BackButton::onClick()
+void ConnectMenu::backClickHandler()
 {
 	//Ui::getInstance().goToPreviousView();
 }
 
-void ConnectMenu::ConnectButton::onClick()
+void ConnectMenu::connectClickHandler()
 {
-	ConnectMenu* menu=dynamic_cast<ConnectMenu*>(getParent());
-
-	std::string hostname=menu->m_hostname_field.getText();
+	std::string hostname=m_hostname_field.getText();
 	
-	int port=std::atoi(menu->m_port_field.getText().c_str());
+	int port=std::atoi(m_port_field.getText().c_str());
 	
 //	Connection::getInstance().connect(hostname,port);
 }

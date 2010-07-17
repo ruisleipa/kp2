@@ -1,6 +1,8 @@
 #ifndef __CALLBACK_HPP
 #define __CALLBACK_HPP
 
+#include <tr1/memory>
+
 class CallbackBase0
 {
 	public:
@@ -50,37 +52,28 @@ class Callback0
 	public:
 		void operator()()
 		{
-			if(m_callback)
+			if(m_callback.get())
 				(*m_callback)();
 		}
 
 		Callback0()
 		{
-			m_callback=0;
+
 		}
 
 		template <typename O>
-		void set(O* object,void (O::*func)())
+		Callback0(O* object,void (O::*func)())
 		{
-			m_callback=new CallbackMem0<O>(object,func);
+			m_callback.reset(new CallbackMem0<O>(object,func));
 		}
 
-		void set(void (*func)())
+		Callback0(void (*func)())
 		{
-			m_callback=new CallbackFun0(func);
+			m_callback.reset(new CallbackFun0(func));
 		}
 		
 	private:
-		void free()
-		{
-			if(m_callback)
-			{
-				delete m_callback;
-				m_callback=0;
-			}			
-		}
-
-		CallbackBase0* m_callback;
+		std::tr1::shared_ptr<CallbackBase0> m_callback;
 };
 
 

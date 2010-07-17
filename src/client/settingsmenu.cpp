@@ -43,7 +43,9 @@ SettingsMenu::SettingsMenu(Graphics& graphics):
 	m_filter_select.addItem("paras");
 	
 	m_back_button.setText("Takaisin");
+	m_back_button.setClickHandler(Callback0(this,&SettingsMenu::backClick));
 	m_apply_button.setText("Ota käyttöön");
+	m_apply_button.setClickHandler(Callback0(this,&SettingsMenu::applyClick));
 
 	addWidget(&m_background);
 	
@@ -144,24 +146,22 @@ void SettingsMenu::updateDisplayOptions()
 	m_vsync_select.autoSize();
 }
 
-void SettingsMenu::BackButton::onClick()
+void SettingsMenu::backClick()
 {
-	getParent()->setVisible(false);
-	((Container*)getParent()->getParent())->getWidget("mainmenu")->setVisible(true);
+	setVisible(false);
+	getRootWidget("mainmenu")->setVisible(true);
 }
 
-void SettingsMenu::ApplyButton::onClick()
+void SettingsMenu::applyClick()
 {
-	SettingsMenu* menu=dynamic_cast<SettingsMenu*>(getParent());
+	Texture::setFilterLimit((TextureFilter)m_filter_select.getIndex());
 	
-	Texture::setFilterLimit((TextureFilter)menu->m_filter_select.getIndex());
+	Vector2D mode=m_modes[m_resolution_select.getIndex()];
+	bool fullscreen=m_fullscreen_select.getIndex();
+	bool vsync=m_vsync_select.getIndex();
 	
-	Vector2D mode=menu->m_modes[menu->m_resolution_select.getIndex()];
-	bool fullscreen=menu->m_fullscreen_select.getIndex();
-	bool vsync=menu->m_vsync_select.getIndex();
+	m_graphics.setVideoMode(mode.getX(),mode.getY(),32,fullscreen,vsync,true);
 	
-	menu->m_graphics.setVideoMode(mode.getX(),mode.getY(),32,fullscreen,vsync,true);
-	
-	menu->updateDisplayOptions();
+	updateDisplayOptions();
 }
 

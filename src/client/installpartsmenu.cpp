@@ -69,12 +69,3 @@ void InstallpartsMenu::onShow()
 
 }
 
-void InstallpartsMenu::InstallButton::onClick()
-{
-
-}
-
-void InstallpartsMenu::SellButton::onClick()
-{
-
-}

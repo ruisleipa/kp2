@@ -19,6 +19,9 @@ class NewLocalGameMenu : public Window
 		virtual void onShow();
 		
 	private:
+		void backClickHandler();
+		void startClickHandler();
+	
 		Connection& m_connection;
 
 		Texture m_background_texture;
@@ -32,17 +35,8 @@ class NewLocalGameMenu : public Window
 		Field m_name_field;
 		Select m_difficulty_select;
 		
-		class BackButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_back_button;
-		
-		class StartButton: public Button
-		{
-			public:	
-				void onClick();
-		}m_start_button;
+		Button m_back_button;		
+		Button m_start_button;
 };
 
 #endif // NEWLOCALGAMEMENU_HPP

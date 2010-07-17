@@ -21,6 +21,9 @@ class GarageMenu : public Container
 		virtual void onHide();
 		
 	private:
+		void carshopClick();
+		void carlistClick();
+	
 		Connection& m_connection;
 		
 		CarshopMenu m_carshopmenu;
@@ -29,17 +32,8 @@ class GarageMenu : public Container
 		Texture m_background_texture;
 		Image m_background;		
 		
-		class CarshopButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_carshop_button;
-		
-		class CarlistButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_carlist_button;
+		Button m_carshop_button;		
+		Button m_carlist_button;
 		
 };
 

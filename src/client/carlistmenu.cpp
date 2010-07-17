@@ -20,7 +20,9 @@ CarlistMenu::CarlistMenu(Connection& connection):
 	m_car_info.setFont(Font("small"));
 
 	m_sell_button.setText("Myy auto");
+	m_sell_button.setClickHandler(Callback0(this,&CarlistMenu::sellClick));
 	m_select_button.setText("Valitse käyttöautoksi");
+	m_select_button.setClickHandler(Callback0(this,&CarlistMenu::selectClick));
 				
 	addWidget(&m_background);
 	addWidget(&m_car_list);
@@ -74,35 +76,32 @@ void CarlistMenu::onConnectionEvent(Connection& connection)
 	}
 }
 
-void CarlistMenu::CarListbox::onChange()
+void CarlistMenu::carlistChange()
 {
-	CarlistMenu* menu=dynamic_cast<CarlistMenu*>(getParent());
-	
 	Vehicle vehicle;
 	
-	if(!menu->m_connection.getPlayerVehicle(menu->m_car_list.getCurrentItemTag(),vehicle))
+	if(!m_connection.getPlayerVehicle(m_car_list.getCurrentItemTag(),vehicle))
 	{
-		std::cout<<menu->m_car_list.getCurrentItemTag()<<std::endl;
 		return;
 	}
 	
-	menu->m_car_name.setText(vehicle.getName());
+	m_car_name.setText(vehicle.getName());
 		
 	std::string image="gamedata/vehicles/";
 	image+=vehicle.getImageName();
-	menu->m_car_texture.load(image);
-	menu->m_car_image.setSize(menu->m_car_texture.getSize()/400);
-	menu->m_car_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(1,0)-menu->m_car_image.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
+	m_car_texture.load(image);
+	m_car_image.setSize(m_car_texture.getSize()/400);
+	m_car_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(1,0)-m_car_image.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
 	
-	menu->m_car_info.setText(vehicle.getGeneralInfoString());
+	m_car_info.setText(vehicle.getGeneralInfoString());
 }
 
-void CarlistMenu::SellButton::onClick()
+void CarlistMenu::sellClick()
 {
 
 }
 
-void CarlistMenu::SelectButton::onClick()
+void CarlistMenu::selectClick()
 {
 
 }

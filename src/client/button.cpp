@@ -5,19 +5,19 @@
 
 #include <GL/gl.h>
 
-void Button::onClick()
-{
-
-}
-
 void Button::onMouseDown(MouseEvent event)
 {
 	if(event.isButtonDown(MouseEvent::LEFT) || event.isButtonDown(MouseEvent::RIGHT))
 	{
 		ActiveTextWidget::onMouseDown(event);
 		
-		onClick();
+		m_click_handler();
 	}
+}
+
+void Button::setClickHandler(Callback0 handler)
+{
+	m_click_handler=handler;
 }
 
 Button::Button()

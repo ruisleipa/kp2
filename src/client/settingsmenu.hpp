@@ -18,6 +18,9 @@ class SettingsMenu : public Window
 		void updateDisplayOptions();
 			
 	private:
+		void backClick();
+		void applyClick();
+		
 		Graphics& m_graphics;
 
 		Texture m_background_texture;
