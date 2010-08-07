@@ -157,10 +157,23 @@ bool Connection::readFromClient(ClientSocket* socket)
 					*/					
 					
 					bool typefound=
-					(				
-						writePartToPacket<Engine>(response,part,PART_TYPE_ID_ENGINE) ||
+					(	
+						writePartToPacket<Accessory>(response,part,PART_TYPE_ID_ACCESSORY) ||
+						writePartToPacket<Camshaft>(response,part,PART_TYPE_ID_CAMSHAFT) ||
+						writePartToPacket<Charger>(response,part,PART_TYPE_ID_CHARGER) ||
+						writePartToPacket<Clutch>(response,part,PART_TYPE_ID_CLUTCH) ||
+						writePartToPacket<Cooler>(response,part,PART_TYPE_ID_COOLER) ||
 						writePartToPacket<CylinderHead>(response,part,PART_TYPE_ID_CYLINDERHEAD) ||
-						writePartToPacket<Accessory>(response,part,PART_TYPE_ID_ACCESSORY)							
+						writePartToPacket<Differential>(response,part,PART_TYPE_ID_DIFFERENTIAL) ||
+						writePartToPacket<Engine>(response,part,PART_TYPE_ID_ENGINE) ||
+						writePartToPacket<ExhaustManifold>(response,part,PART_TYPE_ID_EXHAUSTMANIFOLD) ||
+						writePartToPacket<ExhaustPipe>(response,part,PART_TYPE_ID_EXHAUSTPIPE) ||
+						writePartToPacket<FuelIntake>(response,part,PART_TYPE_ID_FUELINTAKE) ||
+						writePartToPacket<FuelPump>(response,part,PART_TYPE_ID_FUELPUMP) ||
+						writePartToPacket<Injector>(response,part,PART_TYPE_ID_INJECTOR) ||
+						writePartToPacket<IntakeManifold>(response,part,PART_TYPE_ID_INTAKEMANIFOLD) ||
+						writePartToPacket<Tire>(response,part,PART_TYPE_ID_TIRE) ||
+						writePartToPacket<Transmission>(response,part,PART_TYPE_ID_TRANSMISSION)
 					);
 				}
 
@@ -210,9 +223,22 @@ Connection::Connection()
 		}
 	}
 	
-	loadPartsFromDirectory<Engine>("gamedata/parts/engines/");
-	loadPartsFromDirectory<CylinderHead>("gamedata/parts/cylinderheads/");
 	loadPartsFromDirectory<Accessory>("gamedata/parts/accessories/");
+	loadPartsFromDirectory<Camshaft>("gamedata/parts/camshafts/");
+	loadPartsFromDirectory<Charger>("gamedata/parts/chargers/");
+	loadPartsFromDirectory<Clutch>("gamedata/parts/clutches/");
+	loadPartsFromDirectory<Cooler>("gamedata/parts/coolers/");
+	loadPartsFromDirectory<CylinderHead>("gamedata/parts/cylinderheads/");
+	loadPartsFromDirectory<Differential>("gamedata/parts/differentials/");
+	loadPartsFromDirectory<Engine>("gamedata/parts/engines/");
+	loadPartsFromDirectory<ExhaustManifold>("gamedata/parts/exhaustmanifolds/");
+	loadPartsFromDirectory<ExhaustPipe>("gamedata/parts/exhaustpipes/");
+	loadPartsFromDirectory<FuelIntake>("gamedata/parts/fuelintakes/");
+	loadPartsFromDirectory<FuelPump>("gamedata/parts/fuelpumps/");
+	loadPartsFromDirectory<Injector>("gamedata/parts/injectors/");
+	loadPartsFromDirectory<IntakeManifold>("gamedata/parts/intakemanifolds/");
+	loadPartsFromDirectory<Tire>("gamedata/parts/tires/");
+	loadPartsFromDirectory<Transmission>("gamedata/parts/transmissions/");
 }
 
 

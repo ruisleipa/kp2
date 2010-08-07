@@ -156,12 +156,38 @@ void Connection::processMessages()
 					
 					std::tr1::shared_ptr<Part> ptr;
 					
-					if(type_id==PART_TYPE_ID_ENGINE)
-						ptr=getPartFromPacket<Engine>(message);
+					if(type_id==PART_TYPE_ID_ACCESSORY)
+						ptr=getPartFromPacket<Accessory>(message);
+					else if(type_id==PART_TYPE_ID_CAMSHAFT)
+						ptr=getPartFromPacket<Camshaft>(message);
+					else if(type_id==PART_TYPE_ID_CHARGER)
+						ptr=getPartFromPacket<Charger>(message);
+					else if(type_id==PART_TYPE_ID_CLUTCH)
+						ptr=getPartFromPacket<Clutch>(message);
+					else if(type_id==PART_TYPE_ID_COOLER)
+						ptr=getPartFromPacket<Cooler>(message);
 					else if(type_id==PART_TYPE_ID_CYLINDERHEAD)
 						ptr=getPartFromPacket<CylinderHead>(message);
-					else if(type_id==PART_TYPE_ID_ACCESSORY)
-						ptr=getPartFromPacket<Accessory>(message);
+					else if(type_id==PART_TYPE_ID_DIFFERENTIAL)
+						ptr=getPartFromPacket<Differential>(message);
+					else if(type_id==PART_TYPE_ID_ENGINE)
+						ptr=getPartFromPacket<Engine>(message);
+					else if(type_id==PART_TYPE_ID_EXHAUSTMANIFOLD)
+						ptr=getPartFromPacket<ExhaustManifold>(message);
+					else if(type_id==PART_TYPE_ID_EXHAUSTPIPE)
+						ptr=getPartFromPacket<ExhaustPipe>(message);
+					else if(type_id==PART_TYPE_ID_FUELINTAKE)
+						ptr=getPartFromPacket<FuelIntake>(message);
+					else if(type_id==PART_TYPE_ID_FUELPUMP)
+						ptr=getPartFromPacket<FuelPump>(message);
+					else if(type_id==PART_TYPE_ID_INJECTOR)
+						ptr=getPartFromPacket<Injector>(message);
+					else if(type_id==PART_TYPE_ID_INTAKEMANIFOLD)
+						ptr=getPartFromPacket<IntakeManifold>(message);
+					else if(type_id==PART_TYPE_ID_TIRE)
+						ptr=getPartFromPacket<Tire>(message);
+					else if(type_id==PART_TYPE_ID_TRANSMISSION)
+						ptr=getPartFromPacket<Transmission>(message);
 					else
 						continue;
 						
