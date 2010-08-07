@@ -10,7 +10,7 @@
 
 InstallpartsMenu::InstallpartsMenu()
 {
-	m_background_texture.load("data/images/partshopmenu.png");
+	m_background_texture.load("data/images/submenu.png");
 	m_background.setTexture(&m_background_texture);
 	m_background.setStretched(true);
 

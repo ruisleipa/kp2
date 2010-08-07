@@ -11,7 +11,7 @@
 CarshopMenu::CarshopMenu(Connection& connection):
 	m_connection(connection)
 {
-	m_background_texture.load("data/images/carshopmenu.png");
+	m_background_texture.load("data/images/submenu.png");
 	m_background.setTexture(&m_background_texture);
 	m_background.setStretched(true);
 
