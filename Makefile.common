@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -I./src/ -Wall
+CXXFLAGS = -gstabs -I./src/ -Wall
 
 OBJ = $(SRC:.cpp=.o)
 DEPS = $(SRC:.cpp=.d)

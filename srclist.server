@@ -14,4 +14,8 @@ SRC = src/server/main.cpp \
 	src/shared/cylinderhead.cpp \
 	src/shared/directory.cpp \
 	src/shared/outputredirector.cpp \
+	src/shared/stack.cpp \
+	src/shared/crashmessage.cpp \
+	src/shared/crashcatcher.cpp \
+	src/shared/stacktrace.cpp \
 	src/shared/inifile.cpp

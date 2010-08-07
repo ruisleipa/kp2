@@ -6,12 +6,19 @@
 #include "shared/serversocket.hpp"
 #include "shared/socketset.hpp"
 #include "shared/protocol.hpp"
+
 #include "shared/outputredirector.hpp"
+#include "shared/crashmessage.hpp"
+#include "shared/crashcatcher.hpp"
 
 #include "connection.hpp"
 
 int main(int argc,char** argv)
 {
+	CrashMessage crash_message;
+
+	CrashCatcher crash_handler(crash_message);
+
 	OutputRedirector redirec("server.log");
 
 	std::cout<<"Kiihdytyspeli 2 server"<<std::endl;

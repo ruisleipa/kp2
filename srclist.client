@@ -45,6 +45,9 @@ SRC = \
 	src/client/window.cpp \
 	src/shared/assert.cpp \
 	src/shared/clientsocket.cpp \
+	src/shared/crashmessage.cpp \
+	src/shared/crashcatcher.cpp \
+	src/shared/stacktrace.cpp \
 	src/shared/inifile.cpp \
 	src/shared/outputredirector.cpp \
 	src/shared/packet.cpp \
@@ -57,5 +60,6 @@ SRC = \
 	src/shared/socket.cpp \
 	src/shared/socketactivity.cpp \
 	src/shared/socketset.cpp \
+	src/shared/stack.cpp \
 	src/shared/string.cpp
 
