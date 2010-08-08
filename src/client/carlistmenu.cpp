@@ -17,6 +17,8 @@ CarlistMenu::CarlistMenu(Connection& connection):
 
 	m_car_image.setTexture(&m_car_texture);		
 	m_car_list.setFont(Font("small"));
+	m_car_list.setChangeHandler(Callback0(this,&CarlistMenu::carlistChange));
+	
 	m_car_info.setFont(Font("small"));
 
 	m_sell_button.setText("Myy auto");

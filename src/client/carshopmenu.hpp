@@ -35,19 +35,8 @@ class CarshopMenu : public Container
 		
 		std::vector<Vehicle> m_vehicles;
 		
-		class CarListbox: public Listbox
-		{
-			public:				
-				void onChange();			
-		}m_car_list;
-		
-		class BuyButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_buy_button;
-		
-				
+		Listbox m_car_list;		
+		Button m_buy_button;				
 };
 
 #endif // CARSHOPMENU_HPP

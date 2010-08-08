@@ -1,4 +1,4 @@
-#include "installpartsmenu.hpp"
+#include "machiningmenu.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -8,7 +8,7 @@
 #include "shared/string.hpp"
 #include "connection.hpp"
 
-InstallpartsMenu::InstallpartsMenu()
+MachiningMenu::MachiningMenu()
 {
 	m_background_texture.load("data/images/submenu.png");
 	m_background.setTexture(&m_background_texture);
@@ -19,8 +19,6 @@ InstallpartsMenu::InstallpartsMenu()
 
 	m_install_button.setText("Asenna");
 	m_sell_button.setText("Myy Osa");
-	
-	
 	
 	addWidget(&m_background);
 	
@@ -38,7 +36,7 @@ InstallpartsMenu::InstallpartsMenu()
 	addWidget(&m_sell_button);	
 }
 
-void InstallpartsMenu::onResize(Graphics& graphics)
+void MachiningMenu::onResize(Graphics& graphics)
 {
 	setPosition(CAREER_SUBMENU_POSITION);
 	setSize(CAREER_SUBMENU_SIZE);
@@ -62,7 +60,7 @@ void InstallpartsMenu::onResize(Graphics& graphics)
 	m_sell_button.setPosition(CAREER_SUBMENU_SIZE*Vector2D(0.5,1)-m_install_button.getSize()*Vector2D(0,1)-Vector2D(0,PADDING*2)-m_sell_button.getSize()*Vector2D(0,1));	
 }
 
-void InstallpartsMenu::onShow()
+void MachiningMenu::onShow()
 {
 
 }

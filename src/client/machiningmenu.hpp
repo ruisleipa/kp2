@@ -1,5 +1,5 @@
-#ifndef INSTALLPARTSMENU_HPP
-#define INSTALLPARTSMENU_HPP
+#ifndef MACHININGMENU_HPP
+#define MACHININGMENU_HPP
 
 #include "container.hpp"
 #include "label.hpp"
@@ -9,10 +9,10 @@
 #include "listbox.hpp"
 #include "columnlayoutcontainer.hpp"
 
-class InstallpartsMenu : public Container
+class MachiningMenu : public Container
 {
 	public:
-		InstallpartsMenu();
+		MachiningMenu();
 
 		virtual void onResize(Graphics& graphics);
 		virtual void onShow();
@@ -35,4 +35,4 @@ class InstallpartsMenu : public Container
 		Button m_sell_button;
 };
 
-#endif // INSTALLPARTSMENU_HPP
+#endif // MACHININGMENU_HPP

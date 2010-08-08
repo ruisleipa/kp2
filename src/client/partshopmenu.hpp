@@ -19,6 +19,7 @@ class PartshopMenu : public Container
 		
 	private:
 		void categoryChangeHandler();
+		void partChange();
 	
 		Connection& m_connection;
 	

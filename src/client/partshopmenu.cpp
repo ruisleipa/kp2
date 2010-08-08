@@ -133,20 +133,11 @@ void PartshopMenu::categoryChangeHandler()
 
 void PartshopMenu::partChange()
 {
-	if(!getParent())
-		return;
-	
-	PartshopMenu* menu=dynamic_cast<PartshopMenu*>(getParent()->getParent());
-	
-	if(!menu)
-		return;
-	
-	int part_id=menu->m_part_list.getCurrentItemTag();
+	int part_id=m_part_list.getCurrentItemTag();
 	
 	Part part;
 	
-	menu->m_connection.getPartshopPart(part_id,part);
+	m_connection.getPartshopPart(part_id,part);
 	
-	menu->m_part_info.setText(part.getInfo());
-
+	m_part_info.setText(part.getInfo());
 }
