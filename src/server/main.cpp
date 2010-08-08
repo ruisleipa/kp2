@@ -76,18 +76,6 @@ int main(int argc,char** argv)
 	else
 		socket.open("",port);
 	
-	
-	IniFile portfile;
-	
-	if(portfile.load("serverport.tmp"))
-	{
-		std::cerr<<"Server already running!"<<std::endl;
-		return 1;
-	}
-		
-	portfile.setValue("port",port);
-	portfile.save("serverport.tmp");
-		
 	SocketSet set;
 	set.add(&socket);
 	
