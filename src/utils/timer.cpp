@@ -31,7 +31,7 @@ Timer::Timer():
 		throw TimerException("Timer::Timer(): clock_getres() failed");
 #endif
 
-	m_start_time=getTime();
+	reset();
 }
 
 float Timer::getTime() const
