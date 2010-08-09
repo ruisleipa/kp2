@@ -2,7 +2,7 @@
 #define EVENTS_HPP
 
 #include "eventlistener.hpp"
-#include "sdl.hpp"
+#include "utils/sdl.hpp"
 class Graphics;
 
 class ExitException

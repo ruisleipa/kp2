@@ -1,21 +1,18 @@
 #include "fontface.hpp"
 
-#include "graphics.hpp"
-#include "shared/string.hpp"
+#include "utils/string.hpp"
 
 #include <sstream>
 #include <iterator>
 
-FontFace::FontFace(Graphics& graphics):
-	m_graphics(graphics),
+FontFace::FontFace():
 	m_height(0),
 	m_font(0)
 {
 
 }
 
-FontFace::FontFace(Graphics& graphics,std::string fontfile,int fontsize):
-	m_graphics(graphics),
+FontFace::FontFace(std::string fontfile,int fontsize):
 	m_height(0),
 	m_font(0)
 {
@@ -66,7 +63,7 @@ void FontFace::unload()
 	m_height=0;
 }
 
-void FontFace::draw(std::wstring str,Vector2D pos,float char_height)
+void FontFace::draw(Window& window,std::wstring str,Vector2D pos,float char_height)
 {
 	if(!m_font)
 		return;
@@ -104,7 +101,7 @@ void FontFace::draw(std::wstring str,Vector2D pos,float char_height)
 			
 			LetterRectangle& letterinfo=m_font_pages[page].letter_rectangles[rectangle_index];
 			
-			char_size.setX(char_height*(letterinfo.size.getX()/letterinfo.size.getY())/m_graphics.getAspectRatio());
+			char_size.setX(char_height*(letterinfo.size.getX()/letterinfo.size.getY())/window.getAspectRatio());
 			
 			font_page.letters.drawClipped(char_pos,char_size,letterinfo.position,letterinfo.size);
 
@@ -126,7 +123,7 @@ void FontFace::draw(std::wstring str,Vector2D pos,float char_height)
 	}
 }
 
-void FontFace::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float char_height)
+void FontFace::drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D size,float char_height)
 {
 #if 0
 	float row_size = 0;
@@ -204,7 +201,7 @@ void FontFace::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float cha
 	/*
 	Do layout.
 	*/	
-	int max_rows = size.getY() / getTextSize(L"X",char_height).getY() + 1;
+	int max_rows = size.getY() / getTextSize(window,L"X",char_height).getY() + 1;
 	Vector2D rowsize;
 	std::wstring final_string;
 	
@@ -212,7 +209,7 @@ void FontFace::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float cha
 	
 	for(i=words.begin();i!=words.end();++i)
 	{
-		rowsize+=getTextSize((*i),char_height);
+		rowsize+=getTextSize(window,(*i),char_height);
 	
 		if(rowsize.getX()>size.getX())
 		{
@@ -221,8 +218,8 @@ void FontFace::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float cha
 			final_string.append(L" ");
 			
 			rowsize=Vector2D(0,0);			
-			rowsize+=getTextSize((*i),char_height);
-			rowsize+=getTextSize(L" ",char_height);
+			rowsize+=getTextSize(window,(*i),char_height);
+			rowsize+=getTextSize(window,L" ",char_height);
 		}
 		else if((*i).at((*i).size()-1)=='\n')
 		{
@@ -235,15 +232,15 @@ void FontFace::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float cha
 			final_string.append((*i));
 			final_string.append(L" ");
 			
-			rowsize+=getTextSize(L" ",char_height);
+			rowsize+=getTextSize(window,L" ",char_height);
 		}
 	}
 
-	draw(final_string, pos, char_height);
+	draw(window, final_string, pos, char_height);
 #endif
 }
 
-Vector2D FontFace::getTextSize(std::wstring str,float char_height)
+Vector2D FontFace::getTextSize(Window& window,std::wstring str,float char_height)
 {
 	if(!m_font)
 	{
@@ -266,7 +263,7 @@ Vector2D FontFace::getTextSize(std::wstring str,float char_height)
 			int rectangle_index=str[i]%FONT_PAGE_SIZE;
 			LetterRectangle& letterinfo=font_page.letter_rectangles[rectangle_index];
 			
-			w+=char_height*(letterinfo.size.getX()/letterinfo.size.getY())/m_graphics.getAspectRatio();
+			w+=char_height*(letterinfo.size.getX()/letterinfo.size.getY())/window.getAspectRatio();
 		}
 		else
 		{
