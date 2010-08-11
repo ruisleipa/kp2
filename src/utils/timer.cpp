@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #endif
 
-float Timer::getSeconds() const
+double Timer::getSeconds() const
 {
 	return getTime()-m_start_time;
 }
@@ -34,7 +34,7 @@ Timer::Timer():
 	reset();
 }
 
-float Timer::getTime() const
+double Timer::getTime() const
 {
 	//TODO: implement support for more precise timers
 	//TODO: handle rollovers
@@ -45,13 +45,13 @@ float Timer::getTime() const
 	if(!QueryPerformanceCounter(&time))
 		throw TimerException("Timer::getTime(): QueryPerformanceCounter failed");
 
-	return float(time.QuadPart)/m_frequency;
+	return double(time.QuadPart)/m_frequency;
 #else
 	timespec time;
 
 	if(clock_gettime(CLOCK_MONOTONIC,&time) == -1)
 		throw TimerException("Timer::getTime(): clock_gettime failed");
 	
-	return time.tv_sec+float(time.tv_nsec)/1000000000.0;
+	return time.tv_sec+double(time.tv_nsec)/1000000000.0;
 #endif	
 }

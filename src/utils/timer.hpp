@@ -16,18 +16,18 @@ class TimerException: public std::runtime_error
 class Timer
 {
 	public:
-		float getSeconds() const;
+		double getSeconds() const;
 		void reset();
 		
 		Timer();
 		
 	private:
-		float getTime() const;
+		double getTime() const;
 	
-		float m_start_time;
+		double m_start_time;
 		
 #ifdef WIN32
-		float m_frequency;
+		double m_frequency;
 #endif
 };
 
