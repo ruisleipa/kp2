@@ -2,7 +2,7 @@
 
 #include "keyevent.hpp"
 #include "mouseevent.hpp"
-#include "connection.hpp"
+//#include "connection.hpp"
 
 void EventListener::doKeyDown(KeyEvent event)
 {
@@ -28,7 +28,7 @@ void EventListener::doMouseMove(MouseEvent event)
 {
 
 }
-
+/*
 void EventListener::doResize(Graphics& graphics)
 {
 
@@ -39,4 +39,4 @@ void EventListener::doConnectionEvent(Connection& connection)
 
 }
 
-
+*/

@@ -1,25 +1,13 @@
 #include "events.hpp"
 
-#include "graphics.hpp"
+#include "graphics/window.hpp"
 #include "keyevent.hpp"
 #include "mouseevent.hpp"
 #include "eventlistener.hpp"
 
 #include <iostream>
 
-void Events::setEventListener(EventListener* event_listener)
-{
-	m_event_listener=event_listener;
-}
-
-bool Events::isKeyDown(SDLKey key)
-{
-	uint8_t* keys=SDL_GetKeyState(0);
-
-	return keys[key];
-}
-
-void Events::processEvents(Graphics& graphics)
+void Events::processEvents()
 {
 	SDL_Event sdl_event;
 
@@ -69,7 +57,7 @@ void Events::processEvents(Graphics& graphics)
 		{
 			SDL_MouseButtonEvent& button = sdl_event.button;
 			Vector2D pos=Vector2D(button.x, button.y);
-			pos/=graphics.getDisplaySize();
+			pos/=window.getSize();
 							
 			MouseEvent event(pos, 1 << (button.button-1));
 			
@@ -79,7 +67,7 @@ void Events::processEvents(Graphics& graphics)
 		{
 			SDL_MouseButtonEvent& button = sdl_event.button;
 			Vector2D pos=Vector2D(button.x, button.y);
-			pos/=graphics.getDisplaySize();
+			pos/=window.getSize();
 									
 			MouseEvent event(pos, 1 << (button.button-1));
 			
@@ -89,28 +77,29 @@ void Events::processEvents(Graphics& graphics)
 		{
 			SDL_MouseMotionEvent& motion = sdl_event.motion;
 			Vector2D pos=Vector2D(motion.x, motion.y);
-			pos/=graphics.getDisplaySize();
+			pos/=window.getSize();
 					
 			MouseEvent event(pos, motion.state);
 			
 			m_event_listener->doMouseMove(event);
 		}
-		else if(sdl_event.type == SDL_VIDEORESIZE)
-		{
-			SDL_ResizeEvent& resize = sdl_event.resize;
-		
-			graphics.resize(Vector2D(resize.w,resize.h));
-		}
 	}
 }
 
-void Events::resize(Graphics& graphics)
+void Events::setEventListener(EventListener* event_listener)
 {
-	m_event_listener->doResize(graphics);
+	m_event_listener=event_listener;
 }
 
-Events::Events(Sdl& sdl): 
-	m_sdl(sdl), 
+bool Events::isKeyDown(SDLKey key)
+{
+	uint8_t* keys=SDL_GetKeyState(0);
+
+	return keys[key];
+}
+
+Events::Events(Window& window): 
+	window(window),
 	m_event_listener(&m_default_listener)
 {
 	SDL_EnableUNICODE(true);
