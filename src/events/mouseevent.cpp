@@ -1,6 +1,6 @@
 #include "mouseevent.hpp"
 
-#include "assert.hpp"
+#include "debug/assert.hpp"
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ bool MouseEvent::isButtonDown(MouseButton button_index)
 	return m_state & (1 << button_index);
 }
 
-MouseEvent::MouseEvent(Vector2D position,uint8_t state)
+MouseEvent::MouseEvent(Vector2D position,int state)
 {
 	m_position = position;
 	m_state = state;

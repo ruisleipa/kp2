@@ -2,7 +2,7 @@
 #define MOUSEEVENT_HPP
 
 #include <stdint.h>
-#include "vector2d.hpp"
+#include "graphics/vector2d.hpp"
 
 class MouseEvent
 {
@@ -20,12 +20,11 @@ class MouseEvent
 		
 		bool isButtonDown(MouseButton button_index);
 		
-		MouseEvent(Vector2D position,uint8_t state);
+		MouseEvent(Vector2D position,int state);
 		
 	private:
 		Vector2D m_position;
-		uint8_t m_state;
-		
+		int m_state;		
 		
 };
 
