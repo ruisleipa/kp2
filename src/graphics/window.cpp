@@ -14,47 +14,14 @@ float Window::getAspectRatio()
 	return aspectRatio;
 }
 
-void Window::enterGuiMode()
-{
-	if(isInGuiMode)
-		return;
-	
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();	
-	glOrtho(0,1,1,0,0,1);
-	glMatrixMode(GL_MODELVIEW);
-	
-	isInGuiMode=true;
-}
-
-void Window::exitGuiMode()
-{
-	if(!isInGuiMode)
-		return;
-	
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	
-	isInGuiMode=false;
-}
-
 void Window::setVideoMode(Vector2D size,int bpp,bool fullscreen)
 {
-	bool setGuiMode=isInGuiMode;
-	
-	exitGuiMode();	
-	
 	surfaceSize = size;
 	surfaceBpp = bpp;
 	surfaceFullscreen = fullscreen;
 	
 	createSurface();
 	
-	if(setGuiMode)
-		enterGuiMode();
-		
 	calculateAspectRatio();
 	initOpenGL();
 	initGLEW();
@@ -214,6 +181,12 @@ void Window::initOpenGL()
 	Vector2D displaysize=getSize();
 	
 	glViewport(0,0,displaysize.getX(),displaysize.getY());
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();	
+	glOrtho(0,1,1,0,0,1);
+	glMatrixMode(GL_MODELVIEW);
+	
 	glEnable(GL_TEXTURE_2D);
 	
 	glEnable(GL_BLEND);

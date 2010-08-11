@@ -24,9 +24,6 @@ class Window
 		bool isFullscreen();
 		
 		int getBitsPerPixel();
-				
-		void enterGuiMode();
-		void exitGuiMode();
 		
 		Window(Sdl& sdl);
 		~Window();
