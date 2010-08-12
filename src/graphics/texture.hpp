@@ -11,6 +11,7 @@
 #include <GL/glew.h>
 
 #include "vector2d.hpp"
+#include "texturecollection.hpp"
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 
@@ -56,9 +57,6 @@ class Texture
 		
 		Vector2D getSize();
 		
-		static void reuploadTextures();	
-		static void printTextureList();	
-				
 		Texture();
 		Texture(const std::string& filename);
 		Texture(const Texture&);
@@ -95,16 +93,9 @@ class Texture
 				
 		static TextureFilter m_filter_limit;
 		
-		/*
-		These are for texture reuploading in the case of OpenGl context
-		loss on some platforms.
-		*/		
 		void reuploadTexture();
 		
-		static void addManagedTexture(Texture* texture);
-		static void removeManagedTexture(Texture* texture);
-		static std::set<Texture*> m_textures;
-
+		TextureCollection* textures;
 };
 
 #endif // TEXTURE_HPP

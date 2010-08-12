@@ -5,7 +5,6 @@
 #include <iostream>
 #include <stdint.h>
 
-std::set<Texture*> Texture::m_textures;
 TextureFilter Texture::m_filter_limit=LINEAR;
 
 static void CheckGL()
@@ -530,58 +529,6 @@ void Texture::setFilterLimit(TextureFilter filter)
 TextureFilter Texture::getFilterLimit()
 {
 	return m_filter_limit;
-}
-
-void Texture::addManagedTexture(Texture* texture)
-{
-	if(texture)
-		Texture::m_textures.insert(texture);
-}
-
-void Texture::removeManagedTexture(Texture* texture)
-{
-	Texture::m_textures.erase(texture);
-}
-
-void Texture::reuploadTextures()
-{
-#ifdef WIN32
-	std::set<Texture*>::iterator i;
-		
-	for(i=Texture::m_textures.begin();i!=Texture::m_textures.end();++i)
-	{
-		(*i)->reuploadTexture();
-	}
-#endif
-}
-
-void Texture::printTextureList()
-{
-	std::set<Texture*>::iterator i;
-	
-	size_t totalsize=0;
-	
-	for(i=Texture::m_textures.begin();i!=Texture::m_textures.end();++i)
-	{
-		totalsize+=(*i)->printInfo();
-	}
-	
-	std::string unit="B";	
-	
-	if(totalsize>1023)
-	{
-		totalsize/=1024;
-		unit="kB";
-	}
-	
-	if(totalsize>1023)
-	{
-		totalsize/=1024;
-		unit="MB";
-	}
-	
-	std::cout<<"---Textures---"<<std::endl;
-	std::cout<<"Total texture size: "<<totalsize<<" "<<unit<<std::endl;
 }
 
 int Texture::printInfo()
