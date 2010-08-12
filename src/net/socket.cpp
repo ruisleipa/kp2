@@ -22,7 +22,7 @@
 
 #endif
 
-#include "string.hpp"
+#include "utils/string.hpp"
 
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET -1

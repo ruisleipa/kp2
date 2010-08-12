@@ -7,8 +7,8 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "string.hpp"
-#include "assert.hpp"
+#include "utils/string.hpp"
+#include "debug/assert.hpp"
 
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET -1
