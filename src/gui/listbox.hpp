@@ -2,7 +2,7 @@
 #define LISTBOX_HPP
 
 #include "activetextwidget.hpp"
-#include "timer.hpp"
+#include "utils/timer.hpp"
 #include "callback/callback.hpp"
 
 #include <vector>
@@ -10,8 +10,8 @@
 class Listbox : public TextWidget
 {
 	public:
-		virtual void onDraw(Graphics& graphics);
-		virtual void onResize(Graphics& graphics);		
+		virtual void onDraw(Window& window);
+		virtual void onResize(Window& window);		
 	
 		virtual void onMouseDown(MouseEvent event);
 		virtual void onMouseUp(MouseEvent event);

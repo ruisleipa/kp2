@@ -1,7 +1,7 @@
 #include "button.hpp"
 
-#include "shared/string.hpp"
-#include "assert.hpp"
+#include "utils/string.hpp"
+#include "debug/assert.hpp"
 
 #include <GL/gl.h>
 

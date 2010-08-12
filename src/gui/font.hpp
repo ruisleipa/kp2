@@ -1,9 +1,10 @@
 #ifndef FONT_HPP
 #define FONT_HPP
 
-#include "fontface.hpp"
-#include "color.hpp"
-#include "vector2d.hpp"
+#include "graphics/fontface.hpp"
+#include "graphics/color.hpp"
+#include "graphics/vector2d.hpp"
+#include "graphics/window.hpp"
 
 #include <string>
 #include <map>
@@ -11,11 +12,11 @@
 class Font
 {
 	public:
-		void draw(std::wstring str,Vector2D pos);
-		void draw(std::wstring str,Vector2D pos,Color color);
-		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size);
-		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size,Color color);
-		Vector2D getTextSize(std::wstring str);
+		void draw(Window& window,std::wstring str,Vector2D pos);
+		void draw(Window& window,std::wstring str,Vector2D pos,Color color);
+		void drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D size);
+		void drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D size,Color color);
+		Vector2D getTextSize(Window& window,std::wstring str);
 		Color getColor();
 		
 		static void setFontType(std::string name,FontFace* font_face,float size,Color color);

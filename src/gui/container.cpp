@@ -1,16 +1,18 @@
 #include "container.hpp"
 
-#include "assert.hpp"
-#include "graphics.hpp"
-#include "scissor.hpp"
-#include "color.hpp"
-#include "widget.hpp"
-#include "keyevent.hpp"
-#include "mouseevent.hpp"
-#include "texture.hpp"
-#include "shared/string.hpp"
+#include "debug/assert.hpp"
 
-#include <iostream>
+#include "graphics/window.hpp"
+#include "graphics/scissor.hpp"
+#include "graphics/color.hpp"
+#include "graphics/texture.hpp"
+
+#include "events/keyevent.hpp"
+#include "events/mouseevent.hpp"
+#include "utils/string.hpp"
+
+#include <stdexcept>
+#include <sstream>
 
 #include <GL/gl.h>
 #include <SDL/SDL.h>
@@ -84,9 +86,9 @@ void Container::doMouseMove(MouseEvent event)
 		m_mouse_over->doMouseMove(event);
 }
 
-void Container::doResize(Graphics& graphics)
+void Container::doResize(Window& window)
 {
-	Widget::doResize(graphics);
+	Widget::doResize(window);
 
 	std::vector<TaggedWidget>::iterator i;
 	
@@ -94,17 +96,17 @@ void Container::doResize(Graphics& graphics)
 	{
 		Widget* widget=(*i).m_widget;
 	
-		widget->doResize(graphics);
+		widget->doResize(window);
 	}	
 }
 
-void Container::doDraw(Graphics& graphics)
+void Container::doDraw(Window& window)
 {
-	Widget::doDraw(graphics);
+	Widget::doDraw(window);
 	
 	std::vector<TaggedWidget>::iterator i;
 	
-	Scissor scissor(graphics);
+	Scissor scissor(window);
 	
 	for(i=m_widgets.begin();i!=m_widgets.end();++i)
 	{
@@ -136,23 +138,10 @@ void Container::doDraw(Graphics& graphics)
 #endif
 		scissor.set(start,widget->getSize());
 	
-		widget->doDraw(graphics);
+		widget->doDraw(window);
 	}
 	
 	scissor.reset();
-}
-
-void Container::doConnectionEvent(Connection& connection)
-{
-	Widget::doConnectionEvent(connection);
-
-	std::vector<TaggedWidget>::iterator i;
-	
-	for(i=m_widgets.begin();i!=m_widgets.end();++i)
-	{
-		Widget* widget=(*i).m_widget;
-		widget->doConnectionEvent(connection);
-	}	
 }
 
 void Container::addWidget(Widget* widget)
@@ -197,12 +186,17 @@ int Container::getWidgetCount()
 
 Widget* Container::getWidget(int index)
 {
-	if(index >= 0 && index < m_widgets.size())
-		return m_widgets[index].m_widget;
-	else
-		std::cerr << "Requested invalid widget of index " << index << "." << std::endl;
-
-	return 0;	
+	if(index < 0 && index >= m_widgets.size())
+	{
+		std::stringstream ss;
+		
+		ss << "getWidget failed: invalid index ";
+		ss << index;
+	
+		throw std::runtime_error(ss.str());
+	}
+	
+	return m_widgets[index].m_widget;
 }
 
 Container::Container():

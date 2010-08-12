@@ -13,10 +13,8 @@ class Container : public Widget
 		virtual void doMouseUp(MouseEvent event);
 		virtual void doMouseMove(MouseEvent event);
 				
-		virtual void doResize(Graphics& graphics);
-		virtual void doDraw(Graphics& graphics);
-		
-		virtual void doConnectionEvent(Connection& connection);
+		virtual void doResize(Window& window);
+		virtual void doDraw(Window& window);
 		
 		void addWidget(Widget* widget);
 		void addWidget(std::string tag,Widget* widget);

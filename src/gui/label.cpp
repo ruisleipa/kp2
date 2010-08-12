@@ -1,8 +1,8 @@
 #include "label.hpp"
 
-void Label::onDraw(Graphics& graphics)
+void Label::onDraw(Window& window)
 {
-	getFont().drawWrapped(getWideText(),getScreenPosition(),getSize());
+	getFont().drawWrapped(window,getWideText(),getScreenPosition(),getSize());
 }
 
 Label::Label()

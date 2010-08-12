@@ -1,9 +1,9 @@
 #include "image.hpp"
 
-#include "shared/string.hpp"
-#include "assert.hpp"
-#include "color.hpp"
-#include "graphics.hpp"
+#include "utils/string.hpp"
+#include "debug/assert.hpp"
+#include "graphics/color.hpp"
+#include "graphics/window.hpp"
 
 #include <GL/gl.h>
 
@@ -47,7 +47,7 @@ Color Image::getColor()
 	return m_color;
 }
 
-void Image::onDraw(Graphics& graphics)
+void Image::onDraw(Window& window)
 {
 	if(!m_texture)
 		return;
@@ -57,7 +57,7 @@ void Image::onDraw(Graphics& graphics)
 	if(!m_stretched)
 	{
 		image_size=m_texture->getSize();
-		image_size.setX(image_size.getX()/graphics.getAspectRatio());
+		image_size.setX(image_size.getX()/window.getAspectRatio());
 		
 		// ratio>1 = wide, ratio<1=tall 
 		float image_ratio=image_size.getX()/image_size.getY();

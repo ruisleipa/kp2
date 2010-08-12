@@ -3,8 +3,8 @@
 
 #include "widget.hpp"
 
-#include "texture.hpp"
-#include "color.hpp"
+#include "graphics/texture.hpp"
+#include "graphics/color.hpp"
 
 class Image : public Widget
 {
@@ -21,7 +21,7 @@ class Image : public Widget
 		void setColor(Color color);
 		Color getColor();		
 		
-		virtual void onDraw(Graphics& graphics);
+		virtual void onDraw(Window& window);
 		
 		Image();
 		

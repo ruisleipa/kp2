@@ -1,52 +1,52 @@
 #include "font.hpp"
 
-#include "assert.hpp"
+#include "debug/assert.hpp"
 
 std::map<std::string,Font::FontType> Font::m_font_types;
 
-void Font::draw(std::wstring str,Vector2D pos)
+void Font::draw(Window& window,std::wstring str,Vector2D pos)
 {
 	if(!m_font_type)
 		return;
 		
 	m_font_type->m_color.apply();
-	m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
+	m_font_type->m_font_face->draw(window,str,pos,m_font_type->m_size);
 }
 
-void Font::draw(std::wstring str,Vector2D pos,Color color)
+void Font::draw(Window& window,std::wstring str,Vector2D pos,Color color)
 {
 	if(!m_font_type)
 		return;
 		
 	color.apply();
-	m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
+	m_font_type->m_font_face->draw(window,str,pos,m_font_type->m_size);
 }
 
-void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size)
+void Font::drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D size)
 {
 	if(!m_font_type)
 		return;
 		
 	m_font_type->m_color.apply();
 	//m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
-	m_font_type->m_font_face->drawWrapped(str,pos,size,m_font_type->m_size);
+	m_font_type->m_font_face->drawWrapped(window,str,pos,size,m_font_type->m_size);
 }
 
-void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,Color color)
+void Font::drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D size,Color color)
 {
 	if(!m_font_type)
 		return;
 		
 	color.apply();
-	m_font_type->m_font_face->drawWrapped(str,pos,size,m_font_type->m_size);
+	m_font_type->m_font_face->drawWrapped(window,str,pos,size,m_font_type->m_size);
 }
 
-Vector2D Font::getTextSize(std::wstring str)
+Vector2D Font::getTextSize(Window& window,std::wstring str)
 {
 	if(!m_font_type)
 		return Vector2D(0,0);
 	
-	return m_font_type->m_font_face->getTextSize(str,m_font_type->m_size);
+	return m_font_type->m_font_face->getTextSize(window,str,m_font_type->m_size);
 }
 
 Color Font::getColor()

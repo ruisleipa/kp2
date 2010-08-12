@@ -1,8 +1,8 @@
 #include "select.hpp"
 
-#include "shared/string.hpp"
-#include "assert.hpp"
-#include "scissor.hpp"
+#include "utils/string.hpp"
+#include "debug/assert.hpp"
+#include "graphics/scissor.hpp"
 
 void Select::onMouseDown(MouseEvent event)
 {

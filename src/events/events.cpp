@@ -41,7 +41,7 @@ void Events::processEvents()
 		{
 			SDL_keysym& keysym = sdl_event.key.keysym;
 		
-			KeyEvent event(keysym.unicode, keysym.sym);
+			KeyEvent event(window, keysym.unicode, keysym.sym);
 			
 			m_event_listener->doKeyDown(event);
 		}
@@ -49,7 +49,7 @@ void Events::processEvents()
 		{
 			SDL_keysym& keysym = sdl_event.key.keysym;
 		
-			KeyEvent event(keysym.unicode, keysym.sym);
+			KeyEvent event(window, keysym.unicode, keysym.sym);
 			
 			m_event_listener->doKeyUp(event);
 		}
@@ -59,7 +59,7 @@ void Events::processEvents()
 			Vector2D pos=Vector2D(button.x, button.y);
 			pos/=window.getSize();
 							
-			MouseEvent event(pos, 1 << (button.button-1));
+			MouseEvent event(window, pos, 1 << (button.button-1));
 			
 			m_event_listener->doMouseDown(event);
 		}
@@ -69,7 +69,7 @@ void Events::processEvents()
 			Vector2D pos=Vector2D(button.x, button.y);
 			pos/=window.getSize();
 									
-			MouseEvent event(pos, 1 << (button.button-1));
+			MouseEvent event(window, pos, 1 << (button.button-1));
 			
 			m_event_listener->doMouseUp(event);
 		}
@@ -79,7 +79,7 @@ void Events::processEvents()
 			Vector2D pos=Vector2D(motion.x, motion.y);
 			pos/=window.getSize();
 					
-			MouseEvent event(pos, motion.state);
+			MouseEvent event(window, pos, motion.state);
 			
 			m_event_listener->doMouseMove(event);
 		}

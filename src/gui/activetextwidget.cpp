@@ -1,6 +1,6 @@
 #include "activetextwidget.hpp"
 
-#include "scissor.hpp"
+#include "graphics/scissor.hpp"
 
 Sound ActiveTextWidget::m_mouse_over_sound;
 Sound ActiveTextWidget::m_mouse_down_sound;
@@ -48,13 +48,13 @@ static float lerp(float a,float b,float ratio)
 	return a+(b-a)*ratio;
 }
 
-void ActiveTextWidget::onDraw(Graphics& graphics)
+void ActiveTextWidget::onDraw(Window& window)
 {
 	Vector2D position=getScreenPosition();
 	
 	float spread=m_mouse_over_timer.getSeconds()*10.0;
 	
-	Vector2D pixelsize=Vector2D(1,1)/graphics.getDisplaySize();
+	Vector2D pixelsize=Vector2D(1,1)/window.getSize();
 	
 	if(spread>1.0)
 	{
@@ -68,7 +68,7 @@ void ActiveTextWidget::onDraw(Graphics& graphics)
 	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(0,1));
 	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(0,1));
 	
-	Scissor scissor(graphics);
+	Scissor scissor(window);
 	
 	if(m_animate)
 	{

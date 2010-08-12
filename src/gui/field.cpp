@@ -1,8 +1,8 @@
 #include "field.hpp"
 
-#include "scissor.hpp"
+#include "graphics/scissor.hpp"
 
-void Field::onDraw(Graphics& graphics)
+void Field::onDraw(Window& window)
 {				
 	float cursorpos=getFont().getTextSize(getWideText().substr(0,m_cursorpos)).getX();
 		
@@ -23,7 +23,7 @@ void Field::onDraw(Graphics& graphics)
 	Vector2D begin=getScreenPosition();
 	Vector2D end=begin+getSize();
 	
-	Scissor scissor(graphics);
+	Scissor scissor(window);
 	scissor.reset();
 	
 	

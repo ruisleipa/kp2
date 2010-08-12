@@ -2,16 +2,23 @@
 
 uint16_t KeyEvent::getUnicode()
 {
-	return m_unicode;
+	return unicode;
 }
 
 SDLKey KeyEvent::getKey()
 {
-	return m_key;
+	return key;
 }
 
-KeyEvent::KeyEvent(uint16_t unicode,SDLKey key)
+Window& KeyEvent::getWindow()
 {
-	m_unicode=unicode;
-	m_key=key;
+	return window;
+}
+
+KeyEvent::KeyEvent(Window& window,uint16_t unicode,SDLKey key):
+	window(window),
+	unicode(unicode),
+	key(key)
+{
+
 }

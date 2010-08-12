@@ -2,12 +2,13 @@
 #define FIELD_HPP
 
 #include "textwidget.hpp"
-#include "timer.hpp"
+
+#include "utils/timer.hpp"
 
 class Field : public TextWidget
 {
 	public:
-		virtual void onDraw(Graphics& graphics);
+		virtual void onDraw(Window& window);
 		virtual void onKeyDown(KeyEvent event);
 		
 		virtual void onFocus();

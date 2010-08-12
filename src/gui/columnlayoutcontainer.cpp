@@ -2,7 +2,7 @@
 
 #include "ui.hpp"
 
-void ColumnLayoutContainer::onDraw(Graphics& graphics)
+void ColumnLayoutContainer::onDraw(Window& window)
 {
 	int visible_widgets=0;
 

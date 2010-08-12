@@ -1,11 +1,12 @@
 #ifndef WIDGET_HPP
 #define WIDGET_HPP
 
-#include "eventlistener.hpp"
-#include "vector2d.hpp"
-#include "keyevent.hpp"
-#include "mouseevent.hpp"
-#include "graphics.hpp"
+#include "graphics/vector2d.hpp"
+#include "graphics/window.hpp"
+
+#include "events/eventlistener.hpp"
+#include "events/keyevent.hpp"
+#include "events/mouseevent.hpp"
 
 class Widget: public EventListener
 {
@@ -31,7 +32,7 @@ class Widget: public EventListener
 		virtual void doMouseUp(MouseEvent event);
 		virtual void doMouseMove(MouseEvent event);	
 		
-		virtual void doResize(Graphics& graphics);		
+		virtual void doResize(Window& window);		
 		
 		virtual void doMouseOn();
 		virtual void doMouseOut();		
@@ -39,13 +40,10 @@ class Widget: public EventListener
 		virtual void doBlur();
 		virtual void doFocus();	
 		
-		virtual void doDraw(Graphics& graphics);		
+		virtual void doDraw(Window& window);		
 		
 		virtual void doShow();
 		virtual void doHide();
-		
-		virtual void doConnectionEvent(Connection& connection);
-		
 		
 		Widget* getParent();
 		
@@ -68,7 +66,7 @@ class Widget: public EventListener
 		virtual void onMouseUp(MouseEvent event);
 		virtual void onMouseMove(MouseEvent event);
 	
-		virtual void onResize(Graphics& graphics);
+		virtual void onResize(Window& window);
 		
 		virtual void onMouseOn();
 		virtual void onMouseOut();	
@@ -76,12 +74,10 @@ class Widget: public EventListener
 		virtual void onBlur();
 		virtual void onFocus();	
 		
-		virtual void onDraw(Graphics& graphics);
+		virtual void onDraw(Window& window);
 		
 		virtual void onShow();
 		virtual void onHide();
-		
-		virtual void onConnectionEvent(Connection& connection);
 	
 	private:
 		Vector2D m_position;

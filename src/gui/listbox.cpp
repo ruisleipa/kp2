@@ -1,8 +1,8 @@
 #include "listbox.hpp"
 
-#include "shared/string.hpp"
-#include "assert.hpp"
-#include "scissor.hpp"
+#include "utils/string.hpp"
+#include "debug/assert.hpp"
+#include "graphics/scissor.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -25,7 +25,7 @@ static float sign(float value)
 		return 0.0;
 }
 
-void Listbox::onDraw(Graphics& graphics)
+void Listbox::onDraw(Window& window)
 {
 	/*
 	Update the list position.
@@ -47,7 +47,7 @@ void Listbox::onDraw(Graphics& graphics)
 		m_scroll_pending=0;
 	}	
 	
-	float min_offset=(getFont().getTextSize(L"")*m_items.size()).getY();
+	float min_offset=(getFont().getTextSize(window,L"")*m_items.size()).getY();
 	
 	min_offset-=getSize().getY();
 	
@@ -66,7 +66,7 @@ void Listbox::onDraw(Graphics& graphics)
 	Vector2D begin=getScreenPosition();
 	Vector2D end=begin+getSize();
 		
-	Scissor scissor(graphics);
+	Scissor scissor(window);
 	
 	/*
 	Draw list.
@@ -94,8 +94,8 @@ void Listbox::onDraw(Graphics& graphics)
 			Texture().bind();
 			Color(1,1,1).apply();
 			
-			Vector2D textbegin=listbegin+getFont().getTextSize(L"")*i;
-			Vector2D textend=textbegin+getFont().getTextSize(L"")+getSize()*Vector2D(1,0)-Vector2D(BAR_WIDTH,0);			
+			Vector2D textbegin=listbegin+getFont().getTextSize(window,L"")*i;
+			Vector2D textend=textbegin+getFont().getTextSize(window,L"")+getSize()*Vector2D(1,0)-Vector2D(BAR_WIDTH,0);			
 						
 			glBegin(GL_QUADS);
 			
@@ -111,7 +111,7 @@ void Listbox::onDraw(Graphics& graphics)
 			Color(1,1,1).apply();
 		}		
 	
-		getFont().draw(m_items[i].m_string,listbegin+getFont().getTextSize(L"")*i);
+		getFont().draw(window,m_items[i].m_string,listbegin+getFont().getTextSize(window,L"")*i);
 	}
 	
 	scissor.reset();
@@ -120,11 +120,11 @@ void Listbox::onDraw(Graphics& graphics)
 	Draw the thumb.
 	*/
 	float thumb_lenght=getSize().getY();
-	thumb_lenght /= (getFont().getTextSize(L"")*m_items.size()).getY();
+	thumb_lenght /= (getFont().getTextSize(window,L"")*m_items.size()).getY();
 	thumb_lenght = std::min(1.0f,thumb_lenght);
 	thumb_lenght *= getSize().getY()-m_button_height-m_button_height;
 	float thumb_pos=-m_scroll_offset;
-	thumb_pos /= (getFont().getTextSize(L"")*m_items.size()).getY();
+	thumb_pos /= (getFont().getTextSize(window,L"")*m_items.size()).getY();
 	thumb_pos *= getSize().getY()-m_button_height-m_button_height;
 	
 	Texture().bind();
@@ -174,9 +174,9 @@ void Listbox::onDraw(Graphics& graphics)
 	m_arrow_down.draw(Vector2D(end.getX()-BAR_WIDTH,end.getY()-m_button_height),Vector2D(BAR_WIDTH,m_button_height));	
 }
 
-void Listbox::onResize(Graphics& graphics)
+void Listbox::onResize(Window& window)
 {
-	m_button_height=BAR_WIDTH*graphics.getAspectRatio();
+	m_button_height=BAR_WIDTH*window.getAspectRatio();
 }
 
 void Listbox::onMouseDown(MouseEvent event)
@@ -207,7 +207,7 @@ void Listbox::onMouseDown(MouseEvent event)
 	{
 		float y=inner.getY()-m_scroll_offset;
 		
-		setIndex(y/getFont().getTextSize(L"").getY());
+		setIndex(y/getFont().getTextSize(event.getWindow(),L"").getY());
 	}
 	else
 	{	

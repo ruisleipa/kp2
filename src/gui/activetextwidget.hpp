@@ -1,11 +1,12 @@
 #ifndef ACTIVETEXTWIDGET_HPP
 #define ACTIVETEXTWIDGET_HPP
 
+#include "utils/timer.hpp"
+
+#include "sounds/sound.hpp"
+
 #include "textwidget.hpp"
 #include "font.hpp"
-#include "timer.hpp"
-
-#include "sound.hpp"
 
 class ActiveTextWidget : public TextWidget
 {
@@ -17,7 +18,7 @@ class ActiveTextWidget : public TextWidget
 		virtual void onMouseOut();		
 		virtual void onMouseDown(MouseEvent);
 		
-		virtual void onDraw(Graphics& graphics);
+		virtual void onDraw(Window& window);
 		
 		virtual void autoSize();
 		

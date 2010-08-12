@@ -6,7 +6,7 @@
 class ColumnLayoutContainer : public Container
 {
 	public:
-		virtual void onDraw(Graphics& graphics);
+		virtual void onDraw(Window& window);
 	
 	private:
 

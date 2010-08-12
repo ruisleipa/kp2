@@ -1,6 +1,7 @@
 #ifndef KEYEVENT_HPP
 #define KEYEVENT_HPP
 
+#include <graphics/window.hpp>
 #include <SDL/SDL.h>
 #include <stdint.h>
 
@@ -9,12 +10,14 @@ class KeyEvent
 	public:
 		uint16_t getUnicode();
 		SDLKey getKey();
+		Window& getWindow();
 		
-		KeyEvent(uint16_t unicode,SDLKey key);
+		KeyEvent(Window& window,uint16_t unicode,SDLKey key);
 		
 	private:
-		uint16_t m_unicode;
-		SDLKey m_key;
+		Window& window;
+		uint16_t unicode;
+		SDLKey key;
 		
 };
 

@@ -1,12 +1,5 @@
 #include "widget.hpp"
 
-#include <iostream>
-#include <cmath>
-#include "keyevent.hpp"
-#include "mouseevent.hpp"
-
-#include "container.hpp"
-
 void Widget::doKeyDown(KeyEvent event)
 {
 	onKeyDown(event);
@@ -72,11 +65,6 @@ void Widget::doHide()
 	onHide();
 }
 
-void Widget::doConnectionEvent(Connection& connection)
-{
-	onConnectionEvent(connection);
-}
-
 void Widget::onKeyDown(KeyEvent event)
 {
 	
@@ -138,11 +126,6 @@ void Widget::onShow()
 }
 
 void Widget::onHide()
-{
-
-}
-
-void Widget::onConnectionEvent(Connection& connection)
 {
 
 }
@@ -215,28 +198,3 @@ void Widget::setParent(Widget* view)
 {
 	m_parent=view;
 }
-
-Widget* Widget::getRootWidget(const std::string& tag)
-{
-	Container* container=(Container*)getParent();
-	
-	if(container == 0)
-	{
-		std::cerr<<"Trying to get root widget \""<<tag<<"\" on a non-child widget."<<std::endl;
-	}
-	
-	while(container->getParent())
-	{
-		container=(Container*)container->getParent();
-	}
-	
-	Widget* widget=container->getWidget(tag);
-	
-	if(widget == 0)
-	{
-		std::cerr<<"Cannot find root widget \""<<tag<<"\". Will crash."<<std::endl;
-	}
-	
-	return widget;
-}
-
