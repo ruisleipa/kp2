@@ -101,7 +101,7 @@ void Image::onDraw(Window& window)
 	
 	m_color.apply();
 	
-	m_texture->draw(getScreenPosition(),image_size);
+	m_texture->draw(getAbsolutePosition(),image_size);
 }
 
 Image::Image():

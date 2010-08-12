@@ -50,7 +50,7 @@ static float lerp(float a,float b,float ratio)
 
 void ActiveTextWidget::onDraw(Window& window)
 {
-	Vector2D position=getScreenPosition();
+	Vector2D position=getAbsolutePosition();
 	
 	float spread=m_mouse_over_timer.getSeconds()*10.0;
 	
@@ -63,10 +63,10 @@ void ActiveTextWidget::onDraw(Window& window)
 		
 	position+=pixelsize;	
 		
-	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(1,0));	
-	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(1,0));
-	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(0,1));
-	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(0,1));
+	m_border_font.draw(window,getWideText(),position-pixelsize*Vector2D(1,0));	
+	m_border_font.draw(window,getWideText(),position+pixelsize*Vector2D(1,0));
+	m_border_font.draw(window,getWideText(),position-pixelsize*Vector2D(0,1));
+	m_border_font.draw(window,getWideText(),position+pixelsize*Vector2D(0,1));
 	
 	Scissor scissor(window);
 	
@@ -84,17 +84,17 @@ void ActiveTextWidget::onDraw(Window& window)
 		col.setBlue(lerp(acol.getBlue(),bcol.getBlue(),spread));
 		col.setAlpha(lerp(acol.getAlpha(),bcol.getAlpha(),spread));
 
-		getActiveFont().draw(getWideText(),position,col);
+		getActiveFont().draw(window,getWideText(),position,col);
 	}
 	else
 	{
 		if(!m_mouse_over)
 		{
-			getFont().draw(getWideText(),position);
+			getFont().draw(window,getWideText(),position);
 		}
 		else
 		{
-			getActiveFont().draw(getWideText(),position);
+			getActiveFont().draw(window,getWideText(),position);
 		}
 	}
 }

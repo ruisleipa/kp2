@@ -16,32 +16,35 @@ class Container : public Widget
 		virtual void doResize(Window& window);
 		virtual void doDraw(Window& window);
 		
-		void addWidget(Widget* widget);
-		void addWidget(std::string tag,Widget* widget);
+		void addChild(Widget* child);
+		void addChild(std::string tag,Widget* child);
 		
-		Widget* getWidget(std::string tag);
+		Widget* getChild(std::string tag);
 		
 		Container();
-		Container(const Container&);
 		
 	protected:
-		int getWidgetCount();
-		Widget* getWidget(int index);
+		int getChildCount();
+		Widget* getChild(int index);
+		
+		virtual void setWindow(Window* window);
 	
 	private:
+		void propagateWindowPointer();
+	
 		Widget* findWidgetUnderPoint(Vector2D point);
 
-		Widget* m_focused;
-		Widget* m_mouse_over;
+		Widget* focusedChild;
+		Widget* mouseOverChild;
 
 		class TaggedWidget
 		{
 			public:
-				std::string m_tag;
-				Widget* m_widget;
+				std::string tag;
+				Widget* widget;
 		};
 
-		std::vector<TaggedWidget> m_widgets;
+		std::vector<TaggedWidget> children;
 };
 
 #endif // CONTAINER_HPP

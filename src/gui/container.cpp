@@ -21,16 +21,16 @@ void Container::doKeyDown(KeyEvent event)
 {
 	Widget::doKeyDown(event);
 
-	if(m_focused)
-		m_focused->doKeyDown(event);
+	if(focusedChild)
+		focusedChild->doKeyDown(event);
 }
 
 void Container::doKeyUp(KeyEvent event)
 {
 	Widget::doKeyUp(event);
 
-	if(m_focused)
-		m_focused->doKeyUp(event);
+	if(focusedChild)
+		focusedChild->doKeyUp(event);
 }
 
 void Container::doMouseDown(MouseEvent event)
@@ -39,15 +39,15 @@ void Container::doMouseDown(MouseEvent event)
 
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 	
-	if(widget != m_focused)
+	if(widget != focusedChild)
 	{
-		if(m_focused)
-			m_focused->doBlur();
+		if(focusedChild)
+			focusedChild->doBlur();
 	
-		m_focused=widget;
+		focusedChild=widget;
 		
-		if(m_focused)
-			m_focused->doFocus();
+		if(focusedChild)
+			focusedChild->doFocus();
 	}
 	
 	if(widget)
@@ -71,19 +71,19 @@ void Container::doMouseMove(MouseEvent event)
 	
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 	
-	if(widget != m_mouse_over)
+	if(widget != mouseOverChild)
 	{
-		if(m_mouse_over)
-			m_mouse_over->doMouseOut();
+		if(mouseOverChild)
+			mouseOverChild->doMouseOut();
 	
-		m_mouse_over=widget;
+		mouseOverChild=widget;
 		
-		if(m_mouse_over)
-			m_mouse_over->doMouseOn();
+		if(mouseOverChild)
+			mouseOverChild->doMouseOn();
 	}
 	
-	if(m_mouse_over)
-		m_mouse_over->doMouseMove(event);
+	if(mouseOverChild)
+		mouseOverChild->doMouseMove(event);
 }
 
 void Container::doResize(Window& window)
@@ -92,9 +92,9 @@ void Container::doResize(Window& window)
 
 	std::vector<TaggedWidget>::iterator i;
 	
-	for(i=m_widgets.begin();i!=m_widgets.end();++i)
+	for(i=children.begin();i!=children.end();++i)
 	{
-		Widget* widget=(*i).m_widget;
+		Widget* widget=(*i).widget;
 	
 		widget->doResize(window);
 	}	
@@ -108,14 +108,14 @@ void Container::doDraw(Window& window)
 	
 	Scissor scissor(window);
 	
-	for(i=m_widgets.begin();i!=m_widgets.end();++i)
+	for(i=children.begin();i!=children.end();++i)
 	{
-		Widget* widget=(*i).m_widget;
+		Widget* widget=(*i).widget;
 	
 		if(!widget->getVisible())
 			continue;
 	
-		Vector2D start=getScreenPosition()+widget->getPosition();
+		Vector2D start=getAbsolutePosition()+widget->getPosition();
 #if 0
 		scissor.reset();
 	
@@ -124,7 +124,7 @@ void Container::doDraw(Window& window)
 	
 		Texture().bind();
 		
-		if(widget==m_focused)		
+		if(widget==focusedChild)		
 			Color(1,0,0,1).apply();
 		else
 			Color(0,1,0,1).apply();
@@ -144,49 +144,50 @@ void Container::doDraw(Window& window)
 	scissor.reset();
 }
 
-void Container::addWidget(Widget* widget)
+void Container::addChild(Widget* child)
 {
-	if(widget)
+	if(child)
 	{
-		addWidget(convertToString(widget),widget);
+		addChild(convertToString(child),child);
 	}
 }
 
-void Container::addWidget(std::string tag,Widget* widget)
+void Container::addChild(std::string tag,Widget* child)
 {
-	if(widget)
+	if(child)
 	{
-		TaggedWidget tagged_widget;
+		TaggedWidget taggedWidget;
 		
-		tagged_widget.m_tag=tag;
-		tagged_widget.m_widget=widget;		
+		taggedWidget.tag=tag;
+		taggedWidget.widget=child;		
 	
-		m_widgets.push_back(tagged_widget);
-		widget->setParent(this);
+		children.push_back(taggedWidget);
+		
+		child->setParent(this);
 	}
 }
 
-Widget* Container::getWidget(std::string tag)
+Widget* Container::getChild(std::string tag)
 {
 	std::vector<TaggedWidget>::iterator i;
 	
-	for(i=m_widgets.begin();i!=m_widgets.end();++i)
+	for(i=children.begin();i!=children.end();++i)
 	{
-		if(tag==(*i).m_tag)
-			return (*i).m_widget;	
+		if(tag==(*i).tag)
+			return (*i).widget;	
 	}
 
 	return 0;	
 }
 
-int Container::getWidgetCount()
+int Container::getChildCount()
 {
-	return m_widgets.size();
+	return children.size();
 }
 
-Widget* Container::getWidget(int index)
+Widget* Container::getChild(int index)
 {
-	if(index < 0 && index >= m_widgets.size())
+	if(index < 0 && index >= children.size())
 	{
 		std::stringstream ss;
 		
@@ -196,12 +197,29 @@ Widget* Container::getWidget(int index)
 		throw std::runtime_error(ss.str());
 	}
 	
-	return m_widgets[index].m_widget;
+	return children[index].widget;
+}
+
+void Container::setWindow(Window* window)
+{
+	Widget::setWindow(window);
+	
+	propagateWindowPointer();
+}
+
+void Container::propagateWindowPointer()
+{	
+	Window* window=getWindow();
+
+	for(int i=0;i<getChildCount();i++)
+	{
+		getChild(i)->setWindow(window);
+	}
 }
 
 Container::Container():
-	m_mouse_over(0),
-	m_focused(0)
+	mouseOverChild(0),
+	focusedChild(0)
 {
 
 }
@@ -210,14 +228,14 @@ Widget* Container::findWidgetUnderPoint(Vector2D point)
 {
 	std::vector<TaggedWidget>::reverse_iterator i;
 	
-	for(i=m_widgets.rbegin();i!=m_widgets.rend();++i)
+	for(i=children.rbegin();i!=children.rend();++i)
 	{
-		Widget* widget=(*i).m_widget;
+		Widget* widget=(*i).widget;
 
 		if(!widget->getVisible())
 			continue;
 	
-		Vector2D begin=getScreenPosition()+widget->getPosition();
+		Vector2D begin=getAbsolutePosition()+widget->getPosition();
 		Vector2D end=begin+widget->getSize();
 		
 		bool y=point.getY()>=begin.getY() && point.getY()<=end.getY();

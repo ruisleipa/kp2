@@ -25,9 +25,9 @@ void Widget::doMouseMove(MouseEvent event)
 	onMouseMove(event);
 }
 
-void Widget::doResize(Graphics& graphics)
+void Widget::doResize(Window& window)
 {
-	onResize(graphics);
+	onResize(window);
 }
 
 void Widget::doMouseOn()
@@ -50,9 +50,9 @@ void Widget::doFocus()
 	onFocus();
 }
 	
-void Widget::doDraw(Graphics& graphics)
+void Widget::doDraw(Window& window)
 {
-	onDraw(graphics);
+	onDraw(window);
 }
 
 void Widget::doShow()
@@ -90,7 +90,7 @@ void Widget::onMouseMove(MouseEvent event)
 
 }
 
-void Widget::onResize(Graphics& graphics)
+void Widget::onResize(Window& window)
 {
 
 }
@@ -115,7 +115,7 @@ void Widget::onFocus()
 
 }
 	
-void Widget::onDraw(Graphics& graphics)
+void Widget::onDraw(Window& window)
 {
 
 }
@@ -132,41 +132,41 @@ void Widget::onHide()
 
 void Widget::setPosition(Vector2D position)
 {
-	m_position=position;
+	this->position=position;
 }	
 
 Vector2D Widget::getPosition()
 {
-	return m_position;
+	return position;
 }
 
-Vector2D Widget::getScreenPosition()
+Vector2D Widget::getAbsolutePosition()
 {
 	Vector2D position;
 
 	if(getParent())
 	{
-		position+=getParent()->getScreenPosition();
+		position+=getParent()->getAbsolutePosition();
 	}
 	
-	return position+m_position;
+	return position+position;
 }
 
 void Widget::setSize(Vector2D size)
 {
-	m_size=size;
+	this->size=size;
 }	
 
 Vector2D Widget::getSize()
 {
-	return m_size;
+	return size;
 }
 
 void Widget::setVisible(bool visible)
 {
-	m_visible=visible;
+	this->visible=visible;
 	
-	if(visible)
+	if(this->visible)
 		onShow();
 	else
 		onHide();
@@ -174,12 +174,13 @@ void Widget::setVisible(bool visible)
 
 bool Widget::getVisible()
 {
-	return m_visible;
+	return visible;
 }
 
 Widget::Widget():
-	m_parent(0),
-	m_visible(true)
+	visible(true),
+	parent(0),
+	window(0)
 {
 
 }
@@ -189,12 +190,22 @@ Widget::~Widget()
 
 }
 
-Widget* Widget::getParent()
+Container* Widget::getParent()
 {
-	return m_parent;
+	return parent;
 }
 
-void Widget::setParent(Widget* view)
+void Widget::setParent(Container* parent)
 {
-	m_parent=view;
+	this->parent=parent;
+}
+
+Window* Widget::getWindow()
+{
+	return window;
+}
+
+void Widget::setWindow(Window* window)
+{
+	this->window = window;
 }

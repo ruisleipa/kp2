@@ -1,52 +1,52 @@
 #include "columnlayoutcontainer.hpp"
 
-#include "ui.hpp"
+const float PADDING=0.01;
 
 void ColumnLayoutContainer::onDraw(Window& window)
 {
-	int visible_widgets=0;
+	int visibleChildrenCount=0;
 
-	for(int i=0;i<getWidgetCount();i++)
+	for(int i=0;i<getChildCount();i++)
 	{
-		Widget* widget=getWidget(i);
+		Widget* child=getChild(i);
 		
-		if(!widget)
+		if(!child)
 			continue;
 			
-		if(widget->getVisible())
+		if(child->getVisible())
 		{
-			visible_widgets++;
+			visibleChildrenCount++;
 		}
 	}
 	
-	if(visible_widgets == 0)
+	if(visibleChildrenCount == 0)
 	{
 		return;
 	}
 	
-	Vector2D widgetsize;
-	widgetsize.setX(getSize().getX()/visible_widgets-PADDING*(visible_widgets+1)/visible_widgets);
-	widgetsize.setY(getSize().getY()-PADDING*2);
+	Vector2D childSize;
+	childSize.setX(getSize().getX()/visibleChildrenCount-PADDING*(visibleChildrenCount+1)/visibleChildrenCount);
+	childSize.setY(getSize().getY()-PADDING*2);
 	
-	int visible_index=0;
+	int visibleChildrenIndex=0;
 	
-	for(int i=0;i<getWidgetCount();i++)
+	for(int i=0;i<getChildCount();i++)
 	{
-		Widget* widget=getWidget(i);
+		Widget* child=getChild(i);
 		
-		if(!widget)
+		if(!child)
 			continue;
 	
-		if(widget->getVisible())
+		if(child->getVisible())
 		{
 			Vector2D pos;
 			pos.setY(PADDING);
-			pos.setX(PADDING*(visible_index+1)+widgetsize.getX()*visible_index);	
+			pos.setX(PADDING*(visibleChildrenIndex+1)+childSize.getX()*visibleChildrenIndex);	
 			
-			widget->setPosition(pos);
-			widget->setSize(widgetsize);
+			child->setPosition(pos);
+			child->setSize(childSize);
 			
-			visible_index++;
+			visibleChildrenIndex++;
 		}
 	}	
 }

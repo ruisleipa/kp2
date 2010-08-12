@@ -8,12 +8,17 @@
 #include "events/keyevent.hpp"
 #include "events/mouseevent.hpp"
 
-class Widget: public EventListener
+#include "utils/noncopyable.hpp"
+
+class Container;
+
+class Widget: public EventListener, public NonCopyable
 {
 	public:
 		void setPosition(Vector2D position);	
 		Vector2D getPosition();
-		Vector2D getScreenPosition();
+		
+		Vector2D getAbsolutePosition();
 		
 		void setSize(Vector2D size);	
 		Vector2D getSize();
@@ -45,15 +50,16 @@ class Widget: public EventListener
 		virtual void doShow();
 		virtual void doHide();
 		
-		Widget* getParent();
+		Container* getParent();
 		
 		Widget();
 		virtual ~Widget();
 	
 	protected:		
-		void setParent(Widget* view);
+		void setParent(Container* container);
 		
-		Widget* getRootWidget(const std::string& tag);
+		Window* getWindow();
+		virtual void setWindow(Window* window);
 		
 		/*
 		These are the functions that implement object specific handler
@@ -80,14 +86,17 @@ class Widget: public EventListener
 		virtual void onHide();
 	
 	private:
-		Vector2D m_position;
-		Vector2D m_size;
-
-		Widget* m_parent;
+		Vector2D position;
+		Vector2D size;
 		
-		bool m_visible;
+		bool visible;
+		
+		Container* parent;
+		Window* window;		
 		
 		friend class Container;
 };
+
+#include "container.hpp"
 
 #endif // WIDGET_HPP

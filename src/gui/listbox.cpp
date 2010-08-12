@@ -63,7 +63,7 @@ void Listbox::onDraw(Window& window)
 	/*
 	Draw
 	*/
-	Vector2D begin=getScreenPosition();
+	Vector2D begin=getAbsolutePosition();
 	Vector2D end=begin+getSize();
 		
 	Scissor scissor(window);
@@ -85,7 +85,7 @@ void Listbox::onDraw(Window& window)
 	
 	scissor.set(begin+Vector2D(0.001,0.001),getSize()-Vector2D(0.001,0.001)-Vector2D(BAR_WIDTH,0));
 	
-	Vector2D listbegin=Vector2D(0,m_scroll_offset)+getScreenPosition();
+	Vector2D listbegin=Vector2D(0,m_scroll_offset)+getAbsolutePosition();
 	
 	for(int i=0;i<m_items.size();++i)
 	{
@@ -201,7 +201,7 @@ void Listbox::onMouseDown(MouseEvent event)
 		return;
 	}
 	
-	Vector2D inner=event.getPosition()-getScreenPosition();
+	Vector2D inner=event.getPosition()-getAbsolutePosition();
 	
 	if(inner.getX() < getSize().getX() - BAR_WIDTH)
 	{
