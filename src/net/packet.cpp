@@ -16,6 +16,8 @@ const Packet& Packet::operator<<(uint16_t value)
 	uint16_t v=htons(value);
 
 	m_payload.write((char*)&v,sizeof(v));
+	
+	return *this;
 }
 
 const Packet& Packet::operator<<(uint32_t value)
@@ -23,6 +25,8 @@ const Packet& Packet::operator<<(uint32_t value)
 	uint32_t v=htonl(value);
 
 	m_payload.write((char*)&v,sizeof(v));
+	
+	return *this;
 }
 
 const Packet& Packet::operator<<(int16_t value)
@@ -30,6 +34,8 @@ const Packet& Packet::operator<<(int16_t value)
 	int16_t v=htons(value);
 
 	m_payload.write((char*)&v,sizeof(v));
+	
+	return *this;
 }
 
 const Packet& Packet::operator<<(int32_t value)
@@ -37,6 +43,8 @@ const Packet& Packet::operator<<(int32_t value)
 	int32_t v=htonl(value);
 
 	m_payload.write((char*)&v,sizeof(v));
+	
+	return *this;
 }
 
 const Packet& Packet::operator<<(float value)
@@ -49,12 +57,16 @@ const Packet& Packet::operator<<(float value)
 	
 	operator<<(whole);
 	operator<<(fract);
+	
+	return *this;
 }
 
 const Packet& Packet::operator<<(const std::string& value)
 {
 	m_payload<<value;
 	m_payload.put(0);
+	
+	return *this;
 }
 
 const Packet& Packet::operator>>(uint16_t& value)
@@ -65,6 +77,8 @@ const Packet& Packet::operator>>(uint16_t& value)
 		throw EndOfDataException();
 	
 	value=ntohs(value);
+	
+	return *this;
 }
 
 const Packet& Packet::operator>>(uint32_t& value)
@@ -75,6 +89,8 @@ const Packet& Packet::operator>>(uint32_t& value)
 		throw EndOfDataException();
 	
 	value=ntohl(value);
+	
+	return *this;
 }
 
 const Packet& Packet::operator>>(int16_t& value)
@@ -85,6 +101,8 @@ const Packet& Packet::operator>>(int16_t& value)
 		throw EndOfDataException();
 	
 	value=ntohs(value);
+	
+	return *this;
 }
 
 const Packet& Packet::operator>>(int32_t& value)
@@ -95,6 +113,8 @@ const Packet& Packet::operator>>(int32_t& value)
 		throw EndOfDataException();
 	
 	value=ntohl(value);
+	
+	return *this;
 }
 
 const Packet& Packet::operator>>(float& value)
@@ -107,6 +127,8 @@ const Packet& Packet::operator>>(float& value)
 	
 	//FIXME: error with negative numbers
 	value=float(whole)+float(fract)/1000000000.0;	
+	
+	return *this;
 }
 
 const Packet& Packet::operator>>(std::string& value)
@@ -115,6 +137,8 @@ const Packet& Packet::operator>>(std::string& value)
 		
 	if(m_payload.eof())
 		throw EndOfDataException();
+	
+	return *this;
 }
 
 std::string Packet::getString() const
