@@ -13,6 +13,8 @@
 #include "vector2d.hpp"
 #include "texturecollection.hpp"
 
+#include "utils/noncopyable.hpp"
+
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 
 #define RMASK   0xff000000
@@ -33,13 +35,9 @@
 
 enum TextureFilter {NEAREST,LINEAR,TRILINEAR};
 
-class Texture
+class Texture: public NonCopyable
 {
-	public:
-		int load(const std::string& filename);
-		int loadSurface(SDL_Surface* surface);
-		int loadSurface(SDL_Surface* surface,const std::string& tag);
-		
+	public:		
 		void bind();
 		
 		void draw(Vector2D position,Vector2D size);
@@ -50,52 +48,35 @@ class Texture
 		void setFilter(TextureFilter filter);
 		TextureFilter getFilter();
 		
-		static void setFilterLimit(TextureFilter filter);
-		static TextureFilter getFilterLimit();
-				
-		int isEmpty();
+		void reuploadTexture();
 		
 		Vector2D getSize();
 		
 		Texture();
 		Texture(const std::string& filename);
-		Texture(const Texture&);
-		Texture& operator=(const Texture&);
+		Texture(SDL_Surface* surface);
 		~Texture();
 
 	private:
-		int createTexture();
-		void deleteTexture();
+		void loadFromFile(const std::string& filename);
+		void loadFromSurface(SDL_Surface* surface);
+		void freeTextureData();
 		
-		int printInfo();		
+		void createTexture();		
+		void deleteTexture();
 	
 		void init();
-		void copy(const Texture&);
 
-		SDL_Surface* downScale(SDL_Surface* surface,int factor);
+		SDL_Surface* downScale(int factor);			
 
-		std::string m_tag;
-
-		//General stuff
-		void free();	
-		void freeSurface();	
-
-		TextureFilter m_filter;
-
-		SDL_Surface* m_surface;
-
-		GLuint m_texture;
-
-		int m_image_width;
-		int m_image_height;
-		int m_texture_width;
-		int m_texture_height;
-				
-		static TextureFilter m_filter_limit;
+		TextureFilter filter;
+		GLuint texture;
+		SDL_Surface* textureData;
+		int imageWidth;
+		int imageHeight;
+		int textureWidth;
+		int textureHeight;
 		
-		void reuploadTexture();
-		
-		TextureCollection* textures;
 };
 
 #endif // TEXTURE_HPP

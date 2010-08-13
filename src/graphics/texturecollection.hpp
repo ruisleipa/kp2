@@ -1,8 +1,9 @@
 #ifndef TEXTURECOLLECTION_HPP
 #define TEXTURECOLLECTION_HPP
 
-#include "texture.hpp"
 #include <set>
+
+class Texture;
 
 class TextureCollection
 {
@@ -11,8 +12,6 @@ class TextureCollection
 		void remove(Texture& texture);
 	
 		void reuploadTextures();	
-				
-		Texture();
 
 	private:
 		std::set<Texture*> textures;

@@ -1,21 +1,18 @@
 #include "texturecollection.hpp"
 
-Texture::Texture()
-{
+#include "texture.hpp"
 
-}
-
-void Texture::addTexture(Texture& texture)
+void TextureCollection::add(Texture& texture)
 {
 	textures.insert(&texture);
 }
 
-void Texture::removeTexture(Texture& texture)
+void TextureCollection::remove(Texture& texture)
 {
 	textures.erase(&texture);
 }
 
-void Texture::reuploadTextures()
+void TextureCollection::reuploadTextures()
 {
 #ifdef WIN32
 	std::set<Texture*>::iterator i;

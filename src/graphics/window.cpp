@@ -25,7 +25,6 @@ void Window::setVideoMode(Vector2D size,int bpp,bool fullscreen)
 	calculateAspectRatio();
 	initOpenGL();
 	initGLEW();
-	Texture::reuploadTextures();
 }
 
 void Window::createSurface()

@@ -2,10 +2,10 @@
 
 #include "utils/string.hpp"
 #include "debug/assert.hpp"
-#include <iostream>
-#include <stdint.h>
 
-TextureFilter Texture::m_filter_limit=LINEAR;
+#include <iostream>
+#include <stdexcept>
+#include <stdint.h>
 
 static void CheckGL()
 {
@@ -17,109 +17,49 @@ static void CheckGL()
 
 void Texture::init()
 {
-	m_filter=LINEAR;
-	m_surface=0;	
-	m_texture=0;	
-	m_texture_width=0;
-	m_texture_height=0;
-	m_image_width=0;
-	m_image_height=0;
+	filter=LINEAR;
+	textureData=0;	
+	texture=0;	
+	textureWidth=0;
+	textureHeight=0;
+	imageWidth=0;
+	imageHeight=0;
 }
 
 Texture::Texture()
 {
-	Texture::addManagedTexture(this);
-
 	init();
 }
 
 Texture::Texture(const std::string& filename)
 {
-	Texture::addManagedTexture(this);
-
 	init();
-	load(filename);
+	loadFromFile(filename);
+}
+
+Texture::Texture(SDL_Surface* surface)
+{
+	init();
+	loadFromSurface(surface);
 }
 
 Texture::~Texture()
 {
-	Texture::removeManagedTexture(this);
-
-	free();	
-}
-
-void Texture::copy(const Texture& b)
-{
-	init();
-
-	m_texture_width=b.m_texture_width;
-	m_texture_height=b.m_texture_height;
-
-	if(b.m_surface)
-	{
-		m_surface=SDL_CreateRGBSurface(SDL_SWSURFACE,b.m_surface->w,b.m_surface->h,32,RGBAMASK);
-
-		if(SDL_MUSTLOCK(m_surface))
-			SDL_LockSurface(m_surface);
-		if(SDL_MUSTLOCK(b.m_surface))
-			SDL_LockSurface(b.m_surface);
-
-		memcpy(m_surface->pixels,b.m_surface->pixels,4*b.m_surface->h*b.m_surface->w);
-
-		if(SDL_MUSTLOCK(m_surface))
-			SDL_UnlockSurface(m_surface);
-		if(SDL_MUSTLOCK(b.m_surface))
-			SDL_UnlockSurface(b.m_surface);
-	}
-
-	m_filter=b.m_filter;
-	m_image_width=b.m_image_width;
-	m_image_height=b.m_image_height;
-	m_tag=b.m_tag;
-	createTexture();
-	setFilter(m_filter);
-}
-
-Texture::Texture(const Texture& b)
-{
-	Texture::addManagedTexture(this);
-
-	copy(b);
-}
-
-Texture& Texture::operator=(const Texture& b)
-{
-	if(this!=&b)
-	{
-		copy(b);
-	}
-
-	return *this;
-}
-
-void Texture::free()
-{
 	deleteTexture();
-	freeSurface();
-	init();
+	freeTextureData();
 }
 
-void Texture::freeSurface()
+void Texture::freeTextureData()
 {
-	if(m_surface)
-	{
-		SDL_FreeSurface(m_surface);	
-		m_surface=0;
-		m_tag="";
-	}
+	SDL_FreeSurface(textureData);
 }
 
 void Texture::draw(Vector2D position,Vector2D size)
 {
-	float iw=m_image_width;
-	float ih=m_image_height;
-	float tw=m_texture_width;
-	float th=m_texture_height;
+	float iw=imageWidth;
+	float ih=imageHeight;
+	float tw=textureWidth;
+	float th=textureHeight;
 	
 	bind();
 	
@@ -144,10 +84,8 @@ void Texture::drawClipped(Vector2D position,Vector2D size,Vector2D clip_position
 	float ex=clip_position.getX()+clip_size.getX();
 	float ey=clip_position.getY()+clip_size.getY();
 	
-	float iw=m_image_width;
-	float ih=m_image_height;
-	float tw=m_texture_width;
-	float th=m_texture_height;
+	float tw=textureWidth;
+	float th=textureHeight;
 	
 	bind();
 	
@@ -176,18 +114,13 @@ static unsigned int powerOfTwo(unsigned int n)
 
 void Texture::setFilter(TextureFilter filter)
 {
-	m_filter=filter;
-	
-	if(filter>m_filter_limit)
-		filter=m_filter_limit;
-	
-	if(!m_texture)
+	if(!texture)
 		return;
 
 	GLint min;
 	GLint max;
 
-	switch(filter)
+	switch(this->filter)
 	{
 		default:
 		case NEAREST:
@@ -216,48 +149,39 @@ void Texture::setFilter(TextureFilter filter)
 
 void Texture::reuploadTexture()
 {
-	m_texture=0;
+	texture=0;
 	createTexture();
 }
 
 TextureFilter Texture::getFilter()
 {
-	return m_filter;
+	return filter;
 }
 
-int Texture::loadSurface(SDL_Surface* surface)
+void Texture::loadFromSurface(SDL_Surface* surface)
 {
-	loadSurface(surface,convertToString(surface));
-}
-
-int Texture::loadSurface(SDL_Surface* surface,const std::string& tag)
-{
-	if(!surface)
-		return -1;
+	if(surface == 0)
+		throw std::runtime_error("loadFromSurface: invalid surface passed");
 	
-	if(!(surface->w && surface->h))
-		return -1;	
+	if(surface->w == 0 || surface->h == 0)
+		throw std::runtime_error("loadFromSurface: invalid surface passed");
 		
-	free();
+	imageWidth=surface->w;
+	imageHeight=surface->h;
+	textureWidth=powerOfTwo(surface->w);
+	textureHeight=powerOfTwo(surface->h);
 	
-	m_tag=tag;
-		
-	m_image_width=surface->w;
-	m_image_height=surface->h;
-	m_texture_width=powerOfTwo(surface->w);
-	m_texture_height=powerOfTwo(surface->h);
-	
-	m_surface=SDL_CreateRGBSurface(SDL_SWSURFACE,m_texture_width,m_texture_height,32,RGBAMASK);
-	SDL_SetAlpha(m_surface, 0,SDL_ALPHA_OPAQUE);
+	textureData=SDL_CreateRGBSurface(SDL_SWSURFACE,textureWidth,textureHeight,32,RGBAMASK);
+	SDL_SetAlpha(textureData,0,SDL_ALPHA_OPAQUE);
 	SDL_SetAlpha(surface,0,SDL_ALPHA_OPAQUE);	
 	
-	SDL_BlitSurface(surface,0,m_surface,0);
+	SDL_BlitSurface(surface,0,textureData,0);
 	
 	int max_tex_size;
 	
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE,&max_tex_size);
 		
-	int bigside=std::max(m_texture_width,m_texture_height);
+	int bigside=std::max(textureWidth,textureHeight);
 	int downscalefactor=0;
 	
 	while(bigside > max_tex_size)
@@ -268,66 +192,31 @@ int Texture::loadSurface(SDL_Surface* surface,const std::string& tag)
 	
 	if(downscalefactor)
 	{
-		SDL_Surface* tmpsurface=downScale(m_surface,downscalefactor);
-		SDL_FreeSurface(m_surface);
-		m_surface=tmpsurface;
+		downScale(downscalefactor);
 	}
 	
-	if(SDL_MUSTLOCK(m_surface))
-		SDL_LockSurface(m_surface);
-		
-	uint32_t* px=(uint32_t*)m_surface->pixels;
-	
-	if(m_image_width != m_surface->h)
-	{
-		for(int x=0; x<m_surface->w; x++)
-		{
-			px[(m_surface->h-1)*m_surface->w+x]=px[x];
-		}
-	}
-	
-	/*if(m_image_width != m_surface->w)
-	{
-		for(int y=0; y<m_surface->h; y++)
-		{
-			px[y*m_surface->w+m_surface->w-1]=px[y*m_surface->w];
-		}
-	}
-	
-	if((m_image_width != m_surface->w) || (m_image_width != m_surface->h))
-	{
-		px[m_surface->h*m_surface->w-1]=px[0];
-	}*/
-	
-	if(SDL_MUSTLOCK(m_surface))
-		SDL_UnlockSurface(m_surface);	
-
 	createTexture();
-
-	return 0;	
 }
 
-int Texture::load(const std::string& filename)
+void Texture::loadFromFile(const std::string& filename)
 {
 	SDL_Surface* image=IMG_Load(filename.c_str());
 	
 	if(!image)
 	{
 		std::cout<<"failed to load file "<<filename<<std::endl;
-		return 0;
+		return;
 	}
 	
-	int ret=loadSurface(image,filename);	
+	loadFromSurface(image);	
 	
 	SDL_FreeSurface(image);
-		
-	return ret;
 }
 
 
 Vector2D Texture::getSize()
 {
-	return Vector2D(m_image_width,m_image_height);	
+	return Vector2D(imageWidth,imageHeight);	
 }
 
 struct Pixel
@@ -354,25 +243,18 @@ inline uint32_t divide(uint32_t a,uint32_t b,uint32_t c,uint32_t d)
 	return p[0] | p[1]<<8 | p[2]<<16 | p[3]<<24;
 }
 
-SDL_Surface* Texture::downScale(SDL_Surface* surface,int factor)
+SDL_Surface* Texture::downScale(int factor)
 {
-	assert(surface != 0);
-	
-	if(!surface)
-	{
-		return 0;
-	}
-
-	if(SDL_MUSTLOCK(surface))
-		SDL_LockSurface(surface);
+	if(SDL_MUSTLOCK(textureData))
+		SDL_LockSurface(textureData);
 		
-	uint32_t* px=(uint32_t*)surface->pixels;
+	uint32_t* px=(uint32_t*)textureData->pixels;
 	
-	int cw=surface->w;
-	int ch=surface->h;
-	int w=surface->w;
-	int h=surface->h;
-	int row=surface->w*4;
+	int cw=textureData->w;
+	int ch=textureData->h;
+	int w=textureData->w;
+	int h=textureData->h;
+	int row=textureData->w*4;
 	
 	uint32_t a;
 	uint32_t b;
@@ -440,122 +322,69 @@ SDL_Surface* Texture::downScale(SDL_Surface* surface,int factor)
 		}		
 	}
 
-	if(SDL_MUSTLOCK(surface))
-		SDL_UnlockSurface(surface);
+	if(SDL_MUSTLOCK(textureData))
+		SDL_UnlockSurface(textureData);
 		
 	SDL_Surface* newsurface=SDL_CreateRGBSurface(SDL_SWSURFACE,cw,ch,32,RGBAMASK);
+		
 	SDL_Rect size;
 	size.x = 0;
 	size.y = 0;
 	size.w = cw;
 	size.h = ch;
 	
-	SDL_BlitSurface(surface,&size,newsurface,0);
+	SDL_BlitSurface(textureData,&size,newsurface,0);
 	
-	return newsurface;
+	SDL_FreeSurface(textureData);
+	
+	textureData = newsurface;
 }
 
-int Texture::createTexture()
+void Texture::createTexture()
 {
 	deleteTexture();
 	
-	glGenTextures(1,&m_texture);
+	glGenTextures(1,&texture);
 		
-	if(!m_surface)
-	{
-		return -1;
-	}
-
 	bind();
 	glPixelStorei(GL_UNPACK_ALIGNMENT,4);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
 
-	if(SDL_MUSTLOCK(m_surface))
-		SDL_LockSurface(m_surface);
+	if(SDL_MUSTLOCK(surface))
+		SDL_LockSurface(surface);
 
-	gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,m_surface->w,m_surface->h,GL_RGBA,GL_UNSIGNED_BYTE,m_surface->pixels);
+	gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,surface->w,surface->h,GL_RGBA,GL_UNSIGNED_BYTE,surface->pixels);
 
-	if(SDL_MUSTLOCK(m_surface))
-		SDL_UnlockSurface(m_surface);
+	if(SDL_MUSTLOCK(surface))
+		SDL_UnlockSurface(surface);
 
-	setFilter(m_filter);
+	setFilter(filter);
 	
 	CheckGL();
-	
-	return 0;
 }
 
 void Texture::deleteTexture()
 {
-	if(!m_texture)
-		return;
-
-	glDeleteTextures(1,&m_texture);
-	m_texture=0;
+	if(glIsTexture(texture))
+		glDeleteTextures(1,&texture);
 }
 
 void Texture::bind()
 {
-	GLint texture;
+	GLint bindedTexture;
 	
-	glGetIntegerv(GL_TEXTURE_BINDING_2D,&texture);
+	glGetIntegerv(GL_TEXTURE_BINDING_2D,&bindedTexture);
 	
-	if(m_texture == texture)
+	if(texture == bindedTexture)
 		return;
 
-	glBindTexture(GL_TEXTURE_2D,m_texture);
+	glBindTexture(GL_TEXTURE_2D,texture);
 
 	CheckGL();
 }
 
 GLuint Texture::getTexture()
 {
-	return m_texture;
+	return texture;
 }
-
-void Texture::setFilterLimit(TextureFilter filter)
-{
-	m_filter_limit=filter;
-	
-	std::set<Texture*>::iterator i;
-		
-	for(i=Texture::m_textures.begin();i!=Texture::m_textures.end();++i)
-	{
-		(*i)->setFilter((*i)->getFilter());
-	}
-}
-
-TextureFilter Texture::getFilterLimit()
-{
-	return m_filter_limit;
-}
-
-int Texture::printInfo()
-{
-	if(!m_surface)
-		return 0;
-	
-	int size=(m_surface->w*m_surface->h*4);
-	std::string unit="B";	
-	
-	if(size>1023)
-	{
-		size/=1024;
-		unit="kB";
-	}
-	
-	if(size>1023)
-	{
-		size/=1024;
-		unit="MB";
-	}
-	
-	std::cout << "---Texture---" << std::endl;
-	std::cout << "Tag: " << m_tag << std::endl;
-	std::cout << "Size: " << size << " "<< unit << std::endl;
-	std::cout << "Dimensions: " << m_surface->w << "x" << m_surface->h  << std::endl;
-
-	return m_surface->w*m_surface->h*4;
-}
-
