@@ -28,13 +28,6 @@ class Vector2D
 		float getY() const	{return m_y;}
 		void setY(float y)	{m_y=y;}
 
-		friend bool operator==(const Vector2D a,const Vector2D b);
-		friend bool operator!=(const Vector2D a,const Vector2D b);
-		friend bool operator<(const Vector2D a,const Vector2D b);
-		friend bool operator>(const Vector2D a,const Vector2D b);
-		friend bool operator<=(const Vector2D a,const Vector2D b);
-		friend bool operator>=(const Vector2D a,const Vector2D b);
-
 		friend std::ostream& operator<<(std::ostream& os,const Vector2D& s);
 
 	private:
