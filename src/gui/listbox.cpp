@@ -305,8 +305,8 @@ Listbox::Listbox():
 	
 	if(!m_textures_loaded)
 	{
-		m_arrow_up.load("data/images/arrowup.png");
-		m_arrow_down.load("data/images/arrowdown.png");
+		m_arrow_up=Texture("data/images/arrowup.png");
+		m_arrow_down=Texture("data/images/arrowdown.png");
 		
 		m_textures_loaded=true;
 	}

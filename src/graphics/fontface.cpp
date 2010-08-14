@@ -408,10 +408,10 @@ int FontFace::loadPage(unsigned int pagenum)
 		}	
 	}
 	
+	m_font_pages[pagenum].letters=Texture(letters);
 	std::stringstream tag;
 	tag<<m_name<<": Page "<<pagenum;
 	
-	m_font_pages[pagenum].letters.loadSurface(letters,tag.str());
 	m_font_pages[pagenum].letters.setFilter(TRILINEAR);
 	SDL_FreeSurface(letters);	
 

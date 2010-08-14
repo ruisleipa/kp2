@@ -223,7 +223,6 @@ void Window::loadSettings()
 	
 	int width;
 	int height;
-	int filter;
 	int fullscreen;
 	int vsync;
 	
@@ -234,11 +233,6 @@ void Window::loadSettings()
 
 	settings.getValue("fullscreen",fullscreen);
 	settings.getValue("vsync",vsync);
-	
-	if(settings.getValue("filter",filter) == 0)
-		filter=LINEAR;
-		
-	Texture::setFilterLimit((TextureFilter)filter);
 }
 
 void Window::saveSettings()
@@ -247,13 +241,11 @@ void Window::saveSettings()
 	int height=getSize().getY();
 	int fullscreen=isFullscreen();
 	int vsync=isVsynced();
-	int filter=Texture::getFilterLimit();
 	
 	settings.setValue("fullscreen",fullscreen);
 	settings.setValue("vsync",vsync);
 	settings.setValue("width",width);
 	settings.setValue("height",height);
-	settings.setValue("filter",filter);
 	
 	settings.save(VIDEO_CONFIG);
 }
