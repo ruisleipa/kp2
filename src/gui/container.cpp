@@ -178,7 +178,7 @@ Widget* Container::getChild(std::string tag)
 		
 	ss << "getChild failed: invalid tag '" << tag << "'";
 
-	throw Exception(ss.str());
+	throw std::runtime_error(ss.str());
 }
 
 int Container::getChildCount()
