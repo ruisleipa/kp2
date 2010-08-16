@@ -1,20 +1,21 @@
 #ifndef TEXTURECOLLECTION_HPP
 #define TEXTURECOLLECTION_HPP
 
-#include <set>
+#include <map>
+#include <string>
 
 class Texture;
 
 class TextureCollection
 {
 	public:		
-		void add(Texture& texture);
-		void remove(Texture& texture);
+		void addTexture(const std::string& name,const Texture& texture);
+		Texture& getTexture(const std::string& name);
 	
-		void reuploadTextures();	
+		void reuploadTextures();
 
 	private:
-		std::set<Texture*> textures;
+		std::map<std::string,Texture> textures;
 
 };
 
