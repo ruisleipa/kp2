@@ -16,8 +16,8 @@ class Container : public Widget
 		virtual void doResize(Window& window);
 		virtual void doDraw(Window& window);
 		
-		void addChild(Widget* child);
-		void addChild(std::string tag,Widget* child);
+		void addChild(Widget& child);
+		void addChild(std::string tag,Widget& child);
 		
 		Widget* getChild(std::string tag);
 		

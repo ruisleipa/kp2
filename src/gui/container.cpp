@@ -144,27 +144,24 @@ void Container::doDraw(Window& window)
 	scissor.reset();
 }
 
-void Container::addChild(Widget* child)
+
+
+void Container::addChild(Widget& child)
 {
-	if(child)
-	{
-		addChild(convertToString(child),child);
-	}
+	addChild(convertToString(&child),child);
 }
 
-void Container::addChild(std::string tag,Widget* child)
+void Container::addChild(std::string tag,Widget& child)
 {
-	if(child)
-	{
-		TaggedWidget taggedWidget;
-		
-		taggedWidget.tag=tag;
-		taggedWidget.widget=child;		
+	TaggedWidget taggedWidget;
 	
-		children.push_back(taggedWidget);
-		
-		child->setParent(this);
-	}
+	taggedWidget.tag=tag;
+	taggedWidget.widget=&child;		
+
+	children.push_back(taggedWidget);
+	
+	child.setParent(this);
+	child.setWindow(getWindow());
 }
 
 Widget* Container::getChild(std::string tag)
