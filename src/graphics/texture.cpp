@@ -27,21 +27,22 @@ void Texture::draw(Vector2D position,Vector2D size)
 	if(!preparedTexture.get())
 		return;
 		
-	
 	Vector2D textureEnd = preparedTexture->getEndCoordinate();
-	
 	
 	bind();
 	
 	glBegin(GL_QUADS);
 	
-		glTexCoord2f(0,1);
+		glTexCoord2f(0,-1);
 		glVertex2d(position.getX(),position.getY());
-		glTexCoord2f(textureEnd.getX(),1);
+
+		glTexCoord2f(textureEnd.getX(),-1);
 		glVertex2d(position.getX()+size.getX(),position.getY());	
-		glTexCoord2f(textureEnd.getX(),1.0-textureEnd.getY());
+
+		glTexCoord2f(textureEnd.getX(),-(1.0-textureEnd.getY()));
 		glVertex2d(position.getX()+size.getX(),position.getY()+size.getY());
-		glTexCoord2f(0,1.0-textureEnd.getY());
+
+		glTexCoord2f(0,-(1.0-textureEnd.getY()));
 		glVertex2d(position.getX(),position.getY()+size.getY());
 	
 	glEnd();
