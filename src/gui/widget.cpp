@@ -142,14 +142,14 @@ Vector2D Widget::getPosition()
 
 Vector2D Widget::getAbsolutePosition()
 {
-	Vector2D position;
+	Vector2D absolutePosition;
 
 	if(getParent())
 	{
-		position+=getParent()->getAbsolutePosition();
+		absolutePosition+=getParent()->getAbsolutePosition();
 	}
 	
-	return position+position;
+	return absolutePosition+position;
 }
 
 void Widget::setSize(Vector2D size)
