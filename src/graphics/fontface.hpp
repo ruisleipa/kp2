@@ -44,8 +44,8 @@ class FontFace
 		int loadPage(unsigned int pagenum);
 
 		std::string m_name;
-		TTF_Font* m_font;
 		int m_height;
+		TTF_Font* m_font;
 		std::map<unsigned long,FontPage> m_font_pages;
 };
 
