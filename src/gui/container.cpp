@@ -174,7 +174,11 @@ Widget* Container::getChild(std::string tag)
 			return (*i).widget;	
 	}
 
-	return 0;	
+	std::stringstream ss;
+		
+	ss << "getChild failed: invalid tag '" << tag << "'";
+
+	throw Exception(ss.str());
 }
 
 int Container::getChildCount()
@@ -188,9 +192,8 @@ Widget* Container::getChild(int index)
 	{
 		std::stringstream ss;
 		
-		ss << "getWidget failed: invalid index ";
-		ss << index;
-	
+		ss << "getChild failed: invalid index '" << index << "'";
+
 		throw std::runtime_error(ss.str());
 	}
 	
