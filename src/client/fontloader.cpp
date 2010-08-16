@@ -2,13 +2,16 @@
 
 #include "ui.hpp"
 
+#include "graphics/color.hpp"
+#include "gui/font.hpp"
+
 const Color BORDER(0,0,0);
 const Color NORMAL(0,0,0);
 const Color PASSIVE(0.7,0.7,0.7);
 const Color ACTIVE(1,1,1);
 
-FontLoader::FontLoader(Graphics& graphics):
-	m_fontface(graphics)
+FontLoader::FontLoader():
+	m_fontface()
 {
 	m_fontface.load("data/fonts/freesans.ttf",64);
 

@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "vector2d.hpp"
-#include "fontloader.hpp"
+#include "graphics/vector2d.hpp"
+/*#include "fontloader.hpp"
 #include "events.hpp"
 
 #include "container.hpp"
@@ -52,7 +52,7 @@ class Ui
 		TuningMenu m_tuningmenu;
 
 };
-
+*/
 const float PADDING=0.02;
 const float ITEM_HEIGHT=0.05;
 

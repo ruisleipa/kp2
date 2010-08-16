@@ -1,16 +1,18 @@
 #ifndef MAINMENU_HPP
 #define MAINMENU_HPP
 
-#include "window.hpp"
-#include "button.hpp"
-#include "image.hpp"
+#include "gui/container.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
 
-class MainMenu : public Window
+#include "graphics/texture.hpp"
+
+class MainMenu : public Container
 {
 	public:
 		MainMenu();
 		
-		virtual void onResize(Graphics& graphics);
+		virtual void onResize(Window& window);
 
 	private:
 

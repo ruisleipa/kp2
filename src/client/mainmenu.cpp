@@ -4,15 +4,15 @@
 
 #include "ui.hpp"
 
-#include "events.hpp"
-
 MainMenu::MainMenu()
 {
-	m_background_texture.load("data/images/mainmenu.png");
+	setSize(Vector2D(1,1));
+
+	m_background_texture=Texture("data/images/mainmenu.png");
 	m_background.setTexture(&m_background_texture);
 	m_background.setFill(true);
 	
-	m_title_texture.load("data/images/kp2_txt.png");
+	m_title_texture=Texture("data/images/kp2_txt.png");
 	m_title.setTexture(&m_title_texture);
 	
 	m_net_game_button.setText("Verkkopeli");	
@@ -28,18 +28,18 @@ MainMenu::MainMenu()
 	m_quit_button.setText("Lopeta");
 	m_quit_button.setClickHandler(Callback0(this,&MainMenu::quitClickHandler));
 	
-	addWidget(&m_background);
+	addChild(m_background);
 	
-	addWidget(&m_title);
+	addChild(m_title);
 	
-	//addWidget(&m_net_game_button);
-	addWidget(&m_local_game_button);
-	addWidget(&m_about_button);
-	addWidget(&m_settings_button);
-	addWidget(&m_quit_button);
+	//addChild(&m_net_game_button);
+	addChild(m_local_game_button);
+	addChild(m_about_button);
+	addChild(m_settings_button);
+	addChild(m_quit_button);
 }
 
-void MainMenu::onResize(Graphics& graphics)
+void MainMenu::onResize(Window& window)
 {
 	m_background.setSize(Vector2D(1,1));
 
@@ -77,7 +77,7 @@ void MainMenu::netgameClickHandler()
 void MainMenu::localgameClickHandler()
 {
 	setVisible(false);
-	getRootWidget("localgamemenu")->setVisible(true);
+	getParent()->getChild("localgamemenu")->setVisible(true);
 }
 
 void MainMenu::aboutClickHandler()
@@ -88,12 +88,12 @@ void MainMenu::aboutClickHandler()
 void MainMenu::settingsClickHandler()
 {
 	setVisible(false);
-	getRootWidget("settingsmenu")->setVisible(true);
+	getParent()->getChild("settingsmenu")->setVisible(true);
 }
 
 void MainMenu::quitClickHandler()
 {
-	throw ExitException();
+	//throw ExitException();
 }
 
 

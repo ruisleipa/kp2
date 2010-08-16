@@ -1,12 +1,12 @@
 #ifndef FONTLOADER_HPP
 #define FONTLOADER_HPP
 
-#include "fontface.hpp"
+#include "graphics/fontface.hpp"
 
 class FontLoader
 {
 	public:
-		FontLoader(Graphics& graphics);
+		FontLoader();
 
 	private:
 		FontFace m_fontface;		
