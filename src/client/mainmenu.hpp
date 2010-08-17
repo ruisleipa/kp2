@@ -5,28 +5,24 @@
 #include "gui/button.hpp"
 #include "gui/image.hpp"
 
-#include "graphics/texture.hpp"
+#include "graphics/texturecollection.hpp"
 
 class MainMenu : public Container
 {
 	public:
-		MainMenu();
+		MainMenu(TextureCollection& textureCollection);
 		
 		virtual void onResize(Window& window);
 
 	private:
-
-		Texture m_background_texture;
-		Image m_background;
-		
-		Texture m_title_texture;
-		Image m_title;
+		Image background;
+		Image title;
 	
-		Button m_net_game_button;	
-		Button m_local_game_button;		
-		Button m_about_button;
-		Button m_settings_button;		
-		Button m_quit_button;		
+		Button netgameButton;	
+		Button localgameButton;		
+		Button aboutButton;
+		Button settingsButton;		
+		Button quitBbutton;		
 	
 		void netgameClickHandler();
 		void localgameClickHandler();

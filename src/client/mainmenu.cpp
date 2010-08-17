@@ -4,68 +4,68 @@
 
 #include "ui.hpp"
 
-MainMenu::MainMenu()
+MainMenu::MainMenu(TextureCollection& textureCollection)
 {
-	setSize(Vector2D(1,1));
+	
 
-	m_background_texture=Texture("data/images/mainmenu.png");
-	m_background.setTexture(&m_background_texture);
-	m_background.setFill(true);
+	background.setTexture(textureCollection.getTexture("mainmenu"));
+	background.setFill(true);
 	
-	m_title_texture=Texture("data/images/kp2_txt.png");
-	m_title.setTexture(&m_title_texture);
+	title.setTexture(textureCollection.getTexture("title"));
 	
-	m_net_game_button.setText("Verkkopeli");	
+	netgameButton.setText("Verkkopeli");	
 	
-	m_local_game_button.setText("Yksinpeli");
-	m_local_game_button.setClickHandler(Callback0(this,&MainMenu::localgameClickHandler));
+	localgameButton.setText("Yksinpeli");
+	localgameButton.setClickHandler(Callback0(this,&MainMenu::localgameClickHandler));
 	
-	m_about_button.setText("Tietoja pelistä");
+	aboutButton.setText("Tietoja pelistä");
 	
-	m_settings_button.setText("Asetukset");
-	m_settings_button.setClickHandler(Callback0(this,&MainMenu::settingsClickHandler));
+	settingsButton.setText("Asetukset");
+	settingsButton.setClickHandler(Callback0(this,&MainMenu::settingsClickHandler));
 	
-	m_quit_button.setText("Lopeta");
-	m_quit_button.setClickHandler(Callback0(this,&MainMenu::quitClickHandler));
+	quitButton.setText("Lopeta");
+	quitButton.setClickHandler(Callback0(this,&MainMenu::quitClickHandler));
 	
-	addChild(m_background);
+	addChild(background);
 	
-	addChild(m_title);
+	addChild(title);
 	
-	//addChild(&m_net_game_button);
-	addChild(m_local_game_button);
-	addChild(m_about_button);
-	addChild(m_settings_button);
-	addChild(m_quit_button);
+	//addChild(&netgameButton);
+	addChild(localgameButton);
+	addChild(aboutButton);
+	addChild(settingsButton);
+	addChild(quitButton);
 }
 
 void MainMenu::onResize(Window& window)
 {
-	m_background.setSize(Vector2D(1,1));
+	setSize(Vector2D(1,1));
 
-	m_title.setPosition(TITLE_POSITION);
-	m_title.setSize(TITLE_SIZE);
+	background.setSize(Vector2D(1,1));
+
+	title.setPosition(TITLE_POSITION);
+	title.setSize(TITLE_SIZE);
 	
 	Vector2D buttonpos=CONTENT_POSITION;
 
-	//m_net_game_button.setPosition(buttonpos);
-	//m_net_game_button.autoSize();
+	//netgameButton.setPosition(buttonpos);
+	//netgameButton.autoSize();
 	//buttonpos+=BUTTON_HEIGHT;
 	
-	m_local_game_button.setPosition(buttonpos);
-	m_local_game_button.autoSize();
+	localgameButton.setPosition(buttonpos);
+	localgameButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_about_button.setPosition(buttonpos);
-	m_about_button.autoSize();
+	aboutButton.setPosition(buttonpos);
+	aboutButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_settings_button.setPosition(buttonpos);
-	m_settings_button.autoSize();
+	settingsButton.setPosition(buttonpos);
+	settingsButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 
-	m_quit_button.setPosition(buttonpos);
-	m_quit_button.autoSize();
+	quitButton.setPosition(buttonpos);
+	quitButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 }
 
