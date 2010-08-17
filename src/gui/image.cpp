@@ -7,56 +7,53 @@
 
 #include <GL/gl.h>
 
-void Image::setTexture(Texture* texture)
+void Image::setTexture(Texture& texture)
 {
-	m_texture=texture;
+	this->texture=texture;
 }
 
-Texture* Image::getTexture()
+Texture& Image::getTexture()
 {
-	return m_texture;
+	return texture;
 }
 
 void Image::setStretched(bool stretched)
 {
-	m_stretched=stretched;
+	this->stretched=stretched;
 }
 
 bool Image::getStrecthed()
 {
-	return m_stretched;
+	return stretched;
 }
 
 void Image::setFill(bool fill)
 {
-	m_fill=fill;
+	this->fill=fill;
 }
 
 bool Image::getFill()
 {
-	return m_fill;
+	return fill;
 }
 
 void Image::setColor(Color color)
 {
-	m_color=color;
+	this->color=color;
 }
 
 Color Image::getColor()
 {
-	return m_color;
+	return color;
 }
 
 void Image::onDraw(Window& window)
 {
-	if(!m_texture)
-		return;
-	
 	Vector2D image_size;
 	
-	if(!m_stretched)
+	if(!stretched)
 	{
-		image_size=m_texture->getSize();
+		image_size=texture.getSize();
 		image_size.setX(image_size.getX()/window.getAspectRatio());
 		
 		// ratio>1 = wide, ratio<1=tall 
@@ -67,7 +64,7 @@ void Image::onDraw(Window& window)
 		// ratio>1 = wide, ratio<1=tall 
 		float dest_ratio=dest.getX()/dest.getY();
 	
-		if(m_fill)
+		if(fill)
 		{			
 			if(image_ratio>dest_ratio)
 			{
@@ -99,16 +96,16 @@ void Image::onDraw(Window& window)
 		image_size=getSize();
 	}
 	
-	m_color.apply();
+	color.apply();
 	
-	m_texture->draw(getAbsolutePosition(),image_size);
+	texture.draw(getAbsolutePosition(),image_size);
 }
 
 Image::Image():
-	m_texture(0),
-	m_stretched(false),
-	m_fill(false),
-	m_color(1,1,1)
+	texture(),
+	stretched(false),
+	fill(false),
+	color(1,1,1)
 {
 
 }

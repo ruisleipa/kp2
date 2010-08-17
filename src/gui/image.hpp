@@ -9,8 +9,8 @@
 class Image : public Widget
 {
 	public:
-		void setTexture(Texture* texture);
-		Texture* getTexture();
+		void setTexture(Texture& texture);
+		Texture& getTexture();
 		
 		void setStretched(bool stretch);
 		bool getStrecthed();
@@ -26,10 +26,10 @@ class Image : public Widget
 		Image();
 		
 	private:
-		Texture* m_texture;	
-		bool m_stretched;
-		bool m_fill;
-		Color m_color;
+		Texture texture;	
+		bool stretched;
+		bool fill;
+		Color color;
 
 };
 
