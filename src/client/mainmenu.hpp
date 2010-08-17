@@ -22,7 +22,7 @@ class MainMenu : public Container
 		Button localgameButton;		
 		Button aboutButton;
 		Button settingsButton;		
-		Button quitBbutton;		
+		Button quitButton;		
 	
 		void netgameClickHandler();
 		void localgameClickHandler();
