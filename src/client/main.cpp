@@ -60,12 +60,13 @@ void startGame()
 	backgroundTextures.addTexture("image12",Texture("data/images/backgrounds/tools.png"));
 	loadingScreen.progress();
 	
-	Texture mainMenuTitle("data");
+	TextureCollection mainmenuTextures;
+	mainmenuTextures.addTexture("title",Texture("data/images/kp2"));
 	
 	//Init ui
 	RootContainer rootContainer(window,events);
 	
-	MainMenu mainMenu;
+	MainMenu mainMenu(mainmenuTextures);
 	rootContainer.addChild("mainmenu",mainMenu);
 	
 	rootContainer.doResize(window);
