@@ -1,18 +1,20 @@
 #ifndef SETTINGSMENU_HPP
 #define SETTINGSMENU_HPP
 
-#include "window.hpp"
-#include "label.hpp"
-#include "select.hpp"
-#include "button.hpp"
-#include "image.hpp"
+#include "graphics/texturecollection.hpp"
 
-class SettingsMenu : public Window
+#include "gui/container.hpp"
+#include "gui/label.hpp"
+#include "gui/select.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+
+class SettingsMenu : public Container
 {
 	public:
-		SettingsMenu(Graphics& graphics);
+		SettingsMenu(Window& window,TextureCollection& textures);
 
-		virtual void onResize(Graphics& graphics);
+		virtual void onResize(Window& window);
 		virtual void onShow();
 	
 		void updateDisplayOptions();
@@ -21,35 +23,21 @@ class SettingsMenu : public Window
 		void backClick();
 		void applyClick();
 		
-		Graphics& m_graphics;
+		Window& window;
 
-		Texture m_background_texture;
-		Image m_background;
+		Image background;
 		
-		Label m_title;
+		Label title;
 
-		Label m_resolution_label;
-		Select m_resolution_select;
-		Label m_fullscreen_label; 
-		Select m_fullscreen_select;
-		Label m_vsync_label; 
-		Select m_vsync_select;
-		Label m_filter_label; 
-		Select m_filter_select;
+		Label sizeLabel;
+		Select sizeSelect;
+		Label fullscreenLabel; 
+		Select fullscreenSelect;
+		Label vsyncLabel; 
+		Select vsyncSelect;
 		
-		class BackButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_back_button;
-		
-		class ApplyButton: public Button
-		{
-			public:	
-				void onClick();
-		}m_apply_button;
-
-		std::vector<Vector2D> m_modes;
+		Button backButton;
+		Button applyButton;
 };
 
 #endif // SETTINGSMENU_HPP

@@ -15,6 +15,7 @@
 #include "gui/rootcontainer.hpp"
 
 #include "mainmenu.hpp"
+#include "settingsmenu.hpp"
 
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
@@ -67,7 +68,10 @@ void startGame()
 	RootContainer rootContainer(window,events);
 	
 	MainMenu mainMenu(mainmenuTextures);
+	SettingsMenu settingsMenu(window,mainmenuTextures);
+	
 	rootContainer.addChild("mainmenu",mainMenu);
+	rootContainer.addChild("settingsmenu",settingsMenu);
 	
 	rootContainer.doResize(window);
 	

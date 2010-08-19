@@ -3,117 +3,100 @@
 #include <iostream>
 
 #include "ui.hpp"
-#include "graphics.hpp"
-#include "shared/string.hpp"
+#include "utils/string.hpp"
 
-SettingsMenu::SettingsMenu(Graphics& graphics):
-	m_graphics(graphics)
+SettingsMenu::SettingsMenu(Window& window,TextureCollection& textures):
+	window(window)
 {
-	m_background_texture.load("data/images/settingsmenu.png");
-	m_background.setTexture(&m_background_texture);
+	title.setFont(Font("title"));
+	title.setText("Asetukset");			
 	
-	m_title.setFont(Font("title"));
-	m_title.setText("Asetukset");			
+	sizeLabel.setText("Ikkunan koko");
+	fullscreenLabel.setText("Kokoruututila");
+	vsyncLabel.setText("Vsync");	
 	
-	m_resolution_label.setText("Näyttötila:");
-	m_fullscreen_label.setText("Koko ruutu:");
-	m_vsync_label.setText("Vsync:");	
-	m_filter_label.setText("Tekstuurisuodatin:");	
-	
-	m_modes=m_graphics.getVideoModes();
+	std::vector<Vector2D> possibleSizes = window.getPossibleSizes();
 	std::vector<Vector2D>::iterator i;
 	
-	for(i=m_modes.begin();i!=m_modes.end();++i)
+	for(i=possibleSizes.begin();i!=possibleSizes.end();++i)
 	{
-		std::string str=convertToString((*i).getX());
+		std::string str;
+		str+=convertToString((*i).getX());
 		str+="x";
 		str+=convertToString((*i).getY());
 		
-		m_resolution_select.addItem(str);
-	}	
+		sizeSelect.addItem(str);
+	}
 	
-	m_fullscreen_select.addItem("ei");
-	m_fullscreen_select.addItem("kyllä");
+	fullscreenSelect.addItem("ei");
+	fullscreenSelect.addItem("kyllä");
 	
-	m_vsync_select.addItem("ei");
-	m_vsync_select.addItem("kyllä");
+	vsyncSelect.addItem("ei");
+	vsyncSelect.addItem("kyllä");
 	
-	m_filter_select.addItem("nopein");
-	m_filter_select.addItem("hyvä");
-	m_filter_select.addItem("paras");
-	
-	m_back_button.setText("Takaisin");
-	m_back_button.setClickHandler(Callback0(this,&SettingsMenu::backClick));
-	m_apply_button.setText("Ota käyttöön");
-	m_apply_button.setClickHandler(Callback0(this,&SettingsMenu::applyClick));
+	backButton.setText("Takaisin");
+	backButton.setClickHandler(Callback0(this,&SettingsMenu::backClick));
+	applyButton.setText("Ota käyttöön");
+	applyButton.setClickHandler(Callback0(this,&SettingsMenu::applyClick));
 
-	addWidget(&m_background);
+	addChild(background);
 	
-	addWidget(&m_title);
+	addChild(title);
 	
-	addWidget(&m_resolution_label);
-	addWidget(&m_fullscreen_label);
-	addWidget(&m_vsync_label);	
-	addWidget(&m_filter_label);	
+	addChild(sizeLabel);
+	addChild(fullscreenLabel);
+	addChild(vsyncLabel);	
 			
-	addWidget(&m_resolution_select);
-	addWidget(&m_fullscreen_select);	
-	addWidget(&m_vsync_select);
-	addWidget(&m_filter_select);
+	addChild(sizeSelect);
+	addChild(fullscreenSelect);	
+	addChild(vsyncSelect);
 		
-	addWidget(&m_back_button);	
-	addWidget(&m_apply_button);
+	addChild(backButton);	
+	addChild(applyButton);
 }
 
-void SettingsMenu::onResize(Graphics& graphics)
+void SettingsMenu::onResize(Window& window)
 {
-	m_background.setSize(Vector2D(1,1));
+	setSize(Vector2D(1,1));
+	background.setSize(Vector2D(1,1));
 		
-	m_title.setPosition(TITLE_POSITION);
-	m_title.setSize(TITLE_SIZE);
+	title.setPosition(TITLE_POSITION);
+	title.setSize(TITLE_SIZE);
 		
 	Vector2D buttonpos=CONTENT_POSITION;
 
-	m_resolution_label.setPosition(buttonpos);
-	m_resolution_label.autoSize();
+	sizeLabel.setPosition(buttonpos);
+	sizeLabel.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_fullscreen_label.setPosition(buttonpos);
-	m_fullscreen_label.autoSize();
+	fullscreenLabel.setPosition(buttonpos);
+	fullscreenLabel.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_vsync_label.setPosition(buttonpos);
-	m_vsync_label.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	m_filter_label.setPosition(buttonpos);
-	m_filter_label.autoSize();
+	vsyncLabel.setPosition(buttonpos);
+	vsyncLabel.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
 	buttonpos=CONTENT_POSITION;
 	buttonpos.setX(0.5);
 	
-	m_resolution_select.setPosition(buttonpos);
-	m_resolution_select.autoSize();	
+	sizeSelect.setPosition(buttonpos);
+	sizeSelect.autoSize();	
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_fullscreen_select.setPosition(buttonpos);
-	m_fullscreen_select.autoSize();
+	fullscreenSelect.setPosition(buttonpos);
+	fullscreenSelect.autoSize();
 	buttonpos+=BUTTON_HEIGHT;	
 
-	m_vsync_select.setPosition(buttonpos);
-	m_vsync_select.autoSize();
+	vsyncSelect.setPosition(buttonpos);
+	vsyncSelect.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 
-	m_filter_select.setPosition(buttonpos);
-	m_filter_select.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	m_back_button.setPosition(BACK_BUTTON_POSITION);
-	m_back_button.autoSize();
+	backButton.setPosition(BACK_BUTTON_POSITION);
+	backButton.autoSize();
 
-	m_apply_button.setPosition(NEXT_BUTTON_POSITION);
-	m_apply_button.autoSize();
+	applyButton.setPosition(NEXT_BUTTON_POSITION);
+	applyButton.autoSize();
 
 }
 
@@ -124,43 +107,42 @@ void SettingsMenu::onShow()
 
 void SettingsMenu::updateDisplayOptions()
 {
-	Vector2D displaysize=m_graphics.getDisplaySize();
+	std::vector<Vector2D> possibleSizes = window.getPossibleSizes();
 	
-	for(int i=0;i<m_modes.size();++i)
+	for(size_t i=0;i<possibleSizes.size();++i)
 	{
-		if(displaysize==m_modes[i])
+		if(window.getSize() == possibleSizes[i])
 		{
-			m_resolution_select.setIndex(i);
+			sizeSelect.setIndex(i);
 			break;
 		}			
 	}		
 
-	m_fullscreen_select.setIndex(m_graphics.isFullScreen());
+	fullscreenSelect.setIndex(window.isFullscreen());
 	
-	m_vsync_select.setIndex(m_graphics.isVsynced());
+	vsyncSelect.setIndex(window.isVsynced());
 	
-	m_filter_select.setIndex(Texture::getFilterLimit());
-
-	m_resolution_select.autoSize();	
-	m_fullscreen_select.autoSize();
-	m_vsync_select.autoSize();
+	sizeSelect.autoSize();	
+	fullscreenSelect.autoSize();
+	vsyncSelect.autoSize();
 }
 
 void SettingsMenu::backClick()
 {
 	setVisible(false);
-	getRootWidget("mainmenu")->setVisible(true);
+	getParent()->getChild("mainmenu")->setVisible(true);
 }
 
 void SettingsMenu::applyClick()
 {
-	Texture::setFilterLimit((TextureFilter)m_filter_select.getIndex());
+	std::vector<Vector2D> possibleSizes = window.getPossibleSizes();
+	Vector2D size=possibleSizes[sizeSelect.getIndex()];
+
+	bool fullscreen=fullscreenSelect.getIndex();
+	bool vsync=vsyncSelect.getIndex();
 	
-	Vector2D mode=m_modes[m_resolution_select.getIndex()];
-	bool fullscreen=m_fullscreen_select.getIndex();
-	bool vsync=m_vsync_select.getIndex();
-	
-	m_graphics.setVideoMode(mode.getX(),mode.getY(),32,fullscreen,vsync,true);
+	window.setVideoMode(size,32,fullscreen);
+	window.setVsyncPreference(vsync);
 	
 	updateDisplayOptions();
 }
