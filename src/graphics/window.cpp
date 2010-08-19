@@ -27,6 +27,11 @@ void Window::setVideoMode(Vector2D size,int bpp,bool fullscreen)
 	initGLEW();
 }
 
+void Window::setVsyncPreference(bool vsync)
+{
+	vsyncPreference = vsync;
+}
+
 void Window::createSurface()
 {
 	int flags=SDL_OPENGL;
