@@ -94,13 +94,21 @@ int main(int argc,char** argv)
 	}
 	catch(std::runtime_error error)
 	{
-		std::cerr << error.what() << std::endl;
+		std::cerr << "Runtime error: " << error.what() << std::endl;
 		
 		crashMessage.showMessage();
+	}
+	catch(std::exception error)
+	{
+		std::cerr << "Error: " << error.what() << std::endl;
 		
-		StackTrace stackTrace;
+		crashMessage.showMessage();
+	}
+	catch(...)
+	{
+		std::cerr << "Unknown error" << std::endl;
 		
-		stackTrace.printStackTrace();
+		crashMessage.showMessage();
 	}
 }
 
