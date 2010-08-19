@@ -153,11 +153,6 @@ Window::Window(Sdl& sdl):
 	setVideoMode(surfaceSize,surfaceBpp,surfaceFullscreen);
 }
 
-Window::~Window()
-{
-	saveSettings();
-}
-
 void Window::calculateAspectRatio()
 {
 	if(isFullscreen())

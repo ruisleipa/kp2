@@ -78,6 +78,8 @@ void startGame()
 		SDL_GL_SwapBuffers();		
 		events.processEvents();				
 	}
+	
+	window.saveSettings();
 }
 
 int main(int argc,char** argv)

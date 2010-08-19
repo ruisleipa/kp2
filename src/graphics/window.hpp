@@ -25,8 +25,10 @@ class Window
 		
 		int getBitsPerPixel();
 		
+		void loadSettings();
+		void saveSettings();
+		
 		Window(Sdl& sdl);
-		~Window();
 
 	private:
 		Vector2D surfaceSize;
@@ -51,8 +53,7 @@ class Window
 		void initGLEW();
 		
 		void applyDefaultSettings();
-		void loadSettings();
-		void saveSettings();
+
 };
 
 #endif // WINDOW_HPP
