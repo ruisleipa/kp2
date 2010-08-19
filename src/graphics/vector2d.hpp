@@ -22,6 +22,9 @@ class Vector2D
 		Vector2D& operator/=(const Vector2D& a);
 		Vector2D& operator*=(float);
 		Vector2D& operator/=(float);
+		
+		friend bool operator==(const Vector2D a,const Vector2D b);
+		friend bool operator!=(const Vector2D a,const Vector2D b);
 
 		float getX() const	{return m_x;}
 		void setX(float x)	{m_x=x;}

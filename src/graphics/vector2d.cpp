@@ -98,6 +98,17 @@ Vector2D& Vector2D::operator*=(float a)
 	return *this;
 }
 
+bool operator==(const Vector2D a,const Vector2D b)
+{
+	return (a.m_x==b.m_x &&
+		a.m_y==b.m_y);
+}
+
+bool operator!=(const Vector2D a,const Vector2D b)
+{
+	return !(a==b);
+}
+
 std::ostream& operator<<(std::ostream& os,const Vector2D& s)
 {
 	return os<<"x="<<s.getX()<<" y="<<s.getY();
