@@ -6,7 +6,6 @@
 
 MainMenu::MainMenu(TextureCollection& textureCollection)
 {
-	background.setTexture(textureCollection.getTexture("mainmenu"));
 	background.setFill(true);
 	
 	title.setTexture(textureCollection.getTexture("title"));
