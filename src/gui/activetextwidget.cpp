@@ -63,10 +63,10 @@ void ActiveTextWidget::onDraw(Window& window)
 		
 	position+=pixelsize;	
 		
-	m_border_font.draw(window,getWideText(),position-pixelsize*Vector2D(1,0));	
-	m_border_font.draw(window,getWideText(),position+pixelsize*Vector2D(1,0));
-	m_border_font.draw(window,getWideText(),position-pixelsize*Vector2D(0,1));
-	m_border_font.draw(window,getWideText(),position+pixelsize*Vector2D(0,1));
+	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(1,0));	
+	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(1,0));
+	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(0,1));
+	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(0,1));
 	
 	Scissor scissor(window);
 	
@@ -84,17 +84,17 @@ void ActiveTextWidget::onDraw(Window& window)
 		col.setBlue(lerp(acol.getBlue(),bcol.getBlue(),spread));
 		col.setAlpha(lerp(acol.getAlpha(),bcol.getAlpha(),spread));
 
-		getActiveFont().draw(window,getWideText(),position,col);
+		getActiveFont().draw(getWideText(),position,col);
 	}
 	else
 	{
 		if(!m_mouse_over)
 		{
-			getFont().draw(window,getWideText(),position);
+			getFont().draw(getWideText(),position);
 		}
 		else
 		{
-			getActiveFont().draw(window,getWideText(),position);
+			getActiveFont().draw(getWideText(),position);
 		}
 	}
 }

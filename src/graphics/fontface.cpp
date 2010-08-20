@@ -5,16 +5,10 @@
 #include <sstream>
 #include <iterator>
 
-FontFace::FontFace():
-	m_height(0),
-	m_font(0)
-{
-
-}
-
-FontFace::FontFace(std::string fontfile,int fontsize):
-	m_height(0),
-	m_font(0)
+FontFace::FontFace(Window& window,std::string fontfile,int fontsize):
+	window(window),
+	height(0),
+	font(0)
 {
 	load(fontfile,fontsize);
 }
@@ -31,19 +25,15 @@ int FontFace::load(std::string fontfile,int fontsize)
 		TTF_Init();
 	}
 
-	unload();
-	
-	m_name=fontfile;
+	font=TTF_OpenFont(fontfile.c_str(),fontsize);
 
-	m_font=TTF_OpenFont(fontfile.c_str(),fontsize);
-
-	if(!m_font)
+	if(!font)
 	{
 		std::cerr << TTF_GetError() << "\n";
 		return -1;
 	}
 
-	m_height=TTF_FontHeight(m_font);
+	height=TTF_FontHeight(font);
 
 	loadPage(0);
 
@@ -53,19 +43,12 @@ int FontFace::load(std::string fontfile,int fontsize)
 
 void FontFace::unload()
 {
-	if(m_font)
-	{
-		TTF_CloseFont(m_font);
-		m_font=0;
-	}
-
-	m_name="";
-	m_height=0;
+	TTF_CloseFont(font);
 }
 
-void FontFace::draw(Window& window,std::wstring str,Vector2D pos,float char_height)
+void FontFace::draw(std::wstring str,Vector2D pos,float char_height)
 {
-	if(!m_font)
+	if(!font)
 		return;
 
 	Vector2D char_pos=pos;
@@ -97,9 +80,9 @@ void FontFace::draw(Window& window,std::wstring str,Vector2D pos,float char_heig
 			
 			loadPage(page);
 
-			FontPage& font_page=m_font_pages[page];
+			FontPage& font_page=fontPages[page];
 			
-			LetterRectangle& letterinfo=m_font_pages[page].letter_rectangles[rectangle_index];
+			LetterRectangle& letterinfo=fontPages[page].letter_rectangles[rectangle_index];
 			
 			char_size.setX(char_height*(letterinfo.size.getX()/letterinfo.size.getY())/window.getAspectRatio());
 			
@@ -123,60 +106,8 @@ void FontFace::draw(Window& window,std::wstring str,Vector2D pos,float char_heig
 	}
 }
 
-void FontFace::drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D size,float char_height)
+void FontFace::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float char_height)
 {
-#if 0
-	float row_size = 0;
-	int rows_processed = 0;
-	size_t word_start = 0, word_end = 0;
-	std::wstring res_str, stub;
-	res_str.clear();
-	stub.clear();
-
-	while (word_end != std::wstring::npos)
-	{
-		//If text goes beyond our boundaries, it'll be cropped anyway.
-		if (getTextSize(L"X",char_height).getY()*rows_processed >= size.getY())
-		{
-			stub = str.substr(word_start);
-			res_str += stub;
-			break;
-		}
-		
-
-		word_start = word_end+1;
-		//we want to skip those whitespaces,
-		//but we still must cut from the beginning of the string
-		if (word_end == 0)
-			word_start = 0;
-
-		word_end = str.find(L" ",word_start);
-		row_size += getTextSize(stub + L" ",char_height).getX();
-
-		stub = str.substr(word_start,word_end-word_start);
-		
-		
-		if(stub.find(L"\n") != std::wstring::npos)
-		{
-			row_size = 0;
-			rows_processed++;
-		}
-		if (getTextSize(stub,char_height).getX()+row_size >= size.getX())
-		{
-			row_size = 0;
-			res_str += L"\n";
-			rows_processed++;
-		}		
-		
-		res_str += stub + L" ";
-	}
-
-	draw(res_str, pos, char_height);
-	
-#else
-	/*
-	Split the input to words
-	*/	
 	std::wstringstream ss(str);
 	std::vector<std::wstring> words;
 	
@@ -198,10 +129,7 @@ void FontFace::drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D
 			words.push_back(word);
 	}	
 
-	/*
-	Do layout.
-	*/	
-	int max_rows = size.getY() / getTextSize(window,L"X",char_height).getY() + 1;
+	int max_rows = size.getY() / getTextSize(L"X",char_height).getY() + 1;
 	Vector2D rowsize;
 	std::wstring final_string;
 	
@@ -209,7 +137,7 @@ void FontFace::drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D
 	
 	for(i=words.begin();i!=words.end();++i)
 	{
-		rowsize+=getTextSize(window,(*i),char_height);
+		rowsize+=getTextSize((*i),char_height);
 	
 		if(rowsize.getX()>size.getX())
 		{
@@ -218,8 +146,8 @@ void FontFace::drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D
 			final_string.append(L" ");
 			
 			rowsize=Vector2D(0,0);			
-			rowsize+=getTextSize(window,(*i),char_height);
-			rowsize+=getTextSize(window,L" ",char_height);
+			rowsize+=getTextSize((*i),char_height);
+			rowsize+=getTextSize(L" ",char_height);
 		}
 		else if((*i).at((*i).size()-1)=='\n')
 		{
@@ -232,17 +160,16 @@ void FontFace::drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D
 			final_string.append((*i));
 			final_string.append(L" ");
 			
-			rowsize+=getTextSize(window,L" ",char_height);
+			rowsize+=getTextSize(L" ",char_height);
 		}
 	}
 
-	draw(window, final_string, pos, char_height);
-#endif
+	draw(final_string, pos, char_height);
 }
 
-Vector2D FontFace::getTextSize(Window& window,std::wstring str,float char_height)
+Vector2D FontFace::getTextSize(std::wstring str,float char_height)
 {
-	if(!m_font)
+	if(!font)
 	{
 		return Vector2D(0,0);
 	}
@@ -259,7 +186,7 @@ Vector2D FontFace::getTextSize(Window& window,std::wstring str,float char_height
 
 			loadPage(page);
 			
-			FontPage& font_page=m_font_pages[page];
+			FontPage& font_page=fontPages[page];
 			int rectangle_index=str[i]%FONT_PAGE_SIZE;
 			LetterRectangle& letterinfo=font_page.letter_rectangles[rectangle_index];
 			
@@ -295,7 +222,7 @@ Vector2D FontFace::getTextSize(Window& window,std::wstring str,float char_height
 
 int FontFace::loadPage(unsigned int pagenum)
 {
-	if(m_font_pages.find(pagenum)!=m_font_pages.end())
+	if(fontPages.find(pagenum)!=fontPages.end())
 		return 0;
 
 	//Calculate the size of the needed surface
@@ -304,7 +231,7 @@ int FontFace::loadPage(unsigned int pagenum)
 	int h; 	//hieght of the current glyph
 
 	int texture_width=0;
-	int texture_height=m_height;
+	int texture_height=height;
 
 	int max_texture_size;
 
@@ -322,7 +249,7 @@ int FontFace::loadPage(unsigned int pagenum)
 		{
 			ch[0]=unicode;
 
-			if(TTF_SizeUNICODE(m_font,ch,&w,&h))
+			if(TTF_SizeUNICODE(font,ch,&w,&h))
 			{
 				std::cerr << SDL_GetError() << "\n";
 				return -1;
@@ -336,12 +263,12 @@ int FontFace::loadPage(unsigned int pagenum)
 				}
 				
 				current_pos.setX(0);
-				current_pos+=Vector2D(0,m_height);
-				texture_height+=m_height;
+				current_pos+=Vector2D(0,height);
+				texture_height+=height;
 			}
 
-			m_font_pages[pagenum].letter_rectangles[i].position=current_pos;
-			m_font_pages[pagenum].letter_rectangles[i].size=Vector2D(w,m_height);
+			fontPages[pagenum].letter_rectangles[i].position=current_pos;
+			fontPages[pagenum].letter_rectangles[i].size=Vector2D(w,height);
 					
 			current_pos+=Vector2D(w,0);
 
@@ -379,10 +306,10 @@ int FontFace::loadPage(unsigned int pagenum)
 		
 			SDL_Color color={255,255,255};
 
-			if(!m_font_pages[pagenum].letter_rectangles[i].size.getX())
+			if(!fontPages[pagenum].letter_rectangles[i].size.getX())
 				continue;
 		
-			temp=TTF_RenderUNICODE_Blended(m_font,ch,color);
+			temp=TTF_RenderUNICODE_Blended(font,ch,color);
 			
 			if(!temp)
 			{
@@ -392,8 +319,8 @@ int FontFace::loadPage(unsigned int pagenum)
 
 			SDL_SetAlpha(temp,0,SDL_ALPHA_OPAQUE);
 		
-			SDL_Rect clip={	m_font_pages[pagenum].letter_rectangles[i].position.getX(),
-					m_font_pages[pagenum].letter_rectangles[i].position.getY(),
+			SDL_Rect clip={	fontPages[pagenum].letter_rectangles[i].position.getX(),
+					fontPages[pagenum].letter_rectangles[i].position.getY(),
 					texture_width,
 					texture_height};
 
@@ -408,8 +335,8 @@ int FontFace::loadPage(unsigned int pagenum)
 		}	
 	}
 	
-	m_font_pages[pagenum].letters=Texture(letters);
-	m_font_pages[pagenum].letters.setFilter(TRILINEAR);
+	fontPages[pagenum].letters=Texture(letters);
+	fontPages[pagenum].letters.setFilter(TRILINEAR);
 	SDL_FreeSurface(letters);	
 
 	return 0;

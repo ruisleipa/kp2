@@ -4,7 +4,7 @@
 
 void Field::onDraw(Window& window)
 {				
-	float cursorpos=getFont().getTextSize(window,getWideText().substr(0,m_cursorpos)).getX();
+	float cursorpos=getFont().getTextSize(getWideText().substr(0,m_cursorpos)).getX();
 		
 	float textoffset=-(cursorpos+0.02-getSize().getX());
 	
@@ -48,7 +48,7 @@ void Field::onDraw(Window& window)
 	
 	scissor.set(getAbsolutePosition(),getSize());
 	//glClear(GL_COLOR_BUFFER_BIT);
-	getFont().draw(window,getWideText(),getAbsolutePosition()+Vector2D(textoffset,0));
+	getFont().draw(getWideText(),getAbsolutePosition()+Vector2D(textoffset,0));
 }
 
 void Field::onKeyDown(KeyEvent event)

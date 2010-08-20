@@ -4,6 +4,7 @@
 #include "texture.hpp"
 #include "vector2d.hpp"
 #include "window.hpp"
+#include "utils/noncopyable.hpp"
 #include <SDL/SDL_ttf.h>
 #include <map>
 
@@ -23,30 +24,27 @@ class FontPage
 		LetterRectangle letter_rectangles[FONT_PAGE_SIZE];
 };
 
-class FontFace
+class FontFace: public NonCopyable
 {
 	public:
-		int load(std::string fontfile,int fontsize);
-		void draw(Window& window,std::wstring str,Vector2D pos,float char_height);
-		void drawWrapped(Window& window,std::wstring str,Vector2D pos,Vector2D size,float char_height);
-		Vector2D getTextSize(Window& window,std::wstring str,float char_height);
+		void draw(std::wstring str,Vector2D pos,float char_height);
+		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float char_height);
+		Vector2D getTextSize(std::wstring str,float char_height);
 
-		FontFace();
-		FontFace(std::string fontfile,int fontsize);
+		FontFace(Window& window,std::string fontfile,int fontsize);
 		~FontFace();
 
 	private:
-		FontFace(const FontFace&);
-		FontFace& operator=(const FontFace&);
-
+		int load(std::string fontfile,int fontsize);
+				
 		void unload();
 
 		int loadPage(unsigned int pagenum);
 
-		std::string m_name;
-		int m_height;
-		TTF_Font* m_font;
-		std::map<unsigned long,FontPage> m_font_pages;
+		Window& window;
+		int height;
+		TTF_Font* font;
+		std::map<unsigned long,FontPage> fontPages;
 };
 
 #endif

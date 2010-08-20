@@ -10,20 +10,18 @@ const Color NORMAL(0,0,0);
 const Color PASSIVE(0.7,0.7,0.7);
 const Color ACTIVE(1,1,1);
 
-FontLoader::FontLoader():
-	m_fontface()
+FontLoader::FontLoader(Window& window):
+	font(window,"data/fonts/freesans.ttf",64)
 {
-	m_fontface.load("data/fonts/freesans.ttf",64);
-
-	Font::setFontType("title",&m_fontface,TITLE_SIZE.getY(),NORMAL);
-	Font::setFontType("small",&m_fontface,0.03,NORMAL);
-	Font::setFontType("Label",&m_fontface,ITEM_HEIGHT,NORMAL);
-	Font::setFontType("Textborder",&m_fontface,ITEM_HEIGHT,BORDER);
-	Font::setFontType("Button",&m_fontface,ITEM_HEIGHT,PASSIVE);
-	Font::setFontType("Button.active",&m_fontface,ITEM_HEIGHT,ACTIVE);
-	Font::setFontType("Select",&m_fontface,ITEM_HEIGHT,PASSIVE);
-	Font::setFontType("Select.active",&m_fontface,ITEM_HEIGHT,ACTIVE);
-	Font::setFontType("Field",&m_fontface,ITEM_HEIGHT,NORMAL);	
-	Font::setFontType("Listbox",&m_fontface,0.03,NORMAL);	
+	Font::setFontType("title",&font,TITLE_SIZE.getY(),NORMAL);
+	Font::setFontType("small",&font,0.03,NORMAL);
+	Font::setFontType("Label",&font,ITEM_HEIGHT,NORMAL);
+	Font::setFontType("Textborder",&font,ITEM_HEIGHT,BORDER);
+	Font::setFontType("Button",&font,ITEM_HEIGHT,PASSIVE);
+	Font::setFontType("Button.active",&font,ITEM_HEIGHT,ACTIVE);
+	Font::setFontType("Select",&font,ITEM_HEIGHT,PASSIVE);
+	Font::setFontType("Select.active",&font,ITEM_HEIGHT,ACTIVE);
+	Font::setFontType("Field",&font,ITEM_HEIGHT,NORMAL);	
+	Font::setFontType("Listbox",&font,0.03,NORMAL);	
 }
 

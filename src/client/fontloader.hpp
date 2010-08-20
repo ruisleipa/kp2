@@ -6,10 +6,10 @@
 class FontLoader
 {
 	public:
-		FontLoader();
+		FontLoader(Window& window);
 
 	private:
-		FontFace m_fontface;		
+		FontFace font;		
 };
 
 #endif // FONTLOADER_HPP

@@ -29,7 +29,7 @@ void startGame()
 	LoadingScreen loadingScreen;
 	loadingScreen.setTotalLoadCount(13);
 
-	FontLoader fontLoader;	
+	FontLoader fontLoader(window);	
 	
 	//Load textures
 	TextureCollection backgroundTextures;
