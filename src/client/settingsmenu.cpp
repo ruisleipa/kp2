@@ -8,6 +8,8 @@
 SettingsMenu::SettingsMenu(Window& window,TextureCollection& textures):
 	window(window)
 {
+	setVisible(false);
+
 	title.setFont(Font("title"));
 	title.setText("Asetukset");			
 	
