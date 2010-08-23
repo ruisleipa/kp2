@@ -9,11 +9,11 @@
 void CrashMessage::showMessage()
 {
 #ifdef WIN32
-	const WCHAR* errorMessage=L"Kiihdytyspeli 2 kaatui. Lähetä pelin "
-	L"hakemistossa olevat server.log ja client.log -nimiset tiedostot "
-	L"Siilisoftwaren foorumille. Lähetä myös kuvaus siitä mitä olit "
-	L"tekemässä kun peli kaatui.";
-	
+	const WCHAR* errorMessage=L"Kiihdytyspeli 2 lakkasi toimimasta.\n\n"
+	L"Pelin hakemistossa olevista log-päätteisistä tiedostoista löytyy "
+	L"kehittäjille tarkoitettua lisätietoa virheestä. Liitä ne osaksi "
+	L"vikaraporttia.";
+
 	const WCHAR* errorCaption=L"Kiihdytyspeli 2";
 	
 	MessageBoxW(NULL, errorMessage, errorCaption, MB_OK | MB_ICONERROR);
