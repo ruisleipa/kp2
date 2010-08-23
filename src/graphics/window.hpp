@@ -40,8 +40,6 @@ class Window
 		
 		SDL_Surface* surface;		
 		
-		bool isInGuiMode;
-		
 		IniFile settings;
 		
 		void createSurface();

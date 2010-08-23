@@ -147,8 +147,7 @@ Vector2D Window::getSize()
 }
 
 Window::Window(Sdl& sdl):
-	surface(0),
-	isInGuiMode(false)
+	surface(0)
 {
 	applyDefaultSettings();
 	loadSettings();
@@ -198,12 +197,11 @@ void Window::initGLEW()
 
 	if(retval != GLEW_OK)
 	{
-		std::stringstream error;
-		error << "glewInit failed: ";
-		error << glewGetErrorString(retval);
-		error << std::endl;
+		std::string error;
+		error += "Cannot init GLEW: ";
+		error += reinterpret_cast<const char*>(glewGetErrorString(retval));
 	
-		throw std::runtime_error(error.str()); 	
+		throw std::runtime_error(error); 	
 	}
 }
 
