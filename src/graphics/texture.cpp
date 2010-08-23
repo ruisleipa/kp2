@@ -101,8 +101,13 @@ void Texture::loadFromFile(const std::string& filename)
 	
 	if(!image)
 	{
-		std::cout<<"failed to load file "<<filename<<std::endl;
-		return;
+		std::string error;
+		
+		error += "Unable to load image: '";
+		error += filename;
+		error += "'";
+		
+		throw std::runtime_error(error);
 	}
 	
 	loadFromSurface(image);	
