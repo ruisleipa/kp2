@@ -25,9 +25,8 @@ class TextWidget : public Widget
 		virtual bool doAutoSizeOnChange();
 	
 	private:	
-		Font m_font;
-		
-		std::wstring m_text;
+		Font font;		
+		std::wstring text;
 };
 
 #endif // TEXTWIDGET_HPP

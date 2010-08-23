@@ -4,7 +4,7 @@
 
 void TextWidget::setText(std::string text)
 {
-	m_text=convertToWideString(text);
+	this->text=convertToWideString(text);
 	
 	if(doAutoSizeOnChange())
 		autoSize();
@@ -12,12 +12,12 @@ void TextWidget::setText(std::string text)
 
 std::string TextWidget::getText()
 {
-	return convertToString(m_text);
+	return convertToString(text);
 }
 
 void TextWidget::setText(std::wstring text)
 {
-	m_text=text;
+	this->text=text;
 	
 	if(doAutoSizeOnChange())
 		autoSize();
@@ -25,22 +25,22 @@ void TextWidget::setText(std::wstring text)
 
 std::wstring TextWidget::getWideText()
 {
-	return m_text;
+	return text;
 }
 
 void TextWidget::setFont(Font font)
 {
-	m_font=font;
+	this->font = font;
 }
 
 Font& TextWidget::getFont()
 {
-	return m_font;
+	return font;
 }
 
 void TextWidget::autoSize()
 {
-	setSize(m_font.getTextSize(m_text));
+	setSize(font.getTextSize(text));
 }
 
 TextWidget::TextWidget()
