@@ -3,56 +3,50 @@
 #include <iostream>
 
 #include "ui.hpp"
-#include "graphics.hpp"
-#include "shared/string.hpp"
-#include "connection.hpp"
 
 LocalGameMenu::LocalGameMenu()
 {
-	m_background_texture.load("data/images/localgamemenu.png");
-	m_background.setTexture(&m_background_texture);
+	setVisible(false);
+
+	title.setFont(Font("title"));
+	title.setText("Yksinpeli");			
 	
-	m_title.setFont(Font("title"));
-	m_title.setText("Yksinpeli");			
-	
-	m_new_game_button.setText("Uusi tilanne");
-	m_new_game_button.setClickHandler(Callback0(this,&LocalGameMenu::newClickHandler));
-	m_load_game_button.setText("Lataa tilanne");
+	newGameButton.setText("Uusi tilanne");
+	newGameButton.setClickHandler(Callback0(this,&LocalGameMenu::newClickHandler));
+	loadGameButton.setText("Lataa tilanne");
 	
 	//m_save_game_button.setText("Tallenna peli");
 	
-	m_back_button.setText("Peruuta");
-	m_back_button.setClickHandler(Callback0(this,&LocalGameMenu::backClickHandler));
+	backButton.setText("Peruuta");
+	backButton.setClickHandler(Callback0(this,&LocalGameMenu::backClickHandler));
 	
-	addWidget(&m_background);
+	addChild(title);
 	
-	addWidget(&m_title);
+	addChild(newGameButton);
+	addChild(loadGameButton);	
 	
-	addWidget(&m_new_game_button);
-	addWidget(&m_load_game_button);	
-	
-	addWidget(&m_back_button);	
+	addChild(backButton);	
 }
 
-void LocalGameMenu::onResize(Graphics& graphics)
+void LocalGameMenu::onResize(Window& window)
 {
-	m_background.setSize(Vector2D(1,1));
+	setSize(Vector2D(1,1));
 		
-	m_title.setPosition(TITLE_POSITION);
-	m_title.setSize(TITLE_SIZE);
+	title.setPosition(TITLE_POSITION);
+	title.setSize(TITLE_SIZE);
 		
 	Vector2D buttonpos=CONTENT_POSITION;
 
-	m_new_game_button.setPosition(buttonpos);
-	m_new_game_button.autoSize();
+	newGameButton.setPosition(buttonpos);
+	newGameButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_load_game_button.setPosition(buttonpos);
-	m_load_game_button.autoSize();
+	loadGameButton.setPosition(buttonpos);
+	loadGameButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_back_button.setPosition(BACK_BUTTON_POSITION);
-	m_back_button.autoSize();
+	backButton.setPosition(BACK_BUTTON_POSITION);
+	backButton.autoSize();
 }
 
 void LocalGameMenu::onShow()
@@ -63,12 +57,12 @@ void LocalGameMenu::onShow()
 void LocalGameMenu::backClickHandler()
 {
 	setVisible(false);
-	getRootWidget("mainmenu")->setVisible(true);
+	getParent()->getChild("mainmenu")->setVisible(true);
 }
 
 void LocalGameMenu::newClickHandler()
 {
 	setVisible(false);
-	getRootWidget("newlocalgamemenu")->setVisible(true);
+	getParent()->getChild("newlocalgamemenu")->setVisible(true);
 }
 

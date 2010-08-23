@@ -1,42 +1,28 @@
 #ifndef LOCALGAMEMENU_HPP
 #define LOCALGAMEMENU_HPP
 
-#include "window.hpp"
-#include "label.hpp"
-#include "button.hpp"
-#include "image.hpp"
-#include "field.hpp"
+#include "gui/container.hpp"
+#include "gui/label.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
 
-class LocalGameMenu : public Window
+class LocalGameMenu : public Container
 {
 	public:
 		LocalGameMenu();
 
-		virtual void onResize(Graphics& graphics);
+		virtual void onResize(Window& window);
 		virtual void onShow();
 		
 	private:
 		void backClickHandler();
 		void newClickHandler();
 
-		Texture m_background_texture;
-		Image m_background;
+		Label title;
 		
-		Label m_title;
-
-		class NewGameButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_new_game_button;
-		
-		Button m_load_game_button;
-				
-		class BackButton: public Button
-		{
-			public:				
-				void onClick();
-		}m_back_button;
+		Button newGameButton;
+		Button loadGameButton;				
+		Button backButton;
 };
 
 #endif // LOCALGAMEMENU_HPP
