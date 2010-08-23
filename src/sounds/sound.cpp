@@ -175,8 +175,6 @@ int Sound::stop()
 
 void Sound::initSounds()
 {
-	std::cout<<"init"<<std::endl;
-
 	m_sound_sys_init_tried=true;	
 	
 	if(alutInit(NULL, NULL) == AL_FALSE)
