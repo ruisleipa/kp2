@@ -30,6 +30,7 @@ SRC = \
 	src/gui/image.cpp \
 	src/gui/label.cpp \
 	src/gui/listbox.cpp \
+	src/gui/menucontainer.cpp \
 	src/gui/rootcontainer.cpp \
 	src/gui/select.cpp \
 	src/gui/textwidget.cpp \
