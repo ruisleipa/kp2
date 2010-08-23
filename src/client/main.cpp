@@ -13,7 +13,9 @@
 #include "events/events.hpp"
 
 #include "gui/rootcontainer.hpp"
+#include "gui/menucontainer.hpp"
 
+#include "localgamemenu.hpp"
 #include "mainmenu.hpp"
 #include "settingsmenu.hpp"
 
@@ -31,7 +33,6 @@ void startGame()
 
 	FontLoader fontLoader(window);	
 	
-	//Load textures
 	TextureCollection backgroundTextures;
 	
 	backgroundTextures.addTexture("image00",Texture("data/images/backgrounds/block.png"));
@@ -62,16 +63,25 @@ void startGame()
 	loadingScreen.progress();
 	
 	TextureCollection mainmenuTextures;
-	mainmenuTextures.addTexture("title",Texture("data/images/kp2"));
-	
-	//Init ui
-	RootContainer rootContainer(window,events);
+	mainmenuTextures.addTexture("title",Texture("data/images/kp2_txt.png"));	
 	
 	MainMenu mainMenu(mainmenuTextures);
 	SettingsMenu settingsMenu(window,mainmenuTextures);
+	LocalGameMenu localGameMenu;
 	
-	rootContainer.addChild("mainmenu",mainMenu);
-	rootContainer.addChild("settingsmenu",settingsMenu);
+	MenuContainer menuContainer;	
+	menuContainer.addChild("mainmenu",mainMenu);
+	menuContainer.addChild("settingsmenu",settingsMenu);
+	menuContainer.addChild("localgamemenu",localGameMenu);	
+	menuContainer.showMenu("mainmenu");
+	
+	Image background;
+	background.setSize(Vector2D(1,1));
+	background.setTexture(backgroundTextures.getTexture("image00"));
+	
+	RootContainer rootContainer(window,events);	
+	rootContainer.addChild(background);
+	rootContainer.addChild(menuContainer);
 	
 	rootContainer.doResize(window);
 	
