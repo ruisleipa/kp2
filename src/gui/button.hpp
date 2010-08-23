@@ -15,7 +15,7 @@ class Button : public ActiveTextWidget
 		Button();
 		
 	private:	
-		Callback0 m_click_handler;
+		Callback0 clickHandler;
 		
 };
 

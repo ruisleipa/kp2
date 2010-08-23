@@ -11,13 +11,13 @@ void Button::onMouseDown(MouseEvent event)
 	{
 		ActiveTextWidget::onMouseDown(event);
 		
-		m_click_handler();
+		clickHandler();
 	}
 }
 
 void Button::setClickHandler(Callback0 handler)
 {
-	m_click_handler=handler;
+	clickHandler=handler;
 }
 
 Button::Button()
