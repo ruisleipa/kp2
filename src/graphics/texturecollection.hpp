@@ -11,6 +11,9 @@ class TextureCollection
 	public:		
 		void addTexture(const std::string& name,const Texture& texture);
 		Texture& getTexture(const std::string& name);
+		Texture& getTexture(int index);
+
+		int getTextureCount();
 	
 		void reuploadTextures();
 

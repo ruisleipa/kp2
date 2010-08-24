@@ -69,18 +69,14 @@ void startGame()
 	SettingsMenu settingsMenu(window,mainmenuTextures);
 	LocalGameMenu localGameMenu;
 	
-	MenuContainer menuContainer;	
+	MenuContainer menuContainer(backgroundTextures);	
 	menuContainer.addChild("mainmenu",mainMenu);
 	menuContainer.addChild("settingsmenu",settingsMenu);
 	menuContainer.addChild("localgamemenu",localGameMenu);	
 	menuContainer.showMenu("mainmenu");
-	
-	Image background;
-	background.setSize(Vector2D(1,1));
-	background.setTexture(backgroundTextures.getTexture("image00"));
+	menuContainer.setSize(Vector2D(1,1));
 	
 	RootContainer rootContainer(window,events);	
-	rootContainer.addChild(background);
 	rootContainer.addChild(menuContainer);
 	
 	rootContainer.doResize(window);

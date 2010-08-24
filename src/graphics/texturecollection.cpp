@@ -25,6 +25,16 @@ Texture& TextureCollection::getTexture(const std::string& name)
 	return textures[name];
 }
 
+Texture& TextureCollection::getTexture(int index)
+{
+	
+}
+
+int TextureCollection::getTextureCount()
+{
+	return textures.size();
+}
+
 void TextureCollection::reuploadTextures()
 {
 #ifdef WIN32

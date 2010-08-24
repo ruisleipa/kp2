@@ -8,7 +8,8 @@ void MenuContainer::showMenu(std::string tag)
 	}
 	
 	getChild(tag)->setVisible(true);
-	background.setVisible(true);
+	backgroundFront.setVisible(true);
+	backgroundBack.setVisible(true);
 }
 
 void MenuContainer::showOverlayMenu(std::string tag)
@@ -16,29 +17,32 @@ void MenuContainer::showOverlayMenu(std::string tag)
 	getChild(tag)->setVisible(true);
 }
 
-void MenuContainer::onDraw(Graphics& graphics)
+void MenuContainer::onDraw(Window& window)
 {
-	float alpha=m_bg_chage_timer.getSeconds()*10.0;
+	float alpha=backgroundChangeTimer.getSeconds()*10.0;
 	if(alpha > 1.0)
 		alpha = 1.0;
 	
-	m_background_back.setColor(Color(1,1,1,1.0-alpha));
+	backgroundBack.setColor(Color(1,1,1,1.0-alpha));
 }
 
 void MenuContainer::changeBackground()
 {
-	int i=rand()%m_background_files.size();
+	backgroundBack.setTexture(backgroundFront.getTexture());
+	backgroundBack.setTexture(backgroundtextures.getTexture("image01"));
+	backgroundFront.setTexture(backgroundtextures.getTexture("image00"));
 	
-	while(m_background.getTexture()==&m_background_files.at(i))
-		i=rand()%m_background_files.size();
-	
-	m_background_back.setTexture(m_background.getTexture());
-	m_background.setTexture(&m_background_files.at(i));
-	
-	m_bg_chage_timer.reset();
+	backgroundChangeTimer.reset();
 }
 
-MenuContainer::MenuContainer()
+MenuContainer::MenuContainer(TextureCollection& backgroundtextures):
+	backgroundtextures(backgroundtextures)
 {
-	setSize(Vector2D(1,1));
+	backgroundFront.setTexture(backgroundtextures.getTexture("image00"));
+	backgroundFront.setSize(Vector2D(1,1));
+	
+	backgroundBack.setSize(Vector2D(1,1));
+	
+	addChild(backgroundFront);
+	addChild(backgroundBack);
 }
