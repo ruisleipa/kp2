@@ -30,25 +30,22 @@ class Widget: public EventListener, public NonCopyable
 		These are the functions for signaling that an event has
 		happened.		
 		*/		
-		virtual void doKeyDown(KeyEvent event);
-		virtual void doKeyUp(KeyEvent event);				
+		virtual void keyDown(KeyEvent event);
+		virtual void keyUp(KeyEvent event);				
 		
-		virtual void doMouseDown(MouseEvent event);
-		virtual void doMouseUp(MouseEvent event);
-		virtual void doMouseMove(MouseEvent event);	
+		virtual void mouseDown(MouseEvent event);
+		virtual void mouseUp(MouseEvent event);
+		virtual void mouseMove(MouseEvent event);	
 		
-		virtual void doResize(Window& window);		
+		virtual void resize(Window& window);		
 		
-		virtual void doMouseOn();
-		virtual void doMouseOut();		
+		virtual void mouseOn();
+		virtual void mouseOut();		
 		
-		virtual void doBlur();
-		virtual void doFocus();	
+		virtual void blur();
+		virtual void focus();	
 		
-		virtual void doDraw(Window& window);		
-		
-		virtual void doShow();
-		virtual void doHide();
+		virtual void draw(Window& window);		
 		
 		Container* getParent();
 		
@@ -81,9 +78,6 @@ class Widget: public EventListener, public NonCopyable
 		virtual void onFocus();	
 		
 		virtual void onDraw(Window& window);
-		
-		virtual void onShow();
-		virtual void onHide();
 	
 	private:
 		Vector2D position;

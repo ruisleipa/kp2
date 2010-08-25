@@ -1,66 +1,66 @@
 #include "widget.hpp"
 
-void Widget::doKeyDown(KeyEvent event)
+void Widget::keyDown(KeyEvent event)
 {
 	onKeyDown(event);
 }
 
-void Widget::doKeyUp(KeyEvent event)
+void Widget::keyUp(KeyEvent event)
 {
 	onKeyUp(event);
 }
 
-void Widget::doMouseDown(MouseEvent event)
+void Widget::mouseDown(MouseEvent event)
 {
 	onMouseDown(event);
 }
 
-void Widget::doMouseUp(MouseEvent event)
+void Widget::mouseUp(MouseEvent event)
 {
 	onMouseUp(event);
 }
 
-void Widget::doMouseMove(MouseEvent event)
+void Widget::mouseMove(MouseEvent event)
 {
 	onMouseMove(event);
 }
 
-void Widget::doResize(Window& window)
+void Widget::resize(Window& window)
 {
 	onResize(window);
 }
 
-void Widget::doMouseOn()
+void Widget::mouseOn()
 {
 	onMouseOn();
 }
 
-void Widget::doMouseOut()
+void Widget::mouseOut()
 {
 	onMouseOut();
 }
 
-void Widget::doBlur()
+void Widget::blur()
 {
 	onBlur();
 }
 
-void Widget::doFocus()
+void Widget::focus()
 {
 	onFocus();
 }
 	
-void Widget::doDraw(Window& window)
+void Widget::draw(Window& window)
 {
 	onDraw(window);
 }
 
-void Widget::doShow()
+void Widget::show()
 {
 	onShow();
 }
 
-void Widget::doHide()
+void Widget::hide()
 {
 	onHide();
 }
@@ -165,11 +165,6 @@ Vector2D Widget::getSize()
 void Widget::setVisible(bool visible)
 {
 	this->visible=visible;
-	
-	if(this->visible)
-		onShow();
-	else
-		onHide();
 }	
 
 bool Widget::getVisible()
