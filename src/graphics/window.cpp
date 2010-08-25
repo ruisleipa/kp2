@@ -32,6 +32,11 @@ void Window::setVsyncPreference(bool vsync)
 	vsyncPreference = vsync;
 }
 
+bool Window::getVsyncPreference()
+{
+	return vsyncPreference;
+}
+
 void Window::createSurface()
 {
 	int flags=SDL_OPENGL;
@@ -119,16 +124,6 @@ std::vector<Vector2D> Window::getPossibleSizes()
 	}	
 
 	return final;
-}
-
-bool Window::isVsynced()
-{
-	int value;
-
-	if(SDL_GL_GetAttribute(SDL_GL_SWAP_CONTROL,&value) == -1)
-		throw std::runtime_error("Cannot check Vsync state.");
-
-	return value;
 }
 
 bool Window::isFullscreen()
@@ -238,7 +233,7 @@ void Window::saveSettings()
 	int width=getSize().getX();
 	int height=getSize().getY();
 	int fullscreen=isFullscreen();
-	int vsync=isVsynced();
+	int vsync=getVsyncPreference();
 	
 	settings.setValue("fullscreen",fullscreen);
 	settings.setValue("vsync",vsync);

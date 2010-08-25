@@ -19,8 +19,8 @@ class Window
 		void setVideoMode(Vector2D size,int bpp,bool fullscreen);
 		
 		void setVsyncPreference(bool vsync);
+		bool getVsyncPreference();
 		
-		bool isVsynced();
 		bool isFullscreen();
 		
 		int getBitsPerPixel();

@@ -122,7 +122,7 @@ void SettingsMenu::updateDisplayOptions()
 
 	fullscreenSelect.setIndex(window.isFullscreen());
 	
-	vsyncSelect.setIndex(window.isVsynced());
+	vsyncSelect.setIndex(window.getVsyncPreference());
 	
 	sizeSelect.autoSize();	
 	fullscreenSelect.autoSize();
