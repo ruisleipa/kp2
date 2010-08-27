@@ -18,8 +18,6 @@ class Widget: public EventListener, public NonCopyable
 		void setPosition(Vector2D position);	
 		Vector2D getPosition();
 		
-		Vector2D getAbsolutePosition();
-		
 		void setSize(Vector2D size);	
 		Vector2D getSize();
 		
@@ -52,9 +50,9 @@ class Widget: public EventListener, public NonCopyable
 		Widget();
 		virtual ~Widget();
 	
-	protected:		
-		void setParent(Container* container);
-		
+	protected:	
+		Vector2D getAbsolutePosition();
+	
 		/*
 		These are the functions that implement object specific handler
 		for an event.
@@ -77,6 +75,8 @@ class Widget: public EventListener, public NonCopyable
 		virtual void onDraw(Window& window);
 	
 	private:
+		void setParent(Container* container);
+	
 		Vector2D position;
 		Vector2D size;
 		
