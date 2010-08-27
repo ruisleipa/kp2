@@ -26,12 +26,8 @@ class Container : public Widget
 	protected:
 		int getChildCount();
 		Widget* getChild(int index);
-		
-		virtual void setWindow(Window* window);
 	
 	private:
-		void propagateWindowPointer();
-	
 		Widget* findWidgetUnderPoint(Vector2D point);
 
 		Widget* focusedChild;

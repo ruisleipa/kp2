@@ -55,9 +55,6 @@ class Widget: public EventListener, public NonCopyable
 	protected:		
 		void setParent(Container* container);
 		
-		Window* getWindow();
-		virtual void setWindow(Window* window);
-		
 		/*
 		These are the functions that implement object specific handler
 		for an event.
@@ -86,7 +83,6 @@ class Widget: public EventListener, public NonCopyable
 		bool visible;
 		
 		Container* parent;
-		Window* window;		
 		
 		friend class Container;
 };

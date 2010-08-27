@@ -200,23 +200,6 @@ Widget* Container::getChild(int index)
 	return children[index].widget;
 }
 
-void Container::setWindow(Window* window)
-{
-	Widget::setWindow(window);
-	
-	propagateWindowPointer();
-}
-
-void Container::propagateWindowPointer()
-{	
-	Window* window=getWindow();
-
-	for(int i=0;i<getChildCount();i++)
-	{
-		getChild(i)->setWindow(window);
-	}
-}
-
 Container::Container():
 	mouseOverChild(0),
 	focusedChild(0)

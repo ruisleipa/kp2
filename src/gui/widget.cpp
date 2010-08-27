@@ -174,8 +174,7 @@ bool Widget::getVisible()
 
 Widget::Widget():
 	visible(true),
-	parent(0),
-	window(0)
+	parent(0)
 {
 
 }
@@ -193,14 +192,4 @@ Container* Widget::getParent()
 void Widget::setParent(Container* parent)
 {
 	this->parent=parent;
-}
-
-Window* Widget::getWindow()
-{
-	return window;
-}
-
-void Widget::setWindow(Window* window)
-{
-	this->window = window;
 }
