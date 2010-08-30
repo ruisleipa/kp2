@@ -145,6 +145,11 @@ Vector2D Widget::getSize()
 void Widget::setVisible(bool visible)
 {
 	this->visible=visible;
+	
+	if(this->visible)
+		onShow();
+	else
+		onHide();
 }	
 
 bool Widget::getVisible()

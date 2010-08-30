@@ -72,6 +72,9 @@ class Widget: public EventListener, public NonCopyable
 		virtual void onBlur();
 		virtual void onFocus();	
 		
+		virtual void onShow();	
+		virtual void onHide();	
+		
 		virtual void onDraw(Window& window);
 	
 	private:
