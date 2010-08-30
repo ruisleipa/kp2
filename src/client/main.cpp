@@ -15,12 +15,15 @@
 #include "gui/rootcontainer.hpp"
 #include "gui/menucontainer.hpp"
 
+#include "newlocalgamemenu.hpp"
 #include "localgamemenu.hpp"
 #include "mainmenu.hpp"
 #include "settingsmenu.hpp"
 
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
+
+#include "connection.hpp"
 
 void startGame()
 {
@@ -65,14 +68,18 @@ void startGame()
 	TextureCollection mainmenuTextures;
 	mainmenuTextures.addTexture("title",Texture("data/images/kp2_txt.png"));	
 	
+	Connection connection;
+	
 	MainMenu mainMenu(mainmenuTextures);
 	SettingsMenu settingsMenu(window,mainmenuTextures);
 	LocalGameMenu localGameMenu;
+	NewLocalGameMenu newLocalGameMenu(connection);
 	
 	MenuContainer menuContainer(backgroundTextures);	
 	menuContainer.addMenu("mainmenu",mainMenu);
 	menuContainer.addMenu("settingsmenu",settingsMenu);
 	menuContainer.addMenu("localgamemenu",localGameMenu);	
+	menuContainer.addMenu("newlocalgamemenu",newLocalGameMenu);	
 	menuContainer.showMenu("mainmenu");
 	menuContainer.setSize(Vector2D(1,1));
 	

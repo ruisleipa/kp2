@@ -3,11 +3,10 @@
 #include <iostream>
 #include <stdint.h>
 
-#include "shared/inifile.hpp"
-#include "shared/packet.hpp"
+#include "utils/inifile.hpp"
+#include "net/packet.hpp"
 
-#include "sdl.hpp"
-#include "sound.hpp"
+#include "utils/sdl.hpp"
 
 bool Connection::connect(std::string hostname,int port)
 {

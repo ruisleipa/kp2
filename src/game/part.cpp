@@ -1,6 +1,6 @@
 #include "part.hpp"
 
-#include "packet.hpp"
+#include "net/packet.hpp"
 #include "inifile.hpp"
 
 bool Part::load(const std::string& filename)

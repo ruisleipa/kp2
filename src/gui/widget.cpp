@@ -104,6 +104,16 @@ void Widget::onFocus()
 {
 
 }
+
+void Widget::onShow()
+{
+
+}
+
+void Widget::onHide()
+{
+
+}
 	
 void Widget::onDraw(Window& window)
 {

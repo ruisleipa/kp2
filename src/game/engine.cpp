@@ -1,6 +1,6 @@
 #include "engine.hpp"
 
-#include "packet.hpp"
+#include "net/packet.hpp"
 #include "inifile.hpp"
 
 bool Engine::load(const std::string& filename)

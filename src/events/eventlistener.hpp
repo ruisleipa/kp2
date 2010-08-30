@@ -4,7 +4,7 @@
 class KeyEvent;
 class MouseEvent;
 //class Graphics;
-//class Connection;
+class Connection;
 
 class EventListener
 {
@@ -16,9 +16,7 @@ class EventListener
 		virtual void mouseUp(MouseEvent event);
 		virtual void mouseMove(MouseEvent event);
 	
-	//	virtual void doResize(Graphics& graphics);
-		
-	//	virtual void doConnectionEvent(Connection& connection);
+		virtual void doConnectionEvent(Connection& connection);
 };
 
 #endif // KEYEVENT_HPP

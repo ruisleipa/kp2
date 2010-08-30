@@ -1,6 +1,6 @@
 #include "vehicle.hpp"
 
-#include "packet.hpp"
+#include "net/packet.hpp"
 #include "inifile.hpp"
 
 bool Vehicle::load(const std::string& filename)

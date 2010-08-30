@@ -4,7 +4,7 @@
 #include <string>
 #include <stdint.h>
 
-#include "packet.hpp"
+#include "net/packet.hpp"
 
 /*
 These are the part type IDs for serialization. These should make sure that a 

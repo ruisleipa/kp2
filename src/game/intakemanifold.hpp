@@ -5,7 +5,7 @@
 
 #include "part.hpp"
 
-#include "packet.hpp"
+#include "net/packet.hpp"
 
 class IntakeManifold: public Part
 {

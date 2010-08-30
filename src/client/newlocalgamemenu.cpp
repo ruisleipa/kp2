@@ -10,84 +10,76 @@
 NewLocalGameMenu::NewLocalGameMenu(Connection& connection):
 	m_connection(connection)
 {
-	m_background_texture.load("data/images/newlocalgamemenu.png");
-	m_background.setTexture(&m_background_texture);
+	title.setFont(Font("title"));
+	title.setText("Uusi tilanne");			
 	
-	m_title.setFont(Font("title"));
-	m_title.setText("Uusi tilanne");			
+	nameLabel.setText("Nimi:");
+	difficultyLabel.setText("Vaikeusaste:");
 	
-	m_name_label.setText("Nimi:");
-	m_difficulty_label.setText("Vaikeusaste:");
-	
-	m_difficulty_select.addItem("helppo");
-	m_difficulty_select.addItem("normaali");
-	m_difficulty_select.addItem("vaikea");
+	difficultySelect.addItem("helppo");
+	difficultySelect.addItem("normaali");
+	difficultySelect.addItem("vaikea");
 
-	m_back_button.setText("Peruuta");
-	m_back_button.setClickHandler(Callback0(this,&NewLocalGameMenu::backClickHandler));
-	m_start_button.setText("Aloita");
-	m_start_button.setClickHandler(Callback0(this,&NewLocalGameMenu::startClickHandler));
-
-	addWidget(&m_background);
+	backButton.setText("Peruuta");
+	backButton.setClickHandler(Callback0(this,&NewLocalGameMenu::backClickHandler));
+	startButton.setText("Aloita");
+	startButton.setClickHandler(Callback0(this,&NewLocalGameMenu::startClickHandler));
 	
-	addWidget(&m_title);
+	addWidget(&title);
 	
-	addWidget(&m_name_label);
-	addWidget(&m_difficulty_label);
+	addWidget(&nameLabel);
+	addWidget(&difficultyLabel);
 		
-	addWidget(&m_name_field);	
-	addWidget(&m_difficulty_select);
+	addWidget(&nameField);	
+	addWidget(&difficultySelect);
 	
-	addWidget(&m_back_button);	
-	addWidget(&m_start_button);
+	addWidget(&backButton);	
+	addWidget(&startButton);
 }
 
 void NewLocalGameMenu::onResize(Graphics& graphics)
 {
-	m_background.setSize(Vector2D(1,1));
-		
-	m_title.setPosition(TITLE_POSITION);
-	m_title.setSize(TITLE_SIZE);
+	title.setPosition(TITLE_POSITION);
+	title.setSize(TITLE_SIZE);
 		
 	Vector2D buttonpos=CONTENT_POSITION;
 
-	m_name_label.setPosition(buttonpos);
-	m_name_label.autoSize();
+	nameLabel.setPosition(buttonpos);
+	nameLabel.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_difficulty_label.setPosition(buttonpos);
-	m_difficulty_label.autoSize();
+	difficultyLabel.setPosition(buttonpos);
+	difficultyLabel.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
 	buttonpos=CONTENT_POSITION;
 	buttonpos.setX(0.5);
 	
-	m_name_field.setPosition(buttonpos);
-	m_name_field.setSize(FIELD_SIZE);	
+	nameField.setPosition(buttonpos);
+	nameField.setSize(FIELD_SIZE);	
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_difficulty_select.setPosition(buttonpos);
-	m_difficulty_select.autoSize();
+	difficultySelect.setPosition(buttonpos);
+	difficultySelect.autoSize();
 	buttonpos+=BUTTON_HEIGHT;	
 
-	m_back_button.setPosition(BACK_BUTTON_POSITION);
-	m_back_button.autoSize();
+	backButton.setPosition(BACK_BUTTON_POSITION);
+	backButton.autoSize();
 
-	m_start_button.setPosition(NEXT_BUTTON_POSITION);
-	m_start_button.autoSize();
+	startButton.setPosition(NEXT_BUTTON_POSITION);
+	startButton.autoSize();
 
 }
 
 void NewLocalGameMenu::onShow()
 {
-	m_name_field.setText("");
-	m_difficulty_select.setIndex(1);
+	nameField.setText("");
+	difficultySelect.setIndex(1);
 }
 
 void NewLocalGameMenu::backClickHandler()
 {
-	setVisible(false);
-	getRootWidget("localgamemenu")->setVisible(true);	
+	getMenuContainer()->showMenu("localgamemenu");
 }
 
 void NewLocalGameMenu::startClickHandler()
@@ -96,7 +88,7 @@ void NewLocalGameMenu::startClickHandler()
 	{
 		Packet packet;
 		packet.setType(PLAYER_NAME);
-		packet<<m_name_field.getText();
+		packet<<nameField.getText();
 		
 		m_connection.writeToServer(packet);
 		
@@ -111,8 +103,7 @@ void NewLocalGameMenu::startClickHandler()
 		packet2.setType(PARTSHOP_LIST);		
 		m_connection.writeToServer(packet2);
 	
-		setVisible(false);
-		getRootWidget("careermenu")->setVisible(true);
+		getMenuContainer()->showMenu("careermenu");
 	}
 }
 

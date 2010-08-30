@@ -1,6 +1,6 @@
 #include "cylinderhead.hpp"
 
-#include "packet.hpp"
+#include "net/packet.hpp"
 #include "inifile.hpp"
 
 bool CylinderHead::load(const std::string& filename)

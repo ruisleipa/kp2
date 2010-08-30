@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-#include "packet.hpp"
+#include "net/packet.hpp"
 
 const std::string& Player::getName() const
 {
