@@ -27,7 +27,19 @@ Texture& TextureCollection::getTexture(const std::string& name)
 
 Texture& TextureCollection::getTexture(int index)
 {
+	std::map<std::string,Texture>::iterator i;
 	
+	for(i=textures.begin();i!=textures.end();++i)
+	{
+		if(index == 0)
+		{
+			return (*i).second;
+		}
+		
+		index--;
+	}
+	
+	return invalidTexture;
 }
 
 int TextureCollection::getTextureCount()

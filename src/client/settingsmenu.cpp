@@ -131,8 +131,7 @@ void SettingsMenu::updateDisplayOptions()
 
 void SettingsMenu::backClick()
 {
-	setVisible(false);
-	getParent()->getChild("mainmenu")->setVisible(true);
+	getMenuContainer()->showMenu("mainmenu");
 }
 
 void SettingsMenu::applyClick()

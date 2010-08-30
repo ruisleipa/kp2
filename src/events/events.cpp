@@ -43,7 +43,7 @@ void Events::processEvents()
 		
 			KeyEvent event(window, keysym.unicode, keysym.sym);
 			
-			m_event_listener->doKeyDown(event);
+			m_event_listener->keyDown(event);
 		}
 		else if(sdl_event.type == SDL_KEYUP)
 		{
@@ -51,7 +51,7 @@ void Events::processEvents()
 		
 			KeyEvent event(window, keysym.unicode, keysym.sym);
 			
-			m_event_listener->doKeyUp(event);
+			m_event_listener->keyUp(event);
 		}
 		else if(sdl_event.type == SDL_MOUSEBUTTONDOWN)
 		{
@@ -61,7 +61,7 @@ void Events::processEvents()
 							
 			MouseEvent event(window, pos, 1 << (button.button-1));
 			
-			m_event_listener->doMouseDown(event);
+			m_event_listener->mouseDown(event);
 		}
 		else if(sdl_event.type == SDL_MOUSEBUTTONUP)
 		{
@@ -71,7 +71,7 @@ void Events::processEvents()
 									
 			MouseEvent event(window, pos, 1 << (button.button-1));
 			
-			m_event_listener->doMouseUp(event);
+			m_event_listener->mouseUp(event);
 		}
 		else if(sdl_event.type == SDL_MOUSEMOTION)
 		{
@@ -81,7 +81,7 @@ void Events::processEvents()
 					
 			MouseEvent event(window, pos, motion.state);
 			
-			m_event_listener->doMouseMove(event);
+			m_event_listener->mouseMove(event);
 		}
 	}
 }

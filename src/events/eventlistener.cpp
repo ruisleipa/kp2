@@ -4,27 +4,27 @@
 #include "mouseevent.hpp"
 //#include "connection.hpp"
 
-void EventListener::doKeyDown(KeyEvent event)
+void EventListener::keyDown(KeyEvent event)
 {
 
 }
 
-void EventListener::doKeyUp(KeyEvent event)
+void EventListener::keyUp(KeyEvent event)
 {
 
 }
 
-void EventListener::doMouseDown(MouseEvent event)
+void EventListener::mouseDown(MouseEvent event)
 {
 
 }
 
-void EventListener::doMouseUp(MouseEvent event)
+void EventListener::mouseUp(MouseEvent event)
 {
 
 }
 
-void EventListener::doMouseMove(MouseEvent event)
+void EventListener::mouseMove(MouseEvent event)
 {
 
 }

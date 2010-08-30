@@ -73,8 +73,7 @@ void MainMenu::netgameClickHandler()
 
 void MainMenu::localgameClickHandler()
 {
-	setVisible(false);
-	getParent()->getChild("localgamemenu")->setVisible(true);
+	getMenuContainer()->showMenu("localgamemenu");
 }
 
 void MainMenu::aboutClickHandler()
@@ -84,8 +83,7 @@ void MainMenu::aboutClickHandler()
 
 void MainMenu::settingsClickHandler()
 {
-	setVisible(false);
-	getParent()->getChild("settingsmenu")->setVisible(true);
+	getMenuContainer()->showMenu("settingsmenu");
 }
 
 void MainMenu::quitClickHandler()

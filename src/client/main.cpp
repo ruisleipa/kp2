@@ -70,21 +70,21 @@ void startGame()
 	LocalGameMenu localGameMenu;
 	
 	MenuContainer menuContainer(backgroundTextures);	
-	menuContainer.addChild("mainmenu",mainMenu);
-	menuContainer.addChild("settingsmenu",settingsMenu);
-	menuContainer.addChild("localgamemenu",localGameMenu);	
+	menuContainer.addMenu("mainmenu",mainMenu);
+	menuContainer.addMenu("settingsmenu",settingsMenu);
+	menuContainer.addMenu("localgamemenu",localGameMenu);	
 	menuContainer.showMenu("mainmenu");
 	menuContainer.setSize(Vector2D(1,1));
 	
 	RootContainer rootContainer(window,events);	
-	rootContainer.addChild(menuContainer);
+	rootContainer.addWidget(menuContainer);
 	
-	rootContainer.doResize(window);
+	rootContainer.resize(window);
 	
 	while(1)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
-		rootContainer.doDraw(window);
+		rootContainer.draw(window);
 		SDL_GL_SwapBuffers();		
 		events.processEvents();				
 	}

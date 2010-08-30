@@ -55,16 +55,6 @@ void Widget::draw(Window& window)
 	onDraw(window);
 }
 
-void Widget::show()
-{
-	onShow();
-}
-
-void Widget::hide()
-{
-	onHide();
-}
-
 void Widget::onKeyDown(KeyEvent event)
 {
 	
@@ -116,16 +106,6 @@ void Widget::onFocus()
 }
 	
 void Widget::onDraw(Window& window)
-{
-
-}
-
-void Widget::onShow()
-{
-
-}
-
-void Widget::onHide()
 {
 
 }

@@ -1,13 +1,13 @@
 #ifndef MAINMENU_HPP
 #define MAINMENU_HPP
 
-#include "gui/container.hpp"
+#include "gui/menu.hpp"
 #include "gui/button.hpp"
 #include "gui/image.hpp"
 
 #include "graphics/texturecollection.hpp"
 
-class MainMenu : public Container
+class MainMenu : public Menu
 {
 	public:
 		MainMenu(TextureCollection& textureCollection);

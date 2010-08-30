@@ -3,13 +3,13 @@
 
 #include "graphics/texturecollection.hpp"
 
-#include "gui/container.hpp"
+#include "gui/menu.hpp"
 #include "gui/label.hpp"
 #include "gui/select.hpp"
 #include "gui/button.hpp"
 #include "gui/image.hpp"
 
-class SettingsMenu : public Container
+class SettingsMenu : public Menu
 {
 	public:
 		SettingsMenu(Window& window,TextureCollection& textures);

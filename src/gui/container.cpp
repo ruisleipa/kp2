@@ -17,100 +17,100 @@
 #include <GL/gl.h>
 #include <SDL/SDL.h>
 
-void Container::doKeyDown(KeyEvent event)
+void Container::keyDown(KeyEvent event)
 {
-	Widget::doKeyDown(event);
+	Widget::keyDown(event);
 
 	if(focusedChild)
-		focusedChild->doKeyDown(event);
+		focusedChild->keyDown(event);
 }
 
-void Container::doKeyUp(KeyEvent event)
+void Container::keyUp(KeyEvent event)
 {
-	Widget::doKeyUp(event);
+	Widget::keyUp(event);
 
 	if(focusedChild)
-		focusedChild->doKeyUp(event);
+		focusedChild->keyUp(event);
 }
 
-void Container::doMouseDown(MouseEvent event)
+void Container::mouseDown(MouseEvent event)
 {
-	Widget::doMouseDown(event);
+	Widget::mouseDown(event);
 
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 	
 	if(widget != focusedChild)
 	{
 		if(focusedChild)
-			focusedChild->doBlur();
+			focusedChild->blur();
 	
 		focusedChild=widget;
 		
 		if(focusedChild)
-			focusedChild->doFocus();
+			focusedChild->focus();
 	}
 	
 	if(widget)
-		widget->doMouseDown(event);
+		widget->mouseDown(event);
 
 }
 
-void Container::doMouseUp(MouseEvent event)
+void Container::mouseUp(MouseEvent event)
 {
-	Widget::doMouseUp(event);
+	Widget::mouseUp(event);
 
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 
 	if(widget)
-		widget->doMouseUp(event);
+		widget->mouseUp(event);
 }
 
-void Container::doMouseMove(MouseEvent event)
+void Container::mouseMove(MouseEvent event)
 {
-	Widget::doMouseMove(event);
+	Widget::mouseMove(event);
 	
 	Widget* widget=findWidgetUnderPoint(event.getPosition());
 	
 	if(widget != mouseOverChild)
 	{
 		if(mouseOverChild)
-			mouseOverChild->doMouseOut();
+			mouseOverChild->mouseOut();
 	
 		mouseOverChild=widget;
 		
 		if(mouseOverChild)
-			mouseOverChild->doMouseOn();
+			mouseOverChild->mouseOn();
 	}
 	
 	if(mouseOverChild)
-		mouseOverChild->doMouseMove(event);
+		mouseOverChild->mouseMove(event);
 }
 
-void Container::doResize(Window& window)
+void Container::resize(Window& window)
 {
-	Widget::doResize(window);
+	Widget::resize(window);
 
-	std::vector<TaggedWidget>::iterator i;
+	std::vector<Widget*>::iterator i;
 	
 	for(i=children.begin();i!=children.end();++i)
 	{
-		Widget* widget=(*i).widget;
+		Widget* widget=(*i);
 	
-		widget->doResize(window);
+		widget->resize(window);
 	}	
 }
 
-void Container::doDraw(Window& window)
+void Container::draw(Window& window)
 {
-	Widget::doDraw(window);
+	Widget::draw(window);
 	
-	std::vector<TaggedWidget>::iterator i;
+	std::vector<Widget*>::iterator i;
 	
 	Scissor scissor(window);
 	
 	for(i=children.begin();i!=children.end();++i)
 	{
-		Widget* widget=(*i).widget;
+		Widget* widget=(*i);
 	
 		if(!widget->getVisible())
 			continue;
@@ -138,47 +138,17 @@ void Container::doDraw(Window& window)
 #endif
 		scissor.set(start,widget->getSize());
 	
-		widget->doDraw(window);
+		widget->draw(window);
 	}
 	
 	scissor.reset();
 }
 
-
-
 void Container::addChild(Widget& child)
 {
-	addChild(convertToString(&child),child);
-}
-
-void Container::addChild(std::string tag,Widget& child)
-{
-	TaggedWidget taggedWidget;
-	
-	taggedWidget.tag=tag;
-	taggedWidget.widget=&child;		
-
-	children.push_back(taggedWidget);
+	children.push_back(&child);
 	
 	child.setParent(this);
-	child.setWindow(getWindow());
-}
-
-Widget* Container::getChild(std::string tag)
-{
-	std::vector<TaggedWidget>::iterator i;
-	
-	for(i=children.begin();i!=children.end();++i)
-	{
-		if(tag==(*i).tag)
-			return (*i).widget;	
-	}
-
-	std::stringstream ss;
-		
-	ss << "getChild failed: invalid tag '" << tag << "'";
-
-	throw std::runtime_error(ss.str());
 }
 
 int Container::getChildCount()
@@ -197,7 +167,7 @@ Widget* Container::getChild(int index)
 		throw std::runtime_error(ss.str());
 	}
 	
-	return children[index].widget;
+	return children[index];
 }
 
 Container::Container():
@@ -209,11 +179,11 @@ Container::Container():
 
 Widget* Container::findWidgetUnderPoint(Vector2D point)
 {
-	std::vector<TaggedWidget>::reverse_iterator i;
+	std::vector<Widget*>::reverse_iterator i;
 	
 	for(i=children.rbegin();i!=children.rend();++i)
 	{
-		Widget* widget=(*i).widget;
+		Widget* widget=(*i);
 
 		if(!widget->getVisible())
 			continue;

@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-class Texture;
+#include "texture.hpp"
 
 class TextureCollection
 {
@@ -19,6 +19,8 @@ class TextureCollection
 
 	private:
 		std::map<std::string,Texture> textures;
+		
+		Texture invalidTexture;
 
 };
 

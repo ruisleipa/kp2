@@ -7,23 +7,20 @@
 class Container : public Widget
 {
 	public:
-		virtual void doKeyDown(KeyEvent event);
-		virtual void doKeyUp(KeyEvent event);
-		virtual void doMouseDown(MouseEvent event);
-		virtual void doMouseUp(MouseEvent event);
-		virtual void doMouseMove(MouseEvent event);
-				
-		virtual void doResize(Window& window);
-		virtual void doDraw(Window& window);
+		virtual void keyDown(KeyEvent event);
+		virtual void keyUp(KeyEvent event);
+		virtual void mouseDown(MouseEvent event);
+		virtual void mouseUp(MouseEvent event);
+		virtual void mouseMove(MouseEvent event);
 		
-		void addChild(Widget& child);
-		void addChild(std::string tag,Widget& child);
-		
-		Widget* getChild(std::string tag);
+		virtual void resize(Window& window);
+		virtual void draw(Window& window);
 		
 		Container();
 		
 	protected:
+		void addChild(Widget& child);
+	
 		int getChildCount();
 		Widget* getChild(int index);
 	
@@ -33,14 +30,7 @@ class Container : public Widget
 		Widget* focusedChild;
 		Widget* mouseOverChild;
 
-		class TaggedWidget
-		{
-			public:
-				std::string tag;
-				Widget* widget;
-		};
-
-		std::vector<TaggedWidget> children;
+		std::vector<Widget*> children;
 };
 
 #endif // CONTAINER_HPP

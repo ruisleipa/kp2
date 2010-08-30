@@ -56,13 +56,11 @@ void LocalGameMenu::onShow()
 
 void LocalGameMenu::backClickHandler()
 {
-	setVisible(false);
-	getParent()->getChild("mainmenu")->setVisible(true);
+	getMenuContainer()->showMenu("mainmenu");
 }
 
 void LocalGameMenu::newClickHandler()
 {
-	setVisible(false);
-	getParent()->getChild("newlocalgamemenu")->setVisible(true);
+	getMenuContainer()->showMenu("newlocalgamemenu");
 }
 

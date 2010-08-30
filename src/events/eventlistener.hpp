@@ -9,12 +9,12 @@ class MouseEvent;
 class EventListener
 {
 	public:
-		virtual void doKeyDown(KeyEvent event);
-		virtual void doKeyUp(KeyEvent event);
+		virtual void keyDown(KeyEvent event);
+		virtual void keyUp(KeyEvent event);
 		
-		virtual void doMouseDown(MouseEvent event);
-		virtual void doMouseUp(MouseEvent event);
-		virtual void doMouseMove(MouseEvent event);
+		virtual void mouseDown(MouseEvent event);
+		virtual void mouseUp(MouseEvent event);
+		virtual void mouseMove(MouseEvent event);
 	
 	//	virtual void doResize(Graphics& graphics);
 		

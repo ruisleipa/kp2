@@ -1,20 +1,42 @@
 #include "menucontainer.hpp"
 
+#include "menu.hpp"
+
+#include <cstdlib>
+
 void MenuContainer::showMenu(std::string tag)
 {
 	for(int i=0; i<getChildCount(); i++)
 	{
 		getChild(i)->setVisible(false);
 	}
+
+	if(menus.find(tag) != menus.end())
+	{
+		menus[tag]->setVisible(true);
+	}
 	
-	getChild(tag)->setVisible(true);
 	backgroundFront.setVisible(true);
 	backgroundBack.setVisible(true);
+	
+	changeBackground();
 }
 
 void MenuContainer::showOverlayMenu(std::string tag)
 {
-	getChild(tag)->setVisible(true);
+	if(menus.find(tag) != menus.end())
+	{
+		menus[tag]->setVisible(true);
+	}
+}
+
+void MenuContainer::addMenu(std::string name,Menu& menu)
+{
+	Container::addChild(menu);
+	
+	menu.setMenuContainer(this);
+
+	menus[name] = &menu;
 }
 
 void MenuContainer::onDraw(Window& window)
@@ -29,20 +51,30 @@ void MenuContainer::onDraw(Window& window)
 void MenuContainer::changeBackground()
 {
 	backgroundBack.setTexture(backgroundFront.getTexture());
-	backgroundBack.setTexture(backgroundtextures.getTexture("image01"));
-	backgroundFront.setTexture(backgroundtextures.getTexture("image00"));
+	backgroundFront.setTexture(backgroundtextures.getTexture(getRandomTextureIndex()));
 	
 	backgroundChangeTimer.reset();
 }
 
 MenuContainer::MenuContainer(TextureCollection& backgroundtextures):
-	backgroundtextures(backgroundtextures)
+	backgroundtextures(backgroundtextures),
+	backgroundIndex(0)
 {
-	backgroundFront.setTexture(backgroundtextures.getTexture("image00"));
+	backgroundFront.setTexture(backgroundtextures.getTexture(getRandomTextureIndex()));
 	backgroundFront.setSize(Vector2D(1,1));
 	
 	backgroundBack.setSize(Vector2D(1,1));
 	
 	addChild(backgroundFront);
 	addChild(backgroundBack);
+}
+
+int MenuContainer::getRandomTextureIndex()
+{
+	int i=rand()%(backgroundtextures.getTextureCount()-1);
+	
+	if(i == backgroundIndex)
+		i++;
+		
+	return i;
 }

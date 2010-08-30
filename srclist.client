@@ -31,11 +31,13 @@ SRC = \
 	src/gui/image.cpp \
 	src/gui/label.cpp \
 	src/gui/listbox.cpp \
+	src/gui/menu.cpp \
 	src/gui/menucontainer.cpp \
 	src/gui/rootcontainer.cpp \
 	src/gui/select.cpp \
 	src/gui/textwidget.cpp \
 	src/gui/widget.cpp \
+	src/gui/widgetcontainer.cpp \
 	src/net/clientsocket.cpp \
 	src/net/packet.cpp \
 	src/net/serversocket.cpp \
