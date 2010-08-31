@@ -1,7 +1,7 @@
 #include "engine.hpp"
 
 #include "net/packet.hpp"
-#include "inifile.hpp"
+#include "utils/inifile.hpp"
 
 bool Engine::load(const std::string& filename)
 {

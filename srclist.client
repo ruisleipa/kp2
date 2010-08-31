@@ -16,6 +16,11 @@ SRC = \
 	src/events/events.cpp \
 	src/events/keyevent.cpp \
 	src/events/mouseevent.cpp \
+	src/game/cylinderhead.cpp \
+	src/game/engine.cpp \
+	src/game/part.cpp \
+	src/game/player.cpp \
+	src/game/vehicle.cpp \
 	src/graphics/color.cpp \
 	src/graphics/fontface.cpp \
 	src/graphics/preparedtexture.cpp \
