@@ -6,8 +6,6 @@
 
 LocalGameMenu::LocalGameMenu()
 {
-	setVisible(false);
-
 	title.setFont(Font("title"));
 	title.setText("Yksinpeli");			
 	
