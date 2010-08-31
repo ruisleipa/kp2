@@ -1,45 +1,38 @@
 #ifndef CAREERMENU_HPP
 #define CAREERMENU_HPP
 
-#include "container.hpp"
-#include "label.hpp"
-#include "button.hpp"
-#include "image.hpp"
-#include "field.hpp"
+#include "gui/menu.hpp"
+#include "gui/label.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+#include "gui/field.hpp"
 
-class CareerMenu : public Container
+class CareerMenu : public Menu
 {
 	public:
-		CareerMenu();
+		CareerMenu(MenuContainer& mainLevelGameMenus,TextureCollection& textureCollection);
 
-		virtual void onResize(Graphics& graphics);
-		virtual void onDraw(Graphics& graphics);
+		virtual void onResize(Window& window);
+		virtual void onDraw(Window& window);
 		virtual void onConnectionEvent(Connection& connection);
-		
-		void changeBackground();
-		
+
 	private:
 		void garageButtonClick();
 		void tuningButtonClick();
 		void financeButtonClick();
 		void raceButtonClick();
+	
+		MenuContainer& mainLevelGameMenus;
 		
-		Image m_background;
-		Image m_background_back;
+		Image sidebar;
 		
-		Texture m_sidebar_texture;
-		Image m_sidebar;
-		
-		Label m_info_label;
+		Label infoLabel;
 			
-		Button m_garage_button;
-		Button m_tuning_button;
-		Button m_finance_button;
-		Button m_race_button;
+		Button garageButton;
+		Button tuningButton;
+		Button financeButton;
+		Button raceButton;
 		
-		std::vector<Texture> m_background_files;
-		Timer m_bg_chage_timer;
-
 };
 
 #endif // CAREERMENU_HPP

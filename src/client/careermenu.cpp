@@ -3,97 +3,57 @@
 #include <iostream>
 
 #include "ui.hpp"
-#include "sdl.hpp"
-#include "graphics.hpp"
-#include "shared/string.hpp"
-#include "connection.hpp"
 
-CareerMenu::CareerMenu()
+CareerMenu::CareerMenu(MenuContainer& mainLevelGameMenus,TextureCollection& textureCollection):
+	mainLevelGameMenus(mainLevelGameMenus)
 {
-	m_background_files.push_back(Texture("data/images/backgrounds/block.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/brakedisk.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/charger.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/cooler.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/cylinderhead.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/diff.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/engine.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/engine1.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/engine2.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/exhaust.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/intake.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/tire.png"));
-	m_background_files.push_back(Texture("data/images/backgrounds/tools.png"));
-
-	m_sidebar_texture.load("data/images/careermenu.png");
-	m_sidebar.setTexture(&m_sidebar_texture);
-	m_sidebar.setFill(true);
-	//m_sidebar.setColor(Color(0.3,0.6,0.8));
+	sidebar.setTexture(sidebartextures.getTexture("background"));
+	sidebar.setFill(true);
 	
-	m_background.setFill(true);
-	m_background_back.setFill(true);
+	garageButton.setText("Autot");
+	garageButton.setClickHandler(Callback0(this,&CareerMenu::garageButtonClick));
+	tuningButton.setText("Viritys");
+	tuningButton.setClickHandler(Callback0(this,&CareerMenu::tuningButtonClick));
+	financeButton.setText("Raha-asiat");
+	financeButton.setClickHandler(Callback0(this,&CareerMenu::financeButtonClick));
+	raceButton.setText("Kisat");
+	raceButton.setClickHandler(Callback0(this,&CareerMenu::raceButtonClick));
 	
-	m_garage_button.setText("Autot");
-	m_garage_button.setClickHandler(Callback0(this,&CareerMenu::garageButtonClick));
-	m_tuning_button.setText("Viritys");
-	m_tuning_button.setClickHandler(Callback0(this,&CareerMenu::tuningButtonClick));
-	m_finance_button.setText("Raha-asiat");
-	m_finance_button.setClickHandler(Callback0(this,&CareerMenu::financeButtonClick));
-	m_race_button.setText("Kisat");
-	m_race_button.setClickHandler(Callback0(this,&CareerMenu::raceButtonClick));
-	
-	addWidget(&m_background);
-	addWidget(&m_background_back);
-	addWidget(&m_sidebar);
+	addWidget(sidebar);
 		
-	addWidget(&m_info_label);
+	addWidget(infoLabel);
 	
-	addWidget(&m_garage_button);
-	addWidget(&m_tuning_button);
-	addWidget(&m_finance_button);
-	addWidget(&m_race_button);
-	
-	changeBackground();
-}
-
-void CareerMenu::onDraw(Graphics& graphics)
-{
-	float alpha=m_bg_chage_timer.getSeconds()*10.0;
-	if(alpha > 1.0)
-		alpha = 1.0;
-	
-	m_background_back.setColor(Color(1,1,1,1.0-alpha));
+	addWidget(garageButton);
+	addWidget(tuningButton);
+	addWidget(financeButton);
+	addWidget(raceButton);
 }
 
 void CareerMenu::onResize(Graphics& graphics)
 {
 	setSize(Vector2D(1,1));
 	
-	m_background.setSize(CAREER_MENU_SIZE);
-	m_background.setPosition(CAREER_MENU_POSITION);
-	m_background_back.setSize(CAREER_MENU_SIZE);
-	m_background_back.setPosition(CAREER_MENU_POSITION);
+	sidebar.setSize(CAREER_SIDEBAR_SIZE-Vector2D(0.005,0));
 	
-	m_sidebar.setSize(CAREER_SIDEBAR_SIZE-Vector2D(0.005,0));
-	
-	m_info_label.setPosition(TITLE_POSITION);
-	m_info_label.autoSize();
+	infoLabel.setPosition(TITLE_POSITION);
+	infoLabel.autoSize();
 	
 	Vector2D buttonpos=CONTENT_POSITION+Vector2D(0,0.05);
 
-	m_garage_button.setPosition(buttonpos);
-	m_garage_button.autoSize();
+	garageButton.setPosition(buttonpos);
+	garageButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_tuning_button.setPosition(buttonpos);
-	m_tuning_button.autoSize();
+	tuningButton.setPosition(buttonpos);
+	tuningButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_finance_button.setPosition(buttonpos);
-	m_finance_button.autoSize();
+	financeButton.setPosition(buttonpos);
+	financeButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	m_race_button.setPosition(buttonpos);
-	m_race_button.autoSize();
+	raceButton.setPosition(buttonpos);
+	raceButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 }
 
@@ -104,44 +64,27 @@ void CareerMenu::onConnectionEvent(Connection& connection)
 	ss<<connection.getName()<<std::endl;
 	ss<<connection.getMoney()<<" €";
 
-	m_info_label.setText(ss.str());
-	m_info_label.autoSize();
-}
-
-void CareerMenu::changeBackground()
-{
-	int i=rand()%m_background_files.size();
-	
-	while(m_background.getTexture()==&m_background_files.at(i))
-		i=rand()%m_background_files.size();
-	
-	m_background_back.setTexture(m_background.getTexture());
-	m_background.setTexture(&m_background_files.at(i));
-	
-	m_bg_chage_timer.reset();
+	infoLabel.setText(ss.str());
+	infoLabel.autoSize();
 }
 
 void CareerMenu::garageButtonClick()
 {
-	getRootWidget("garagemenu")->setVisible(true);
-	getRootWidget("tuningmenu")->setVisible(false);
+	mainLevelGameMenus.showMenu("garage");
 }
 
 void CareerMenu::tuningButtonClick()
 {
-	getRootWidget("garagemenu")->setVisible(false);
-	getRootWidget("tuningmenu")->setVisible(true);
+	mainLevelGameMenus.showMenu("tuning");
 }
 
 void CareerMenu::financeButtonClick()
 {
-	getRootWidget("garagemenu")->setVisible(false);
-	getRootWidget("tuningmenu")->setVisible(false);
+	mainLevelGameMenus.showMenu("finance");
 }
 
 void CareerMenu::raceButtonClick()
 {
-	getRootWidget("garagemenu")->setVisible(false);
-	getRootWidget("tuningmenu")->setVisible(false);
+	mainLevelGameMenus.showMenu("race");
 }
 
