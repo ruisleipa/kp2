@@ -2,14 +2,15 @@
 #include <string>
 #include <map>
 
-#include "shared/inifile.hpp"
-#include "shared/serversocket.hpp"
-#include "shared/socketset.hpp"
-#include "shared/protocol.hpp"
+#include "utils/inifile.hpp"
+#include "utils/outputredirector.hpp"
 
-#include "shared/outputredirector.hpp"
-#include "shared/crashmessage.hpp"
-#include "shared/crashcatcher.hpp"
+#include "net/serversocket.hpp"
+#include "net/socketset.hpp"
+#include "net/protocol.hpp"
+
+#include "debug/crashmessage.hpp"
+#include "debug/crashcatcher.hpp"
 
 #include "connection.hpp"
 

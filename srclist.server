@@ -1,21 +1,24 @@
-SRC = src/server/main.cpp \
+SRC = src/debug/assert.cpp \
+	src/debug/crashcatcher.cpp \
+	src/debug/crashmessage.cpp \
+	src/debug/stack.cpp \
+	src/debug/stacktrace.cpp \
+	src/game/cylinderhead.cpp \
+	src/game/engine.cpp \
+	src/game/part.cpp \
+	src/game/player.cpp \
+	src/game/vehicle.cpp \
+	src/net/clientsocket.cpp \
+	src/net/packet.cpp \
+	src/net/serversocket.cpp \
+	src/net/socket.cpp \
+	src/net/socketactivity.cpp \
+	src/net/socketset.cpp \
 	src/server/connection.cpp \
-	src/shared/serversocket.cpp \
-	src/shared/clientsocket.cpp \
-	src/shared/socket.cpp \
-	src/shared/socketset.cpp \
-	src/shared/socketactivity.cpp \
-	src/shared/packet.cpp \
-	src/shared/assert.cpp \
-	src/shared/player.cpp \
-	src/shared/vehicle.cpp \
-	src/shared/part.cpp \
-	src/shared/engine.cpp \
-	src/shared/cylinderhead.cpp \
-	src/shared/directory.cpp \
-	src/shared/outputredirector.cpp \
-	src/shared/stack.cpp \
-	src/shared/crashmessage.cpp \
-	src/shared/crashcatcher.cpp \
-	src/shared/stacktrace.cpp \
-	src/shared/inifile.cpp
+	src/server/main.cpp \
+	src/utils/directory.cpp \
+	src/utils/inifile.cpp \
+	src/utils/noncopyable.cpp \
+	src/utils/outputredirector.cpp \
+	src/utils/string.cpp \
+	src/utils/timer.cpp

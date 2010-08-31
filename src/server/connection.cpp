@@ -1,7 +1,7 @@
 #include "connection.hpp"
 
-#include "shared/packet.hpp"
-#include "shared/protocol.hpp"
+#include "net/packet.hpp"
+#include "net/protocol.hpp"
 
 #include <sstream>
 #include <algorithm>
