@@ -19,6 +19,7 @@
 #include "localgamemenu.hpp"
 #include "mainmenu.hpp"
 #include "settingsmenu.hpp"
+#include "careermenu.hpp"
 
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
@@ -66,7 +67,10 @@ void startGame()
 	loadingScreen.progress();
 	
 	TextureCollection mainmenuTextures;
-	mainmenuTextures.addTexture("title",Texture("data/images/kp2_txt.png"));	
+	mainmenuTextures.addTexture("title",Texture("data/images/kp2_txt.png"));
+
+	TextureCollection careerTextures;
+	careerTextures.addTexture("background",Texture("data/images/careermenu.png"));	
 	
 	Connection connection;
 	
@@ -75,11 +79,16 @@ void startGame()
 	LocalGameMenu localGameMenu;
 	NewLocalGameMenu newLocalGameMenu(connection);
 	
+	MenuContainer topLevelGameMenus(backgroundTextures);
+	
+	CareerMenu careerMenu(careerTextures,topLevelGameMenus);	
+	
 	MenuContainer menuContainer(backgroundTextures);	
 	menuContainer.addMenu("mainmenu",mainMenu);
 	menuContainer.addMenu("settingsmenu",settingsMenu);
 	menuContainer.addMenu("localgamemenu",localGameMenu);	
 	menuContainer.addMenu("newlocalgamemenu",newLocalGameMenu);	
+	menuContainer.addMenu("careermenu",careerMenu);	
 	menuContainer.showMenu("mainmenu");
 	menuContainer.setSize(Vector2D(1,1));
 	

@@ -3,9 +3,10 @@
 #include <iostream>
 
 #include "ui.hpp"
+#include "connection.hpp"
 
-CareerMenu::CareerMenu(MenuContainer& mainLevelGameMenus,TextureCollection& textureCollection):
-	mainLevelGameMenus(mainLevelGameMenus)
+CareerMenu::CareerMenu(TextureCollection& sidebartextures,MenuContainer& topLevelGameMenus):
+	topLevelGameMenus(topLevelGameMenus)
 {
 	sidebar.setTexture(sidebartextures.getTexture("background"));
 	sidebar.setFill(true);
@@ -27,18 +28,18 @@ CareerMenu::CareerMenu(MenuContainer& mainLevelGameMenus,TextureCollection& text
 	addWidget(tuningButton);
 	addWidget(financeButton);
 	addWidget(raceButton);
+	
+	addWidget(topLevelGameMenus);
 }
 
-void CareerMenu::onResize(Graphics& graphics)
+void CareerMenu::onResize(Window& window)
 {
-	setSize(Vector2D(1,1));
-	
-	sidebar.setSize(CAREER_SIDEBAR_SIZE-Vector2D(0.005,0));
+	sidebar.setSize(CAREER_SIDEBAR_SIZE);
 	
 	infoLabel.setPosition(TITLE_POSITION);
 	infoLabel.autoSize();
 	
-	Vector2D buttonpos=CONTENT_POSITION+Vector2D(0,0.05);
+	Vector2D buttonpos=CONTENT_POSITION;
 
 	garageButton.setPosition(buttonpos);
 	garageButton.autoSize();
@@ -55,6 +56,9 @@ void CareerMenu::onResize(Graphics& graphics)
 	raceButton.setPosition(buttonpos);
 	raceButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
+	
+	topLevelGameMenus.setSize(Vector2D(1.0-CAREER_SIDEBAR_SIZE.getX(),1));
+	topLevelGameMenus.setPosition(Vector2D(CAREER_SIDEBAR_SIZE.getX(),0));
 }
 
 void CareerMenu::onConnectionEvent(Connection& connection)
@@ -70,21 +74,21 @@ void CareerMenu::onConnectionEvent(Connection& connection)
 
 void CareerMenu::garageButtonClick()
 {
-	mainLevelGameMenus.showMenu("garage");
+	topLevelGameMenus.showMenu("garage");
 }
 
 void CareerMenu::tuningButtonClick()
 {
-	mainLevelGameMenus.showMenu("tuning");
+	topLevelGameMenus.showMenu("tuning");
 }
 
 void CareerMenu::financeButtonClick()
 {
-	mainLevelGameMenus.showMenu("finance");
+	topLevelGameMenus.showMenu("finance");
 }
 
 void CareerMenu::raceButtonClick()
 {
-	mainLevelGameMenus.showMenu("race");
+	topLevelGameMenus.showMenu("race");
 }
 

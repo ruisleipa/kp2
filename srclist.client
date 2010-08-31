@@ -1,4 +1,5 @@
 SRC = \
+	src/client/careermenu.cpp \
 	src/client/connection.cpp \
 	src/client/fontloader.cpp \
 	src/client/main.cpp \

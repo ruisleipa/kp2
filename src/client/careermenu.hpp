@@ -10,10 +10,9 @@
 class CareerMenu : public Menu
 {
 	public:
-		CareerMenu(MenuContainer& mainLevelGameMenus,TextureCollection& textureCollection);
+		CareerMenu(TextureCollection& sidebartextures,MenuContainer& topLevelGameMenus);
 
 		virtual void onResize(Window& window);
-		virtual void onDraw(Window& window);
 		virtual void onConnectionEvent(Connection& connection);
 
 	private:
@@ -22,7 +21,7 @@ class CareerMenu : public Menu
 		void financeButtonClick();
 		void raceButtonClick();
 	
-		MenuContainer& mainLevelGameMenus;
+		MenuContainer& topLevelGameMenus;
 		
 		Image sidebar;
 		
