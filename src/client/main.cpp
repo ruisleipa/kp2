@@ -71,7 +71,7 @@ void startGame()
 	Connection connection;
 	
 	MainMenu mainMenu(mainmenuTextures);
-	SettingsMenu settingsMenu(window,mainmenuTextures);
+	SettingsMenu settingsMenu(window);
 	LocalGameMenu localGameMenu;
 	NewLocalGameMenu newLocalGameMenu(connection);
 	

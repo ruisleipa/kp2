@@ -5,7 +5,7 @@
 #include "ui.hpp"
 #include "utils/string.hpp"
 
-SettingsMenu::SettingsMenu(Window& window,TextureCollection& textures):
+SettingsMenu::SettingsMenu(Window& window):
 	window(window)
 {
 	setVisible(false);

@@ -12,7 +12,7 @@
 class SettingsMenu : public Menu
 {
 	public:
-		SettingsMenu(Window& window,TextureCollection& textures);
+		SettingsMenu(Window& window);
 
 		virtual void onResize(Window& window);
 		virtual void onShow();
