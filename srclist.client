@@ -3,6 +3,7 @@ SRC = \
 	src/client/fontloader.cpp \
 	src/client/main.cpp \
 	src/client/mainmenu.cpp \
+	src/client/newlocalgamemenu.cpp \
 	src/client/loadingscreen.cpp \
 	src/client/localgamemenu.cpp \
 	src/client/settingsmenu.cpp \

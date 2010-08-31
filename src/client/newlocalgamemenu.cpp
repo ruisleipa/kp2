@@ -3,12 +3,11 @@
 #include <iostream>
 
 #include "ui.hpp"
-#include "graphics.hpp"
-#include "shared/string.hpp"
-#include "shared/packet.hpp"
+#include "utils/string.hpp"
+#include "net/packet.hpp"
 
 NewLocalGameMenu::NewLocalGameMenu(Connection& connection):
-	m_connection(connection)
+	connection(connection)
 {
 	title.setFont(Font("title"));
 	title.setText("Uusi tilanne");			
@@ -25,19 +24,19 @@ NewLocalGameMenu::NewLocalGameMenu(Connection& connection):
 	startButton.setText("Aloita");
 	startButton.setClickHandler(Callback0(this,&NewLocalGameMenu::startClickHandler));
 	
-	addWidget(&title);
+	addWidget(title);
 	
-	addWidget(&nameLabel);
-	addWidget(&difficultyLabel);
+	addWidget(nameLabel);
+	addWidget(difficultyLabel);
 		
-	addWidget(&nameField);	
-	addWidget(&difficultySelect);
+	addWidget(nameField);	
+	addWidget(difficultySelect);
 	
-	addWidget(&backButton);	
-	addWidget(&startButton);
+	addWidget(backButton);	
+	addWidget(startButton);
 }
 
-void NewLocalGameMenu::onResize(Graphics& graphics)
+void NewLocalGameMenu::onResize(Window& window)
 {
 	title.setPosition(TITLE_POSITION);
 	title.setSize(TITLE_SIZE);
@@ -84,24 +83,24 @@ void NewLocalGameMenu::backClickHandler()
 
 void NewLocalGameMenu::startClickHandler()
 {
-	if(m_connection.startLocalServer())
+	if(connection.startLocalServer())
 	{
 		Packet packet;
 		packet.setType(PLAYER_NAME);
 		packet<<nameField.getText();
 		
-		m_connection.writeToServer(packet);
+		connection.writeToServer(packet);
 		
 		Packet packet2;
 		packet2.setType(PLAYER_MONEY);
 		
-		m_connection.writeToServer(packet2);
+		connection.writeToServer(packet2);
 		
 		packet2.setType(CARSHOP_LIST);		
-		m_connection.writeToServer(packet2);
+		connection.writeToServer(packet2);
 		
 		packet2.setType(PARTSHOP_LIST);		
-		m_connection.writeToServer(packet2);
+		connection.writeToServer(packet2);
 	
 		getMenuContainer()->showMenu("careermenu");
 	}
