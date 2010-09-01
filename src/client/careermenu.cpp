@@ -5,6 +5,8 @@
 #include "ui.hpp"
 #include "connection.hpp"
 
+const float CAREER_SIDEBAR_WIDTH=0.20;
+
 CareerMenu::CareerMenu(TextureCollection& sidebartextures,MenuContainer& topLevelGameMenus):
 	topLevelGameMenus(topLevelGameMenus)
 {
@@ -34,7 +36,7 @@ CareerMenu::CareerMenu(TextureCollection& sidebartextures,MenuContainer& topLeve
 
 void CareerMenu::onResize(Window& window)
 {
-	sidebar.setSize(CAREER_SIDEBAR_SIZE);
+	sidebar.setSize(Vector2D(CAREER_SIDEBAR_WIDTH,1));
 	
 	infoLabel.setPosition(TITLE_POSITION);
 	infoLabel.autoSize();
@@ -57,8 +59,8 @@ void CareerMenu::onResize(Window& window)
 	raceButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
-	topLevelGameMenus.setSize(Vector2D(1.0-CAREER_SIDEBAR_SIZE.getX(),1));
-	topLevelGameMenus.setPosition(Vector2D(CAREER_SIDEBAR_SIZE.getX(),0));
+	topLevelGameMenus.setSize(Vector2D(1.0-CAREER_SIDEBAR_WIDTH,1));
+	topLevelGameMenus.setPosition(Vector2D(CAREER_SIDEBAR_WIDTH,0));
 }
 
 void CareerMenu::onConnectionEvent(Connection& connection)
