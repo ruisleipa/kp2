@@ -8,9 +8,6 @@
 
 class Menu : public WidgetContainer
 {
-	public:
-		Menu();
-		
 	protected:
 		MenuContainer* getMenuContainer();
 		

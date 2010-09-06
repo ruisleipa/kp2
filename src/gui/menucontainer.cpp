@@ -6,37 +6,19 @@
 
 void MenuContainer::showMenu(std::string tag)
 {
-	for(int i=0; i<getChildCount(); i++)
+	std::map<std::string,Menu*>::iterator i;
+		
+	for(i=menus.begin(); i!=menus.end(); ++i)
 	{
-		getChild(i)->setVisible(false);
+		(*i).second->setVisible(false);
 	}
 
 	if(menus.find(tag) != menus.end())
 	{
 		menus[tag]->setVisible(true);
 	}
-	
-	backgroundFront.setVisible(true);
-	backgroundBack.setVisible(true);
 	
 	changeBackground();
-}
-
-void MenuContainer::showOverlayMenu(std::string tag)
-{
-	if(menus.find(tag) != menus.end())
-	{
-		menus[tag]->setVisible(true);
-	}
-}
-
-void MenuContainer::addMenu(std::string name,Menu& menu)
-{
-	Container::addChild(menu);
-	
-	menu.setMenuContainer(this);
-
-	menus[name] = &menu;
 }
 
 void MenuContainer::onDraw(Window& window)
@@ -54,6 +36,15 @@ void MenuContainer::changeBackground()
 	backgroundFront.setTexture(backgroundtextures.getTexture(getRandomTextureIndex()));
 	
 	backgroundChangeTimer.reset();
+}
+
+void MenuContainer::addMenu(std::string name,Menu& menu)
+{
+	Container::addChild(menu);
+	
+	menu.setMenuContainer(this);
+
+	menus[name] = &menu;
 }
 
 MenuContainer::MenuContainer(TextureCollection& backgroundtextures):

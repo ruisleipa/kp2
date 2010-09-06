@@ -15,12 +15,13 @@ class MenuContainer: public Container
 {
 	public:
 		void showMenu(std::string menu);
-		void showOverlayMenu(std::string menu);
-		void addMenu(std::string name,Menu& menu);
 		
 		virtual void onDraw(Window& window);
 		
+	protected:
 		void changeBackground();
+		
+		void addMenu(std::string name,Menu& menu);
 		
 		MenuContainer(TextureCollection& backgroundtextures);
 	
@@ -38,5 +39,5 @@ class MenuContainer: public Container
 
 };
 
-#endif // CONTAINER_HPP
+#endif // MENUCONTAINER_HPP
 

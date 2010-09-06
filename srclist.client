@@ -43,6 +43,8 @@ SRC = \
 	src/gui/menucontainer.cpp \
 	src/gui/rootcontainer.cpp \
 	src/gui/select.cpp \
+	src/gui/simplemenucontainer.cpp \
+	src/gui/tabbedmenucontainer.cpp \
 	src/gui/textwidget.cpp \
 	src/gui/widget.cpp \
 	src/gui/widgetcontainer.cpp \
