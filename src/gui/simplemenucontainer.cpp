@@ -1,5 +1,7 @@
 #include "simplemenucontainer.hpp"
 
+#include "menu.hpp"
+
 void SimpleMenuContainer::addMenu(std::string name,Menu& menu)
 {
 	MenuContainer::addMenu(name,menu);

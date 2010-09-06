@@ -11,6 +11,7 @@ class TabbedMenuContainer: public MenuContainer
 		TabbedMenuContainer(TextureCollection& backgroundtextures);
 		
 	private:
+		ColumnLayoutContainer buttonContainer;
 	
 };
 
