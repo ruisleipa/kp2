@@ -3,19 +3,19 @@
 
 #include "activetextwidget.hpp"
 
-#include "callback/callback.hpp"
+#include <tr1/functional>
 
 class Button : public ActiveTextWidget
 {
 	public:
 		virtual void onMouseDown(MouseEvent event);
 		
-		void setClickHandler(Callback0 handler);
+		void setClickHandler(std::tr1::function<void()> handler);
 		
 		Button();
 		
 	private:	
-		Callback0 clickHandler;
+		std::tr1::function<void()> clickHandler;
 		
 };
 

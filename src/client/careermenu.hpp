@@ -1,16 +1,18 @@
 #ifndef CAREERMENU_HPP
 #define CAREERMENU_HPP
 
-#include "gui/menu.hpp"
+#include "gui/container.hpp"
 #include "gui/label.hpp"
 #include "gui/button.hpp"
 #include "gui/image.hpp"
 #include "gui/field.hpp"
 
-class CareerMenu : public Menu
+#include "graphics/texturecollection.hpp"
+
+class CareerMenu : public Container
 {
 	public:
-		CareerMenu(TextureCollection& sidebartextures,MenuContainer& topLevelGameMenus);
+		CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus);
 
 		virtual void onResize(Window& window);
 		virtual void onConnectionEvent(Connection& connection);
@@ -21,7 +23,7 @@ class CareerMenu : public Menu
 		void financeButtonClick();
 		void raceButtonClick();
 	
-		MenuContainer& topLevelGameMenus;
+		Container& topLevelGameMenus;
 		
 		Image sidebar;
 		

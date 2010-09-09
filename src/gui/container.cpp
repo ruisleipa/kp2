@@ -144,11 +144,33 @@ void Container::draw(Window& window)
 	scissor.reset();
 }
 
-void Container::addChild(Widget& child)
+void Container::showOnlyWidget(const std::string& tag)
+{
+	std::map<std::string,Menu*>::iterator i;
+	
+	for(i=children.begin(); i!=children.end(); ++i)
+	{
+		(*i).second->setVisible(false);
+	}
+	
+	if(tags.find(tag) != tags.end())
+	{
+		menus[tag]->setVisible(true);
+	}
+}
+
+void Container::addWidget(Widget& child)
 {
 	children.push_back(&child);
 	
 	child.setParent(this);
+}
+
+void Container::addWidget(const std::string& tag,Widget& child)
+{
+	tags[tag]=&child;
+	
+	addWidget(child);
 }
 
 int Container::getChildCount()

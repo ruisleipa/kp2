@@ -89,7 +89,7 @@ void PreparedTexture::checkOpenGlErrors()
 }
 
 PreparedTexture::PreparedTexture(SDL_Surface* surface):
-	filter(LINEAR),
+	filter(TRILINEAR),
 	number(0),	
 	data(0),	
 	width(0),

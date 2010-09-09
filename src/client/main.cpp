@@ -13,7 +13,6 @@
 #include "events/events.hpp"
 
 #include "gui/rootcontainer.hpp"
-#include "gui/simplemenucontainer.hpp"
 
 #include "newlocalgamemenu.hpp"
 #include "localgamemenu.hpp"
@@ -79,16 +78,16 @@ void startGame()
 	LocalGameMenu localGameMenu;
 	NewLocalGameMenu newLocalGameMenu(connection);
 	
-	SimpleMenuContainer topLevelGameMenus(backgroundTextures);
+	Container topLevelGameMenus(backgroundTextures);
 	
 	CareerMenu careerMenu(careerTextures,topLevelGameMenus);	
 	
-	SimpleMenuContainer menuContainer(backgroundTextures);	
-	menuContainer.addMenu("mainmenu",mainMenu);
-	menuContainer.addMenu("settingsmenu",settingsMenu);
-	menuContainer.addMenu("localgamemenu",localGameMenu);	
-	menuContainer.addMenu("newlocalgamemenu",newLocalGameMenu);	
-	menuContainer.addMenu("careermenu",careerMenu);	
+	Container menuContainer(backgroundTextures);	
+	menuContainer.addWidget("mainmenu",mainMenu);
+	menuContainer.addWidget("settingsmenu",settingsMenu);
+	menuContainer.addWidget("localgamemenu",localGameMenu);	
+	menuContainer.addWidget("newlocalgamemenu",newLocalGameMenu);	
+	menuContainer.addWidget("careermenu",careerMenu);	
 	menuContainer.showMenu("mainmenu");
 	menuContainer.setSize(Vector2D(1,1));
 	

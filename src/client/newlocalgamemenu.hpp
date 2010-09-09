@@ -1,7 +1,7 @@
 #ifndef NEWLOCALGAMEMENU_HPP
 #define NEWLOCALGAMEMENU_HPP
 
-#include "gui/menu.hpp"
+#include "gui/container.hpp"
 #include "gui/label.hpp"
 #include "gui/select.hpp"
 #include "gui/button.hpp"
@@ -10,7 +10,7 @@
 
 #include "connection.hpp"
 
-class NewLocalGameMenu : public Menu
+class NewLocalGameMenu : public Container
 {
 	public:
 		NewLocalGameMenu(Connection& connection);

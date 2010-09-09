@@ -15,7 +15,7 @@ void Button::onMouseDown(MouseEvent event)
 	}
 }
 
-void Button::setClickHandler(Callback0 handler)
+void Button::setClickHandler(std::tr1::function<void()> handler)
 {
 	clickHandler=handler;
 }

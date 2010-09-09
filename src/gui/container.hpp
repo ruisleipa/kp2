@@ -16,11 +16,14 @@ class Container : public Widget
 		virtual void resize(Window& window);
 		virtual void draw(Window& window);
 		
+		void showOnlyWidget(const std::string& tag);
+		
+		void addWidget(Widget& child);
+		void addWidget(const std::string& tag,Widget& child);
+		
 		Container();
 		
-	protected:
-		void addChild(Widget& child);
-	
+	protected:	
 		int getChildCount();
 		Widget* getChild(int index);
 	
@@ -30,6 +33,7 @@ class Container : public Widget
 		Widget* focusedChild;
 		Widget* mouseOverChild;
 
+		std::map<std::string,Widget*> tags;
 		std::vector<Widget*> children;
 };
 

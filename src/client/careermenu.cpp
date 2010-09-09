@@ -7,20 +7,20 @@
 
 const float CAREER_SIDEBAR_WIDTH=0.20;
 
-CareerMenu::CareerMenu(TextureCollection& sidebartextures,MenuContainer& topLevelGameMenus):
+CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus):
 	topLevelGameMenus(topLevelGameMenus)
 {
 	sidebar.setTexture(sidebartextures.getTexture("background"));
 	sidebar.setFill(true);
 	
 	garageButton.setText("Autot");
-	garageButton.setClickHandler(Callback0(this,&CareerMenu::garageButtonClick));
+	garageButton.setClickHandler(std::tr1::bind(&CareerMenu::garageButtonClick,this));
 	tuningButton.setText("Viritys");
-	tuningButton.setClickHandler(Callback0(this,&CareerMenu::tuningButtonClick));
+	tuningButton.setClickHandler(std::tr1::bind(&CareerMenu::tuningButtonClick,this));
 	financeButton.setText("Raha-asiat");
-	financeButton.setClickHandler(Callback0(this,&CareerMenu::financeButtonClick));
+	financeButton.setClickHandler(std::tr1::bind(&CareerMenu::tuningButtonClick,this));
 	raceButton.setText("Kisat");
-	raceButton.setClickHandler(Callback0(this,&CareerMenu::raceButtonClick));
+	raceButton.setClickHandler(std::tr1::bind(&CareerMenu::tuningButtonClick,this));
 	
 	addWidget(sidebar);
 		
@@ -76,21 +76,21 @@ void CareerMenu::onConnectionEvent(Connection& connection)
 
 void CareerMenu::garageButtonClick()
 {
-	topLevelGameMenus.showMenu("garage");
+	topLevelGameMenus.showOnlyWidget("garage");
 }
 
 void CareerMenu::tuningButtonClick()
 {
-	topLevelGameMenus.showMenu("tuning");
+	topLevelGameMenus.showOnlyWidget("tuning");
 }
 
 void CareerMenu::financeButtonClick()
 {
-	topLevelGameMenus.showMenu("finance");
+	topLevelGameMenus.showOnlyWidget("finance");
 }
 
 void CareerMenu::raceButtonClick()
 {
-	topLevelGameMenus.showMenu("race");
+	topLevelGameMenus.showOnlyWidget("race");
 }
 
