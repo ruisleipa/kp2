@@ -10,28 +10,25 @@ MainMenu::MainMenu(TextureCollection& textureCollection)
 	
 	title.setTexture(textureCollection.getTexture("title"));
 	
-	netgameButton.setText("Verkkopeli");	
-	
 	localgameButton.setText("Yksinpeli");
-	localgameButton.setClickHandler(Callback0(this,&MainMenu::localgameClickHandler));
+	localgameButton.setClickHandler(std::tr1::bind(&MainMenu::localgameClickHandler,this));
 	
 	aboutButton.setText("Tietoja pelistä");
 	
 	settingsButton.setText("Asetukset");
-	settingsButton.setClickHandler(Callback0(this,&MainMenu::settingsClickHandler));
+	settingsButton.setClickHandler(std::tr1::bind(&MainMenu::settingsClickHandler,this));
 	
 	quitButton.setText("Lopeta");
-	quitButton.setClickHandler(Callback0(this,&MainMenu::quitClickHandler));
+	quitButton.setClickHandler(std::tr1::bind(&MainMenu::quitClickHandler,this));
 	
-	addChild(background);
+	addWidget(background);
 	
-	addChild(title);
+	addWidget(title);
 	
-	//addChild(&netgameButton);
-	addChild(localgameButton);
-	addChild(aboutButton);
-	addChild(settingsButton);
-	addChild(quitButton);
+	addWidget(localgameButton);
+	addWidget(aboutButton);
+	addWidget(settingsButton);
+	addWidget(quitButton);
 }
 
 void MainMenu::onResize(Window& window)
@@ -45,10 +42,6 @@ void MainMenu::onResize(Window& window)
 	
 	Vector2D buttonpos=CONTENT_POSITION;
 
-	//netgameButton.setPosition(buttonpos);
-	//netgameButton.autoSize();
-	//buttonpos+=BUTTON_HEIGHT;
-	
 	localgameButton.setPosition(buttonpos);
 	localgameButton.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
@@ -66,14 +59,9 @@ void MainMenu::onResize(Window& window)
 	buttonpos+=BUTTON_HEIGHT;
 }
 
-void MainMenu::netgameClickHandler()
-{
-
-}
-
 void MainMenu::localgameClickHandler()
 {
-	getMenuContainer()->showMenu("localgamemenu");
+	getParent()->showOnlyWidget("localgamemenu");
 }
 
 void MainMenu::aboutClickHandler()
@@ -83,7 +71,7 @@ void MainMenu::aboutClickHandler()
 
 void MainMenu::settingsClickHandler()
 {
-	getMenuContainer()->showMenu("settingsmenu");
+	getParent()->showOnlyWidget("settingsmenu");
 }
 
 void MainMenu::quitClickHandler()

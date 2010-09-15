@@ -7,7 +7,7 @@
 #include "image.hpp"
 #include "field.hpp"
 
-class ConnectMenu : public Container
+class ConnectMenu : public Menu
 {
 	public:
 		ConnectMenu();

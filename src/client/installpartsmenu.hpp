@@ -9,7 +9,7 @@
 #include "listbox.hpp"
 #include "columnlayoutcontainer.hpp"
 
-class InstallpartsMenu : public Container
+class InstallpartsMenu : public Menu
 {
 	public:
 		InstallpartsMenu();

@@ -9,7 +9,7 @@
 #include "listbox.hpp"
 #include "columnlayoutcontainer.hpp"
 
-class MachiningMenu : public Container
+class MachiningMenu : public Menu
 {
 	public:
 		MachiningMenu();

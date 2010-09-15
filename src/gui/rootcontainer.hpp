@@ -1,13 +1,13 @@
 #ifndef ROOTCONTAINER_HPP
 #define ROOTCONTAINER_HPP
 
-#include "widgetcontainer.hpp"
+#include "container.hpp"
 
 #include "graphics/window.hpp"
 
 #include "events/events.hpp"
 
-class RootContainer : public WidgetContainer
+class RootContainer : public Container
 {
 	public:
 		RootContainer(Window& window,Events& events);

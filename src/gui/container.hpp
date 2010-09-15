@@ -16,7 +16,7 @@ class Container : public Widget
 		virtual void resize(Window& window);
 		virtual void draw(Window& window);
 		
-		void showOnlyWidget(const std::string& tag);
+		virtual void showOnlyWidget(const std::string& tag);
 		
 		void addWidget(Widget& child);
 		void addWidget(const std::string& tag,Widget& child);

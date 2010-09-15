@@ -1,9 +1,9 @@
 #ifndef COLUMNLAYOUTCONTAINER_HPP
 #define COLUMNLAYOUTCONTAINER_HPP
 
-#include "widgetcontainer.hpp"
+#include "container.hpp"
 
-class ColumnLayoutContainer : public WidgetContainer
+class ColumnLayoutContainer : public Container
 {
 	public:
 		virtual void onDraw(Window& window);

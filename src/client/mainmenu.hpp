@@ -18,13 +18,11 @@ class MainMenu : public Menu
 		Image background;
 		Image title;
 	
-		Button netgameButton;	
 		Button localgameButton;		
 		Button aboutButton;
 		Button settingsButton;		
 		Button quitButton;		
 	
-		void netgameClickHandler();
 		void localgameClickHandler();
 		void aboutClickHandler();		
 		void settingsClickHandler();

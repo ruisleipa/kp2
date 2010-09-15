@@ -3,8 +3,8 @@
 
 #include "activetextwidget.hpp"
 #include "utils/timer.hpp"
-#include "callback/callback.hpp"
 
+#include <tr1/functional>
 #include <vector>
 
 class Listbox : public TextWidget
@@ -17,7 +17,7 @@ class Listbox : public TextWidget
 		virtual void onMouseUp(MouseEvent event);
 		virtual void onMouseOut();
 		
-		void setChangeHandler(Callback0 handler);
+		void setChangeHandler(std::tr1::function<void()> handler);
 		
 		Listbox();
 		
@@ -41,7 +41,7 @@ class Listbox : public TextWidget
 
 		float m_button_height;
 		
-		Callback0 m_change_handler;
+		std::tr1::function<void()> m_change_handler;
 		
 		static Texture m_arrow_up;
 		static Texture m_arrow_down;

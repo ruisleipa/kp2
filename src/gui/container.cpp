@@ -116,7 +116,7 @@ void Container::draw(Window& window)
 			continue;
 	
 		Vector2D start=getAbsolutePosition()+widget->getPosition();
-#if 0
+#if 1
 		scissor.reset();
 	
 		Vector2D begin=start;
@@ -146,16 +146,16 @@ void Container::draw(Window& window)
 
 void Container::showOnlyWidget(const std::string& tag)
 {
-	std::map<std::string,Menu*>::iterator i;
+	std::vector<Widget*>::iterator i;
 	
 	for(i=children.begin(); i!=children.end(); ++i)
 	{
-		(*i).second->setVisible(false);
+		(*i)->setVisible(false);
 	}
 	
 	if(tags.find(tag) != tags.end())
 	{
-		menus[tag]->setVisible(true);
+		tags[tag]->setVisible(true);
 	}
 }
 

@@ -20,9 +20,9 @@ NewLocalGameMenu::NewLocalGameMenu(Connection& connection):
 	difficultySelect.addItem("vaikea");
 
 	backButton.setText("Peruuta");
-	backButton.setClickHandler(Callback0(this,&NewLocalGameMenu::backClickHandler));
+	backButton.setClickHandler(std::tr1::bind(&NewLocalGameMenu::backClickHandler,this));
 	startButton.setText("Aloita");
-	startButton.setClickHandler(Callback0(this,&NewLocalGameMenu::startClickHandler));
+	startButton.setClickHandler(std::tr1::bind(&NewLocalGameMenu::startClickHandler,this));
 	
 	addWidget(title);
 	
@@ -78,7 +78,7 @@ void NewLocalGameMenu::onShow()
 
 void NewLocalGameMenu::backClickHandler()
 {
-	getMenuContainer()->showMenu("localgamemenu");
+	getParent()->showOnlyWidget("localgamemenu");
 }
 
 void NewLocalGameMenu::startClickHandler()
@@ -102,7 +102,7 @@ void NewLocalGameMenu::startClickHandler()
 		packet2.setType(PARTSHOP_LIST);		
 		connection.writeToServer(packet2);
 	
-		getMenuContainer()->showMenu("careermenu");
+		getParent()->showOnlyWidget("careermenu");
 	}
 }
 

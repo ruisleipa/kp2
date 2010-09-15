@@ -10,7 +10,7 @@
 
 #include "connection.hpp"
 
-class CarlistMenu : public Container
+class CarlistMenu : public Menu
 {
 	public:
 		CarlistMenu(Connection& connection);

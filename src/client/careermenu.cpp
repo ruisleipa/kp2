@@ -32,6 +32,8 @@ CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGam
 	addWidget(raceButton);
 	
 	addWidget(topLevelGameMenus);
+	
+	std::cout<<getSize()<<std::endl;
 }
 
 void CareerMenu::onResize(Window& window)

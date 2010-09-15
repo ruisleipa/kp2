@@ -9,7 +9,7 @@
 #include "field.hpp"
 #include "listbox.hpp"
 
-class PartshopMenu : public Container
+class PartshopMenu : public Menu
 {
 	public:
 		PartshopMenu(Connection& connection);

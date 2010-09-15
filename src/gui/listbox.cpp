@@ -240,7 +240,7 @@ void Listbox::onMouseOut()
 	//m_scroll_pending=0;
 }
 
-void Listbox::setChangeHandler(Callback0 handler)
+void Listbox::setChangeHandler(std::tr1::function<void()> handler)
 {
 	m_change_handler=handler;
 }

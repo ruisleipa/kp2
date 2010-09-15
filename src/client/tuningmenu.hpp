@@ -10,7 +10,7 @@
 #include "partshopmenu.hpp"
 #include "installpartsmenu.hpp"
 
-class TuningMenu : public Container
+class TuningMenu : public Menu
 {
 	public:
 		TuningMenu(Connection& connection);

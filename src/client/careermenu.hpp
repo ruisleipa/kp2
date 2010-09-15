@@ -1,7 +1,7 @@
 #ifndef CAREERMENU_HPP
 #define CAREERMENU_HPP
 
-#include "gui/container.hpp"
+#include "gui/menu.hpp"
 #include "gui/label.hpp"
 #include "gui/button.hpp"
 #include "gui/image.hpp"
@@ -9,7 +9,7 @@
 
 #include "graphics/texturecollection.hpp"
 
-class CareerMenu : public Container
+class CareerMenu : public Menu
 {
 	public:
 		CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus);

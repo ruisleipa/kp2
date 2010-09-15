@@ -37,24 +37,24 @@ SettingsMenu::SettingsMenu(Window& window):
 	vsyncSelect.addItem("kyllä");
 	
 	backButton.setText("Takaisin");
-	backButton.setClickHandler(Callback0(this,&SettingsMenu::backClick));
+	backButton.setClickHandler(std::tr1::bind(&SettingsMenu::backClick,this));
 	applyButton.setText("Ota käyttöön");
-	applyButton.setClickHandler(Callback0(this,&SettingsMenu::applyClick));
+	applyButton.setClickHandler(std::tr1::bind(&SettingsMenu::applyClick,this));
 
-	addChild(background);
+	addWidget(background);
 	
-	addChild(title);
+	addWidget(title);
 	
-	addChild(sizeLabel);
-	addChild(fullscreenLabel);
-	addChild(vsyncLabel);	
+	addWidget(sizeLabel);
+	addWidget(fullscreenLabel);
+	addWidget(vsyncLabel);	
 			
-	addChild(sizeSelect);
-	addChild(fullscreenSelect);	
-	addChild(vsyncSelect);
+	addWidget(sizeSelect);
+	addWidget(fullscreenSelect);	
+	addWidget(vsyncSelect);
 		
-	addChild(backButton);	
-	addChild(applyButton);
+	addWidget(backButton);	
+	addWidget(applyButton);
 }
 
 void SettingsMenu::onResize(Window& window)
@@ -131,7 +131,7 @@ void SettingsMenu::updateDisplayOptions()
 
 void SettingsMenu::backClick()
 {
-	getMenuContainer()->showMenu("mainmenu");
+	getParent()->showOnlyWidget("mainmenu");
 }
 
 void SettingsMenu::applyClick()

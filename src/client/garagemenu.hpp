@@ -12,7 +12,7 @@
 
 #include "connection.hpp"
 
-class GarageMenu : public Container
+class GarageMenu : public Menu
 {
 	public:
 		GarageMenu(Connection& connection);

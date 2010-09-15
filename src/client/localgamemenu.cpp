@@ -10,20 +10,18 @@ LocalGameMenu::LocalGameMenu()
 	title.setText("Yksinpeli");			
 	
 	newGameButton.setText("Uusi tilanne");
-	newGameButton.setClickHandler(Callback0(this,&LocalGameMenu::newClickHandler));
+	newGameButton.setClickHandler(std::tr1::bind(&LocalGameMenu::newClickHandler,this));
 	loadGameButton.setText("Lataa tilanne");
 	
-	//m_save_game_button.setText("Tallenna peli");
-	
 	backButton.setText("Peruuta");
-	backButton.setClickHandler(Callback0(this,&LocalGameMenu::backClickHandler));
+	backButton.setClickHandler(std::tr1::bind(&LocalGameMenu::backClickHandler,this));
 	
-	addChild(title);
+	addWidget(title);
 	
-	addChild(newGameButton);
-	addChild(loadGameButton);	
+	addWidget(newGameButton);
+	addWidget(loadGameButton);	
 	
-	addChild(backButton);	
+	addWidget(backButton);	
 }
 
 void LocalGameMenu::onResize(Window& window)
@@ -54,11 +52,11 @@ void LocalGameMenu::onShow()
 
 void LocalGameMenu::backClickHandler()
 {
-	getMenuContainer()->showMenu("mainmenu");
+	getParent()->showOnlyWidget("mainmenu");
 }
 
 void LocalGameMenu::newClickHandler()
 {
-	getMenuContainer()->showMenu("newlocalgamemenu");
+	getParent()->showOnlyWidget("newlocalgamemenu");
 }
 
