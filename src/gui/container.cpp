@@ -37,7 +37,7 @@ void Container::mouseDown(MouseEvent event)
 {
 	Widget::mouseDown(event);
 
-	Widget* widget=findWidgetUnderPoint(event.getPosition());
+	Widget* widget=findWidgetUnderMouse(event);
 	
 	if(widget != focusedChild)
 	{
@@ -59,7 +59,7 @@ void Container::mouseUp(MouseEvent event)
 {
 	Widget::mouseUp(event);
 
-	Widget* widget=findWidgetUnderPoint(event.getPosition());
+	Widget* widget=findWidgetUnderMouse(event);
 
 	if(widget)
 		widget->mouseUp(event);
@@ -69,7 +69,7 @@ void Container::mouseMove(MouseEvent event)
 {
 	Widget::mouseMove(event);
 	
-	Widget* widget=findWidgetUnderPoint(event.getPosition());
+	Widget* widget=findWidgetUnderMouse(event);
 	
 	if(widget != mouseOverChild)
 	{
@@ -100,13 +100,15 @@ void Container::resize(Window& window)
 	}	
 }
 
-void Container::draw(Window& window)
+void Container::draw(DrawEvent event)
 {
-	Widget::draw(window);
+	Widget::draw(event);
 	
 	std::vector<Widget*>::iterator i;
 	
-	Scissor scissor(window);
+	Scissor scissor(event.getWindow());
+	
+	scissor.reset();
 	
 	for(i=children.begin();i!=children.end();++i)
 	{
@@ -115,12 +117,25 @@ void Container::draw(Window& window)
 		if(!widget->getVisible())
 			continue;
 	
-		Vector2D start=getAbsolutePosition()+widget->getPosition();
+		Vector2D start = event.getAreaPosition();
+		
+		if(widget->hasPixelPosition())
+			start += widget->getPosition();
+		else
+			start += widget->getPosition() * event.getAreaSize();
+		
+		Vector2D size;
+		
+		if(widget->hasPixelSize())
+			size = widget->getSize();
+		else
+			size = widget->getSize() * event.getAreaSize();
+				
 #if 1
 		scissor.reset();
 	
 		Vector2D begin=start;
-		Vector2D end=begin+widget->getSize();
+		Vector2D end=begin+size;
 	
 		Texture().bind();
 		
@@ -136,9 +151,12 @@ void Container::draw(Window& window)
 			glVertex2f(begin.getX(),end.getY());
 		glEnd();
 #endif
-		scissor.set(start,widget->getSize());
+		scissor.set(start,size);
 	
-		widget->draw(window);
+		EventArea eventArea(event.getWindow(), start, size);
+		DrawEvent drawEvent(eventArea);
+	
+		widget->draw(drawEvent);
 	}
 	
 	scissor.reset();
@@ -193,28 +211,43 @@ Widget* Container::getChild(int index)
 }
 
 Container::Container():
-	mouseOverChild(0),
-	focusedChild(0)
+	focusedChild(0),
+	mouseOverChild(0)
 {
 
 }
 
-Widget* Container::findWidgetUnderPoint(Vector2D point)
+Widget* Container::findWidgetUnderMouse(MouseEvent event)
 {
 	std::vector<Widget*>::reverse_iterator i;
 	
-	for(i=children.rbegin();i!=children.rend();++i)
+	for(i = children.rbegin(); i != children.rend(); ++i)
 	{
-		Widget* widget=(*i);
+		Widget* widget = (*i);
 
 		if(!widget->getVisible())
 			continue;
 	
-		Vector2D begin=getAbsolutePosition()+widget->getPosition();
-		Vector2D end=begin+widget->getSize();
+		Vector2D begin = event.getAreaPosition();
 		
-		bool y=point.getY()>=begin.getY() && point.getY()<=end.getY();
-		bool x=point.getX()>=begin.getX() && point.getX()<=end.getX();
+		if(widget->hasPixelPosition())
+			begin += widget->getPosition();
+		else
+			begin += widget->getPosition() * event.getAreaSize();
+		
+		Vector2D size;
+		
+		if(widget->hasPixelSize())
+			size = widget->getSize();
+		else
+			size = widget->getSize() * event.getAreaSize();
+		
+		Vector2D end = begin + size;
+		
+		Vector2D point = event.getMousePosition();
+		
+		bool y = point.getY() >= begin.getY() && point.getY() <= end.getY();
+		bool x = point.getX() >= begin.getX() && point.getX() <= end.getX();
 		
 		if(x && y)
 			return widget;

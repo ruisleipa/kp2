@@ -1,14 +1,14 @@
 #ifndef MOUSEEVENT_HPP
 #define MOUSEEVENT_HPP
 
-#include <stdint.h>
-#include "graphics/window.hpp"
+#include "event.hpp"
+
 #include "graphics/vector2d.hpp"
 
-class MouseEvent
+class MouseEvent: public Event
 {
 	public:
-		Vector2D getPosition();
+		Vector2D getMousePosition();
 		
 		enum MouseButton
 		{
@@ -19,14 +19,12 @@ class MouseEvent
 			WHEELDOWN=4
 		};
 		
-		bool isButtonDown(MouseButton button_index);
-		Window& getWindow();
+		bool isButtonDown(MouseButton button);
 		
-		MouseEvent(Window& window,Vector2D position,int state);
+		MouseEvent(const EventArea& area,const Vector2D& mousePosition,int state);
 		
 	private:
-		Window& window;
-		Vector2D position;
+		Vector2D mousePosition;
 		int state;
 		
 };

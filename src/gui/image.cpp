@@ -47,58 +47,58 @@ Color Image::getColor()
 	return color;
 }
 
-void Image::onDraw(Window& window)
+void Image::onDraw(DrawEvent event)
 {
-	Vector2D image_size;
+	Vector2D imageSize;
 	
 	if(!stretched)
 	{
-		image_size=texture.getSize();
-		image_size.setX(image_size.getX()/window.getAspectRatio());
+		imageSize=texture.getSize();
+		imageSize.setX(imageSize.getX());
 		
 		// ratio>1 = wide, ratio<1=tall 
-		float image_ratio=image_size.getX()/image_size.getY();
+		float imageRatio=imageSize.getX()/imageSize.getY();
 		
-		Vector2D dest=getSize();
+		Vector2D dest=event.getAreaSize();
 	
 		// ratio>1 = wide, ratio<1=tall 
 		float dest_ratio=dest.getX()/dest.getY();
 	
 		if(fill)
 		{			
-			if(image_ratio>dest_ratio)
+			if(imageRatio>dest_ratio)
 			{
 				//image is wider than dest
-				image_size*=dest.getY()/image_size.getY();			
+				imageSize*=dest.getY()/imageSize.getY();			
 			}
 			else
 			{
 				//image is taller than dest
-				image_size*=dest.getX()/image_size.getX();	
+				imageSize*=dest.getX()/imageSize.getX();	
 			}
 		}
 		else
 		{
-			if(image_ratio<dest_ratio)
+			if(imageRatio<dest_ratio)
 			{
 				//image is wider than dest
-				image_size*=dest.getY()/image_size.getY();			
+				imageSize*=dest.getY()/imageSize.getY();			
 			}
 			else
 			{
 				//image is taller than dest
-				image_size*=dest.getX()/image_size.getX();	
+				imageSize*=dest.getX()/imageSize.getX();	
 			}
 		}
 	}
 	else
 	{
-		image_size=getSize();
+		imageSize=event.getAreaSize();
 	}
 	
 	color.apply();
 	
-	texture.draw(getAbsolutePosition(),image_size);
+	texture.draw(event.getAreaPosition(),imageSize);
 }
 
 Image::Image():

@@ -1,6 +1,6 @@
 #include "keyevent.hpp"
 
-uint16_t KeyEvent::getUnicode()
+int KeyEvent::getUnicode()
 {
 	return unicode;
 }
@@ -10,13 +10,8 @@ SDLKey KeyEvent::getKey()
 	return key;
 }
 
-Window& KeyEvent::getWindow()
-{
-	return window;
-}
-
-KeyEvent::KeyEvent(Window& window,uint16_t unicode,SDLKey key):
-	window(window),
+KeyEvent::KeyEvent(const EventArea& area,int unicode,SDLKey key):
+	Event(area),
 	unicode(unicode),
 	key(key)
 {

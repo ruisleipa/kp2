@@ -14,7 +14,7 @@ class Container : public Widget
 		virtual void mouseMove(MouseEvent event);
 		
 		virtual void resize(Window& window);
-		virtual void draw(Window& window);
+		virtual void draw(DrawEvent event);
 		
 		virtual void showOnlyWidget(const std::string& tag);
 		
@@ -28,7 +28,7 @@ class Container : public Widget
 		Widget* getChild(int index);
 	
 	private:
-		Widget* findWidgetUnderPoint(Vector2D point);
+		Widget* findWidgetUnderMouse(MouseEvent event);
 
 		Widget* focusedChild;
 		Widget* mouseOverChild;

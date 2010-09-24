@@ -1,22 +1,20 @@
 #ifndef KEYEVENT_HPP
 #define KEYEVENT_HPP
 
-#include <graphics/window.hpp>
-#include <SDL/SDL.h>
-#include <stdint.h>
+#include "event.hpp"
 
-class KeyEvent
+#include <SDL/SDL.h>
+
+class KeyEvent: public Event
 {
 	public:
-		uint16_t getUnicode();
+		int getUnicode();
 		SDLKey getKey();
-		Window& getWindow();
-		
-		KeyEvent(Window& window,uint16_t unicode,SDLKey key);
+				
+		KeyEvent(const EventArea& area,int unicode,SDLKey key);
 		
 	private:
-		Window& window;
-		uint16_t unicode;
+		int unicode;
 		SDLKey key;
 		
 };

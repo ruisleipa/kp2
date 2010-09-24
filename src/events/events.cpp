@@ -9,16 +9,17 @@
 
 void Events::processEvents()
 {
-	SDL_Event sdl_event;
-
-	while(SDL_PollEvent(&sdl_event))
+	SDL_Event sdlEvent;
+	EventArea eventArea(window, Vector2D(0,0), window.getSize());
+	
+	while(SDL_PollEvent(&sdlEvent))
 	{
-		if(sdl_event.type == SDL_QUIT)
+		if(sdlEvent.type == SDL_QUIT)
 		{
 			throw ExitException();
 		}
 		
-		if(m_event_listener == &m_default_listener)
+		if(eventListener == &defaultListener)
 		{
 			/*
 			This key is checked so that apps with no eventlistener
@@ -26,9 +27,9 @@ void Events::processEvents()
 			accidentally set no eventlistener in a fullscreen
 			program.
 			*/		
-			if(sdl_event.type == SDL_KEYDOWN)
+			if(sdlEvent.type == SDL_KEYDOWN)
 			{
-				SDL_keysym& keysym = sdl_event.key.keysym;
+				SDL_keysym& keysym = sdlEvent.key.keysym;
 		
 				if(keysym.sym==SDLK_ESCAPE)
 					throw ExitException();
@@ -37,58 +38,55 @@ void Events::processEvents()
 			continue;
 		}
 		
-		if(sdl_event.type == SDL_KEYDOWN)
+		if(sdlEvent.type == SDL_KEYDOWN)
 		{
-			SDL_keysym& keysym = sdl_event.key.keysym;
+			SDL_keysym& keysym = sdlEvent.key.keysym;
 		
-			KeyEvent event(window, keysym.unicode, keysym.sym);
+			KeyEvent event(eventArea, keysym.unicode, keysym.sym);
 			
-			m_event_listener->keyDown(event);
+			eventListener->keyDown(event);
 		}
-		else if(sdl_event.type == SDL_KEYUP)
+		else if(sdlEvent.type == SDL_KEYUP)
 		{
-			SDL_keysym& keysym = sdl_event.key.keysym;
+			SDL_keysym& keysym = sdlEvent.key.keysym;
 		
-			KeyEvent event(window, keysym.unicode, keysym.sym);
+			KeyEvent event(eventArea, keysym.unicode, keysym.sym);
 			
-			m_event_listener->keyUp(event);
+			eventListener->keyUp(event);
 		}
-		else if(sdl_event.type == SDL_MOUSEBUTTONDOWN)
+		else if(sdlEvent.type == SDL_MOUSEBUTTONDOWN)
 		{
-			SDL_MouseButtonEvent& button = sdl_event.button;
+			SDL_MouseButtonEvent& button = sdlEvent.button;
 			Vector2D pos=Vector2D(button.x, button.y);
-			pos/=window.getSize();
 							
-			MouseEvent event(window, pos, 1 << (button.button-1));
+			MouseEvent event(eventArea, pos, 1 << (button.button-1));
 			
-			m_event_listener->mouseDown(event);
+			eventListener->mouseDown(event);
 		}
-		else if(sdl_event.type == SDL_MOUSEBUTTONUP)
+		else if(sdlEvent.type == SDL_MOUSEBUTTONUP)
 		{
-			SDL_MouseButtonEvent& button = sdl_event.button;
+			SDL_MouseButtonEvent& button = sdlEvent.button;
 			Vector2D pos=Vector2D(button.x, button.y);
-			pos/=window.getSize();
 									
-			MouseEvent event(window, pos, 1 << (button.button-1));
+			MouseEvent event(eventArea, pos, 1 << (button.button-1));
 			
-			m_event_listener->mouseUp(event);
+			eventListener->mouseUp(event);
 		}
-		else if(sdl_event.type == SDL_MOUSEMOTION)
+		else if(sdlEvent.type == SDL_MOUSEMOTION)
 		{
-			SDL_MouseMotionEvent& motion = sdl_event.motion;
+			SDL_MouseMotionEvent& motion = sdlEvent.motion;
 			Vector2D pos=Vector2D(motion.x, motion.y);
-			pos/=window.getSize();
 					
-			MouseEvent event(window, pos, motion.state);
+			MouseEvent event(eventArea, pos, motion.state);
 			
-			m_event_listener->mouseMove(event);
+			eventListener->mouseMove(event);
 		}
 	}
 }
 
-void Events::setEventListener(EventListener* event_listener)
+void Events::setEventListener(EventListener* eventListener)
 {
-	m_event_listener=event_listener;
+	this->eventListener=eventListener;
 }
 
 bool Events::isKeyDown(SDLKey key)
@@ -100,7 +98,7 @@ bool Events::isKeyDown(SDLKey key)
 
 Events::Events(Window& window): 
 	window(window),
-	m_event_listener(&m_default_listener)
+	eventListener(&defaultListener)
 {
 	SDL_EnableUNICODE(true);
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);

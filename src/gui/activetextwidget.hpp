@@ -18,7 +18,7 @@ class ActiveTextWidget : public TextWidget
 		virtual void onMouseOut();		
 		virtual void onMouseDown(MouseEvent);
 		
-		virtual void onDraw(Window& window);
+		virtual void onDraw(DrawEvent event);
 		
 		virtual void autoSize();
 		
@@ -29,16 +29,16 @@ class ActiveTextWidget : public TextWidget
 		bool isMouseOver();
 	
 	private:	
-		Font m_active_font;
-		Font m_border_font;
+		Font activeFont;
+		Font borderFont;
 		
-		bool m_mouse_over;	
-		bool m_animate;
+		bool mouseOverFlag;	
+		bool doAnimate;
 
-		Timer m_mouse_over_timer;
+		Timer mouseOverTimer;
 		
-		static Sound m_mouse_over_sound;
-		static Sound m_mouse_down_sound;
+		static Sound mouseOverSound;
+		static Sound mouseDownSound;
 };
 
 #endif // ACTIVETEXTWIDGET_HPP

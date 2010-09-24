@@ -177,7 +177,7 @@ void Window::initOpenGL()
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();	
-	glOrtho(0,1,1,0,0,1);
+	glOrtho(0,displaysize.getX(),displaysize.getY(),0,0,1);
 	glMatrixMode(GL_MODELVIEW);
 	
 	glEnable(GL_TEXTURE_2D);

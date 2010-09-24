@@ -10,7 +10,7 @@ void Font::draw(std::wstring str,Vector2D pos)
 		return;
 		
 	m_font_type->m_color.apply();
-	m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
+	m_font_type->m_font_face->draw(str,pos);
 }
 
 void Font::draw(std::wstring str,Vector2D pos,Color color)
@@ -19,7 +19,7 @@ void Font::draw(std::wstring str,Vector2D pos,Color color)
 		return;
 		
 	color.apply();
-	m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
+	m_font_type->m_font_face->draw(str,pos);
 }
 
 void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size)
@@ -28,8 +28,8 @@ void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size)
 		return;
 		
 	m_font_type->m_color.apply();
-	//m_font_type->m_font_face->draw(str,pos,m_font_type->m_size);
-	m_font_type->m_font_face->drawWrapped(str,pos,size,m_font_type->m_size);
+	//m_font_type->m_font_face->draw(str,pos);
+	m_font_type->m_font_face->drawWrapped(str,pos,size);
 }
 
 void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,Color color)
@@ -38,7 +38,7 @@ void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size,Color color)
 		return;
 		
 	color.apply();
-	m_font_type->m_font_face->drawWrapped(str,pos,size,m_font_type->m_size);
+	m_font_type->m_font_face->drawWrapped(str,pos,size);
 }
 
 Vector2D Font::getTextSize(std::wstring str)
@@ -46,7 +46,7 @@ Vector2D Font::getTextSize(std::wstring str)
 	if(!m_font_type)
 		return Vector2D(0,0);
 	
-	return m_font_type->m_font_face->getTextSize(str,m_font_type->m_size);
+	return m_font_type->m_font_face->getTextSize(str);
 }
 
 Color Font::getColor()

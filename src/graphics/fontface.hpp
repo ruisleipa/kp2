@@ -27,9 +27,9 @@ class FontPage
 class FontFace: public NonCopyable
 {
 	public:
-		void draw(std::wstring str,Vector2D pos,float char_height);
-		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size,float char_height);
-		Vector2D getTextSize(std::wstring str,float char_height);
+		void draw(std::wstring str,Vector2D pos);
+		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size);
+		Vector2D getTextSize(std::wstring str);
 
 		FontFace(Window& window,std::string fontfile,int fontsize);
 		~FontFace();

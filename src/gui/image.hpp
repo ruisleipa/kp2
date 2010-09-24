@@ -21,7 +21,7 @@ class Image : public Widget
 		void setColor(Color color);
 		Color getColor();		
 		
-		virtual void onDraw(Window& window);
+		virtual void onDraw(DrawEvent event);
 		
 		Image();
 		

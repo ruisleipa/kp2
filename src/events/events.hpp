@@ -15,7 +15,7 @@ class Events
 {
 	public:
 		void processEvents();
-		void setEventListener(EventListener* event_listener);
+		void setEventListener(EventListener* eventListener);
 		
 		bool isKeyDown(SDLKey key);
 
@@ -25,9 +25,9 @@ class Events
 	private:
 		Window& window;
 		
-		EventListener* m_event_listener;	
+		EventListener* eventListener;	
 		
-		EventListener m_default_listener;	
+		EventListener defaultListener;	
 };
 
 #endif // EVENTS_HPP

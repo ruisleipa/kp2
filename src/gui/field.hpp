@@ -8,7 +8,7 @@
 class Field : public TextWidget
 {
 	public:
-		virtual void onDraw(Window& window);
+		virtual void onDraw(DrawEvent event);
 		virtual void onKeyDown(KeyEvent event);
 		
 		virtual void onFocus();

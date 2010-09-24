@@ -97,10 +97,13 @@ void startGame()
 	
 	rootContainer.resize(window);
 	
+	EventArea eventArea(window, Vector2D(0,0), window.getSize());
+	DrawEvent drawEvent(eventArea);
+	
 	while(1)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
-		rootContainer.draw(window);
+		rootContainer.draw(drawEvent);
 		SDL_GL_SwapBuffers();		
 		events.processEvents();				
 	}

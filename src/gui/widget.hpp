@@ -7,6 +7,7 @@
 #include "events/eventlistener.hpp"
 #include "events/keyevent.hpp"
 #include "events/mouseevent.hpp"
+#include "events/drawevent.hpp"
 
 #include "utils/noncopyable.hpp"
 
@@ -16,9 +17,11 @@ class Widget: public EventListener, public NonCopyable
 {
 	public:
 		void setPosition(Vector2D position);	
-		Vector2D getPosition();
-		
+		void setPixelPosition(Vector2D position);	
+		Vector2D getPosition();	
+
 		void setSize(Vector2D size);	
+		void setPixelSize(Vector2D size);	
 		Vector2D getSize();
 		
 		void setVisible(bool visible);
@@ -43,7 +46,7 @@ class Widget: public EventListener, public NonCopyable
 		virtual void blur();
 		virtual void focus();	
 		
-		virtual void draw(Window& window);		
+		virtual void draw(DrawEvent event);		
 		
 		Container* getParent();
 		
@@ -51,7 +54,8 @@ class Widget: public EventListener, public NonCopyable
 		virtual ~Widget();
 	
 	protected:	
-		Vector2D getAbsolutePosition();
+		bool hasPixelPosition();
+		bool hasPixelSize();
 	
 		/*
 		These are the functions that implement object specific handler
@@ -75,17 +79,20 @@ class Widget: public EventListener, public NonCopyable
 		virtual void onShow();	
 		virtual void onHide();	
 		
-		virtual void onDraw(Window& window);
+		virtual void onDraw(DrawEvent event);
 	
 	private:
 		void setParent(Container* container);
+			
+		bool visible;
+			
+		Container* parent;
 	
 		Vector2D position;
+		bool pixelPosition;
+		
 		Vector2D size;
-		
-		bool visible;
-		
-		Container* parent;
+		bool pixelSize;		
 		
 		friend class Container;
 };

@@ -2,28 +2,21 @@
 
 #include "debug/assert.hpp"
 
-#include <iostream>
-
-Vector2D MouseEvent::getPosition()
+Vector2D MouseEvent::getMousePosition()
 {
-	return position;
+	return mousePosition;
 }
 
-bool MouseEvent::isButtonDown(MouseButton button_index)
+bool MouseEvent::isButtonDown(MouseButton button)
 {
-	assert(button_index < 5);
+	assert(button < 5);
 	
-	return state & (1 << button_index);
+	return state & (1 << button);
 }
 
-Window& MouseEvent::getWindow()
-{
-	return window;
-}
-
-MouseEvent::MouseEvent(Window& window,Vector2D position,int state):
-	window(window),
-	position(position),
+MouseEvent::MouseEvent(const EventArea& area,const Vector2D& mousePosition,int state):
+	Event(area),
+	mousePosition(mousePosition),
 	state(state)	
 {
 

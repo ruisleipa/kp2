@@ -2,39 +2,39 @@
 
 #include "graphics/scissor.hpp"
 
-Sound ActiveTextWidget::m_mouse_over_sound;
-Sound ActiveTextWidget::m_mouse_down_sound;
+Sound ActiveTextWidget::mouseOverSound;
+Sound ActiveTextWidget::mouseDownSound;
 
 void ActiveTextWidget::setActiveFont(Font font)
 {
-	m_active_font=font;
+	activeFont=font;
 }
 
 Font& ActiveTextWidget::getActiveFont()
 {
-	return m_active_font;
+	return activeFont;
 }
 
 void ActiveTextWidget::onMouseOn()
 {
-	m_animate=true;
-	m_mouse_over=true;
+	doAnimate=true;
+	mouseOverFlag=true;
 	
-	m_mouse_over_sound.stop();
-	m_mouse_over_sound.play();	
+	mouseOverSound.stop();
+	mouseOverSound.play();	
 
-	m_mouse_over_timer.reset();
+	mouseOverTimer.reset();
 }
 
 void ActiveTextWidget::onMouseOut()
 {
-	m_mouse_over=false;
+	mouseOverFlag=false;
 }
 
 void ActiveTextWidget::onMouseDown(MouseEvent event)
 {
-	m_mouse_down_sound.stop();
-	m_mouse_down_sound.play();
+	mouseDownSound.stop();
+	mouseDownSound.play();
 }
 
 static float lerp(float a,float b,float ratio)
@@ -48,32 +48,32 @@ static float lerp(float a,float b,float ratio)
 	return a+(b-a)*ratio;
 }
 
-void ActiveTextWidget::onDraw(Window& window)
+void ActiveTextWidget::onDraw(DrawEvent event)
 {
-	Vector2D position=getAbsolutePosition();
+	Vector2D position=event.getAreaPosition();
 	
-	float spread=m_mouse_over_timer.getSeconds()*10.0;
+	float spread=mouseOverTimer.getSeconds()*10.0;
 	
-	Vector2D pixelsize=Vector2D(1,1)/window.getSize();
+	Vector2D pixelsize=Vector2D(1,1);
 	
 	if(spread>1.0)
 	{
-		m_animate=false;
+		doAnimate=false;
 	}
 		
 	position+=pixelsize;	
 		
-	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(1,0));	
-	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(1,0));
-	m_border_font.draw(getWideText(),position-pixelsize*Vector2D(0,1));
-	m_border_font.draw(getWideText(),position+pixelsize*Vector2D(0,1));
+	borderFont.draw(getWideText(),position-pixelsize*Vector2D(1,0));	
+	borderFont.draw(getWideText(),position+pixelsize*Vector2D(1,0));
+	borderFont.draw(getWideText(),position-pixelsize*Vector2D(0,1));
+	borderFont.draw(getWideText(),position+pixelsize*Vector2D(0,1));
 	
-	Scissor scissor(window);
+	Scissor scissor(event.getWindow());
 	
-	if(m_animate)
+	if(doAnimate)
 	{
-		if(m_mouse_over==false)
-			m_animate=false;
+		if(mouseOverFlag==false)
+			doAnimate=false;
 			
 		Color col;
 		Color acol=getFont().getColor();
@@ -88,7 +88,7 @@ void ActiveTextWidget::onDraw(Window& window)
 	}
 	else
 	{
-		if(!m_mouse_over)
+		if(!mouseOverFlag)
 		{
 			getFont().draw(getWideText(),position);
 		}
@@ -100,13 +100,13 @@ void ActiveTextWidget::onDraw(Window& window)
 }
 
 ActiveTextWidget::ActiveTextWidget():
-	m_mouse_over(false),
-	m_animate(false)
+	mouseOverFlag(false),
+	doAnimate(false)
 {
-	m_mouse_over_sound.load("data/sounds/mouseover.wav");
-	m_mouse_down_sound.load("data/sounds/click.wav");
+	mouseOverSound.load("data/sounds/mouseover.wav");
+	mouseDownSound.load("data/sounds/click.wav");
 	
-	m_border_font=Font("Textborder");
+	borderFont=Font("Textborder");
 }
 
 void ActiveTextWidget::autoSize()
@@ -114,5 +114,5 @@ void ActiveTextWidget::autoSize()
 	//needed for the bordered look
 	//TODO: better calculation (this is an ugly hack :P)
 	TextWidget::autoSize();
-	setSize(getSize()+Vector2D(0.005,0));
+	setPixelSize(getSize()+Vector2D(2,2));
 }

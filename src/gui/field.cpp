@@ -2,31 +2,22 @@
 
 #include "graphics/scissor.hpp"
 
-void Field::onDraw(Window& window)
-{				
+void Field::onDraw(DrawEvent event)
+{
 	float cursorpos=getFont().getTextSize(getWideText().substr(0,m_cursorpos)).getX();
 		
-	float textoffset=-(cursorpos+0.02-getSize().getX());
+	float textoffset=-(cursorpos+0.02-event.getAreaSize().getX());
 	
 	if(textoffset>0.001)
 		textoffset=0.001;
 	
-	cursorpos+=getAbsolutePosition().getX()+textoffset;
-	
-	#if 0
-	glBegin(GL_LINES);
-	glVertex2d(getAbsolutePosition().getX(),getAbsolutePosition().getY()+getSize().getY()*0.8);
-	glVertex2d(getAbsolutePosition().getX()+getSize().getX(),getAbsolutePosition().getY()+getSize().getY()*0.8);
-	glEnd();
-	#endif
+	cursorpos+=event.getAreaPosition().getX()+textoffset;
 
-	Vector2D begin=getAbsolutePosition();
-	Vector2D end=begin+getSize();
+	Vector2D begin=event.getAreaPosition();
+	Vector2D end=begin+event.getAreaSize();
 	
-	Scissor scissor(window);
-	scissor.reset();
-	
-	
+	Scissor scissor(event.getWindow());
+	scissor.reset();	
 	
 	Color(0,0,0).apply();
 	Texture().bind();
@@ -41,14 +32,14 @@ void Field::onDraw(Window& window)
 	if(m_focused && int(m_blink_timer.getSeconds()/0.750)%2)
 	{
 		glBegin(GL_LINES);
-		glVertex2d(cursorpos,getAbsolutePosition().getY());
-		glVertex2d(cursorpos,getAbsolutePosition().getY()+getSize().getY());
+		glVertex2d(cursorpos,event.getAreaPosition().getY());
+		glVertex2d(cursorpos,event.getAreaPosition().getY()+event.getAreaSize().getY());
 		glEnd();
 	}
 	
-	scissor.set(getAbsolutePosition(),getSize());
+	scissor.set(event.getAreaPosition(),event.getAreaSize());
 	//glClear(GL_COLOR_BUFFER_BIT);
-	getFont().draw(getWideText(),getAbsolutePosition()+Vector2D(textoffset,0));
+	getFont().draw(getWideText(),event.getAreaPosition()+Vector2D(textoffset,0));
 }
 
 void Field::onKeyDown(KeyEvent event)

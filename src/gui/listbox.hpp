@@ -10,7 +10,7 @@
 class Listbox : public TextWidget
 {
 	public:
-		virtual void onDraw(Window& window);
+		virtual void onDraw(DrawEvent event);
 		virtual void onResize(Window& window);		
 	
 		virtual void onMouseDown(MouseEvent event);
@@ -33,28 +33,28 @@ class Listbox : public TextWidget
 		virtual bool doAutoSizeOnChange();
 		
 	private:
-		int m_index;		
+		int index;		
 		
-		float m_scroll_offset;
-		float m_scroll_pending;
-		Timer m_scroll_timer;
+		float scrollOffset;
+		float scrollPending;
+		Timer scrollTimer;
 
-		float m_button_height;
+		float buttonHeight;
 		
 		std::tr1::function<void()> m_change_handler;
 		
-		static Texture m_arrow_up;
-		static Texture m_arrow_down;
-		static bool m_textures_loaded;		
+		static Texture arrowUp;
+		static Texture arrowDown;
+		static bool haveTexturesBeenLoaded;		
 		
 		class Item
 		{
 			public:
-				std::wstring m_string;
-				int m_tag;
+				std::wstring text;
+				int tag;
 		};
 		
-		std::vector<Item> m_items;
+		std::vector<Item> items;
 };
 
 #endif // LISTBOX_HPP

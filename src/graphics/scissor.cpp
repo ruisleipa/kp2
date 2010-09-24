@@ -8,11 +8,10 @@ void Scissor::set(Vector2D pos,Vector2D size)
 {
 	Vector2D windowsize=window.getSize();
 
-	pos*=windowsize;
-	size*=windowsize;
-	
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(pos.getX(),windowsize.getY()-(pos.getY()+size.getY()),size.getX(),size.getY());
+	
+	glDisable(GL_SCISSOR_TEST);
 }
 
 void Scissor::reset()
