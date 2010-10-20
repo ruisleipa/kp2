@@ -28,7 +28,7 @@ class Listbox : public TextWidget
 		std::string getCurrentItemString();
 		
 		int getIndex();
-		void setIndex(int index);		
+		void setIndex(int newIndex);		
 		
 		virtual bool doAutoSizeOnChange();
 		

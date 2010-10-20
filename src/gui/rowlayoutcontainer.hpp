@@ -1,9 +1,9 @@
-#ifndef COLUMNLAYOUTCONTAINER_HPP
-#define COLUMNLAYOUTCONTAINER_HPP
+#ifndef ROWLAYOUTCONTAINER_HPP
+#define ROWLAYOUTCONTAINER_HPP
 
 #include "layoutcontainer.hpp"
 
-class ColumnLayoutContainer : public LayoutContainer
+class RowLayoutContainer : public LayoutContainer
 {
 	protected:
 		virtual int getDividedSide(Vector2D size);
@@ -12,5 +12,5 @@ class ColumnLayoutContainer : public LayoutContainer
 
 };
 
-#endif // COLUMNLAYOUTCONTAINER_HPP
+#endif // ROWLAYOUTCONTAINER_HPP
 

@@ -14,12 +14,16 @@
 
 #include "gui/rootcontainer.hpp"
 #include "gui/menucontainer.hpp"
+#include "gui/tabbedmenu.hpp"
 
 #include "newlocalgamemenu.hpp"
 #include "localgamemenu.hpp"
 #include "mainmenu.hpp"
 #include "settingsmenu.hpp"
 #include "careermenu.hpp"
+
+#include "carshopmenu.hpp"
+#include "carlistmenu.hpp"
 
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
@@ -75,14 +79,25 @@ void startGame()
 	Connection connection;
 	
 	MainMenu mainMenu(mainmenuTextures);
+	
 	SettingsMenu settingsMenu(window);
 	LocalGameMenu localGameMenu;
 	NewLocalGameMenu newLocalGameMenu(connection);
 	
-	Container topLevelGameMenus/*(backgroundTextures)*/;
+	MenuContainer topLevelGameMenus(backgroundTextures);
 	
-	CareerMenu careerMenu(careerTextures,topLevelGameMenus);	
+	CarShopMenu carShopMenu(connection);
+	CarListMenu carListMenu(connection);
 	
+	TabbedMenu garageMenu;
+		
+	garageMenu.addTab("Autokauppa",carShopMenu);
+	garageMenu.addTab("Autotalli",carListMenu);
+	
+	topLevelGameMenus.addWidget("garage",garageMenu);
+	
+	CareerMenu careerMenu(careerTextures,topLevelGameMenus);
+		
 	MenuContainer menuContainer(backgroundTextures);	
 	menuContainer.addWidget("mainmenu",mainMenu);
 	menuContainer.addWidget("settingsmenu",settingsMenu);
@@ -105,6 +120,7 @@ void startGame()
 		glClear(GL_COLOR_BUFFER_BIT);
 		rootContainer.draw(drawEvent);
 		SDL_GL_SwapBuffers();		
+		connection.processMessages();				
 		events.processEvents();				
 	}
 	

@@ -11,7 +11,7 @@ CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGam
 	topLevelGameMenus(topLevelGameMenus)
 {
 	sidebar.setTexture(sidebartextures.getTexture("background"));
-	sidebar.setFill(true);
+	sidebar.setStretched(true);
 	
 	garageButton.setText("Autot");
 	garageButton.setClickHandler(std::tr1::bind(&CareerMenu::garageButtonClick,this));
@@ -22,6 +22,8 @@ CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGam
 	raceButton.setText("Kisat");
 	raceButton.setClickHandler(std::tr1::bind(&CareerMenu::tuningButtonClick,this));
 	
+	addWidget(topLevelGameMenus);
+	
 	addWidget(sidebar);
 		
 	addWidget(infoLabel);
@@ -29,11 +31,7 @@ CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGam
 	addWidget(garageButton);
 	addWidget(tuningButton);
 	addWidget(financeButton);
-	addWidget(raceButton);
-	
-	addWidget(topLevelGameMenus);
-	
-	std::cout<<getSize()<<std::endl;
+	addWidget(raceButton);	
 }
 
 void CareerMenu::onResize(Window& window)

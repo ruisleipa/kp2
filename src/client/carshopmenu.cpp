@@ -1,65 +1,57 @@
-#include "garagemenu.hpp"
+#include "carshopmenu.hpp"
 
 #include <iostream>
 #include <sstream>
 
 #include "ui.hpp"
-#include "graphics.hpp"
-#include "shared/string.hpp"
+#include "utils/string.hpp"
 #include "connection.hpp"
 
-CarshopMenu::CarshopMenu(Connection& connection):
-	m_connection(connection)
+CarShopMenu::CarShopMenu(Connection& connection):
+	connection(connection),
+	backgroundTexture("data/images/submenu.png")
 {
-	m_background_texture.load("data/images/submenu.png");
-	m_background.setTexture(&m_background_texture);
-	m_background.setStretched(true);
+	connection.addEventHandler(std::tr1::bind(&CarShopMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
+	
+	background.setTexture(backgroundTexture);
+	background.setStretched(true);
 
-	m_car_list.setFont(Font("small"));
-	m_car_list.setChangeHandler(Callback0(this,&CarshopMenu::carlistChange));
+	carList.setFont(Font("small"));
+	carList.setChangeHandler(std::tr1::bind(&CarShopMenu::carlistChange,this));
 		
-	m_car_info.setFont(Font("small"));
-	m_car_image.setTexture(&m_car_texture);
+	carInfo.setFont(Font("small"));
 	
-	m_buy_button.setText("Osta auto");
-	m_buy_button.setClickHandler(Callback0(this,&CarshopMenu::buyClick));
+	
+	buyButton.setText("Osta auto");
+	buyButton.setClickHandler(std::tr1::bind(&CarShopMenu::buyClick,this));
 				
-	addWidget(&m_background);
-	addWidget(&m_car_list);
-	addWidget(&m_car_image);
-	addWidget(&m_car_name);
-	addWidget(&m_car_info);
+	addWidget(background);
 	
-	addWidget(&m_buy_button);
+	addWidget(mainContainer);
+	
+	mainContainer.addWidget(carList);
+	mainContainer.addWidget(infoContainer);
+	
+	infoContainer.addWidget(titleContainer);
+	infoContainer.addWidget(carInfo);
+	infoContainer.addWidget(buyButton);
+	infoContainer.showOuterPadding(false);
+	
+	titleContainer.addWidget(carName);
+	titleContainer.addWidget(carImage);
+	titleContainer.showOuterPadding(false);
 	
 }
 
-void CarshopMenu::onResize(Graphics& graphics)
+void CarShopMenu::onResize(Window& window)
 {
-	setPosition(CAREER_SUBMENU_POSITION);
-	setSize(CAREER_SUBMENU_SIZE);
-	
-	m_background.setSize(CAREER_SUBMENU_SIZE);
-	
-	m_car_image.setSize(m_car_texture.getSize()/400);
-	m_car_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(1,0)-m_car_image.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
-	
-	m_car_list.setPosition(TITLE_POSITION);
-	m_car_list.setSize(CAREER_SUBMENU_SIZE*Vector2D(0.5,1)-Vector2D(PADDING,PADDING)*2);
-	
-	m_car_name.setPosition(TITLE_POSITION*Vector2D(0,1)+CAREER_SUBMENU_SIZE*Vector2D(0.5,0));
-	m_car_name.setSize(CAREER_SUBMENU_SIZE*Vector2D(0.3,0.15));
-
-	m_car_info.setPosition(CAREER_SUBMENU_SIZE*Vector2D(0.5,0.3));
-	m_car_info.setSize(CAREER_SUBMENU_SIZE*Vector2D(0.5,0.5)-Vector2D(PADDING,PADDING)*2);
-	
-	m_buy_button.autoSize();
-	m_buy_button.setPosition(CAREER_SUBMENU_SIZE*Vector2D(0.5,1)-m_buy_button.getSize()*Vector2D(0,1)-Vector2D(0,PADDING));
+	background.setSize(Vector2D(1,1));
+	mainContainer.setSize(Vector2D(1,1));
 }
 
-void CarshopMenu::onConnectionEvent(Connection& connection)
+void CarShopMenu::onConnectionEvent(Connection& connection)
 {
-	m_car_list.clearItems();
+	carList.clearItems();
 	
 	for(int i=0;i<=connection.getCarshopVehicleMaxId();++i)
 	{
@@ -67,33 +59,31 @@ void CarshopMenu::onConnectionEvent(Connection& connection)
 	
 		if(connection.getCarshopVehicle(i,vehicle))
 		{
-			m_car_list.addItem(vehicle.getName(),i);
+			carList.addItem(vehicle.getName(),i);
 		}
 	}	
 }
 
-void CarshopMenu::carlistChange()
+void CarShopMenu::carlistChange()
 {
 	Vehicle vehicle;
 	
-	if(!m_connection.getCarshopVehicle(m_car_list.getCurrentItemTag(),vehicle))
+	if(!connection.getCarshopVehicle(carList.getCurrentItemTag(),vehicle))
 	{
 		return;
 	}
 	
-	m_car_name.setText(vehicle.getName());
+	carName.setText(vehicle.getName());
 		
 	std::string image="gamedata/vehicles/";
 	image+=vehicle.getImageName();
-	m_car_texture.load(image);
-	m_car_image.setSize(m_car_texture.getSize()/400);
-	m_car_image.setPosition(CAREER_SUBMENU_SIZE*Vector2D(1,0)-m_car_image.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
+	carImage.setTexture(Texture(image));
 	
-	m_car_info.setText(vehicle.getGeneralInfoString());
+	carInfo.setText(vehicle.getGeneralInfoString());
 }
 
-void CarshopMenu::buyClick()
+void CarShopMenu::buyClick()
 {
-	m_connection.buyCar(m_car_list.getIndex());
+	connection.buyCar(carList.getIndex());
 }
 

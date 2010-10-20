@@ -20,9 +20,12 @@
 void Container::keyDown(KeyEvent event)
 {
 	Widget::keyDown(event);
-
+	
 	if(focusedChild)
+	{
+		moveEventOrigin(event,focusedChild);
 		focusedChild->keyDown(event);
+	}
 }
 
 void Container::keyUp(KeyEvent event)
@@ -30,7 +33,10 @@ void Container::keyUp(KeyEvent event)
 	Widget::keyUp(event);
 
 	if(focusedChild)
+	{
+		moveEventOrigin(event,focusedChild);
 		focusedChild->keyUp(event);
+	}
 }
 
 void Container::mouseDown(MouseEvent event)
@@ -51,8 +57,10 @@ void Container::mouseDown(MouseEvent event)
 	}
 	
 	if(widget)
+	{
+		moveEventOrigin(event,widget);
 		widget->mouseDown(event);
-
+	}
 }
 
 void Container::mouseUp(MouseEvent event)
@@ -62,7 +70,10 @@ void Container::mouseUp(MouseEvent event)
 	Widget* widget=findWidgetUnderMouse(event);
 
 	if(widget)
+	{
+		moveEventOrigin(event,widget);
 		widget->mouseUp(event);
+	}
 }
 
 void Container::mouseMove(MouseEvent event)
@@ -81,9 +92,12 @@ void Container::mouseMove(MouseEvent event)
 		if(mouseOverChild)
 			mouseOverChild->mouseOn();
 	}
-	
+		
 	if(mouseOverChild)
+	{
+		moveEventOrigin(event,mouseOverChild);	
 		mouseOverChild->mouseMove(event);
+	}
 }
 
 void Container::resize(Window& window)
@@ -116,33 +130,27 @@ void Container::draw(DrawEvent event)
 	
 		if(!widget->getVisible())
 			continue;
+		
+		DrawEvent drawEvent=event;
+		
+		moveEventOrigin(drawEvent,widget);
 	
-		Vector2D start = event.getAreaPosition();
-		
-		if(widget->hasPixelPosition())
-			start += widget->getPosition();
-		else
-			start += widget->getPosition() * event.getAreaSize();
-		
-		Vector2D size;
-		
-		if(widget->hasPixelSize())
-			size = widget->getSize();
-		else
-			size = widget->getSize() * event.getAreaSize();
+		scissor.set(drawEvent.getAreaPosition(),drawEvent.getAreaSize());
+	
+		widget->draw(drawEvent);
 				
 #if 1
 		scissor.reset();
 	
-		Vector2D begin=start;
-		Vector2D end=begin+size;
+		Vector2D begin=drawEvent.getAreaPosition();
+		Vector2D end=begin+drawEvent.getAreaSize();
 	
 		Texture().bind();
 		
 		if(widget==focusedChild)		
-			Color(1,0,0,1).apply();
+			Color(1,0,0).apply();
 		else
-			Color(0,1,0,1).apply();
+			Color(0,1,0).apply();
 
 		glBegin(GL_LINE_LOOP);
 			glVertex2f(begin.getX(),begin.getY());
@@ -151,12 +159,6 @@ void Container::draw(DrawEvent event)
 			glVertex2f(begin.getX(),end.getY());
 		glEnd();
 #endif
-		scissor.set(start,size);
-	
-		EventArea eventArea(event.getWindow(), start, size);
-		DrawEvent drawEvent(eventArea);
-	
-		widget->draw(drawEvent);
 	}
 	
 	scissor.reset();
@@ -228,26 +230,16 @@ Widget* Container::findWidgetUnderMouse(MouseEvent event)
 		if(!widget->getVisible())
 			continue;
 	
-		Vector2D begin = event.getAreaPosition();
+		MouseEvent newEvent=event;
 		
-		if(widget->hasPixelPosition())
-			begin += widget->getPosition();
-		else
-			begin += widget->getPosition() * event.getAreaSize();
+		moveEventOrigin(newEvent,widget);
 		
-		Vector2D size;
+		Vector2D size = newEvent.getAreaSize();
 		
-		if(widget->hasPixelSize())
-			size = widget->getSize();
-		else
-			size = widget->getSize() * event.getAreaSize();
+		Vector2D point = newEvent.getMousePosition();
 		
-		Vector2D end = begin + size;
-		
-		Vector2D point = event.getMousePosition();
-		
-		bool y = point.getY() >= begin.getY() && point.getY() <= end.getY();
-		bool x = point.getX() >= begin.getX() && point.getX() <= end.getX();
+		bool y = point.getY() >= 0 && point.getY() <= size.getY();
+		bool x = point.getX() >= 0 && point.getX() <= size.getX();
 		
 		if(x && y)
 			return widget;
@@ -256,3 +248,24 @@ Widget* Container::findWidgetUnderMouse(MouseEvent event)
 	return 0;
 }
 
+void Container::moveEventOrigin(Event& event,Widget* widget)
+{
+	event.moveOrigin(calculateWidgetPosition(widget,event.getAreaSize()));
+	event.setAreaSize(calculateWidgetSize(widget,event.getAreaSize()));
+}
+
+Vector2D Container::calculateWidgetPosition(Widget* widget,Vector2D ourSize)
+{
+	if(widget->hasPixelPosition())
+		return widget->getPosition();
+	else
+		return widget->getPosition() * ourSize;
+}
+
+Vector2D Container::calculateWidgetSize(Widget* widget,Vector2D ourSize)
+{
+	if(widget->hasPixelSize())
+		return widget->getSize();
+	else
+		return widget->getSize() * ourSize;
+}

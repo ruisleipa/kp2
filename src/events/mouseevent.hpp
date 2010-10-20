@@ -10,6 +10,8 @@ class MouseEvent: public Event
 	public:
 		Vector2D getMousePosition();
 		
+		virtual void moveOrigin(const Vector2D& offset);
+		
 		enum MouseButton
 		{
 			LEFT=0,

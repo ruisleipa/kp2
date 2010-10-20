@@ -5,7 +5,7 @@ const Vector2D& Event::getAreaPosition()
 	return area.getPosition();
 }
 
-void Event::moveArea(const Vector2D& offset)
+void Event::moveOrigin(const Vector2D& offset)
 {
 	area = EventArea(area.getWindow(), area.getPosition() + offset, area.getSize());
 }

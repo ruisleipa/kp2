@@ -1,42 +1,50 @@
 #ifndef CARSHOPMENU_HPP
 #define CARSHOPMENU_HPP
 
-#include "container.hpp"
-#include "label.hpp"
-#include "button.hpp"
-#include "image.hpp"
-#include "field.hpp"
-#include "listbox.hpp"
+#include "gui/menu.hpp"
+#include "gui/label.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+#include "gui/field.hpp"
+#include "gui/listbox.hpp"
+#include "gui/rowlayoutcontainer.hpp"
+#include "gui/columnlayoutcontainer.hpp"
+
+#include "graphics/texture.hpp"
 
 #include "connection.hpp"
 
-class CarshopMenu : public Menu
+class CarShopMenu : public Menu
 {
 	public:
-		CarshopMenu(Connection& connection);
+		CarShopMenu(Connection& connection);
 
-		virtual void onResize(Graphics& graphics);
+		virtual void onResize(Window& window);
 		virtual void onConnectionEvent(Connection& connection);
 		
 	private:
 		void carlistChange();
 		void buyClick();
 	
-		Connection& m_connection;
+		Connection& connection;
+		
+		ColumnLayoutContainer mainContainer;
+		ColumnLayoutContainer titleContainer;
+		RowLayoutContainer infoContainer;
 	
-		Texture m_background_texture;
-		Image m_background;
+		Texture backgroundTexture;
+		Image background;
 		
-		Texture m_car_texture;
-		Image m_car_image;
+		Texture carTexture;
+		Image carImage;
 		
-		Label m_car_name;
-		Label m_car_info;
+		Label carName;
+		Label carInfo;
 		
-		std::vector<Vehicle> m_vehicles;
+		std::vector<Vehicle> vehicles;
 		
-		Listbox m_car_list;		
-		Button m_buy_button;				
+		Listbox carList;		
+		Button buyButton;				
 };
 
 #endif // CARSHOPMENU_HPP

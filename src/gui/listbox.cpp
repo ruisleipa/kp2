@@ -11,9 +11,9 @@ Texture Listbox::arrowUp;
 Texture Listbox::arrowDown;
 bool Listbox::haveTexturesBeenLoaded=false;
 
-const float BAR_WIDTH=0.02;
-const float SCROLL_DEFAULT_STEP=0.4;
-const float SCROLL_RATE=1;
+const float BAR_WIDTH=32;
+const float SCROLL_DEFAULT_STEP=25;
+const float SCROLL_RATE=100;
 
 static float sign(float value)
 {
@@ -83,7 +83,7 @@ void Listbox::onDraw(DrawEvent event)
 				
 	glEnd();	
 	
-	scissor.set(begin+Vector2D(0.001,0.001),getSize()-Vector2D(0.001,0.001)-Vector2D(BAR_WIDTH,0));
+	scissor.set(event.getAreaPosition(),event.getAreaSize());
 	
 	Vector2D listbegin=Vector2D(0,scrollOffset)+event.getAreaPosition();
 	
@@ -95,8 +95,11 @@ void Listbox::onDraw(DrawEvent event)
 			Color(1,1,1).apply();
 			
 			Vector2D textbegin=listbegin+getFont().getTextSize(L"")*i;
-			Vector2D textend=textbegin+getFont().getTextSize(L"")+getSize()*Vector2D(1,0)-Vector2D(BAR_WIDTH,0);			
-						
+			
+			Vector2D textend;
+			textend.setY(textbegin.getY()+getFont().getTextSize(L"").getY());
+			textend.setX(textbegin.getX()+event.getAreaSize().getX()-BAR_WIDTH);			
+
 			glBegin(GL_QUADS);
 			
 			glVertex2f(textbegin.getX(),textbegin.getY());
@@ -176,7 +179,7 @@ void Listbox::onDraw(DrawEvent event)
 
 void Listbox::onResize(Window& window)
 {
-	buttonHeight=BAR_WIDTH*window.getAspectRatio();
+	buttonHeight=BAR_WIDTH;
 }
 
 void Listbox::onMouseDown(MouseEvent event)
@@ -201,9 +204,11 @@ void Listbox::onMouseDown(MouseEvent event)
 		return;
 	}
 	
-	Vector2D inner=event.getMousePosition()-event.getAreaPosition();
-	
-	if(inner.getX() < getSize().getX() - BAR_WIDTH)
+	Vector2D inner=event.getMousePosition();
+
+	float y=inner.getY()-scrollOffset;
+		
+	if(inner.getX() < event.getAreaSize().getX() - BAR_WIDTH)
 	{
 		float y=inner.getY()-scrollOffset;
 		
@@ -284,11 +289,11 @@ int Listbox::getIndex()
 	return index;
 }
 
-void Listbox::setIndex(int index)
+void Listbox::setIndex(int newIndex)
 {
-	if(index >= 0 && index < items.size())
+	if(newIndex >= 0 && newIndex < items.size())
 	{
-		index=index;
+		index=newIndex;
 		
 		m_change_handler();
 	}

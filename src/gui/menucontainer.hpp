@@ -12,7 +12,7 @@ class MenuContainer : public Container
 	public:
 		virtual void showOnlyWidget(const std::string& tag);
 
-		virtual void onDraw(Window& window);
+		virtual void onDraw(DrawEvent event);
 		
 		MenuContainer(TextureCollection& backgroundtextures);
 	

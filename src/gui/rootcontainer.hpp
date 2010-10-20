@@ -10,6 +10,8 @@
 class RootContainer : public Container
 {
 	public:
+		virtual void onDraw(Window& window);
+	
 		RootContainer(Window& window,Events& events);
 	
 	private:

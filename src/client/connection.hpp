@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <tr1/memory>
+#include <tr1/functional>
 
 #include "net/clientsocket.hpp"
 #include "net/protocol.hpp"
@@ -42,7 +43,7 @@ class Connection
 		
 		void processMessages();
 		
-		void setEventListener(EventListener* event_listener);
+		void addEventHandler(std::tr1::function<void(Connection&)> handler);
 		
 		Connection();
 		
@@ -84,8 +85,8 @@ class Connection
 		/*
 		Event handling variables.
 		*/
-		EventListener* m_event_listener;		
-		EventListener m_default_listener;
+		std::vector<std::tr1::function<void(Connection&)> > eventHandlers;
+
 		
 		Sound m_cash;
 		
@@ -96,7 +97,7 @@ class Connection
 		
 		std::string m_receive_buffer;
 		std::string m_send_buffer;						
-		char m_buffer[BUFFERSIZE];
+		char buffer[BUFFERSIZE];
 };
 
 template<typename T>

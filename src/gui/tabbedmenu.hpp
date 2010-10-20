@@ -2,6 +2,11 @@
 #define TABBEDMENU_HPP
 
 #include "menu.hpp"
+#include "button.hpp"
+#include "container.hpp"
+#include "columnlayoutcontainer.hpp"
+
+#include <tr1/memory>
 
 class TabbedMenu : public Menu
 {
@@ -11,8 +16,10 @@ class TabbedMenu : public Menu
 		void addTab(const std::string& label,Widget& widget);
 	
 	private:
-		Container buttonContainer;		
+		ColumnLayoutContainer buttonContainer;		
 		Container tabContainer;
+		
+		std::vector<std::tr1::shared_ptr<Button> > buttons;
 		
 };
 

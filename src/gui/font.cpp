@@ -28,7 +28,6 @@ void Font::drawWrapped(std::wstring str,Vector2D pos,Vector2D size)
 		return;
 		
 	m_font_type->m_color.apply();
-	//m_font_type->m_font_face->draw(str,pos);
 	m_font_type->m_font_face->drawWrapped(str,pos,size);
 }
 

@@ -12,13 +12,14 @@ void MenuContainer::showOnlyWidget(const std::string& tag)
 	backgroundBack.setVisible(true);
 }
 
-void MenuContainer::onDraw(Window& window)
+void MenuContainer::onDraw(DrawEvent event)
 {
 	float alpha=backgroundChangeTimer.getSeconds()*10.0;
 	if(alpha > 1.0)
 		alpha = 1.0;
 	
 	backgroundBack.setColor(Color(1,1,1,1.0-alpha));
+	backgroundFront.setColor(Color(1,1,1,1.0));
 }
 
 void MenuContainer::changeBackground()
@@ -37,6 +38,9 @@ MenuContainer::MenuContainer(TextureCollection& backgroundtextures):
 	backgroundFront.setSize(Vector2D(1,1));
 	
 	backgroundBack.setSize(Vector2D(1,1));
+	
+	backgroundBack.setFill(true);
+	backgroundFront.setFill(true);
 	
 	addWidget(backgroundFront);
 	addWidget(backgroundBack);

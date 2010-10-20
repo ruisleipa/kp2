@@ -1,52 +1,16 @@
 #include "columnlayoutcontainer.hpp"
 
-const float PADDING=0.01;
-
-void ColumnLayoutContainer::onDraw(Window& window)
+int ColumnLayoutContainer::getDividedSide(Vector2D size)
 {
-	int visibleChildrenCount=0;
+	return size.getX();
+}
 
-	for(int i=0;i<getChildCount();i++)
-	{
-		Widget* child=getChild(i);
-		
-		if(!child)
-			continue;
-			
-		if(child->getVisible())
-		{
-			visibleChildrenCount++;
-		}
-	}
-	
-	if(visibleChildrenCount == 0)
-	{
-		return;
-	}
-	
-	Vector2D childSize;
-	childSize.setX(getSize().getX()/visibleChildrenCount-PADDING*(visibleChildrenCount+1)/visibleChildrenCount);
-	childSize.setY(getSize().getY()-PADDING*2);
-	
-	int visibleChildrenIndex=0;
-	
-	for(int i=0;i<getChildCount();i++)
-	{
-		Widget* child=getChild(i);
-		
-		if(!child)
-			continue;
-	
-		if(child->getVisible())
-		{
-			Vector2D pos;
-			pos.setY(PADDING);
-			pos.setX(PADDING*(visibleChildrenIndex+1)+childSize.getX()*visibleChildrenIndex);	
-			
-			child->setPosition(pos);
-			child->setSize(childSize);
-			
-			visibleChildrenIndex++;
-		}
-	}	
+int ColumnLayoutContainer::getNonDividedSide(Vector2D size)
+{
+	return size.getY();
+}
+
+Vector2D ColumnLayoutContainer::convertDimensionsToVector(int dividedSide,int nonDividedSide)
+{
+	return Vector2D(dividedSide,nonDividedSide);
 }

@@ -8,7 +8,7 @@ class Event
 {
 	public:
 		const Vector2D& getAreaPosition();
-		void moveArea(const Vector2D& offset);
+		virtual void moveOrigin(const Vector2D& offset);
 		
 		const Vector2D& getAreaSize();		
 		void setAreaSize(const Vector2D& size);

@@ -1,21 +1,22 @@
 #ifndef CARLISTMENU_HPP
 #define CARLISTMENU_HPP
 
-#include "container.hpp"
-#include "label.hpp"
-#include "button.hpp"
-#include "image.hpp"
-#include "field.hpp"
-#include "listbox.hpp"
+#include "gui/menu.hpp"
+#include "gui/label.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+#include "gui/listbox.hpp"
+#include "gui/rowlayoutcontainer.hpp"
+#include "gui/columnlayoutcontainer.hpp"
 
 #include "connection.hpp"
 
-class CarlistMenu : public Menu
+class CarListMenu : public Menu
 {
 	public:
-		CarlistMenu(Connection& connection);
+		CarListMenu(Connection& connection);
 
-		virtual void onResize(Graphics& graphics);
+		virtual void onResize(Window& window);
 		virtual void onConnectionEvent(Connection& connection);
 		
 	private:
@@ -23,23 +24,24 @@ class CarlistMenu : public Menu
 		void sellClick();
 		void selectClick();
 	
-		Connection& m_connection;
+		Connection& connection;
+		
+		ColumnLayoutContainer mainContainer;
+		ColumnLayoutContainer titleContainer;
+		RowLayoutContainer infoContainer;
 	
-		Texture m_background_texture;
-		Image m_background;
+		Image background;		
+		Image carImage;
 		
-		Texture m_car_texture;
-		Image m_car_image;
+		Label carName;
+		Label carInfo;
 		
-		Label m_car_name;
-		Label m_car_info;
+		Listbox carList;
 		
-		Listbox m_car_list;
+		std::vector<Vehicle> vehicles;
 		
-		std::vector<Vehicle> m_vehicles;
-		
-		Button m_sell_button;		
-		Button m_select_button;				
+		Button sellButton;		
+		Button selectButton;				
 };
 
 #endif // CARLISTMENU_HPP

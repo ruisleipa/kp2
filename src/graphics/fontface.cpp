@@ -84,7 +84,7 @@ void FontFace::draw(std::wstring str,Vector2D pos)
 			
 			LetterRectangle& letterinfo=fontPages[page].letter_rectangles[rectangle_index];
 			
-			char_size.setX(height*(letterinfo.size.getX()/letterinfo.size.getY()));
+			char_size.setX(letterinfo.size.getX());
 			
 			font_page.letters.drawClipped(char_pos,char_size,letterinfo.position,letterinfo.size);
 
@@ -190,7 +190,7 @@ Vector2D FontFace::getTextSize(std::wstring str)
 			int rectangle_index=str[i]%FONT_PAGE_SIZE;
 			LetterRectangle& letterinfo=font_page.letter_rectangles[rectangle_index];
 			
-			w+=height*(letterinfo.size.getX()/letterinfo.size.getY())/window.getAspectRatio();
+			w+=letterinfo.size.getX();
 		}
 		else
 		{

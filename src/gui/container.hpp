@@ -29,7 +29,12 @@ class Container : public Widget
 	
 	private:
 		Widget* findWidgetUnderMouse(MouseEvent event);
-
+		
+		void moveEventOrigin(Event& event,Widget* widget);
+		
+		Vector2D calculateWidgetPosition(Widget* widget,Vector2D ourSize);
+		Vector2D calculateWidgetSize(Widget* widget,Vector2D ourSize);
+		
 		Widget* focusedChild;
 		Widget* mouseOverChild;
 

@@ -21,9 +21,9 @@ void Connection::processMessages()
 	Read as long as there is data to read (reads more than
 	zero bytes).
 	*/
-	while((read=m_socket.read(m_buffer,BUFFERSIZE))>0)
+	while((read=m_socket.read(buffer,BUFFERSIZE))>0)
 	{
-		m_receive_buffer.append(m_buffer,read);
+		m_receive_buffer.append(buffer,read);
 	}
 			
 	/*
@@ -203,7 +203,12 @@ void Connection::processMessages()
 				}	
 			}
 			
-			m_event_listener->doConnectionEvent(*this);
+			std::vector<std::tr1::function<void(Connection&)> >::iterator i;
+			
+			for(i=eventHandlers.begin();i!=eventHandlers.end();++i)
+			{
+				(*i)(*this);
+			}	
 		}
 		catch(EndOfDataException)
 		{
@@ -316,9 +321,9 @@ void Connection::writeToServer(const Packet& packet)
 	m_send_buffer.append(str.c_str(),str.size());
 }
 
-void Connection::setEventListener(EventListener* event_listener)
+void Connection::addEventHandler(std::tr1::function<void(Connection&)> handler)
 {
-	m_event_listener=event_listener;
+	eventHandlers.push_back(handler);
 }
 
 bool Connection::startLocalServer()
@@ -356,9 +361,7 @@ bool Connection::startLocalServer()
 	return false;
 }
 
-Connection::Connection():
-	m_event_listener(&m_default_listener)
+Connection::Connection()
 {
-
 	m_cash.load("data/sounds/kassa.wav");
 }		

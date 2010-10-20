@@ -7,6 +7,13 @@ Vector2D MouseEvent::getMousePosition()
 	return mousePosition;
 }
 
+void MouseEvent::moveOrigin(const Vector2D& offset)
+{
+	mousePosition -= offset;
+	
+	Event::moveOrigin(offset);
+}
+
 bool MouseEvent::isButtonDown(MouseButton button)
 {
 	assert(button < 5);
