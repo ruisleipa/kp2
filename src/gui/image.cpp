@@ -7,7 +7,7 @@
 
 #include <GL/gl.h>
 
-void Image::setTexture(Texture& texture)
+void Image::setTexture(const Texture& texture)
 {
 	this->texture=texture;
 }

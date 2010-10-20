@@ -9,7 +9,7 @@
 class Image : public Widget
 {
 	public:
-		void setTexture(Texture& texture);
+		void setTexture(const Texture& texture);
 		Texture& getTexture();
 		
 		void setStretched(bool stretch);
