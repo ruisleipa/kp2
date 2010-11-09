@@ -32,6 +32,8 @@ void PreparedTexture::setFilter(TextureFilter filter)
 	if(!number)
 		return;
 
+	this->filter=filter;
+		
 	GLint min;
 	GLint max;
 
