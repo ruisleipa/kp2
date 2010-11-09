@@ -9,15 +9,18 @@
 
 #include "graphics/texturecollection.hpp"
 
+#include "connection.hpp"
+
 class CareerMenu : public Menu
 {
 	public:
-		CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus);
+		CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus,Connection& connection);
 
 		virtual void onResize(Window& window);
-		virtual void onConnectionEvent(Connection& connection);
-
+		
 	private:
+		void onConnectionEvent(Connection& connection);
+	
 		void garageButtonClick();
 		void tuningButtonClick();
 		void financeButtonClick();

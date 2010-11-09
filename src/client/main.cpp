@@ -96,7 +96,7 @@ void startGame()
 	
 	topLevelGameMenus.addWidget("garage",garageMenu);
 	
-	CareerMenu careerMenu(careerTextures,topLevelGameMenus);
+	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);
 		
 	MenuContainer menuContainer(backgroundTextures);	
 	menuContainer.addWidget("mainmenu",mainMenu);

@@ -3,13 +3,14 @@
 #include <iostream>
 
 #include "ui.hpp"
-#include "connection.hpp"
 
 const float CAREER_SIDEBAR_WIDTH=0.20;
 
-CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus):
+CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus,Connection& connection):
 	topLevelGameMenus(topLevelGameMenus)
 {
+	connection.addEventHandler(std::tr1::bind(&CareerMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
+	
 	sidebar.setTexture(sidebartextures.getTexture("background"));
 	sidebar.setStretched(true);
 	
