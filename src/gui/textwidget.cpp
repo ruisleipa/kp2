@@ -40,7 +40,7 @@ Font& TextWidget::getFont()
 
 void TextWidget::autoSize()
 {
-	setSize(font.getTextSize(text));
+	setPixelSize(font.getTextSize(text));
 }
 
 TextWidget::TextWidget()
