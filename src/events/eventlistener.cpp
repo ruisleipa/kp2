@@ -1,35 +1,6 @@
 #include "eventlistener.hpp"
 
-#include "keyevent.hpp"
-#include "mouseevent.hpp"
-#include "client/connection.hpp"
-
-void EventListener::keyDown(KeyEvent event)
-{
-
-}
-
-void EventListener::keyUp(KeyEvent event)
-{
-
-}
-
-void EventListener::mouseDown(MouseEvent event)
-{
-
-}
-
-void EventListener::mouseUp(MouseEvent event)
-{
-
-}
-
-void EventListener::mouseMove(MouseEvent event)
-{
-
-}
-
-void EventListener::doConnectionEvent(Connection& connection)
+void EventListener::handleEvent(Event* event)
 {
 
 }

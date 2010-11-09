@@ -26,7 +26,8 @@ void Events::processEvents()
 			can quit easily. This is handy especially when you have
 			accidentally set no eventlistener in a fullscreen
 			program.
-			*/		
+			*/
+
 			if(sdlEvent.type == SDL_KEYDOWN)
 			{
 				SDL_keysym& keysym = sdlEvent.key.keysym;
@@ -38,49 +39,48 @@ void Events::processEvents()
 			continue;
 		}
 		
+		Event* event = 0;
+		
 		if(sdlEvent.type == SDL_KEYDOWN)
 		{
 			SDL_keysym& keysym = sdlEvent.key.keysym;
 		
-			KeyEvent event(eventArea, keysym.unicode, keysym.sym);
-			
-			eventListener->keyDown(event);
+			event = new KeyDownEvent(eventArea, keysym.unicode, keysym.sym);
 		}
 		else if(sdlEvent.type == SDL_KEYUP)
 		{
 			SDL_keysym& keysym = sdlEvent.key.keysym;
 		
-			KeyEvent event(eventArea, keysym.unicode, keysym.sym);
-			
-			eventListener->keyUp(event);
+			event = new KeyUpEvent(eventArea, keysym.unicode, keysym.sym);
 		}
 		else if(sdlEvent.type == SDL_MOUSEBUTTONDOWN)
 		{
 			SDL_MouseButtonEvent& button = sdlEvent.button;
-			Vector2D pos=Vector2D(button.x, button.y);
+			Vector2D pos = Vector2D(button.x, button.y);
 							
-			MouseEvent event(eventArea, pos, 1 << (button.button-1));
-			
-			eventListener->mouseDown(event);
+			event = new MouseDownEvent(eventArea, pos, 1 << (button.button-1));
 		}
 		else if(sdlEvent.type == SDL_MOUSEBUTTONUP)
 		{
 			SDL_MouseButtonEvent& button = sdlEvent.button;
-			Vector2D pos=Vector2D(button.x, button.y);
+			Vector2D pos = Vector2D(button.x, button.y);
 									
-			MouseEvent event(eventArea, pos, 1 << (button.button-1));
-			
-			eventListener->mouseUp(event);
+			event = new MouseUpEvent(eventArea, pos, 1 << (button.button-1));
 		}
 		else if(sdlEvent.type == SDL_MOUSEMOTION)
 		{
 			SDL_MouseMotionEvent& motion = sdlEvent.motion;
-			Vector2D pos=Vector2D(motion.x, motion.y);
+			Vector2D pos = Vector2D(motion.x, motion.y);
 					
-			MouseEvent event(eventArea, pos, motion.state);
-			
-			eventListener->mouseMove(event);
+			event = new MouseMotionEvent(eventArea, pos, motion.state);
 		}
+		
+		if(event)
+		{
+			eventListener->handleEvent(event);
+		
+			delete event;
+		}		
 	}
 }
 

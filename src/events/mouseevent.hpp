@@ -31,4 +31,19 @@ class MouseEvent: public Event
 		
 };
 
+class MouseUpEvent: public MouseEvent
+{
+
+};
+
+class MouseDownEvent: public MouseEvent
+{
+
+};
+
+class MouseMotionEvent: public MouseEvent
+{
+
+};
+
 #endif // MOUSEEVENT_HPP

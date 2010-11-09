@@ -16,37 +16,16 @@ class Container;
 class Widget: public EventListener, public NonCopyable
 {
 	public:
-		void setPosition(Vector2D position);	
-		void setPixelPosition(Vector2D position);	
-		Vector2D getPosition();	
+		void setPosition(Vector2D position);
+		void setPixelPosition(Vector2D position);
 
 		void setSize(Vector2D size);	
 		void setPixelSize(Vector2D size);	
-		Vector2D getSize();
 		
 		void setVisible(bool visible);
 		bool getVisible();
-		
-		/*
-		These are the functions for signaling that an event has
-		happened.		
-		*/		
-		virtual void keyDown(KeyEvent event);
-		virtual void keyUp(KeyEvent event);				
-		
-		virtual void mouseDown(MouseEvent event);
-		virtual void mouseUp(MouseEvent event);
-		virtual void mouseMove(MouseEvent event);	
-		
-		virtual void resize(Window& window);		
-		
-		virtual void mouseOn();
-		virtual void mouseOut();		
-		
-		virtual void blur();
-		virtual void focus();	
-		
-		virtual void draw(DrawEvent event);		
+
+		virtual void handleEvent(Event* event);
 		
 		Container* getParent();
 		
@@ -55,31 +34,10 @@ class Widget: public EventListener, public NonCopyable
 	
 	protected:	
 		bool hasPixelPosition();
+		Vector2D getPosition();
+		
 		bool hasPixelSize();
-	
-		/*
-		These are the functions that implement object specific handler
-		for an event.
-		*/		
-		virtual void onKeyDown(KeyEvent event);
-		virtual void onKeyUp(KeyEvent event);
-		
-		virtual void onMouseDown(MouseEvent event);
-		virtual void onMouseUp(MouseEvent event);
-		virtual void onMouseMove(MouseEvent event);
-	
-		virtual void onResize(Window& window);
-		
-		virtual void onMouseOn();
-		virtual void onMouseOut();	
-		
-		virtual void onBlur();
-		virtual void onFocus();	
-		
-		virtual void onShow();	
-		virtual void onHide();	
-		
-		virtual void onDraw(DrawEvent event);
+		Vector2D getSize();	
 	
 	private:
 		void setParent(Container* container);

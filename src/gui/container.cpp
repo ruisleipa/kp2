@@ -17,10 +17,22 @@
 #include <GL/gl.h>
 #include <SDL/SDL.h>
 
-void Container::keyDown(KeyEvent event)
+void Container::handleEvent(Event* event)
 {
-	Widget::keyDown(event);
+	Widget::handleEvent(event);
 	
+	if(dynamic_cast<KeyEvent*>(event))
+		handleKeyEvent(dynamic_cast<KeyEvent*>(event));
+	else if(dynamic_cast<MouseDownEvent*>(event))
+		handleMouseDownEvent(dynamic_cast<MouseDownEvent*>(event));
+	else if(dynamic_cast<MouseUpEvent*>(event))
+		handleMouseUpEvent(dynamic_cast<MouseUpEvent*>(event));
+	else if(dynamic_cast<MouseMoveEvent*>(event))
+		handleMouseMoveEvent(dynamic_cast<MouseMoveEvent*>(event));
+}
+
+void Container::handleKeyEvent(KeyEvent* event)
+{
 	if(focusedChild)
 	{
 		moveEventOrigin(event,focusedChild);
@@ -28,21 +40,8 @@ void Container::keyDown(KeyEvent event)
 	}
 }
 
-void Container::keyUp(KeyEvent event)
+void Container::handleMouseDownEvent(MouseDownEvent* event)
 {
-	Widget::keyUp(event);
-
-	if(focusedChild)
-	{
-		moveEventOrigin(event,focusedChild);
-		focusedChild->keyUp(event);
-	}
-}
-
-void Container::mouseDown(MouseEvent event)
-{
-	Widget::mouseDown(event);
-
 	Widget* widget=findWidgetUnderMouse(event);
 	
 	if(widget != focusedChild)
@@ -63,10 +62,8 @@ void Container::mouseDown(MouseEvent event)
 	}
 }
 
-void Container::mouseUp(MouseEvent event)
+void Container::handleMouseUpEvent(MouseUpEvent* event)
 {
-	Widget::mouseUp(event);
-
 	Widget* widget=findWidgetUnderMouse(event);
 
 	if(widget)
@@ -76,10 +73,8 @@ void Container::mouseUp(MouseEvent event)
 	}
 }
 
-void Container::mouseMove(MouseEvent event)
+void Container::handleMouseMoveEvent(MouseMoveEvent* event)
 {
-	Widget::mouseMove(event);
-	
 	Widget* widget=findWidgetUnderMouse(event);
 	
 	if(widget != mouseOverChild)
@@ -248,10 +243,10 @@ Widget* Container::findWidgetUnderMouse(MouseEvent event)
 	return 0;
 }
 
-void Container::moveEventOrigin(Event& event,Widget* widget)
+void Container::moveEventOrigin(Event* event,Widget* widget)
 {
-	event.moveOrigin(calculateWidgetPosition(widget,event.getAreaSize()));
-	event.setAreaSize(calculateWidgetSize(widget,event.getAreaSize()));
+	event.moveOrigin(calculateWidgetPosition(widget,event->getAreaSize()));
+	event.setAreaSize(calculateWidgetSize(widget,event->getAreaSize()));
 }
 
 Vector2D Container::calculateWidgetPosition(Widget* widget,Vector2D ourSize)

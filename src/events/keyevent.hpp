@@ -19,4 +19,14 @@ class KeyEvent: public Event
 		
 };
 
+class KeyUpEvent: public KeyEvent
+{
+
+};
+
+class KeyDownEvent: public KeyEvent
+{
+
+};
+
 #endif // KEYEVENT_HPP
