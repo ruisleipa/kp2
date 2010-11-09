@@ -11,7 +11,7 @@ const Color PASSIVE(0.7,0.7,0.7);
 const Color ACTIVE(1,1,1);
 
 FontLoader::FontLoader(Window& window):
-	font(window,"data/fonts/freesans.ttf",18)
+	font(window,"data/fonts/freesans.ttf",window.getSize().getY()*(12.0/480.0))
 {
 	Font::setFontType("title",&font,TITLE_SIZE.getY(),NORMAL);
 	Font::setFontType("small",&font,0.03,NORMAL);
