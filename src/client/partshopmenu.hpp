@@ -1,45 +1,46 @@
 #ifndef PARTSHOPMENU_HPP
 #define PARTSHOPMENU_HPP
 
-#include "container.hpp"
-#include "columnlayoutcontainer.hpp"
-#include "label.hpp"
-#include "button.hpp"
-#include "image.hpp"
-#include "field.hpp"
-#include "listbox.hpp"
+#include "gui/menu.hpp"
+#include "gui/columnlayoutcontainer.hpp"
+#include "gui/rowlayoutcontainer.hpp"
+#include "gui/label.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+#include "gui/field.hpp"
+#include "gui/listbox.hpp"
 
-class PartshopMenu : public Menu
+#include "connection.hpp"
+
+class PartShopMenu : public Menu
 {
 	public:
-		PartshopMenu(Connection& connection);
+		PartShopMenu(Connection& connection);
 
-		virtual void onResize(Graphics& graphics);
-		virtual void onShow();
-		
+		virtual void onResize(Window& window);
+				
 	private:
 		void categoryChangeHandler();
 		void partChange();
 	
-		Connection& m_connection;
+		Connection& connection;
 	
-		Texture m_background_texture;
-		Image m_background;
+		ColumnLayoutContainer container;
+				
+		RowLayoutContainer categoryContainer;
+				
+		Label categoryInfo;
+		Listbox categoryBox;	
+			
+		RowLayoutContainer partContainer;
+
+		Listbox partBox;	
+
+		RowLayoutContainer partInfoContainer;
 		
-		ColumnLayoutContainer m_top_row;
-		
-		Texture m_part_texture;
-		Image m_part_image;		
-		Label m_category_info;
-		
-		ColumnLayoutContainer m_bottom_row;
-		
-		Listbox m_category_list;		
-		Listbox m_part_list;
-		
-		Label m_part_info;
-		
-		Button m_buy_button;
+		Image partImage;
+		Label partInfo;
+		Button buyButton;
 };
 
 #endif // PARTSHOPMENU_HPP

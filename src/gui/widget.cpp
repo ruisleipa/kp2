@@ -4,6 +4,11 @@
 
 void Widget::setPosition(Vector2D position)
 {
+	setFactorPosition(position);
+}
+
+void Widget::setFactorPosition(Vector2D position)
+{
 	pixelPosition=false;
 	this->position=position;
 }
@@ -21,6 +26,11 @@ Vector2D Widget::getPosition()
 
 void Widget::setSize(Vector2D size)
 {
+	setFactorSize(size);
+}
+
+void Widget::setFactorSize(Vector2D size)
+{
 	pixelSize=false;
 	this->size=size;
 }
@@ -36,14 +46,30 @@ Vector2D Widget::getSize()
 	return size;
 }
 
+void Widget::setFluid(bool fluid)
+{
+	this->fluid = fluid;
+}
+
+bool Widget::getFluid()
+{
+	return fluid;
+}
+
 void Widget::setVisible(bool visible)
 {
 	this->visible=visible;
 	
 	if(this->visible)
-		onShow();
+	{
+		ShowEvent showEvent;
+		handleEvent(&showEvent);
+	}
 	else
-		onHide();
+	{
+		HideEvent hideEvent;
+		handleEvent(&hideEvent);
+	}
 }	
 
 bool Widget::getVisible()
@@ -51,11 +77,27 @@ bool Widget::getVisible()
 	return visible;
 }
 
+void Widget::handleEvent(Event* event)
+{
+
+}
+
+void Widget::resize(Window& window)
+{
+	onResize(window);
+}
+
+void Widget::onResize(Window& window)
+{
+	
+}
+
 Widget::Widget():
 	visible(true),
 	parent(0),
 	pixelPosition(true),
-	pixelSize(true)
+	pixelSize(true),
+	fluid(false)
 {
 
 }

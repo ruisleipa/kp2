@@ -8,11 +8,7 @@
 class Field : public TextWidget
 {
 	public:
-		virtual void onDraw(DrawEvent event);
-		virtual void onKeyDown(KeyEvent event);
-		
-		virtual void onFocus();
-		virtual void onBlur();
+		virtual void handleEvent(Event* event);
 		
 		Field();
 	
@@ -20,10 +16,16 @@ class Field : public TextWidget
 		virtual bool doAutoSizeOnChange();
 		
 	private:
-		size_t m_cursorpos;
+		void handleDrawEvent(DrawEvent* event);
+		void handleKeyDownEvent(KeyDownEvent* event);
 		
-		Timer m_blink_timer;
-		bool m_focused;
+		void handleFocusEvent();
+		void handleBlurEvent();
+	
+		size_t cursorPosition;
+		
+		Timer blinkTimer;
+		bool isFocused;
 };
 
 #endif // FIELD_HPP

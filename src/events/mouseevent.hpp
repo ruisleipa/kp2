@@ -1,11 +1,11 @@
 #ifndef MOUSEEVENT_HPP
 #define MOUSEEVENT_HPP
 
-#include "event.hpp"
+#include "areaevent.hpp"
 
 #include "graphics/vector2d.hpp"
 
-class MouseEvent: public Event
+class MouseEvent: public AreaEvent
 {
 	public:
 		Vector2D getMousePosition();
@@ -33,15 +33,40 @@ class MouseEvent: public Event
 
 class MouseUpEvent: public MouseEvent
 {
-
+	public:
+		MouseUpEvent(const EventArea& area,const Vector2D& mousePosition,int state):
+			MouseEvent(area,mousePosition,state)
+		{
+		
+		}
 };
 
 class MouseDownEvent: public MouseEvent
 {
+	public:
+		MouseDownEvent(const EventArea& area,const Vector2D& mousePosition,int state):
+			MouseEvent(area,mousePosition,state)
+		{
+		
+		}
+};
+
+class MouseMoveEvent: public MouseEvent
+{
+	public:
+		MouseMoveEvent(const EventArea& area,const Vector2D& mousePosition,int state):
+			MouseEvent(area,mousePosition,state)
+		{
+		
+		}
+};
+
+class MouseOverEvent: public Event
+{
 
 };
 
-class MouseMotionEvent: public MouseEvent
+class MouseOutEvent: public Event
 {
 
 };

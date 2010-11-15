@@ -21,7 +21,9 @@ void Container::handleEvent(Event* event)
 {
 	Widget::handleEvent(event);
 	
-	if(dynamic_cast<KeyEvent*>(event))
+	if(dynamic_cast<DrawEvent*>(event))
+		handleDrawEvent(dynamic_cast<DrawEvent*>(event));	
+	else if(dynamic_cast<KeyEvent*>(event))
 		handleKeyEvent(dynamic_cast<KeyEvent*>(event));
 	else if(dynamic_cast<MouseDownEvent*>(event))
 		handleMouseDownEvent(dynamic_cast<MouseDownEvent*>(event));
@@ -33,10 +35,18 @@ void Container::handleEvent(Event* event)
 
 void Container::handleKeyEvent(KeyEvent* event)
 {
+	if(event->getKey() == SDLK_F5)
+	{
+		if(dynamic_cast<KeyDownEvent*>(event))
+			showBounds = true;
+		else if(dynamic_cast<KeyUpEvent*>(event))
+			showBounds = false;
+	}
+		
 	if(focusedChild)
 	{
-		moveEventOrigin(event,focusedChild);
-		focusedChild->keyDown(event);
+		convertAreaEventForChild(event,focusedChild);
+		focusedChild->handleEvent(event);
 	}
 }
 
@@ -47,18 +57,24 @@ void Container::handleMouseDownEvent(MouseDownEvent* event)
 	if(widget != focusedChild)
 	{
 		if(focusedChild)
-			focusedChild->blur();
+		{
+			BlurEvent blurEvent;
+			focusedChild->handleEvent(&blurEvent);
+		}
 	
 		focusedChild=widget;
 		
 		if(focusedChild)
-			focusedChild->focus();
+		{
+			FocusEvent focusEvent;
+			focusedChild->handleEvent(&focusEvent);
+		}
 	}
 	
 	if(widget)
 	{
-		moveEventOrigin(event,widget);
-		widget->mouseDown(event);
+		convertAreaEventForChild(event,widget);
+		widget->handleEvent(event);
 	}
 }
 
@@ -68,8 +84,8 @@ void Container::handleMouseUpEvent(MouseUpEvent* event)
 
 	if(widget)
 	{
-		moveEventOrigin(event,widget);
-		widget->mouseUp(event);
+		convertAreaEventForChild(event,widget);
+		widget->handleEvent(event);
 	}
 }
 
@@ -80,19 +96,76 @@ void Container::handleMouseMoveEvent(MouseMoveEvent* event)
 	if(widget != mouseOverChild)
 	{
 		if(mouseOverChild)
-			mouseOverChild->mouseOut();
+		{
+			MouseOutEvent mouseOutEvent;
+			mouseOverChild->handleEvent(&mouseOutEvent);
+		}
 	
 		mouseOverChild=widget;
 		
 		if(mouseOverChild)
-			mouseOverChild->mouseOn();
+		{
+			MouseOverEvent mouseOverEvent;
+			mouseOverChild->handleEvent(&mouseOverEvent);
+		}
 	}
 		
 	if(mouseOverChild)
 	{
-		moveEventOrigin(event,mouseOverChild);	
-		mouseOverChild->mouseMove(event);
+		convertAreaEventForChild(event,mouseOverChild);	
+		mouseOverChild->handleEvent(event);
 	}
+}
+
+void Container::handleDrawEvent(DrawEvent* event)
+{
+	std::vector<Widget*>::iterator i;
+	
+	Scissor scissor(event->getWindow());
+	
+	scissor.reset();
+	
+	for(i=children.begin();i!=children.end();++i)
+	{
+		Widget* widget=(*i);
+	
+		if(!widget->getVisible())
+			continue;
+		
+		DrawEvent drawEvent=*event;
+		
+		convertAreaEventForChild(&drawEvent,widget);
+	
+		scissor.set(drawEvent.getAreaPosition(),drawEvent.getAreaSize());
+	
+		//std::cout<<drawEvent.getAreaPosition()<<" "<<widget->getPosition()<<std::endl;
+	
+		widget->handleEvent(&drawEvent);
+		
+		if(showBounds)
+		{
+			scissor.reset();
+		
+			Vector2D begin=drawEvent.getAreaPosition();
+			Vector2D end=begin+drawEvent.getAreaSize();
+		
+			Texture().bind();
+			
+			if(widget==focusedChild)		
+				Color(1,0,0).apply();
+			else
+				Color(0,1,0).apply();
+
+			glBegin(GL_LINE_LOOP);
+				glVertex2f(begin.getX(),begin.getY());
+				glVertex2f(end.getX(),	begin.getY());
+				glVertex2f(end.getX(),	end.getY());
+				glVertex2f(begin.getX(),end.getY());
+			glEnd();
+		}	
+	}
+	
+	scissor.reset();
 }
 
 void Container::resize(Window& window)
@@ -107,56 +180,6 @@ void Container::resize(Window& window)
 	
 		widget->resize(window);
 	}	
-}
-
-void Container::draw(DrawEvent event)
-{
-	Widget::draw(event);
-	
-	std::vector<Widget*>::iterator i;
-	
-	Scissor scissor(event.getWindow());
-	
-	scissor.reset();
-	
-	for(i=children.begin();i!=children.end();++i)
-	{
-		Widget* widget=(*i);
-	
-		if(!widget->getVisible())
-			continue;
-		
-		DrawEvent drawEvent=event;
-		
-		moveEventOrigin(drawEvent,widget);
-	
-		scissor.set(drawEvent.getAreaPosition(),drawEvent.getAreaSize());
-	
-		widget->draw(drawEvent);
-				
-#if 1
-		scissor.reset();
-	
-		Vector2D begin=drawEvent.getAreaPosition();
-		Vector2D end=begin+drawEvent.getAreaSize();
-	
-		Texture().bind();
-		
-		if(widget==focusedChild)		
-			Color(1,0,0).apply();
-		else
-			Color(0,1,0).apply();
-
-		glBegin(GL_LINE_LOOP);
-			glVertex2f(begin.getX(),begin.getY());
-			glVertex2f(end.getX(),	begin.getY());
-			glVertex2f(end.getX(),	end.getY());
-			glVertex2f(begin.getX(),end.getY());
-		glEnd();
-#endif
-	}
-	
-	scissor.reset();
 }
 
 void Container::showOnlyWidget(const std::string& tag)
@@ -209,12 +232,13 @@ Widget* Container::getChild(int index)
 
 Container::Container():
 	focusedChild(0),
-	mouseOverChild(0)
+	mouseOverChild(0),
+	showBounds(0)
 {
 
 }
 
-Widget* Container::findWidgetUnderMouse(MouseEvent event)
+Widget* Container::findWidgetUnderMouse(MouseEvent* event)
 {
 	std::vector<Widget*>::reverse_iterator i;
 	
@@ -225,9 +249,9 @@ Widget* Container::findWidgetUnderMouse(MouseEvent event)
 		if(!widget->getVisible())
 			continue;
 	
-		MouseEvent newEvent=event;
+		MouseEvent newEvent=*event;
 		
-		moveEventOrigin(newEvent,widget);
+		convertAreaEventForChild(&newEvent,widget);
 		
 		Vector2D size = newEvent.getAreaSize();
 		
@@ -243,10 +267,10 @@ Widget* Container::findWidgetUnderMouse(MouseEvent event)
 	return 0;
 }
 
-void Container::moveEventOrigin(Event* event,Widget* widget)
+void Container::convertAreaEventForChild(AreaEvent* event,Widget* widget)
 {
-	event.moveOrigin(calculateWidgetPosition(widget,event->getAreaSize()));
-	event.setAreaSize(calculateWidgetSize(widget,event->getAreaSize()));
+	event->moveOrigin(getWidgetPosition(widget,event->getAreaSize()));
+	event->setAreaSize(getWidgetSize(widget,event->getAreaSize()));
 }
 
 Vector2D Container::calculateWidgetPosition(Widget* widget,Vector2D ourSize)
@@ -264,3 +288,14 @@ Vector2D Container::calculateWidgetSize(Widget* widget,Vector2D ourSize)
 	else
 		return widget->getSize() * ourSize;
 }
+
+Vector2D Container::getWidgetPosition(Widget* widget,Vector2D ourSize)
+{
+	return calculateWidgetPosition(widget,ourSize);
+}
+
+Vector2D Container::getWidgetSize(Widget* widget,Vector2D ourSize)
+{
+	return calculateWidgetSize(widget,ourSize);
+}
+

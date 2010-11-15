@@ -11,9 +11,11 @@ Texture Listbox::arrowUp;
 Texture Listbox::arrowDown;
 bool Listbox::haveTexturesBeenLoaded=false;
 
-const float BAR_WIDTH=32;
-const float SCROLL_DEFAULT_STEP=25;
-const float SCROLL_RATE=100;
+const float BAR_WIDTH=20;
+const float BUTTON_WIDTH=BAR_WIDTH;
+const float BUTTON_HEIGHT=BUTTON_WIDTH;
+const float SCROLL_DEFAULT_STEP=50;
+const float SCROLL_RATE=150;
 
 static float sign(float value)
 {
@@ -25,7 +27,15 @@ static float sign(float value)
 		return 0.0;
 }
 
-void Listbox::onDraw(DrawEvent event)
+void Listbox::handleEvent(Event* event)
+{
+	if(dynamic_cast<DrawEvent*>(event))
+		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
+	else if(dynamic_cast<MouseDownEvent*>(event))
+		handleMouseDownEvent(dynamic_cast<MouseDownEvent*>(event));
+}
+
+void Listbox::handleDrawEvent(DrawEvent* event)
 {
 	/*
 	Update the list position.
@@ -49,7 +59,7 @@ void Listbox::onDraw(DrawEvent event)
 	
 	float min_offset=(getFont().getTextSize(L"")*items.size()).getY();
 	
-	min_offset-=event.getAreaSize().getY();
+	min_offset-=event->getAreaSize().getY();
 	
 	if(min_offset<0.0)
 		min_offset=0;
@@ -63,10 +73,10 @@ void Listbox::onDraw(DrawEvent event)
 	/*
 	Draw
 	*/
-	Vector2D begin=event.getAreaPosition();
-	Vector2D end=begin+event.getAreaSize();
+	Vector2D begin=event->getAreaPosition();
+	Vector2D end=begin+event->getAreaSize();
 		
-	Scissor scissor(event.getWindow());
+	Scissor scissor(event->getWindow());
 	
 	/*
 	Draw list.
@@ -83,9 +93,9 @@ void Listbox::onDraw(DrawEvent event)
 				
 	glEnd();	
 	
-	scissor.set(event.getAreaPosition(),event.getAreaSize());
+	scissor.set(event->getAreaPosition(),event->getAreaSize());
 	
-	Vector2D listbegin=Vector2D(0,scrollOffset)+event.getAreaPosition();
+	Vector2D listbegin=Vector2D(0,scrollOffset)+event->getAreaPosition();
 	
 	for(int i=0;i<items.size();++i)
 	{
@@ -98,7 +108,7 @@ void Listbox::onDraw(DrawEvent event)
 			
 			Vector2D textend;
 			textend.setY(textbegin.getY()+getFont().getTextSize(L"").getY());
-			textend.setX(textbegin.getX()+event.getAreaSize().getX()-BAR_WIDTH);			
+			textend.setX(textbegin.getX()+event->getAreaSize().getX()-BAR_WIDTH);			
 
 			glBegin(GL_QUADS);
 			
@@ -122,23 +132,23 @@ void Listbox::onDraw(DrawEvent event)
 	/*
 	Draw the thumb.
 	*/
-	float thumbLenght=getSize().getY();
+	float thumbLenght=event->getAreaSize().getY();
 	thumbLenght /= (getFont().getTextSize(L"")*items.size()).getY();
 	thumbLenght = std::min(1.0f,thumbLenght);
-	thumbLenght *= getSize().getY()-buttonHeight-buttonHeight;
+	thumbLenght *= event->getAreaSize().getY()-BUTTON_HEIGHT-BUTTON_HEIGHT;
 	float thumbPosition=-scrollOffset;
 	thumbPosition /= (getFont().getTextSize(L"")*items.size()).getY();
-	thumbPosition *= getSize().getY()-buttonHeight-buttonHeight;
+	thumbPosition *= event->getAreaSize().getY()-BUTTON_HEIGHT-BUTTON_HEIGHT;
 	
 	Texture().bind();
-	Color(1,1,1,0.5).apply();
+	Color(0,0,0,0.5).apply();
 	
 	glBegin(GL_QUADS);
 			
-	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+buttonHeight+thumbPosition);
-	glVertex2f(end.getX(),begin.getY()+buttonHeight+thumbPosition);
-	glVertex2f(end.getX(),begin.getY()+buttonHeight+thumbPosition+thumbLenght);
-	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+buttonHeight+thumbPosition+thumbLenght);
+	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+BUTTON_HEIGHT+thumbPosition);
+	glVertex2f(end.getX(),begin.getY()+BUTTON_HEIGHT+thumbPosition);
+	glVertex2f(end.getX(),begin.getY()+BUTTON_HEIGHT+thumbPosition+thumbLenght);
+	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+BUTTON_HEIGHT+thumbPosition+thumbLenght);
 				
 	glEnd();
 	
@@ -165,26 +175,26 @@ void Listbox::onDraw(DrawEvent event)
 	glVertex2f(end.getX()-BAR_WIDTH,begin.getY());
 	glVertex2f(end.getX()-BAR_WIDTH,end.getY());
 	
-	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+buttonHeight);
-	glVertex2f(end.getX(),begin.getY()+buttonHeight);
+	glVertex2f(end.getX()-BAR_WIDTH,begin.getY()+BAR_WIDTH);
+	glVertex2f(end.getX(),begin.getY()+BAR_WIDTH);
 	
-	glVertex2f(end.getX()-BAR_WIDTH,end.getY()-buttonHeight);
-	glVertex2f(end.getX(),end.getY()-buttonHeight);
+	glVertex2f(end.getX()-BAR_WIDTH,end.getY()-BAR_WIDTH);
+	glVertex2f(end.getX(),end.getY()-BAR_WIDTH);
 	
 	glEnd();			
 	
-	arrowUp.draw(Vector2D(end.getX()-BAR_WIDTH,begin.getY()),Vector2D(BAR_WIDTH,buttonHeight));
-	arrowDown.draw(Vector2D(end.getX()-BAR_WIDTH,end.getY()-buttonHeight),Vector2D(BAR_WIDTH,buttonHeight));	
+	arrowUp.draw(Vector2D(end.getX()-BAR_WIDTH,begin.getY()),Vector2D(BAR_WIDTH,BAR_WIDTH));
+	arrowDown.draw(Vector2D(end.getX()-BAR_WIDTH,end.getY()-BAR_WIDTH),Vector2D(BAR_WIDTH,BAR_WIDTH));	
 }
 
 void Listbox::onResize(Window& window)
 {
-	buttonHeight=BAR_WIDTH;
+
 }
 
-void Listbox::onMouseDown(MouseEvent event)
+void Listbox::handleMouseDownEvent(MouseDownEvent* event)
 {		
-	if(event.isButtonDown(MouseEvent::WHEELUP))
+	if(event->isButtonDown(MouseEvent::WHEELUP))
 	{
 		if(scrollPending<0)
 			scrollPending=0;
@@ -194,7 +204,7 @@ void Listbox::onMouseDown(MouseEvent event)
 		return;
 	}
 
-	if(event.isButtonDown(MouseEvent::WHEELDOWN))
+	if(event->isButtonDown(MouseEvent::WHEELDOWN))
 	{
 		if(scrollPending>0)
 			scrollPending=0;
@@ -204,11 +214,9 @@ void Listbox::onMouseDown(MouseEvent event)
 		return;
 	}
 	
-	Vector2D inner=event.getMousePosition();
+	Vector2D inner=event->getMousePosition();
 
-	float y=inner.getY()-scrollOffset;
-		
-	if(inner.getX() < event.getAreaSize().getX() - BAR_WIDTH)
+	if(inner.getX() < event->getAreaSize().getX() - BAR_WIDTH)
 	{
 		float y=inner.getY()-scrollOffset;
 		
@@ -216,15 +224,15 @@ void Listbox::onMouseDown(MouseEvent event)
 	}
 	else
 	{	
-		if(event.isButtonDown(MouseEvent::LEFT) || event.isButtonDown(MouseEvent::RIGHT))
+		if(event->isButtonDown(MouseEvent::LEFT) || event->isButtonDown(MouseEvent::RIGHT))
 		{		
-			if(inner.getY() < buttonHeight)
+			if(inner.getY() < BUTTON_HEIGHT)
 			{
 				scrollPending=SCROLL_DEFAULT_STEP;
 				scrollTimer.reset();
 			}
 			
-			if(inner.getY() > getSize().getY() - buttonHeight)
+			if(inner.getY() > event->getAreaSize().getY() - BUTTON_HEIGHT)
 			{
 				scrollPending=-SCROLL_DEFAULT_STEP;
 				scrollTimer.reset();
@@ -235,19 +243,9 @@ void Listbox::onMouseDown(MouseEvent event)
 	}
 }
 
-void Listbox::onMouseUp(MouseEvent event)
-{
-	//scrollPending=0;
-}
-
-void Listbox::onMouseOut()
-{
-	//scrollPending=0;
-}
-
 void Listbox::setChangeHandler(std::tr1::function<void()> handler)
 {
-	m_change_handler=handler;
+	changeHandler=handler;
 }
 
 void Listbox::addItem(std::string item,int tag)
@@ -295,15 +293,15 @@ void Listbox::setIndex(int newIndex)
 	{
 		index=newIndex;
 		
-		m_change_handler();
+		if(changeHandler)
+			changeHandler();
 	}
 }
 
 Listbox::Listbox():
 	index(-1),
 	scrollOffset(0.0),
-	scrollPending(0),
-	buttonHeight(0)
+	scrollPending(0)
 {
 	setFont(Font("Listbox"));
 	//setActiveFont(Font("Listbox.active"));

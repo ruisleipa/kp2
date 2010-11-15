@@ -34,7 +34,7 @@ bool Player::changeMoney(int money)
 
 Player::Player():
 	m_name(""),
-	m_money(20000)
+	m_money(100000)
 {
 
 }

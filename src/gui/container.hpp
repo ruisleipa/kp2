@@ -14,6 +14,8 @@ class Container : public Widget
 
 		virtual void handleEvent(Event* event);
 		
+		virtual void resize(Window& window);
+		
 		Container();
 		
 	protected:	
@@ -24,20 +26,26 @@ class Container : public Widget
 		void handleMouseDownEvent(MouseDownEvent* event);
 		void handleMouseUpEvent(MouseUpEvent* event);
 		void handleMouseMoveEvent(MouseMoveEvent* event);
-	
-	private:
-		Widget* findWidgetUnderMouse(MouseEvent* event);
-		
-		void moveEventOrigin(Event* event,Widget* widget);
+		void handleDrawEvent(DrawEvent* event);
 		
 		Vector2D calculateWidgetPosition(Widget* widget,Vector2D ourSize);
 		Vector2D calculateWidgetSize(Widget* widget,Vector2D ourSize);
 		
+		virtual Vector2D getWidgetPosition(Widget* widget,Vector2D ourSize);
+		virtual Vector2D getWidgetSize(Widget* widget,Vector2D ourSize);
+	
+	private:
+		Widget* findWidgetUnderMouse(MouseEvent* event);
+		
+		void convertAreaEventForChild(AreaEvent* event,Widget* widget);
+				
 		Widget* focusedChild;
 		Widget* mouseOverChild;
 
 		std::map<std::string,Widget*> tags;
 		std::vector<Widget*> children;
+		
+		bool showBounds;
 };
 
 #endif // CONTAINER_HPP

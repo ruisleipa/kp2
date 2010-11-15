@@ -6,11 +6,12 @@
 class Label : public TextWidget
 {
 	public:
-		virtual void onDraw(DrawEvent event);
+		virtual void handleEvent(Event* event);
 		
 		Label();
 		
 	private:
+		void handleDrawEvent(DrawEvent* event);
 };
 
 #endif // LABEL_HPP

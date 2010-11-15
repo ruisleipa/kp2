@@ -11,7 +11,7 @@ void MouseEvent::moveOrigin(const Vector2D& offset)
 {
 	mousePosition -= offset;
 	
-	Event::moveOrigin(offset);
+	AreaEvent::moveOrigin(offset);
 }
 
 bool MouseEvent::isButtonDown(MouseButton button)
@@ -22,7 +22,7 @@ bool MouseEvent::isButtonDown(MouseButton button)
 }
 
 MouseEvent::MouseEvent(const EventArea& area,const Vector2D& mousePosition,int state):
-	Event(area),
+	AreaEvent(area),
 	mousePosition(mousePosition),
 	state(state)	
 {

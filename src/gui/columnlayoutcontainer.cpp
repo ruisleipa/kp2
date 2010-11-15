@@ -1,16 +1,16 @@
 #include "columnlayoutcontainer.hpp"
 
-int ColumnLayoutContainer::getDividedSide(Vector2D size)
+int ColumnLayoutContainer::getDividedAxis(Vector2D size)
 {
 	return size.getX();
 }
 
-int ColumnLayoutContainer::getNonDividedSide(Vector2D size)
+int ColumnLayoutContainer::getNonDividedAxis(Vector2D size)
 {
 	return size.getY();
 }
 
-Vector2D ColumnLayoutContainer::convertDimensionsToVector(int dividedSide,int nonDividedSide)
+Vector2D ColumnLayoutContainer::convertDimensionsToVector(int dividedAxis,int nonDividedAxis)
 {
-	return Vector2D(dividedSide,nonDividedSide);
+	return Vector2D(dividedAxis,nonDividedAxis);
 }

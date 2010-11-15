@@ -10,13 +10,6 @@
 class Listbox : public TextWidget
 {
 	public:
-		virtual void onDraw(DrawEvent event);
-		virtual void onResize(Window& window);		
-	
-		virtual void onMouseDown(MouseEvent event);
-		virtual void onMouseUp(MouseEvent event);
-		virtual void onMouseOut();
-		
 		void setChangeHandler(std::tr1::function<void()> handler);
 		
 		Listbox();
@@ -28,20 +21,25 @@ class Listbox : public TextWidget
 		std::string getCurrentItemString();
 		
 		int getIndex();
-		void setIndex(int newIndex);		
+		void setIndex(int newIndex);
 		
 		virtual bool doAutoSizeOnChange();
 		
+		virtual void handleEvent(Event* event);
+		
+		void onResize(Window& window);	
+		
 	private:
+		void handleDrawEvent(DrawEvent* event);		
+		void handleMouseDownEvent(MouseDownEvent* event);
+		
 		int index;		
 		
 		float scrollOffset;
 		float scrollPending;
 		Timer scrollTimer;
-
-		float buttonHeight;
 		
-		std::tr1::function<void()> m_change_handler;
+		std::tr1::function<void()> changeHandler;
 		
 		static Texture arrowUp;
 		static Texture arrowDown;

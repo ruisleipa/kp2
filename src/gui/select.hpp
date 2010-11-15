@@ -8,8 +8,8 @@
 class Select : public ActiveTextWidget
 {
 	public:
-		virtual void onMouseDown(MouseEvent event);
-		
+		virtual void handleEvent(Event* event);
+			
 		Select();
 		
 		void addItem(std::string item);
@@ -19,6 +19,8 @@ class Select : public ActiveTextWidget
 		void setIndex(int index);
 		
 	private:
+		void handleMouseDownEvent(MouseDownEvent* event);
+	
 		int m_index;
 		
 		std::vector<std::wstring> m_items;

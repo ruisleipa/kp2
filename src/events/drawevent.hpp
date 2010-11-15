@@ -1,9 +1,9 @@
 #ifndef DRAWEVENT_HPP
 #define DRAWEVENT_HPP
 
-#include "event.hpp"
+#include "areaevent.hpp"
 
-class DrawEvent: public Event
+class DrawEvent: public AreaEvent
 {
 	public:		
 		DrawEvent(const EventArea& area);

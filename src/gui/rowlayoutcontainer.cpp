@@ -1,16 +1,16 @@
 #include "rowlayoutcontainer.hpp"
 
-int RowLayoutContainer::getDividedSide(Vector2D size)
+int RowLayoutContainer::getDividedAxis(Vector2D size)
 {
 	return size.getY();
 }
 
-int RowLayoutContainer::getNonDividedSide(Vector2D size)
+int RowLayoutContainer::getNonDividedAxis(Vector2D size)
 {
 	return size.getX();
 }
 
-Vector2D RowLayoutContainer::convertDimensionsToVector(int dividedSide,int nonDividedSide)
+Vector2D RowLayoutContainer::convertDimensionsToVector(int dividedAxis,int nonDividedAxis)
 {
-	return Vector2D(nonDividedSide,dividedSide);
+	return Vector2D(nonDividedAxis,dividedAxis);
 }

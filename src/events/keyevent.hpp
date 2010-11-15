@@ -1,11 +1,11 @@
 #ifndef KEYEVENT_HPP
 #define KEYEVENT_HPP
 
-#include "event.hpp"
+#include "areaevent.hpp"
 
 #include <SDL/SDL.h>
 
-class KeyEvent: public Event
+class KeyEvent: public AreaEvent
 {
 	public:
 		int getUnicode();
@@ -21,12 +21,22 @@ class KeyEvent: public Event
 
 class KeyUpEvent: public KeyEvent
 {
-
+	public:
+		KeyUpEvent(const EventArea& area,int unicode,SDLKey key):
+			KeyEvent(area,unicode,key)
+		{
+		
+		}
 };
 
 class KeyDownEvent: public KeyEvent
 {
-
+	public:
+		KeyDownEvent(const EventArea& area,int unicode,SDLKey key):
+			KeyEvent(area,unicode,key)
+		{
+		
+		}
 };
 
 #endif // KEYEVENT_HPP

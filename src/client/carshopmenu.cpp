@@ -18,35 +18,48 @@ CarShopMenu::CarShopMenu(Connection& connection):
 
 	carList.setFont(Font("small"));
 	carList.setChangeHandler(std::tr1::bind(&CarShopMenu::carlistChange,this));
-		
-	carInfo.setFont(Font("small"));
 	
+	
+	carInfo.setFont(Font("small"));	
 	
 	buyButton.setText("Osta auto");
+	buyButton.autoSize();
 	buyButton.setClickHandler(std::tr1::bind(&CarShopMenu::buyClick,this));
 				
 	addWidget(background);
 	
 	addWidget(mainContainer);
 	
+	background.setSize(Vector2D(1,1));	
+	mainContainer.setSize(Vector2D(1,1));
+	
 	mainContainer.addWidget(carList);
 	mainContainer.addWidget(infoContainer);
+	
+	carList.setFluid(true);	
+	infoContainer.setFluid(true);	
 	
 	infoContainer.addWidget(titleContainer);
 	infoContainer.addWidget(carInfo);
 	infoContainer.addWidget(buyButton);
 	infoContainer.showOuterPadding(false);
 	
+	titleContainer.setPixelSize(Vector2D(0,60));
+	carInfo.setFluid(true);	
+		
 	titleContainer.addWidget(carName);
 	titleContainer.addWidget(carImage);
 	titleContainer.showOuterPadding(false);
+	
+	carName.setFluid(true);	
+	carImage.setFluid(true);	
 	
 }
 
 void CarShopMenu::onResize(Window& window)
 {
-	background.setSize(Vector2D(1,1));
-	mainContainer.setSize(Vector2D(1,1));
+	
+	
 }
 
 void CarShopMenu::onConnectionEvent(Connection& connection)

@@ -8,13 +8,15 @@
 class Button : public ActiveTextWidget
 {
 	public:
-		virtual void onMouseDown(MouseEvent event);
+		virtual void handleEvent(Event* event);
 		
 		void setClickHandler(std::tr1::function<void()> handler);
 		
 		Button();
 		
 	private:	
+		void handleMouseDownEvent(MouseDownEvent* event);
+	
 		std::tr1::function<void()> clickHandler;
 		
 };

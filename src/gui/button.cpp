@@ -5,12 +5,18 @@
 
 #include <GL/gl.h>
 
-void Button::onMouseDown(MouseEvent event)
+void Button::handleEvent(Event* event)
 {
-	if(event.isButtonDown(MouseEvent::LEFT) || event.isButtonDown(MouseEvent::RIGHT))
+	ActiveTextWidget::handleEvent(event);
+
+	if(dynamic_cast<MouseDownEvent*>(event))
+		handleMouseDownEvent(dynamic_cast<MouseDownEvent*>(event));
+}
+
+void Button::handleMouseDownEvent(MouseDownEvent* event)
+{
+	if(event->isButtonDown(MouseEvent::LEFT))
 	{
-		ActiveTextWidget::onMouseDown(event);
-		
 		clickHandler();
 	}
 }

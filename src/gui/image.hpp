@@ -21,11 +21,13 @@ class Image : public Widget
 		void setColor(Color color);
 		Color getColor();		
 		
-		virtual void onDraw(DrawEvent event);
+		virtual void handleEvent(Event* event);
 		
 		Image();
 		
 	private:
+		void handleDrawEvent(DrawEvent* event);
+	
 		Texture texture;	
 		bool stretched;
 		bool fill;

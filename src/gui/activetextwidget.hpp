@@ -14,21 +14,21 @@ class ActiveTextWidget : public TextWidget
 		void setActiveFont(Font font);
 		Font& getActiveFont();
 		
-		virtual void onMouseOn();
-		virtual void onMouseOut();		
-		virtual void onMouseDown(MouseEvent);
-		
-		virtual void onDraw(DrawEvent event);
+		virtual void handleEvent(Event* event);
 		
 		virtual void autoSize();
 		
 		ActiveTextWidget();
 	
-	protected:
-	
+	protected:	
 		bool isMouseOver();
 	
-	private:	
+	private:
+		void handleMouseOverEvent(MouseOverEvent* event);
+		void handleMouseOutEvent(MouseOutEvent* event);
+		void handleMouseDownEvent(MouseDownEvent* event);
+		void handleDrawEvent(DrawEvent* event);
+	
 		Font activeFont;
 		Font borderFont;
 		

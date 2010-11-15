@@ -11,7 +11,7 @@ SDLKey KeyEvent::getKey()
 }
 
 KeyEvent::KeyEvent(const EventArea& area,int unicode,SDLKey key):
-	Event(area),
+	AreaEvent(area),
 	unicode(unicode),
 	key(key)
 {

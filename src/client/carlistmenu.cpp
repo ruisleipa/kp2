@@ -30,17 +30,29 @@ CarListMenu::CarListMenu(Connection& connection):
 	
 	addWidget(mainContainer);
 	
+	background.setSize(Vector2D(1,1));	
+	mainContainer.setSize(Vector2D(1,1));
+	
 	mainContainer.addWidget(carList);
 	mainContainer.addWidget(infoContainer);
 	
+	carList.setFluid(true);	
+	infoContainer.setFluid(true);	
+	
 	infoContainer.addWidget(titleContainer);
 	infoContainer.addWidget(carInfo);
-
+	//infoContainer.addWidget(buyButton);
 	infoContainer.showOuterPadding(false);
 	
+	titleContainer.setPixelSize(Vector2D(0,60));
+	carInfo.setFluid(true);	
+		
 	titleContainer.addWidget(carName);
 	titleContainer.addWidget(carImage);
 	titleContainer.showOuterPadding(false);
+	
+	carName.setFluid(true);	
+	carImage.setFluid(true);	
 	
 }
 
@@ -51,7 +63,7 @@ void CarListMenu::onResize(Window& window)
 }
 
 void CarListMenu::onConnectionEvent(Connection& connection)
-{std::cout<<"connection event"<<std::endl;
+{
 	carList.clearItems();
 	
 	for(int i=0;i<=connection.getPlayerVehicleMaxId();++i)
@@ -79,8 +91,6 @@ void CarListMenu::carlistChange()
 	std::string image="gamedata/vehicles/";
 	image+=vehicle.getImageName();
 	carImage.setTexture(Texture(image));
-	carImage.setSize(carImage.getTexture().getSize()/400);
-	carImage.setPosition(Vector2D(1,0)-carImage.getSize()*Vector2D(1,0)+Vector2D(-PADDING,PADDING));
 	
 	carInfo.setText(vehicle.getGeneralInfoString());
 }

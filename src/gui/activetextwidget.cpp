@@ -15,7 +15,7 @@ Font& ActiveTextWidget::getActiveFont()
 	return activeFont;
 }
 
-void ActiveTextWidget::onMouseOn()
+void ActiveTextWidget::handleMouseOverEvent(MouseOverEvent* event)
 {
 	doAnimate=true;
 	mouseOverFlag=true;
@@ -26,12 +26,12 @@ void ActiveTextWidget::onMouseOn()
 	mouseOverTimer.reset();
 }
 
-void ActiveTextWidget::onMouseOut()
+void ActiveTextWidget::handleMouseOutEvent(MouseOutEvent* event)
 {
 	mouseOverFlag=false;
 }
 
-void ActiveTextWidget::onMouseDown(MouseEvent event)
+void ActiveTextWidget::handleMouseDownEvent(MouseDownEvent* event)
 {
 	mouseDownSound.stop();
 	mouseDownSound.play();
@@ -48,9 +48,23 @@ static float lerp(float a,float b,float ratio)
 	return a+(b-a)*ratio;
 }
 
-void ActiveTextWidget::onDraw(DrawEvent event)
+void ActiveTextWidget::handleEvent(Event* event)
 {
-	Vector2D position=event.getAreaPosition();
+	if(dynamic_cast<DrawEvent*>(event))
+		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
+	else if(dynamic_cast<MouseOverEvent*>(event))
+		handleMouseOverEvent(dynamic_cast<MouseOverEvent*>(event));
+	else if(dynamic_cast<MouseOutEvent*>(event))
+		handleMouseOutEvent(dynamic_cast<MouseOutEvent*>(event));
+	else if(dynamic_cast<MouseDownEvent*>(event))
+		handleMouseDownEvent(dynamic_cast<MouseDownEvent*>(event));
+}
+
+void ActiveTextWidget::handleDrawEvent(DrawEvent* event)
+{
+	std::cout<<event->getAreaPosition()<<std::endl;
+
+	Vector2D position=event->getAreaPosition();
 	
 	float spread=mouseOverTimer.getSeconds()*10.0;
 	
@@ -68,7 +82,7 @@ void ActiveTextWidget::onDraw(DrawEvent event)
 	borderFont.draw(getWideText(),position-pixelsize*Vector2D(0,1));
 	borderFont.draw(getWideText(),position+pixelsize*Vector2D(0,1));
 	
-	Scissor scissor(event.getWindow());
+	Scissor scissor(event->getWindow());
 	
 	if(doAnimate)
 	{

@@ -4,14 +4,20 @@
 #include "debug/assert.hpp"
 #include "graphics/scissor.hpp"
 
-void Select::onMouseDown(MouseEvent event)
+void Select::handleEvent(Event* event)
 {
-	ActiveTextWidget::onMouseDown(event);
+	ActiveTextWidget::handleEvent(event);
+	
+	if(dynamic_cast<MouseDownEvent*>(event))
+		handleMouseDownEvent(dynamic_cast<MouseDownEvent*>(event));
+}
 
+void Select::handleMouseDownEvent(MouseDownEvent* event)
+{
 	if(m_index == -1)
 		return;
 
-	if(event.isButtonDown(MouseEvent::LEFT) || event.isButtonDown(MouseEvent::WHEELDOWN))
+	if(event->isButtonDown(MouseEvent::LEFT) || event->isButtonDown(MouseEvent::WHEELDOWN))
 	{
 		if(m_index==m_items.size()-1)
 			setIndex(0);
@@ -19,7 +25,7 @@ void Select::onMouseDown(MouseEvent event)
 			setIndex(getIndex()+1);
 	}
 		
-	if(event.isButtonDown(MouseEvent::RIGHT) || event.isButtonDown(MouseEvent::WHEELUP))
+	if(event->isButtonDown(MouseEvent::RIGHT) || event->isButtonDown(MouseEvent::WHEELUP))
 	{
 		if(m_index==0)
 			setIndex(m_items.size()-1);

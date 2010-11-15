@@ -25,6 +25,9 @@
 #include "carshopmenu.hpp"
 #include "carlistmenu.hpp"
 
+#include "partshopmenu.hpp"
+//#include "installpartsmenu.hpp"
+
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
 
@@ -85,16 +88,22 @@ void startGame()
 	NewLocalGameMenu newLocalGameMenu(connection);
 	
 	MenuContainer topLevelGameMenus(backgroundTextures);
-	
-	CarShopMenu carShopMenu(connection);
-	CarListMenu carListMenu(connection);
-	
-	TabbedMenu garageMenu;
 		
+	TabbedMenu garageMenu;	
+	CarShopMenu carShopMenu(connection);
 	garageMenu.addTab("Autokauppa",carShopMenu);
-	garageMenu.addTab("Autotalli",carListMenu);
+	CarListMenu carListMenu(connection);	
+	garageMenu.addTab("Autotalli",carListMenu);	
 	
 	topLevelGameMenus.addWidget("garage",garageMenu);
+	
+	TabbedMenu tuningMenu;	
+	PartShopMenu partShopMenu(connection);
+	tuningMenu.addTab("Osakauppa",partShopMenu);
+	//InstallPartsMenu installPartsMenu(connection);	
+	//tuningMenu.addTab("Asenna osia",installPartsMenu);	
+	
+	topLevelGameMenus.addWidget("tuning",tuningMenu);
 	
 	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);
 		
@@ -110,6 +119,7 @@ void startGame()
 	RootContainer rootContainer(window,events);	
 	rootContainer.addWidget(menuContainer);
 	
+	//ResizeEvent resizeEvent;
 	rootContainer.resize(window);
 	
 	EventArea eventArea(window, Vector2D(0,0), window.getSize());
@@ -118,7 +128,7 @@ void startGame()
 	while(1)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
-		rootContainer.draw(drawEvent);
+		rootContainer.handleEvent(&drawEvent);
 		SDL_GL_SwapBuffers();		
 		connection.processMessages();				
 		events.processEvents();				

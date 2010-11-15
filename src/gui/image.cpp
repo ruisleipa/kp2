@@ -47,7 +47,13 @@ Color Image::getColor()
 	return color;
 }
 
-void Image::onDraw(DrawEvent event)
+void Image::handleEvent(Event* event)
+{
+	if(dynamic_cast<DrawEvent*>(event))
+		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
+}
+
+void Image::handleDrawEvent(DrawEvent* event)
 {
 	Vector2D imageSize;
 	
@@ -59,7 +65,7 @@ void Image::onDraw(DrawEvent event)
 		// ratio>1 = wide, ratio<1=tall 
 		float imageRatio=imageSize.getX()/imageSize.getY();
 		
-		Vector2D dest=event.getAreaSize();
+		Vector2D dest=event->getAreaSize();
 	
 		// ratio>1 = wide, ratio<1=tall 
 		float dest_ratio=dest.getX()/dest.getY();
@@ -93,12 +99,12 @@ void Image::onDraw(DrawEvent event)
 	}
 	else
 	{
-		imageSize=event.getAreaSize();
+		imageSize=event->getAreaSize();
 	}
 	
 	color.apply();
 	
-	texture.draw(event.getAreaPosition(),imageSize);
+	texture.draw(event->getAreaPosition(),imageSize);
 }
 
 Image::Image():

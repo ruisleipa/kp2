@@ -10,11 +10,13 @@ SRC = \
 	src/client/settingsmenu.cpp \
 	src/client/carshopmenu.cpp \
 	src/client/carlistmenu.cpp \
+	src/client/partshopmenu.cpp \
 	src/debug/assert.cpp \
 	src/debug/crashcatcher.cpp \
 	src/debug/crashmessage.cpp \
 	src/debug/stack.cpp \
 	src/debug/stacktrace.cpp \
+	src/events/areaevent.cpp \
 	src/events/drawevent.cpp \
 	src/events/event.cpp \
 	src/events/eventarea.cpp \

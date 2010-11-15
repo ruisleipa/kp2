@@ -1,8 +1,14 @@
 #include "label.hpp"
 
-void Label::onDraw(DrawEvent event)
+void Label::handleEvent(Event* event)
 {
-	getFont().drawWrapped(getWideText(),event.getAreaPosition(),event.getAreaSize());
+	if(dynamic_cast<DrawEvent*>(event))
+		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
+}
+
+void Label::handleDrawEvent(DrawEvent* event)
+{
+	getFont().drawWrapped(getWideText(),event->getAreaPosition(),event->getAreaSize());
 }
 
 Label::Label()

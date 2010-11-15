@@ -72,7 +72,7 @@ void Events::processEvents()
 			SDL_MouseMotionEvent& motion = sdlEvent.motion;
 			Vector2D pos = Vector2D(motion.x, motion.y);
 					
-			event = new MouseMotionEvent(eventArea, pos, motion.state);
+			event = new MouseMoveEvent(eventArea, pos, motion.state);
 		}
 		
 		if(event)

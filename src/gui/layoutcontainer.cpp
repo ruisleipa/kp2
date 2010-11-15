@@ -2,48 +2,67 @@
 
 const float PADDING=10;
 
-void LayoutContainer::onDraw(DrawEvent event)
+void LayoutContainer::handleEvent(Event* event)
 {
-	int visibleChildrenCount = getVisibleWidgetCount();
+	if(dynamic_cast<DrawEvent*>(event))
+		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
+	
+	Container::handleEvent(event);
+}
 
-	if(visibleChildrenCount == 0)
-		return;
-	
-	int dividedSize=getDividedSide(event.getAreaSize());
-	int nonDividedSize=getNonDividedSide(event.getAreaSize());
-	
-	if(applyOuterPadding)
-	{
-		dividedSize -= PADDING * 2;
-		nonDividedSize -= PADDING * 2;
-	}		
-	
-	dividedSize -= PADDING * (visibleChildrenCount - 1);
-	dividedSize /= visibleChildrenCount;
-	
+void LayoutContainer::handleDrawEvent(DrawEvent* event)
+{
+	int dividedAxis = getDividedAxis(event->getAreaSize());
+	int sizeAvailableForWidgets = dividedAxis - (getVisibleWidgetCount() - 1) * PADDING;
+	int nonDividedAxis = getNonDividedAxis(event->getAreaSize());
 	int outerPadding=0;
 	int position=0;
 	
 	if(applyOuterPadding)
 	{
+		sizeAvailableForWidgets -= PADDING * 2;
+		nonDividedAxis -= PADDING * 2;
 		outerPadding = PADDING;
 		position = PADDING;
 	}
 	
+	int sizeAvailableForFluidWidgets = sizeAvailableForWidgets - calculateTotalSizeOfNonFluidWidgets(event->getAreaSize());
+	int totalSizeOfFluidWidgets = calculateTotalSizeOfFluidWidgets(event->getAreaSize());
+	
+	layouts.clear();
+	
 	for(int i=0;i<getChildCount();i++)
 	{
-		Widget* child=getChild(i);
+		Widget* child = getChild(i);
 		
 		if(!child)
 			continue;
 			
 		if(child->getVisible())
 		{
-			child->setPixelPosition(convertDimensionsToVector(position,outerPadding));
-			child->setPixelSize(convertDimensionsToVector(dividedSize,nonDividedSize));
+			int widgetSize = getDividedAxis(calculateWidgetSize(child,event->getAreaSize()));
+		
+			std::cout<<widgetSize<<"     "<<calculateWidgetSize(child,event->getAreaSize())<<std::endl;
+		
+			if(child->getFluid())
+			{
+				if(widgetSize == 0)
+					widgetSize = 1;
+				
+				float ratio = float(widgetSize) / float(totalSizeOfFluidWidgets);
+				
+				widgetSize = sizeAvailableForFluidWidgets * ratio;
+			}
+		
+			Layout layout;
 			
-			position += dividedSize;
-			position += PADDING;			
+			layout.position = convertDimensionsToVector(position,outerPadding);
+			layout.size = convertDimensionsToVector(widgetSize,nonDividedAxis);
+			
+			layouts[child] = layout;
+			
+			position += widgetSize;
+			position += PADDING;		
 		}
 	}	
 }
@@ -71,11 +90,67 @@ int LayoutContainer::getVisibleWidgetCount()
 			continue;
 			
 		if(child->getVisible())
-		{
 			count++;
-		}
 	}
 	
 	return count;
 }
 
+int LayoutContainer::calculateTotalSizeOfFluidWidgets(Vector2D ourSize)
+{
+	int totalsize=0;
+
+	for(int i=0;i<getChildCount();i++)
+	{
+		Widget* child=getChild(i);
+		
+		if(!child)
+			continue;
+			
+		if(!child->getVisible())
+			continue;
+			
+		if(child->getFluid())
+		{
+			int size = getDividedAxis(calculateWidgetSize(child,ourSize));
+		
+			if(size == 0)
+				size = 1;
+		
+			totalsize += size;
+		}
+	}
+	
+	return totalsize;
+}
+
+int LayoutContainer::calculateTotalSizeOfNonFluidWidgets(Vector2D ourSize)
+{
+	int totalsize=0;
+
+	for(int i=0;i<getChildCount();i++)
+	{
+		Widget* child=getChild(i);
+		
+		if(!child)
+			continue;
+			
+		if(!child->getVisible())
+			continue;
+			
+		if(!child->getFluid())
+			totalsize += getDividedAxis(calculateWidgetSize(child,ourSize));
+	}
+	
+	return totalsize;
+}
+
+Vector2D LayoutContainer::getWidgetPosition(Widget* widget,Vector2D ourSize)
+{
+	return layouts[widget].position;
+}
+
+Vector2D LayoutContainer::getWidgetSize(Widget* widget,Vector2D ourSize)
+{
+	return layouts[widget].size;
+}
