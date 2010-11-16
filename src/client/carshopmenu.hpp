@@ -32,10 +32,6 @@ class CarShopMenu : public Menu
 		ColumnLayoutContainer titleContainer;
 		RowLayoutContainer infoContainer;
 	
-		Texture backgroundTexture;
-		Image background;
-		
-		Texture carTexture;
 		Image carImage;
 		
 		Label carName;

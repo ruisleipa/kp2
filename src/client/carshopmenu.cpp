@@ -8,29 +8,21 @@
 #include "connection.hpp"
 
 CarShopMenu::CarShopMenu(Connection& connection):
-	connection(connection),
-	backgroundTexture("data/images/submenu.png")
+	connection(connection)
 {
 	connection.addEventHandler(std::tr1::bind(&CarShopMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
 	
-	background.setTexture(backgroundTexture);
-	background.setStretched(true);
-
 	carList.setFont(Font("small"));
 	carList.setChangeHandler(std::tr1::bind(&CarShopMenu::carlistChange,this));
-	
-	
+		
 	carInfo.setFont(Font("small"));	
 	
 	buyButton.setText("Osta auto");
 	buyButton.autoSize();
 	buyButton.setClickHandler(std::tr1::bind(&CarShopMenu::buyClick,this));
 				
-	addWidget(background);
-	
 	addWidget(mainContainer);
 	
-	background.setSize(Vector2D(1,1));	
 	mainContainer.setSize(Vector2D(1,1));
 	
 	mainContainer.addWidget(carList);
