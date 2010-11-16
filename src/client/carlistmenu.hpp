@@ -30,7 +30,6 @@ class CarListMenu : public Menu
 		ColumnLayoutContainer titleContainer;
 		RowLayoutContainer infoContainer;
 	
-		Image background;		
 		Image carImage;
 		
 		Label carName;

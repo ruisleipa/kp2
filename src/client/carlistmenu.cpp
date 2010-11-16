@@ -13,9 +13,6 @@ CarListMenu::CarListMenu(Connection& connection):
 {
 	connection.addEventHandler(std::tr1::bind(&CarListMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
 
-	background.setTexture(Texture("data/images/submenu.png"));
-	background.setStretched(true);
-
 	carList.setFont(Font("small"));
 	carList.setChangeHandler(std::tr1::bind(&CarListMenu::carlistChange,this));
 	
@@ -26,11 +23,8 @@ CarListMenu::CarListMenu(Connection& connection):
 	selectButton.setText("Valitse käyttöautoksi");
 	selectButton.setClickHandler(std::tr1::bind(&CarListMenu::selectClick,this));
 	
-	addWidget(background);
-	
 	addWidget(mainContainer);
 	
-	background.setSize(Vector2D(1,1));	
 	mainContainer.setSize(Vector2D(1,1));
 	
 	mainContainer.addWidget(carList);
@@ -58,7 +52,6 @@ CarListMenu::CarListMenu(Connection& connection):
 
 void CarListMenu::onResize(Window& window)
 {
-	background.setSize(Vector2D(1,1));
 	mainContainer.setSize(Vector2D(1,1));
 }
 
