@@ -3,6 +3,7 @@
 
 #include "graphics/vector2d.hpp"
 #include "graphics/window.hpp"
+#include "graphics/color.hpp"
 
 #include "events/eventlistener.hpp"
 #include "events/keyevent.hpp"
@@ -29,6 +30,9 @@ class Widget: public EventListener, public NonCopyable
 		
 		void setVisible(bool visible);
 		bool getVisible();
+		
+		void setBackgroundColor(const Color& color);
+		const Color& getBackgroundColor();
 
 		virtual void handleEvent(Event* event);
 				
@@ -49,6 +53,8 @@ class Widget: public EventListener, public NonCopyable
 		Vector2D getSize();	
 	
 	private:
+		void handleDrawEvent(DrawEvent* event);
+		
 		void setParent(Container* container);
 			
 		bool visible;
@@ -62,6 +68,8 @@ class Widget: public EventListener, public NonCopyable
 		bool pixelSize;
 		
 		bool fluid;
+		
+		Color backgroundColor;
 		
 		friend class Container;
 };
