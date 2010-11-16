@@ -23,7 +23,7 @@ CarShopMenu::CarShopMenu(Connection& connection):
 				
 	addWidget(mainContainer);
 	
-	mainContainer.setSize(Vector2D(1,1));
+	mainContainer.setFactorSize(Vector2D(1,1));
 	
 	mainContainer.addWidget(carList);
 	mainContainer.addWidget(infoContainer);
@@ -36,7 +36,7 @@ CarShopMenu::CarShopMenu(Connection& connection):
 	infoContainer.addWidget(buyButton);
 	infoContainer.showOuterPadding(false);
 	
-	titleContainer.setPixelSize(Vector2D(0,60));
+	titleContainer.setFactorSize(Vector2D(0,0.25));
 	carInfo.setFluid(true);	
 		
 	titleContainer.addWidget(carName);
@@ -45,12 +45,6 @@ CarShopMenu::CarShopMenu(Connection& connection):
 	
 	carName.setFluid(true);	
 	carImage.setFluid(true);	
-	
-}
-
-void CarShopMenu::onResize(Window& window)
-{
-	
 	
 }
 

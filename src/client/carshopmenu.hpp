@@ -19,7 +19,6 @@ class CarShopMenu : public Menu
 	public:
 		CarShopMenu(Connection& connection);
 
-		virtual void onResize(Window& window);
 		virtual void onConnectionEvent(Connection& connection);
 		
 	private:

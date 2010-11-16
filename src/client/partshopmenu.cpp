@@ -48,7 +48,7 @@ PartShopMenu::PartShopMenu(Connection& connection):
 	categoryContainer.showOuterPadding(false);
 	
 	categoryContainer.addWidget(categoryInfo);
-	categoryInfo.setFactorSize(Vector2D(0,0.3));
+	categoryInfo.setFactorSize(Vector2D(0,0.25));
 	
 	categoryContainer.addWidget(categoryBox);	
 	categoryBox.setFluid(true);
@@ -57,7 +57,8 @@ PartShopMenu::PartShopMenu(Connection& connection):
 	partContainer.showOuterPadding(false);
 
 	partContainer.addWidget(partImage);
-	partImage.setFactorSize(Vector2D(0,0.3));
+	partImage.setFactorSize(Vector2D(0,0.25));
+	partImage.setFill(true);
 	
 	partContainer.addWidget(partBox);	
 	partBox.setFluid(true);

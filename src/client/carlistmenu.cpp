@@ -25,7 +25,7 @@ CarListMenu::CarListMenu(Connection& connection):
 	
 	addWidget(mainContainer);
 	
-	mainContainer.setSize(Vector2D(1,1));
+	mainContainer.setFactorSize(Vector2D(1,1));
 	
 	mainContainer.addWidget(carList);
 	mainContainer.addWidget(infoContainer);
@@ -38,7 +38,7 @@ CarListMenu::CarListMenu(Connection& connection):
 	//infoContainer.addWidget(buyButton);
 	infoContainer.showOuterPadding(false);
 	
-	titleContainer.setPixelSize(Vector2D(0,60));
+	titleContainer.setFactorSize(Vector2D(0,0.25));
 	carInfo.setFluid(true);	
 		
 	titleContainer.addWidget(carName);
@@ -48,11 +48,6 @@ CarListMenu::CarListMenu(Connection& connection):
 	carName.setFluid(true);	
 	carImage.setFluid(true);	
 	
-}
-
-void CarListMenu::onResize(Window& window)
-{
-	mainContainer.setSize(Vector2D(1,1));
 }
 
 void CarListMenu::onConnectionEvent(Connection& connection)
