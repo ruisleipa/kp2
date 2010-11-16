@@ -7,6 +7,9 @@
 #include <stdexcept>
 #include <stdint.h>
 
+#include <SDL/SDL_image.h>
+#include <GL/glew.h>
+
 Texture::Texture()
 {
 	

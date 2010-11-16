@@ -8,8 +8,6 @@
 #include <tr1/memory>
 
 #include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#include <GL/glew.h>
 
 #include "vector2d.hpp"
 #include "preparedtexture.hpp"
