@@ -14,6 +14,7 @@ TabbedMenu::TabbedMenu()
 	topContainer.addWidget(tabContainer);
 	
 	tabContainer.setFluid(true);
+	tabContainer.setBackgroundColor(Color(1,1,1,0.5));
 	
 	buttonContainer.showOuterPadding(false);
 }
