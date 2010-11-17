@@ -1,38 +1,43 @@
 #ifndef INSTALLPARTSMENU_HPP
 #define INSTALLPARTSMENU_HPP
 
-#include "container.hpp"
-#include "label.hpp"
-#include "button.hpp"
-#include "image.hpp"
-#include "field.hpp"
-#include "listbox.hpp"
-#include "columnlayoutcontainer.hpp"
+#include "gui/menu.hpp"
+#include "gui/label.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+#include "gui/listbox.hpp"
+#include "gui/columnlayoutcontainer.hpp"
+#include "gui/rowlayoutcontainer.hpp"
 
-class InstallpartsMenu : public Menu
+#include "connection.hpp"
+
+class InstallPartsMenu : public Menu
 {
 	public:
-		InstallpartsMenu();
+		InstallPartsMenu(Connection& connection);
 
-		virtual void onResize(Graphics& graphics);
-		virtual void onShow();
+		virtual void handleEvent(Event* event);
 		
 	private:
-		Texture m_background_texture;
-		Image m_background;
+		Connection& connection;
+	
+		ColumnLayoutContainer container;
 		
-		ColumnLayoutContainer m_title_row;
+		RowLayoutContainer carContainer;
 		
-		Label m_car_title;		
-		Label m_part_title;
+		ColumnLayoutContainer carTitleContainer;
 		
-		ColumnLayoutContainer m_list_row;
+		Label carName;		
+		Image carImage;
 		
-		Listbox m_car_part_list;		
-		Listbox m_part_list;
+		Listbox carParts;
 		
-		Button m_install_button;
-		Button m_sell_button;
+		RowLayoutContainer partContainer;
+		
+		Listbox parts;		
+		
+		Button installButton;
+		Button sellButton;
 };
 
 #endif // INSTALLPARTSMENU_HPP

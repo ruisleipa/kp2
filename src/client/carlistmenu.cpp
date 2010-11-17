@@ -20,8 +20,10 @@ CarListMenu::CarListMenu(Connection& connection):
 
 	sellButton.setText("Myy auto");
 	sellButton.setClickHandler(std::tr1::bind(&CarListMenu::sellClick,this));
+	sellButton.autoSize();
 	selectButton.setText("Valitse käyttöautoksi");
 	selectButton.setClickHandler(std::tr1::bind(&CarListMenu::selectClick,this));
+	selectButton.autoSize();
 	
 	addWidget(mainContainer);
 	
@@ -35,7 +37,8 @@ CarListMenu::CarListMenu(Connection& connection):
 	
 	infoContainer.addWidget(titleContainer);
 	infoContainer.addWidget(carInfo);
-	//infoContainer.addWidget(buyButton);
+	infoContainer.addWidget(sellButton);
+	infoContainer.addWidget(selectButton);
 	infoContainer.showOuterPadding(false);
 	
 	titleContainer.setFactorSize(Vector2D(0,0.25));
