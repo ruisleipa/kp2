@@ -138,8 +138,6 @@ void Container::handleDrawEvent(DrawEvent* event)
 	
 		scissor.set(drawEvent.getAreaPosition(),drawEvent.getAreaSize());
 	
-		//std::cout<<drawEvent.getAreaPosition()<<" "<<widget->getPosition()<<std::endl;
-	
 		widget->handleEvent(&drawEvent);
 		
 		if(showBounds)

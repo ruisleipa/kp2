@@ -42,8 +42,6 @@ void LayoutContainer::handleDrawEvent(DrawEvent* event)
 		{
 			int widgetSize = getDividedAxis(calculateWidgetSize(child,event->getAreaSize()));
 		
-			std::cout<<widgetSize<<"     "<<calculateWidgetSize(child,event->getAreaSize())<<std::endl;
-		
 			if(child->getFluid())
 			{
 				if(widgetSize == 0)

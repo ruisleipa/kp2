@@ -62,8 +62,6 @@ void ActiveTextWidget::handleEvent(Event* event)
 
 void ActiveTextWidget::handleDrawEvent(DrawEvent* event)
 {
-	std::cout<<event->getAreaPosition()<<std::endl;
-
 	Vector2D position=event->getAreaPosition();
 	
 	float spread=mouseOverTimer.getSeconds()*10.0;
