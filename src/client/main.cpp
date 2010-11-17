@@ -26,7 +26,7 @@
 #include "carlistmenu.hpp"
 
 #include "partshopmenu.hpp"
-//#include "installpartsmenu.hpp"
+#include "installpartsmenu.hpp"
 
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
@@ -100,8 +100,8 @@ void startGame()
 	TabbedMenu tuningMenu;	
 	PartShopMenu partShopMenu(connection);
 	tuningMenu.addTab("Osakauppa",partShopMenu);
-	//InstallPartsMenu installPartsMenu(connection);	
-	//tuningMenu.addTab("Asenna osia",installPartsMenu);	
+	InstallPartsMenu installPartsMenu(connection);	
+	tuningMenu.addTab("Asenna osia",installPartsMenu);	
 	
 	topLevelGameMenus.addWidget("tuning",tuningMenu);
 	

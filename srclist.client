@@ -11,6 +11,7 @@ SRC = \
 	src/client/carshopmenu.cpp \
 	src/client/carlistmenu.cpp \
 	src/client/partshopmenu.cpp \
+	src/client/installpartsmenu.cpp \
 	src/debug/assert.cpp \
 	src/debug/crashcatcher.cpp \
 	src/debug/crashmessage.cpp \
