@@ -14,8 +14,8 @@ SRC = src/debug/assert.cpp \
 	src/net/socket.cpp \
 	src/net/socketactivity.cpp \
 	src/net/socketset.cpp \
-	src/server/connection.cpp \
 	src/server/main.cpp \
+	src/utils/commandlineparser.cpp \
 	src/utils/directory.cpp \
 	src/utils/inifile.cpp \
 	src/utils/noncopyable.cpp \

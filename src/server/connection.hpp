@@ -53,15 +53,15 @@ class Connection
 		template<typename T>
 		bool writePartToPacket(Packet& packet,Part* part,uint16_t type_id);
 	
-		Player m_player;
+		Player player;
 		
-		std::map<int,Vehicle> m_carshop_vehicles;
-		std::map<int,Vehicle> m_player_vehicles;
-		std::map<int,std::tr1::shared_ptr<Part> > m_partshop_parts;
+		std::map<int,Vehicle> carshopVehicles;
+		std::map<int,Vehicle> playerVehicles;
+		std::map<int,std::tr1::shared_ptr<Part> > partshopParts;
 	
-		std::string m_receive_buffer;		
+		std::string receiveBuffer;		
 		static const int BUFFER_SIZE=512;		
-		char m_buffer[BUFFER_SIZE];
+		char buffer[BUFFER_SIZE];
 };
 
 template<typename T>
@@ -74,10 +74,10 @@ void Connection::loadPartsFromDirectory(const std::string& directory)
 	
 	int id;
 	
-	if(m_partshop_parts.rbegin()==m_partshop_parts.rend())
+	if(partshopParts.rbegin()==partshopParts.rend())
 		id=0;
 	else
-		id=m_partshop_parts.rbegin()->first;
+		id=partshopParts.rbegin()->first;
 	
 	for(i=files.begin();i!=files.end();++i)
 	{
@@ -87,7 +87,7 @@ void Connection::loadPartsFromDirectory(const std::string& directory)
 
 		if(part->load(directory + (*i)))
 		{
-			m_partshop_parts[id++]=ptr;
+			partshopParts[id++]=ptr;
 		}
 	}
 }
