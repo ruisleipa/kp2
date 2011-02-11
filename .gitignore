@@ -9,3 +9,4 @@ stdout.txt
 *.bak
 *.cfg
 *.res
+*.exe
