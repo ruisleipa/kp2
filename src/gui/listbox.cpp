@@ -15,7 +15,7 @@ const float BAR_WIDTH=20;
 const float BUTTON_WIDTH=BAR_WIDTH;
 const float BUTTON_HEIGHT=BUTTON_WIDTH;
 const float SCROLL_DEFAULT_STEP=50;
-const float SCROLL_RATE=150;
+const float SCROLL_RATE=500;
 
 static float sign(float value)
 {
@@ -269,7 +269,7 @@ void Listbox::clearItems()
 int Listbox::getCurrentItemTag()
 {
 	if(index == -1)
-		return 0;
+		return -1;
 		
 	return items[index].tag;
 }

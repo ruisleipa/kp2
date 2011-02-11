@@ -27,7 +27,7 @@ void TabbedMenu::addTab(const std::string& label,Widget& widget)
 	button->autoSize();
 	button->setClickHandler(std::tr1::bind(&Container::showOnlyWidget,&tabContainer,convertToString(&widget)));
 	
-	buttonContainer.setFactorSize(Vector2D(0,0.1));
+	buttonContainer.setPixelSize(Vector2D(0, button->getFont().getTextSize(L"").getY() + 2));
 	
 	buttons.push_back(button);
 	

@@ -1,53 +1,54 @@
 #include "inifile.hpp"
 
-static std::string trim(const std::string& str,const std::string& chars=" \t\n\v\f\r")
-{
-	size_t begin=str.find_first_not_of(chars);
-	size_t end=str.find_last_not_of(chars);
-	
-	if(begin == std::string::npos)
-		begin = 0;
+#include <fstream>
+#include <iostream>
 
-	if(end == std::string::npos)
-		end = str.size()-1;
+const char COMMENT_LINE_BEGIN_CHARACTER = '#';
+const char KEY_VALUE_SEPARATOR = '=';
+const char STRING_BEGIN_CHARACTER = '"';
+const char* STRING_DELIMITER = "\"";
+const char* WHITESPACE = " \t\n\v\f\r";
+
+static std::string trim(std::string str,const std::string& chars)
+{
+	str.erase(0,str.find_first_not_of(chars));
+	str.erase(str.find_last_not_of(chars)+1);
 		
-	return str.substr(begin,end-begin+1);
+	return str;
 }
 
-bool IniFile::getValue(const std::string& key,std::string& value)
+void IniFile::getValue(const std::string& key,std::string& value)
 {
-	if(m_values.find(key) == m_values.end())
+	if(values.find(key) == values.end())
 	{
-		std::cerr << "Requested key ";
-		std::cerr << '"' << key << '"';
-		std::cerr << " not found in IniFile originally loaded from ";
-		std::cerr << '"' << m_filename << '"' << std::endl;
-		return false;
+		std::stringstream ss;
+	
+		ss << "Value of \"" << key;
+		ss << "\" not found in file loaded from \"";
+		ss << filename << "\".";
+			
+		throw std::runtime_error(ss.str());
 	}
 	
-	value=m_values[key];
-	return true;
+	value=values[key];
 }
 
-bool IniFile::setValue(const std::string& key,const std::string& str)
+void IniFile::setValue(const std::string& key,const std::string& str)
 {
-	m_values[key] = str;
-	
-	return true;
+	values[key] = str;
 }
 
 
-bool IniFile::load(const std::string& filename)
+void IniFile::load(const std::string& filename)
 {
 	std::ifstream file(filename.c_str(),std::ios_base::in);
 	
 	if(!file.good())	
 	{
-		std::cerr<<"Cannot open file "<<filename<<" for reading"<<std::endl;
-		return false;
+		throw std::runtime_error("Cannot open file \"" + filename + "\" for reading.");
 	}
 	
-	m_filename=filename;
+	this->filename=filename;
 	
 	std::string line;
 	std::string key;
@@ -55,74 +56,59 @@ bool IniFile::load(const std::string& filename)
 	
 	while(getline(file,line))
 	{
-		/*
-		Ignore empty lines
-		*/
 		if(!line.length())
 			continue;		
-		/*
-		Comment character
-		*/
-		if(!line.at(0)=='#')
+		
+		if(!line.at(0)==COMMENT_LINE_BEGIN_CHARACTER)
 			continue;
 		
 		/*
 		key contains everything before the '=', and value contains
 		everything after it.
 		*/
-		key=line.substr(0,line.find('='));
-		value=line.substr(line.find('=')+1);
+		key=line.substr(0,line.find(KEY_VALUE_SEPARATOR));
+		value=line.substr(line.find(KEY_VALUE_SEPARATOR)+1);
 		
-		/*
-		Trim whitespace.
-		*/
-		key=trim(key);
-		value=trim(value);
+		key=trim(key,WHITESPACE);
+		value=trim(value,WHITESPACE);
 		
 		/*
 		Check if the value is a string.
 		*/
-		if(value.at(0)=='"')
+		if(value.at(0) == STRING_BEGIN_CHARACTER)
 		{
 			/*
 			Trim the quotes.
 			*/
-			value=trim(value,"\"");
+			value=trim(value, STRING_DELIMITER);
 		}
 		
 		if(key!="")
 		{		
-			m_values[key]=value;
+			values[key]=value;
 		}
 	}
 	
 	file.close();
-	
-	return true;
 }
 
-
-
-bool IniFile::save(const std::string& filename)
+void IniFile::save(const std::string& filename)
 {
 	std::ofstream file(filename.c_str(),std::ios_base::trunc);
 	
 	if(!file.good())	
 	{
-		std::cerr<<"Cannot open file "<<filename<<" for writing"<<std::endl;
-		return false;
+		throw std::runtime_error("Cannot open file \"" + filename + "\" for writing.");
 	}
 	
 	std::map<std::string,std::string>::iterator i;
 	
-	for(i=m_values.begin();i!=m_values.end();i++)
+	for(i=values.begin();i!=values.end();i++)
 	{		
 		file<<i->first<<"="<<i->second<<std::endl;
 	}
 	
 	file.close();
-	
-	return true;
 }
 
 IniFile::IniFile()
@@ -134,6 +120,3 @@ IniFile::IniFile(const std::string& filename)
 {
 	load(filename);
 }
-
-
-

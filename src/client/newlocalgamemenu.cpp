@@ -85,24 +85,9 @@ void NewLocalGameMenu::startClickHandler()
 {
 	if(connection.startLocalServer())
 	{
-		Packet packet;
-		packet.setType(PLAYER_NAME);
-		packet<<nameField.getText();
-		
-		connection.writeToServer(packet);
-		
-		Packet packet2;
-		packet2.setType(PLAYER_MONEY);
-		
-		connection.writeToServer(packet2);
-		
-		packet2.setType(CARSHOP_LIST);		
-		connection.writeToServer(packet2);
-		
-		packet2.setType(PARTSHOP_LIST);		
-		connection.writeToServer(packet2);
-	
 		getParent()->showOnlyWidget("careermenu");
+		
+		connection.setName(nameField.getText());
 	}
 }
 

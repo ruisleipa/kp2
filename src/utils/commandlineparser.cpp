@@ -28,9 +28,9 @@ void CommandLineParser::parse(int argc,char** argv)
 			{
 				std::stringstream ss;
 				
-				ss << "Expected an value after '";
+				ss << "Expected an value after \"";
 				ss << arg;
-				ss << "'";
+				ss << "\"";
 			
 				throw CommandLineParseError(ss.str());
 			}
@@ -40,16 +40,14 @@ void CommandLineParser::parse(int argc,char** argv)
 			i++;
 			
 			values[arg]=argv[i];
-			
-			std::cout<<arg<<"='"<<values[arg]<<"'"<<std::endl;
 		}
 		else
 		{
 			std::stringstream ss;
 		
-			ss << "Expected a option instead of value '";
+			ss << "Expected a option instead of value \"";
 			ss << arg;
-			ss << "'";
+			ss << "\"";
 			
 			throw CommandLineParseError(ss.str());
 		}

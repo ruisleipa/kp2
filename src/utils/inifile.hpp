@@ -2,78 +2,88 @@
 #define INIFILE_HPP
 
 #include <string>
-#include <iostream>
 #include <sstream>
-#include <fstream>
 #include <map>
-#include <cstdlib>
-#include <vector>
+#include <stdexcept>
+#include <typeinfo>
 
+#include "utils/demangle.hpp"
 
 class IniFile
 {
 	public:
 		template<typename T>
-		bool getValue(const std::string& key,T& value);
-		bool getValue(const std::string& key,std::string& value);
+		void getValue(const std::string& key,T& value);
+		void getValue(const std::string& key,std::string& value);
 			
 		template<typename T>
-		bool setValue(const std::string& key,const T& value);
-		bool setValue(const std::string& key,const std::string& value);
+		void setValue(const std::string& key,const T& value);
+		void setValue(const std::string& key,const std::string& value);
 		
-		bool load(const std::string& filename);
-		bool save(const std::string& filename);
+		void load(const std::string& filename);
+		void save(const std::string& filename);
 
 		IniFile();
 		IniFile(const std::string& filename);
 				
 	private:
-		std::map<std::string,std::string> m_values;
+		std::map<std::string,std::string> values;
 		
-		std::string m_filename;
+		std::string filename;
 	
 };
 
 template<typename T>
-bool IniFile::setValue(const std::string& key,const T& value)
+void IniFile::setValue(const std::string& key,const T& value)
 {
-	std::string str;
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << value;
-	ss >> str;
 	
 	if (ss.fail())
-	return false;
+	{
+		std::stringstream ss;
+		
+		ss << "Given value '" << value << "' for key '" << key << " cannot be converted to string.";
+		
+		throw std::runtime_error(ss.str());
+	}
 	
-	m_values[key] = str;
-	
-	return true;
+	values[key] = ss.str();
 };
 
 template<typename T>
-bool IniFile::getValue(const std::string& key,T& value)
+void IniFile::getValue(const std::string& key,T& value)
 {
-	if(m_values.find(key) == m_values.end())
+	if(values.find(key) == values.end())
 	{
-		std::cerr << "Requested key ";
-		std::cerr << '"' << key << '"';
-		std::cerr << " not found in IniFile originally loaded from ";
-		std::cerr << '"' << m_filename << '"' << std::endl;
-		return false;
+		std::stringstream ss;
+	
+		ss << "Key \"" << key;
+		ss << "\" not found in file loaded from \"";
+		ss << filename << "\"";
+			
+		throw std::runtime_error(ss.str());
 	}
 		
 	T temp;
 	
 	std::stringstream ss;
-	ss << m_values[key];
+	ss << values[key];
 	
 	ss >> temp;
 	
 	if (ss.fail())
-		return false;
+	{
+		std::stringstream ss;
+	
+		ss << "Key \"" << key;
+		ss << "\" does not match type \"";
+		ss << demangleName(typeid(value).name()) << "\".";
+			
+		throw std::runtime_error(ss.str());
+	}
 		
 	value = temp;
-	return true;
 }
 
 #endif // INIFILE_HPP

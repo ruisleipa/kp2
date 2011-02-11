@@ -68,8 +68,10 @@ void CareerMenu::onConnectionEvent(Connection& connection)
 {
 	std::stringstream ss;
 	
-	ss<<connection.getName()<<std::endl;
-	ss<<connection.getMoney()<<" €";
+	const PlayerInfo& playerInfo = connection.getPlayerInfo();
+	
+	ss<<playerInfo.name<<std::endl;
+	ss<<playerInfo.money<<" €";
 
 	infoLabel.setText(ss.str());
 	infoLabel.autoSize();

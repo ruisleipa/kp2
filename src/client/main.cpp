@@ -125,10 +125,13 @@ void startGame()
 	EventArea eventArea(window, Vector2D(0,0), window.getSize());
 	DrawEvent drawEvent(eventArea);
 	
+	FontFace font(window,"data/fonts/freesans.ttf",window.getSize().getY()*(12.0/480.0));
+	
 	while(1)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		rootContainer.handleEvent(&drawEvent);
+		Color(1,1,1).apply();
 		SDL_GL_SwapBuffers();		
 		connection.processMessages();				
 		events.processEvents();				

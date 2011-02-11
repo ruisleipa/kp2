@@ -12,7 +12,15 @@ void MenuContainer::showOnlyWidget(const std::string& tag)
 	backgroundBack.setVisible(true);
 }
 
-void MenuContainer::onDraw(DrawEvent event)
+void MenuContainer::handleEvent(Event* event)
+{
+	if(dynamic_cast<DrawEvent*>(event))
+		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
+		
+	Container::handleEvent(event);
+}
+
+void MenuContainer::handleDrawEvent(DrawEvent* event)
 {
 	float alpha=backgroundChangeTimer.getSeconds()*10.0;
 	if(alpha > 1.0)

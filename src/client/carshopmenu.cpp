@@ -50,39 +50,49 @@ CarShopMenu::CarShopMenu(Connection& connection):
 
 void CarShopMenu::onConnectionEvent(Connection& connection)
 {
+	const ShopVehicles& shopVehicles = connection.getShopVehicles();
+	
 	carList.clearItems();
 	
-	for(int i=0;i<=connection.getCarshopVehicleMaxId();++i)
+	for(size_t i = 0; i < shopVehicles.getVehicleCount(); ++i)
 	{
-		Vehicle vehicle;
-	
-		if(connection.getCarshopVehicle(i,vehicle))
-		{
-			carList.addItem(vehicle.getName(),i);
-		}
+		ShopVehicle vehicle =  shopVehicles.getVehicle(i);
+		
+		carList.addItem(vehicle.name, i);
 	}	
 }
 
 void CarShopMenu::carlistChange()
 {
-	Vehicle vehicle;
+	const ShopVehicles& shopVehicles = connection.getShopVehicles();
+
+	ShopVehicle vehicle = shopVehicles.getVehicle(carList.getIndex());
 	
-	if(!connection.getCarshopVehicle(carList.getCurrentItemTag(),vehicle))
-	{
-		return;
-	}
-	
-	carName.setText(vehicle.getName());
+	carName.setText(vehicle.name);
 		
-	std::string image="gamedata/vehicles/";
-	image+=vehicle.getImageName();
+	std::string image = "gamedata/vehicleimages/";
+	image += vehicle.imageName;
 	carImage.setTexture(Texture(image));
 	
-	carInfo.setText(vehicle.getGeneralInfoString());
+	std::stringstream ss;
+	
+	ss << vehicle.info << "\n" << "\n";
+	ss << "Vuosimalli: " << vehicle.year << std::endl;
+	ss << "Korin paino: " << vehicle.chassisWeight << std::endl;
+	ss << "Hinta: " << vehicle.price << std::endl;
+	
+	carInfo.setText(ss.str());
 }
 
 void CarShopMenu::buyClick()
 {
-	connection.buyCar(carList.getIndex());
+	const ShopVehicles& shopVehicles = connection.getShopVehicles();
+	
+	if(carList.getCurrentItemTag() != -1)
+	{
+		ShopVehicle vehicle = shopVehicles.getVehicle(carList.getCurrentItemTag());
+	
+		connection.buyVehicle(vehicle.id);
+	}
 }
 

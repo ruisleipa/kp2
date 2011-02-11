@@ -3,19 +3,51 @@ SRC = src/debug/assert.cpp \
 	src/debug/crashmessage.cpp \
 	src/debug/stack.cpp \
 	src/debug/stacktrace.cpp \
-	src/game/cylinderhead.cpp \
-	src/game/engine.cpp \
-	src/game/part.cpp \
-	src/game/player.cpp \
-	src/game/vehicle.cpp \
 	src/net/clientsocket.cpp \
 	src/net/packet.cpp \
 	src/net/serversocket.cpp \
 	src/net/socket.cpp \
 	src/net/socketactivity.cpp \
 	src/net/socketset.cpp \
+	src/protocol/buypart.cpp \
+	src/protocol/buyvehicle.cpp \
+	src/protocol/players.cpp \
+	src/protocol/playerinfo.cpp \
+	src/protocol/playerpart.cpp \
+	src/protocol/playerparts.cpp \
+	src/protocol/playervehicle.cpp \
+	src/protocol/playervehicles.cpp \
+	src/protocol/setname.cpp \
+	src/protocol/shoppart.cpp \
+	src/protocol/shopparts.cpp \
+	src/protocol/shopvehicle.cpp \
+	src/protocol/shopvehicles.cpp \
+	src/server/connection.cpp \
+	src/server/gamestate.cpp \
+	src/server/machining.cpp \
 	src/server/main.cpp \
+	src/server/part.cpp \
+	src/server/partmodel.cpp \
+	src/server/player.cpp \
+	src/server/camshaft.cpp \
+	src/server/charger.cpp \
+	src/server/clutch.cpp \
+	src/server/cooler.cpp \
+	src/server/cylinderhead.cpp \
+	src/server/differential.cpp \
+	src/server/engine.cpp \
+	src/server/exhaustmanifold.cpp \
+	src/server/exhaustpipe.cpp \
+	src/server/fuelintake.cpp \
+	src/server/fuelpump.cpp \
+	src/server/injector.cpp \
+	src/server/intakemanifold.cpp \
+	src/server/tire.cpp \
+	src/server/transmission.cpp \
+	src/server/vehicle.cpp \
+	src/server/vehiclemodel.cpp \
 	src/utils/commandlineparser.cpp \
+	src/utils/demangle.cpp \
 	src/utils/directory.cpp \
 	src/utils/inifile.cpp \
 	src/utils/noncopyable.cpp \

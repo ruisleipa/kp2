@@ -3,9 +3,11 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
 
 std::string convertToString(std::wstring str);
 std::wstring convertToWideString(std::string str);
+std::vector<std::string> tokenize(std::string str,std::string delim);
 
 template <class T>
 inline std::string convertToString(const T& t)

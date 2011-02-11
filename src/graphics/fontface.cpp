@@ -70,7 +70,7 @@ void FontFace::draw(std::wstring str,Vector2D pos)
 			If a glyph doesn't reside on those pages, we display a
 			question mark instead.
 			TODO: Rework the class to use some kind of glyph level
-			caching. Not a top priority however.
+			caching.
 			*/
 			if(page!=0 && page!=32)
 			{
@@ -336,7 +336,7 @@ int FontFace::loadPage(unsigned int pagenum)
 	}
 	
 	fontPages[pagenum].letters=Texture(letters);
-	fontPages[pagenum].letters.setFilter(TRILINEAR);
+	fontPages[pagenum].letters.setFilter(NEAREST);
 	SDL_FreeSurface(letters);	
 
 	return 0;

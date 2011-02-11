@@ -1,15 +1,16 @@
 #ifndef CARLISTMENU_HPP
 #define CARLISTMENU_HPP
 
+#include "playervehiclewidget.hpp"
+
 #include "gui/menu.hpp"
 #include "gui/label.hpp"
 #include "gui/button.hpp"
-#include "gui/image.hpp"
 #include "gui/listbox.hpp"
 #include "gui/rowlayoutcontainer.hpp"
 #include "gui/columnlayoutcontainer.hpp"
 
-#include "connection.hpp"
+class Connection;
 
 class CarListMenu : public Menu
 {
@@ -26,18 +27,13 @@ class CarListMenu : public Menu
 		Connection& connection;
 		
 		ColumnLayoutContainer mainContainer;
-		ColumnLayoutContainer titleContainer;
-		RowLayoutContainer infoContainer;
-	
-		Image carImage;
-		
-		Label carName;
-		Label carInfo;
 		
 		Listbox carList;
 		
-		std::vector<Vehicle> vehicles;
+		RowLayoutContainer infoContainer;
 		
+		PlayerVehicleWidget vehicleInfo;
+
 		Button sellButton;		
 		Button selectButton;				
 };

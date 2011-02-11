@@ -246,7 +246,7 @@ int Socket::readImpl(char* data,int size)
 	if(res==0)
 	{
 		close();
-		return -1;
+		throw ConnectionClosedException();
 	}
 	
 	return res;

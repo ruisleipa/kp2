@@ -10,6 +10,7 @@ class FontLoader
 
 	private:
 		FontFace font;		
+		FontFace smallFont;		
 };
 
 #endif // FONTLOADER_HPP

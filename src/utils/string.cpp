@@ -93,3 +93,27 @@ std::wstring convertToWideString(std::string str)
 
 	return result;
 }
+
+std::vector<std::string> tokenize(std::string str,std::string delim)
+{
+	std::vector<std::string> vector;
+	std::string token;
+	size_t begin,end;
+
+	// find first token char
+	begin=str.find_first_not_of(delim);
+
+	while(begin!=str.npos)
+	{
+		//find first non-token char after token
+		end=str.find_first_of(delim,begin);
+
+		token=str.substr(begin,end-begin);
+		
+		vector.push_back(token);	
+
+		begin=str.find_first_not_of(delim,end);
+	}
+
+	return vector;
+}

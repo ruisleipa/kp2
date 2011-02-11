@@ -3,6 +3,8 @@
 InstallPartsMenu::InstallPartsMenu(Connection& connection):
 	connection(connection)
 {
+	connection.addEventHandler(std::tr1::bind(&InstallPartsMenu::handleConnectionEvent,this));
+	
 	addWidget(container);
 	
 	container.setFactorSize(Vector2D(1,1));
@@ -12,7 +14,8 @@ InstallPartsMenu::InstallPartsMenu(Connection& connection):
 	
 	carContainer.setFluid(true);
 	carContainer.addWidget(carTitleContainer);
-	carContainer.addWidget(carParts);
+	carContainer.addWidget(carPartList);
+	carContainer.showOuterPadding(false);
 	
 	carTitleContainer.setFactorSize(Vector2D(0,0.25));
 	carTitleContainer.showOuterPadding(false);
@@ -23,14 +26,15 @@ InstallPartsMenu::InstallPartsMenu(Connection& connection):
 	
 	carImage.setFluid(true);	
 	
-	carParts.setFluid(true);
+	carPartList.setFluid(true);
 	
 	partContainer.setFluid(true);
-	partContainer.addWidget(parts);
+	partContainer.addWidget(partList);
 	partContainer.addWidget(installButton);
 	partContainer.addWidget(sellButton);
+	partContainer.showOuterPadding(false);
 	
-	parts.setFluid(true);
+	partList.setFluid(true);
 	
 	installButton.setText("Asenna");
 	installButton.autoSize();
@@ -39,21 +43,16 @@ InstallPartsMenu::InstallPartsMenu(Connection& connection):
 	sellButton.autoSize();
 }
 
-void InstallPartsMenu::handleEvent(Event* event)
+void InstallPartsMenu::handleConnectionEvent()
 {
-	Menu::handleEvent(event);
+	partList.clearItems();
 	
-	if(dynamic_cast<ShowEvent*>(event))
-	{
-		Vehicle vehicle;
+	const PlayerParts& parts = connection.getPlayerParts();
 		
-		if(!connection.getPlayerVehicle(0,vehicle))
-			return;
-				
-		carName.setText(vehicle.getName());
-			
-		std::string image="gamedata/vehicles/";
-		image+=vehicle.getImageName();
-		carImage.setTexture(Texture(image));
-	}	
+	for(size_t i = 0; i < parts.getPartCount(); ++i)
+	{
+		PlayerPart part = parts.getPart(i);
+	
+		partList.addItem(part.name, i);
+	}
 }

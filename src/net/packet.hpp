@@ -35,12 +35,13 @@ class Packet
 		void readFromBuffer(std::string& buffer);
 		
 		Packet();
-		
+		Packet(const Packet&);
+				
 		friend std::ostream& operator<<(std::ostream& stream,const Packet& packet);
 
 	private:
-		uint16_t m_type;
-		std::stringstream m_payload;
+		uint16_t type;
+		std::stringstream payload;
 };
 
 #endif // PACKET_HPP

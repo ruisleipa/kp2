@@ -22,7 +22,8 @@ class PartShopMenu : public Menu
 	private:
 		void categoryChangeHandler();
 		void partChange();
-	
+		void buyHandler();
+		
 		Connection& connection;
 	
 		ColumnLayoutContainer container;

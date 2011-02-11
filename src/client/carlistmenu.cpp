@@ -13,11 +13,8 @@ CarListMenu::CarListMenu(Connection& connection):
 {
 	connection.addEventHandler(std::tr1::bind(&CarListMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
 
-	carList.setFont(Font("small"));
 	carList.setChangeHandler(std::tr1::bind(&CarListMenu::carlistChange,this));
 	
-	carInfo.setFont(Font("small"));
-
 	sellButton.setText("Myy auto");
 	sellButton.setClickHandler(std::tr1::bind(&CarListMenu::sellClick,this));
 	sellButton.autoSize();
@@ -35,55 +32,48 @@ CarListMenu::CarListMenu(Connection& connection):
 	carList.setFluid(true);	
 	infoContainer.setFluid(true);	
 	
-	infoContainer.addWidget(titleContainer);
-	infoContainer.addWidget(carInfo);
+	infoContainer.addWidget(vehicleInfo);
 	infoContainer.addWidget(sellButton);
 	infoContainer.addWidget(selectButton);
 	infoContainer.showOuterPadding(false);
 	
-	titleContainer.setFactorSize(Vector2D(0,0.25));
-	carInfo.setFluid(true);	
-		
-	titleContainer.addWidget(carName);
-	titleContainer.addWidget(carImage);
-	titleContainer.showOuterPadding(false);
-	
-	carName.setFluid(true);	
-	carImage.setFluid(true);	
-	
+	vehicleInfo.setFluid(true);
 }
 
 void CarListMenu::onConnectionEvent(Connection& connection)
 {
+	const PlayerVehicles& playerVehicles = connection.getPlayerVehicles();
+	
 	carList.clearItems();
 	
-	for(int i=0;i<=connection.getPlayerVehicleMaxId();++i)
+	for(size_t i = 0; i < playerVehicles.getVehicleCount(); ++i)
 	{
-		Vehicle vehicle;
-	
-		if(connection.getPlayerVehicle(i,vehicle))
-		{
-			carList.addItem(vehicle.getName(),i);
-		}
-	}
+		PlayerVehicle vehicle =  playerVehicles.getVehicle(i);
+		
+		carList.addItem(vehicle.name, i);
+	}	
 }
 
 void CarListMenu::carlistChange()
 {
-	Vehicle vehicle;
+	const PlayerVehicles& playerVehicles = connection.getPlayerVehicles();
+
+	PlayerVehicle vehicle = playerVehicles.getVehicle(carList.getIndex());
 	
-	if(!connection.getPlayerVehicle(carList.getCurrentItemTag(),vehicle))
-	{
-		return;
-	}
-	
-	carName.setText(vehicle.getName());
+	carName.setText(vehicle.name);
 		
-	std::string image="gamedata/vehicles/";
-	image+=vehicle.getImageName();
+	std::string image = "gamedata/vehicleimages/";
+	image += vehicle.imageName;
 	carImage.setTexture(Texture(image));
 	
-	carInfo.setText(vehicle.getGeneralInfoString());
+	std::stringstream ss;
+	
+	ss << vehicle.info << "\n" << "\n";
+	ss << "Vuosimalli: " << vehicle.year << std::endl;
+	ss << "Korin paino: " << vehicle.chassisWeight << std::endl;
+	ss << "Hinta: " << vehicle.price << std::endl;
+	
+	carInfo.setText(ss.str());
 }
 
 void CarListMenu::sellClick()

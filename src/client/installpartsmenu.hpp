@@ -16,28 +16,24 @@ class InstallPartsMenu : public Menu
 	public:
 		InstallPartsMenu(Connection& connection);
 
-		virtual void handleEvent(Event* event);
-		
 	private:
+		void handleConnectionEvent();
+	
 		Connection& connection;
 	
-		ColumnLayoutContainer container;
+		ColumnLayoutContainer maincontainer;
 		
 		RowLayoutContainer carContainer;
 		
-		ColumnLayoutContainer carTitleContainer;
+		RowLayoutContainer carPartContainer;
 		
-		Label carName;		
-		Image carImage;
-		
-		Listbox carParts;
+		Label carPartLabel;		
+		Listbox carPartList;
 		
 		RowLayoutContainer partContainer;
 		
-		Listbox parts;		
-		
-		Button installButton;
-		Button sellButton;
+		Label partLabel;		
+		Listbox partList;
 };
 
 #endif // INSTALLPARTSMENU_HPP

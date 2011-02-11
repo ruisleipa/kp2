@@ -216,12 +216,12 @@ void Window::loadSettings()
 	
 	int width;
 	int height;
+		
+	settings.getValue("width",width);
+	settings.getValue("height",height);
 	
-	if(settings.getValue("width",width) && settings.getValue("height",height))
-	{
-		surfaceSize = Vector2D(width,height);
-	}
-
+	surfaceSize = Vector2D(width,height);
+	
 	settings.getValue("fullscreen",surfaceFullscreen);
 	settings.getValue("vsync",vsyncPreference);
 }

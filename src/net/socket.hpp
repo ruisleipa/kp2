@@ -6,6 +6,11 @@
 
 class SocketSet;
 
+class ConnectionClosedException
+{
+
+};
+
 class Socket
 {
 	public:		

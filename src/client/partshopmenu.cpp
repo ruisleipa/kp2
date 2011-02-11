@@ -5,6 +5,8 @@
 
 #include "utils/string.hpp"
 
+const std::string PART_TYPES[] = {"camshaft", "charger", "clutch", "cooler", "cylinderhead", "differential", "engine", "exhaustmanifold", "exhaustpipe", "fuelintake", "fuelpump", "injector", "intakemanifold", "tire"};
+
 PartShopMenu::PartShopMenu(Connection& connection):
 	connection(connection)
 {
@@ -16,24 +18,24 @@ PartShopMenu::PartShopMenu(Connection& connection):
 	
 	categoryBox.setChangeHandler(std::tr1::bind(&PartShopMenu::categoryChangeHandler,this));
 	categoryBox.setFluid(true);
-	categoryBox.addItem("Lisävarusteet",PART_TYPE_ID_ACCESSORY);
-	categoryBox.addItem("Nokka-akselit",PART_TYPE_ID_CAMSHAFT);
-	categoryBox.addItem("Ahtimet",PART_TYPE_ID_CHARGER);	
-	categoryBox.addItem("Kytkimet",PART_TYPE_ID_CLUTCH);
-	categoryBox.addItem("Jäähdyttimet",PART_TYPE_ID_COOLER);
-	categoryBox.addItem("Kannet",PART_TYPE_ID_CYLINDERHEAD);
-	categoryBox.addItem("Tasauspyörästöt",PART_TYPE_ID_DIFFERENTIAL);	
-	categoryBox.addItem("Moottorit",PART_TYPE_ID_ENGINE);
-	categoryBox.addItem("Pakosarjat",PART_TYPE_ID_EXHAUSTMANIFOLD);
-	categoryBox.addItem("Pakoputkistot",PART_TYPE_ID_EXHAUSTPIPE);
-	categoryBox.addItem("Bensansyöttö",PART_TYPE_ID_FUELINTAKE);	
-	categoryBox.addItem("Bensapumput",PART_TYPE_ID_FUELPUMP);
-	categoryBox.addItem("Ruiskut",PART_TYPE_ID_INJECTOR);
-	categoryBox.addItem("Imusarjat",PART_TYPE_ID_INTAKEMANIFOLD);
-	categoryBox.addItem("Renkaat",PART_TYPE_ID_TIRE);	
-	categoryBox.addItem("Vaihteistot",PART_TYPE_ID_TRANSMISSION);
+	
+	categoryBox.addItem("Nokka-akselit", 0);
+	categoryBox.addItem("Ahtimet", 1);
+	categoryBox.addItem("Kytkimet", 2);
+	categoryBox.addItem("Jäähdyttimet", 3);
+	categoryBox.addItem("Sylinterikannet", 4);
+	categoryBox.addItem("Tasauspyörästöt", 5);
+	categoryBox.addItem("Moottorit", 6);
+	categoryBox.addItem("Pakosarjat", 7);
+	categoryBox.addItem("Pakoputket", 8);
+	categoryBox.addItem("Polttoaineensyöttö", 9);
+	categoryBox.addItem("Polttoainepumput", 10);
+	categoryBox.addItem("Suuttimet", 11);
+	categoryBox.addItem("Imusarjat", 12);
+	categoryBox.addItem("Renkaat", 13);
 	
 	buyButton.setText("Osta");
+	buyButton.setClickHandler(std::tr1::bind(&PartShopMenu::buyHandler,this));
 	buyButton.autoSize();
 	
 	container.setFactorSize(Vector2D(1,1));
@@ -61,6 +63,7 @@ PartShopMenu::PartShopMenu(Connection& connection):
 	partImage.setFill(true);
 	
 	partContainer.addWidget(partBox);	
+	partBox.setChangeHandler(std::tr1::bind(&PartShopMenu::partChange, this));
 	partBox.setFluid(true);
 	
 	partInfoContainer.setFluid(true);
@@ -80,63 +83,43 @@ void PartShopMenu::onResize(Window& window)
 
 void PartShopMenu::categoryChangeHandler()
 {	
-	int partType=categoryBox.getCurrentItemTag();
+	const ShopParts& shopParts = connection.getShopParts();
 	
 	partBox.clearItems();
 	
-	for(int i=0;i<=connection.getPartshopPartMaxId();++i)
+	for(size_t i = 0; i < shopParts.getPartCount(); ++i)
 	{
-		Part part;
-	
-		bool success=false;
-	
-		if(partType==PART_TYPE_ID_ACCESSORY)
-			success=connection.getPartshopPartOfType<Accessory>(i,part);
-		else if(partType==PART_TYPE_ID_CAMSHAFT)
-			success=connection.getPartshopPartOfType<Camshaft>(i,part);
-		else if(partType==PART_TYPE_ID_CHARGER)
-			success=connection.getPartshopPartOfType<Charger>(i,part);
-		else if(partType==PART_TYPE_ID_CLUTCH)
-			success=connection.getPartshopPartOfType<Clutch>(i,part);
-		else if(partType==PART_TYPE_ID_COOLER)
-			success=connection.getPartshopPartOfType<Cooler>(i,part);
-		else if(partType==PART_TYPE_ID_CYLINDERHEAD)
-			success=connection.getPartshopPartOfType<CylinderHead>(i,part);
-		else if(partType==PART_TYPE_ID_DIFFERENTIAL)
-			success=connection.getPartshopPartOfType<Differential>(i,part);
-		else if(partType==PART_TYPE_ID_ENGINE)
-			success=connection.getPartshopPartOfType<Engine>(i,part);
-		else if(partType==PART_TYPE_ID_EXHAUSTMANIFOLD)
-			success=connection.getPartshopPartOfType<ExhaustManifold>(i,part);
-		else if(partType==PART_TYPE_ID_EXHAUSTPIPE)
-			success=connection.getPartshopPartOfType<ExhaustPipe>(i,part);
-		else if(partType==PART_TYPE_ID_FUELINTAKE)
-			success=connection.getPartshopPartOfType<FuelIntake>(i,part);
-		else if(partType==PART_TYPE_ID_FUELPUMP)
-			success=connection.getPartshopPartOfType<FuelPump>(i,part);
-		else if(partType==PART_TYPE_ID_INJECTOR)
-			success=connection.getPartshopPartOfType<Injector>(i,part);
-		else if(partType==PART_TYPE_ID_INTAKEMANIFOLD)
-			success=connection.getPartshopPartOfType<IntakeManifold>(i,part);
-		else if(partType==PART_TYPE_ID_TIRE)
-			success=connection.getPartshopPartOfType<Tire>(i,part);
-		else if(partType==PART_TYPE_ID_TRANSMISSION)
-			success=connection.getPartshopPartOfType<Transmission>(i,part);
-	
-		if(!success)
-			continue;
-	
-		partBox.addItem(part.getName(),i);
+		ShopPart part = shopParts.getPart(i);
+		
+		if(PART_TYPES[categoryBox.getCurrentItemTag()].compare(part.type) == 0)
+		{
+			partBox.addItem(part.name, i);
+		}
 	}
 }
 
 void PartShopMenu::partChange()
 {
-	int partId=partBox.getCurrentItemTag();
+	const ShopParts& shopParts = connection.getShopParts();
+
+	ShopPart part = shopParts.getPart(partBox.getCurrentItemTag());
 	
-	Part part;
+	std::stringstream ss;
 	
-	connection.getPartshopPart(partId,part);
+	ss << part.name << "\n" << "\n";
+	ss << "Paino: " << part.weight << " kg" << std::endl;
+	ss << "Hinta: " << part.price << " €" << std::endl;
 	
-	partInfo.setText(part.getInfo());
+	partInfo.setText(ss.str());
+}
+
+void PartShopMenu::buyHandler()
+{
+	const ShopParts& shopParts = connection.getShopParts();
+
+	ShopPart part = shopParts.getPart(partBox.getCurrentItemTag());
+	
+	shopParts.getPart(partBox.getCurrentItemTag());
+	
+	connection.buyPart(part.id);
 }

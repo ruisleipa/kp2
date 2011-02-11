@@ -12,14 +12,14 @@
 class Font
 {
 	public:
-		void draw(std::wstring str,Vector2D pos);
-		void draw(std::wstring str,Vector2D pos,Color color);
-		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size);
-		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size,Color color);
+		void draw(std::wstring str, Vector2D pos);
+		void draw(std::wstring str, Vector2D pos, Color color);
+		void drawWrapped(std::wstring str, Vector2D pos, Vector2D size);
+		void drawWrapped(std::wstring str, Vector2D pos, Vector2D size, Color color);
 		Vector2D getTextSize(std::wstring str);
 		Color getColor();
 		
-		static void setFontType(std::string name,FontFace* font_face,float size,Color color);
+		static void setFontType(std::string name, FontFace& fontFace, Color color);
 		
 		Font(std::string type);
 		Font();
@@ -28,14 +28,13 @@ class Font
 		class FontType
 		{
 			public:
-				FontFace* m_font_face;
-				float m_size;
-				Color m_color;
+				FontFace* fontFace;
+				Color color;
 		};
 		
-		FontType* m_font_type;
+		FontType* fontType;
 		
-		static std::map<std::string,FontType> m_font_types;
+		static std::map<std::string, FontType> fontTypes;
 };
 
 #endif

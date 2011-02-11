@@ -36,8 +36,6 @@ class CarShopMenu : public Menu
 		Label carName;
 		Label carInfo;
 		
-		std::vector<Vehicle> vehicles;
-		
 		Listbox carList;		
 		Button buyButton;				
 };

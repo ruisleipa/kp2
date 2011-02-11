@@ -10,11 +10,14 @@
 class MenuContainer : public Container
 {
 	public:
+		virtual void handleEvent(Event* event);
+	
 		virtual void showOnlyWidget(const std::string& tag);
 
-		virtual void onDraw(DrawEvent event);
-		
 		MenuContainer(TextureCollection& backgroundtextures);
+	
+	protected:
+		void handleDrawEvent(DrawEvent* event);
 	
 	private:
 		void changeBackground();

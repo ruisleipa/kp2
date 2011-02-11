@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <limits>
+#include <stdexcept>
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -15,7 +17,7 @@ const Packet& Packet::operator<<(uint16_t value)
 {
 	uint16_t v=htons(value);
 
-	m_payload.write((char*)&v,sizeof(v));
+	payload.write((char*)&v,sizeof(v));
 	
 	return *this;
 }
@@ -24,7 +26,7 @@ const Packet& Packet::operator<<(uint32_t value)
 {
 	uint32_t v=htonl(value);
 
-	m_payload.write((char*)&v,sizeof(v));
+	payload.write((char*)&v,sizeof(v));
 	
 	return *this;
 }
@@ -33,7 +35,7 @@ const Packet& Packet::operator<<(int16_t value)
 {
 	int16_t v=htons(value);
 
-	m_payload.write((char*)&v,sizeof(v));
+	payload.write((char*)&v,sizeof(v));
 	
 	return *this;
 }
@@ -42,7 +44,7 @@ const Packet& Packet::operator<<(int32_t value)
 {
 	int32_t v=htonl(value);
 
-	m_payload.write((char*)&v,sizeof(v));
+	payload.write((char*)&v,sizeof(v));
 	
 	return *this;
 }
@@ -63,56 +65,59 @@ const Packet& Packet::operator<<(float value)
 
 const Packet& Packet::operator<<(const std::string& value)
 {
-	m_payload<<value;
-	m_payload.put(0);
+	if(value.size() > std::numeric_limits<uint16_t>::max())
+		std::runtime_error("Too long string for sending");
+
+	operator<<(uint16_t(value.size()));
+	payload.write(value.c_str(), value.size());
 	
 	return *this;
 }
 
 const Packet& Packet::operator>>(uint16_t& value)
 {
-	m_payload.read((char*)&value,sizeof(value));
+	payload.read((char*)&value, sizeof(value));
 	
-	if(m_payload.eof())
+	if(payload.eof())
 		throw EndOfDataException();
 	
-	value=ntohs(value);
+	value = ntohs(value);
 	
 	return *this;
 }
 
 const Packet& Packet::operator>>(uint32_t& value)
 {
-	m_payload.read((char*)&value,sizeof(value));
+	payload.read((char*)&value, sizeof(value));
 	
-	if(m_payload.eof())
+	if(payload.eof())
 		throw EndOfDataException();
 	
-	value=ntohl(value);
+	value = ntohl(value);
 	
 	return *this;
 }
 
 const Packet& Packet::operator>>(int16_t& value)
 {
-	m_payload.read((char*)&value,sizeof(value));
+	payload.read((char*)&value, sizeof(value));
 	
-	if(m_payload.eof())
+	if(payload.eof())
 		throw EndOfDataException();
 	
-	value=ntohs(value);
+	value = ntohs(value);
 	
 	return *this;
 }
 
 const Packet& Packet::operator>>(int32_t& value)
 {
-	m_payload.read((char*)&value,sizeof(value));
+	payload.read((char*)&value, sizeof(value));
 	
-	if(m_payload.eof())
+	if(payload.eof())
 		throw EndOfDataException();
 	
-	value=ntohl(value);
+	value = ntohl(value);
 	
 	return *this;
 }
@@ -125,18 +130,35 @@ const Packet& Packet::operator>>(float& value)
 	operator>>(whole);
 	operator>>(fract);
 	
-	//FIXME: error with negative numbers
-	value=float(whole)+float(fract)/1000000000.0;	
+	value = float(abs(whole)) + float(fract) / 1000000000.0;
+	
+	if(whole < 1)
+		value *= -1.0;
 	
 	return *this;
 }
 
 const Packet& Packet::operator>>(std::string& value)
 {
-	std::getline(m_payload,value,'\0');
+	value = "";
+
+	uint16_t size;
+	
+	operator>>(size);
+	
+	while(size > 0)
+	{
+		char c;
 		
-	if(m_payload.eof())
-		throw EndOfDataException();
+		payload.read(&c, 1);
+		
+		if(payload.eof())
+			throw EndOfDataException();
+	
+		value.push_back(c);
+	
+		size--;
+	}
 	
 	return *this;
 }
@@ -144,29 +166,26 @@ const Packet& Packet::operator>>(std::string& value)
 std::string Packet::getString() const
 {
 	std::string str;
-	std::string payload=m_payload.str();
+	std::string payload = this->payload.str();
 	
-	uint16_t size=htons(payload.size()+4);
-	uint16_t type=htons(m_type);
+	uint16_t size = htons(payload.size() + 4);
+	uint16_t type = htons(this->type);
 	
-	str.append((char*)&size,sizeof(size));
-	str.append((char*)&type,sizeof(type));
+	str.append((char*)&size, sizeof(size));
+	str.append((char*)&type, sizeof(type));
 	str.append(payload);
 	
-	if(str.size()>500)
-		std::cerr<<"FIXME: Packet size over 500, this may cause buffer overflows. Bad thing."<<std::endl;
-
 	return str;
 }
 
 uint16_t Packet::getType() const
 {
-	return m_type;
+	return type;
 }
 
 void Packet::setType(uint16_t type)
 {
-	m_type=type;
+	this->type = type;
 }
 
 void Packet::readFromBuffer(std::string& buffer)
@@ -177,8 +196,8 @@ void Packet::readFromBuffer(std::string& buffer)
 	uint16_t length;
 	uint16_t type;
 		
-	buffer.copy((char*)&length,sizeof(length));
-	buffer.copy((char*)&type,sizeof(type),2);	
+	buffer.copy((char*)&length, sizeof(length));
+	buffer.copy((char*)&type, sizeof(type),2);	
 	
 	length=ntohs(length);
 	type=ntohs(type);
@@ -186,26 +205,33 @@ void Packet::readFromBuffer(std::string& buffer)
 	if(buffer.size() < length)
 		throw EndOfDataException();
 		
-	m_type=type;
-	m_payload.str(std::string(buffer,4,length-4));	
-	buffer.erase(0,length);	
+	this->type = type;
+	this->payload.str(std::string(buffer, 4, length-4));	
+	buffer.erase(0, length);	
 }
 
 Packet::Packet():
-	m_type(0),
-	m_payload("")
+	type(0),
+	payload("")
 {
 
+}
+
+Packet::Packet(const Packet& packet)
+{
+	type = packet.type;
+	payload.str(packet.payload.str());
+	payload.seekp(packet.payload.str().size());
 }
 
 std::ostream& operator<<(std::ostream& stream,const Packet& packet)
 {
-	std::string str=packet.m_payload.str();
+	std::string str=packet.payload.str();
 
 	stream << "---Packet---" << std::endl;
-	stream << "Size: " << str.size() << std::endl;
-	stream << "Type: " << packet.m_type << std::endl;
-	stream << "Content: " << std::endl;
+	stream << "Type: " << packet.type << std::endl;
+	stream << "Payload size: " << str.size() << std::endl;
+	stream << "Payload: " << std::endl;
 	
 	int hex_i=0;
 	int char_i=0;
@@ -216,10 +242,14 @@ std::ostream& operator<<(std::ostream& stream,const Packet& packet)
 	{
 		int i=0;
 	
-		while(i < bytes_per_row && hex_i < str.size())
+		while(i < bytes_per_row)
 		{
 			stream << std::setw(2) << std::setfill('0') << std::hex;
-			stream << (unsigned int)((unsigned char)(str[hex_i])) << " ";
+			
+			if(hex_i < str.size())
+				stream << (unsigned int)((unsigned char)(str[hex_i])) << " ";
+			else
+				stream << "  " << " ";
 			
 			hex_i++;
 			i++;
@@ -227,17 +257,20 @@ std::ostream& operator<<(std::ostream& stream,const Packet& packet)
 		
 		i=0;
 		
-		while(i < bytes_per_row && char_i < str.size())
+		while(i < bytes_per_row)
 		{
-			if(isprint(str[char_i]))
+			if(char_i < str.size())
 			{
-				stream << str[char_i];
+				if(isprint(str[char_i]))
+					stream << str[char_i];
+				else
+					stream << ".";
 			}
 			else
 			{
-				stream << ".";
+				stream << " ";
 			}
-
+			
 			char_i++;
 			i++;
 		}
