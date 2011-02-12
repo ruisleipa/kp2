@@ -5,6 +5,9 @@
 
 class Packet;
 
+namespace Protocol
+{
+
 class SetName
 {
 	public:
@@ -12,6 +15,8 @@ class SetName
 
 		friend Packet& operator<<(Packet& packet,const SetName& setName);
 		friend Packet& operator>>(Packet& packet,SetName& setName);
+
+};
 
 };
 

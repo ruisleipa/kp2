@@ -42,13 +42,13 @@ CarListMenu::CarListMenu(Connection& connection):
 
 void CarListMenu::onConnectionEvent(Connection& connection)
 {
-	const PlayerVehicles& playerVehicles = connection.getPlayerVehicles();
+	const Protocol::PlayerVehicles& playerVehicles = connection.getPlayerVehicles();
 	
 	carList.clearItems();
 	
-	for(size_t i = 0; i < playerVehicles.getVehicleCount(); ++i)
+	for(size_t i = 0; i < playerVehicles.getItemCount(); ++i)
 	{
-		PlayerVehicle vehicle =  playerVehicles.getVehicle(i);
+		Protocol::Vehicle vehicle = playerVehicles.getItem(i);
 		
 		carList.addItem(vehicle.name, i);
 	}	

@@ -83,13 +83,13 @@ void PartShopMenu::onResize(Window& window)
 
 void PartShopMenu::categoryChangeHandler()
 {	
-	const ShopParts& shopParts = connection.getShopParts();
+	const Protocol::ShopParts& shopParts = connection.getShopParts();
 	
 	partBox.clearItems();
 	
-	for(size_t i = 0; i < shopParts.getPartCount(); ++i)
+	for(size_t i = 0; i < shopParts.getItemCount(); ++i)
 	{
-		ShopPart part = shopParts.getPart(i);
+		Protocol::ShopPart part = shopParts.getItem(i);
 		
 		if(PART_TYPES[categoryBox.getCurrentItemTag()].compare(part.type) == 0)
 		{
@@ -100,9 +100,9 @@ void PartShopMenu::categoryChangeHandler()
 
 void PartShopMenu::partChange()
 {
-	const ShopParts& shopParts = connection.getShopParts();
+	const Protocol::ShopParts& shopParts = connection.getShopParts();
 
-	ShopPart part = shopParts.getPart(partBox.getCurrentItemTag());
+	Protocol::ShopPart part = shopParts.getItem(partBox.getCurrentItemTag());
 	
 	std::stringstream ss;
 	
@@ -115,11 +115,11 @@ void PartShopMenu::partChange()
 
 void PartShopMenu::buyHandler()
 {
-	const ShopParts& shopParts = connection.getShopParts();
+	const Protocol::ShopParts& shopParts = connection.getShopParts();
 
-	ShopPart part = shopParts.getPart(partBox.getCurrentItemTag());
+	Protocol::ShopPart part = shopParts.getItem(partBox.getCurrentItemTag());
 	
-	shopParts.getPart(partBox.getCurrentItemTag());
+	shopParts.getItem(partBox.getCurrentItemTag());
 	
 	connection.buyPart(part.id);
 }

@@ -9,11 +9,11 @@
 #include "protocol/buypart.hpp"
 #include "protocol/buyvehicle.hpp"
 #include "protocol/playerinfo.hpp"
-#include "protocol/players.hpp"
-#include "protocol/playervehicles.hpp"
-#include "protocol/playerparts.hpp"
-#include "protocol/shopvehicles.hpp"
-#include "protocol/shopparts.hpp"
+#include "protocol/shopvehicle.hpp"
+#include "protocol/shoppart.hpp"
+#include "protocol/collection.hpp"
+#include "protocol/vehicle.hpp"
+#include "protocol/part.hpp"
 
 #include <sstream>
 #include <algorithm>
@@ -51,9 +51,9 @@ void Connection::processPackets(ClientSocket& socket)
 		{			
 			uint16_t type = packet.getType();
 			
-			if(type == COMMAND_SET_NAME)
+			if(type == Protocol::COMMAND_SET_NAME)
 			{
-				SetName setName;
+				Protocol::SetName setName;
 
 				packet >> setName;
 				
@@ -61,9 +61,9 @@ void Connection::processPackets(ClientSocket& socket)
 								
 				sendPlayerInfo();
 			}
-			else if(type == COMMAND_BUY_VEHICLE)
+			else if(type == Protocol::COMMAND_BUY_VEHICLE)
 			{
-				BuyVehicle buyVehicle;
+				Protocol::BuyVehicle buyVehicle;
 
 				packet >> buyVehicle;
 				
@@ -72,9 +72,9 @@ void Connection::processPackets(ClientSocket& socket)
 				sendPlayerInfo();
 				sendPlayerVehicles();				
 			}
-			else if(type == COMMAND_BUY_PART)
+			else if(type == Protocol::COMMAND_BUY_PART)
 			{
-				BuyPart buyPart;
+				Protocol::BuyPart buyPart;
 
 				packet >> buyPart;
 				
@@ -110,9 +110,9 @@ void Connection::sendPlayerInfo()
 {
 	Packet packet;
 	
-	packet.setType(DATA_PLAYER_INFO);
+	packet.setType(Protocol::DATA_PLAYER_INFO);
 	
-	PlayerInfo playerInfo;
+	Protocol::PlayerInfo playerInfo;
 		
 	Player& player = gameState.getPlayer(playerId);
 	
@@ -129,16 +129,16 @@ void Connection::sendPlayers()
 {
 	Packet packet;
 	
-	packet.setType(DATA_PLAYERS);
+	packet.setType(Protocol::DATA_PLAYERS);
 	
-	Players players;
+	Protocol::Collection<Protocol::PlayerInfo> playerCollection;
 	
 	std::vector<int> playerIds = gameState.getPlayerIds();
 	std::vector<int>::iterator i;
 	
 	for(i = playerIds.begin(); i != playerIds.end(); ++i)
 	{
-		PlayerInfo playerInfo;
+		Protocol::PlayerInfo playerInfo;
 			
 		const Player& player = gameState.getPlayer((*i));
 		
@@ -151,10 +151,10 @@ void Connection::sendPlayers()
 		*/
 		playerInfo.money = 0;
 		
-		players.addPlayer(playerInfo);
+		playerCollection.addItem(playerInfo);
 	}
 		
-	packet << players;
+	packet << playerCollection;
 	
 	sendQueue.push(packet);	
 }
@@ -163,16 +163,16 @@ void Connection::sendShopVehicles()
 {
 	Packet packet;
 	
-	packet.setType(DATA_SHOP_VEHICLES);
+	packet.setType(Protocol::DATA_SHOP_VEHICLES);
 	
-	ShopVehicles shopVehicles;
+	Protocol::Collection<Protocol::ShopVehicle> shopVehiclesCollection;
 	
 	std::vector<std::string> vehicleModelIds = gameState.getVehicleModelIds();
 	std::vector<std::string>::iterator i;
 	
 	for(i = vehicleModelIds.begin(); i != vehicleModelIds.end(); ++i)
 	{
-		ShopVehicle shopVehicle;
+		Protocol::ShopVehicle shopVehicle;
 			
 		const VehicleModel& vehicleModel = gameState.getVehicleModel((*i));
 		
@@ -184,10 +184,10 @@ void Connection::sendShopVehicles()
 		shopVehicle.chassisWeight = vehicleModel.getChassisWeight();
 		shopVehicle.price = vehicleModel.getPrice();
 		
-		shopVehicles.addVehicle(shopVehicle);
+		shopVehiclesCollection.addItem(shopVehicle);
 	}
 		
-	packet << shopVehicles;
+	packet << shopVehiclesCollection;
 	
 	sendQueue.push(packet);	
 }
@@ -196,16 +196,16 @@ void Connection::sendShopParts()
 {
 	Packet packet;
 	
-	packet.setType(DATA_SHOP_PARTS);
+	packet.setType(Protocol::DATA_SHOP_PARTS);
 	
-	ShopParts shopParts;
+	Protocol::Collection<Protocol::ShopPart> shopPartsCollection;
 	
 	std::vector<std::string> PartModelIds = gameState.getPartModelIds();
 	std::vector<std::string>::iterator i;
 	
 	for(i = PartModelIds.begin(); i != PartModelIds.end(); ++i)
 	{
-		ShopPart shopPart;
+		Protocol::ShopPart shopPart;
 			
 		const PartModel& PartModel = gameState.getPartModel((*i));
 		
@@ -215,10 +215,10 @@ void Connection::sendShopParts()
 		shopPart.price = PartModel.getPrice();
 		shopPart.weight = PartModel.getWeight();
 				
-		shopParts.addPart(shopPart);
+		shopPartsCollection.addItem(shopPart);
 	}
 		
-	packet << shopParts;
+	packet << shopPartsCollection;
 	
 	sendQueue.push(packet);	
 }
@@ -227,15 +227,15 @@ void Connection::sendPlayerVehicles()
 {
 	Packet packet;
 	
-	packet.setType(DATA_PLAYER_VEHICLES);
+	packet.setType(Protocol::DATA_PLAYER_VEHICLES);
 	
-	PlayerVehicles playerVehicles;
+	Protocol::Collection<Protocol::Vehicle> playerVehicleCollection;
 	
 	Player& player = gameState.getPlayer(playerId);
 	
 	for(int i = 0; i < player.getVehicleCount(); ++i)
 	{
-		PlayerVehicle playerVehicle;
+		Protocol::Vehicle playerVehicle;
 			
 		const Vehicle& vehicle = player.getVehicle(i);
 		
@@ -247,10 +247,10 @@ void Connection::sendPlayerVehicles()
 		playerVehicle.chassisWeight = vehicle.getModel().getChassisWeight();
 		playerVehicle.price = vehicle.getModel().getPrice();
 		
-		playerVehicles.addVehicle(playerVehicle);
+		playerVehicleCollection.addItem(playerVehicle);
 	}
 		
-	packet << playerVehicles;
+	packet << playerVehicleCollection;
 	
 	sendQueue.push(packet);	
 }
@@ -259,15 +259,15 @@ void Connection::sendPlayerParts()
 {
 	Packet packet;
 	
-	packet.setType(DATA_PLAYER_PARTS);
+	packet.setType(Protocol::DATA_PLAYER_PARTS);
 	
-	PlayerParts playerParts;
+	Protocol::Collection<Protocol::Part> playerPartCollection;
 	
 	Player& player = gameState.getPlayer(playerId);
 	
 	for(int i = 0; i < player.getPartCount(); ++i)
 	{
-		PlayerPart playerPart;
+		Protocol::Part playerPart;
 			
 		const Part& Part = player.getPart(i);
 		
@@ -278,10 +278,10 @@ void Connection::sendPlayerParts()
 		playerPart.price = Part.getPrice();
 		playerPart.weight = Part.getWeight();
 
-		playerParts.addPart(playerPart);
+		playerPartCollection.addItem(playerPart);
 	}
 		
-	packet << playerParts;
+	packet << playerPartCollection;
 	
 	sendQueue.push(packet);
 }

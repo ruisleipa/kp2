@@ -3,6 +3,22 @@
 
 #include <stdint.h>
 
+#include "protocol/collection.hpp"
+#include "protocol/playerinfo.hpp"
+#include "protocol/shopvehicle.hpp"
+#include "protocol/shoppart.hpp"
+#include "protocol/vehicle.hpp"
+#include "protocol/part.hpp"
+
+namespace Protocol
+{
+
+typedef Protocol::Collection<Protocol::PlayerInfo> Players;
+typedef Protocol::Collection<Protocol::ShopVehicle> ShopVehicles;
+typedef Protocol::Collection<Protocol::ShopPart> ShopParts;
+typedef Protocol::Collection<Protocol::Vehicle> PlayerVehicles;
+typedef Protocol::Collection<Protocol::Part> PlayerParts;
+
 const uint16_t DATA_PLAYER_INFO = 0;
 const uint16_t DATA_PLAYERS = 1;
 
@@ -22,6 +38,7 @@ const uint16_t COMMAND_ADD_MACHINING = 3;
 const uint16_t COMMAND_INSTALL_PART = 4;
 const uint16_t COMMAND_UNINSTALL_PART = 5;
 
+};
 
 #endif // PROTOCOL_HPP
 

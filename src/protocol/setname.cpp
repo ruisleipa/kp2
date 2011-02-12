@@ -2,6 +2,9 @@
 
 #include "net/packet.hpp"
 
+namespace Protocol
+{
+
 Packet& operator<<(Packet& packet,const SetName& setName)
 {
 	packet << setName.name;
@@ -15,3 +18,5 @@ Packet& operator>>(Packet& packet,SetName& setName)
 	
 	return packet;
 }
+
+};

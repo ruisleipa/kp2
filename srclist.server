@@ -11,17 +11,13 @@ SRC = src/debug/assert.cpp \
 	src/net/socketset.cpp \
 	src/protocol/buypart.cpp \
 	src/protocol/buyvehicle.cpp \
-	src/protocol/players.cpp \
+	src/protocol/part.cpp \
 	src/protocol/playerinfo.cpp \
-	src/protocol/playerpart.cpp \
-	src/protocol/playerparts.cpp \
-	src/protocol/playervehicle.cpp \
-	src/protocol/playervehicles.cpp \
+	src/protocol/collection.cpp \
 	src/protocol/setname.cpp \
 	src/protocol/shoppart.cpp \
-	src/protocol/shopparts.cpp \
 	src/protocol/shopvehicle.cpp \
-	src/protocol/shopvehicles.cpp \
+	src/protocol/vehicle.cpp \
 	src/server/connection.cpp \
 	src/server/gamestate.cpp \
 	src/server/machining.cpp \

@@ -2,6 +2,9 @@
 
 #include "net/packet.hpp"
 
+namespace Protocol
+{
+
 Packet& operator<<(Packet& packet,const ShopPart& shopPart)
 {
 	packet << shopPart.id;
@@ -23,3 +26,5 @@ Packet& operator>>(Packet& packet,ShopPart& shopPart)
 	
 	return packet;
 }
+
+};

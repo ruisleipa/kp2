@@ -68,7 +68,7 @@ void CareerMenu::onConnectionEvent(Connection& connection)
 {
 	std::stringstream ss;
 	
-	const PlayerInfo& playerInfo = connection.getPlayerInfo();
+	const Protocol::PlayerInfo& playerInfo = connection.getPlayerInfo();
 	
 	ss<<playerInfo.name<<std::endl;
 	ss<<playerInfo.money<<" €";

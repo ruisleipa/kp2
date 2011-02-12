@@ -1,10 +1,13 @@
-#ifndef SHOPPART_HPP
-#define SHOPPART_HPP
+#ifndef PROTOCOL_SHOPPART_HPP
+#define PROTOCOL_SHOPPART_HPP
 
 #include <string>
 #include <stdint.h>
 
 class Packet;
+
+namespace Protocol
+{
 
 class ShopPart
 {
@@ -19,5 +22,7 @@ class ShopPart
 		friend Packet& operator>>(Packet& packet,ShopPart& shopPart);
 };
 
-#endif // SHOPPART_HPP
+};
+
+#endif
 

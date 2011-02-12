@@ -4,6 +4,9 @@
 
 #include "net/packet.hpp"
 
+namespace Protocol
+{
+
 Packet& operator<<(Packet& packet,const PlayerInfo& playerInfo)
 {
 	packet << playerInfo.playerId;
@@ -21,3 +24,5 @@ Packet& operator>>(Packet& packet,PlayerInfo& playerInfo)
 		
 	return packet;
 }
+
+};

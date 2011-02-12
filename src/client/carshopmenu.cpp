@@ -50,13 +50,13 @@ CarShopMenu::CarShopMenu(Connection& connection):
 
 void CarShopMenu::onConnectionEvent(Connection& connection)
 {
-	const ShopVehicles& shopVehicles = connection.getShopVehicles();
+	const Protocol::ShopVehicles& shopVehicles = connection.getShopVehicles();
 	
 	carList.clearItems();
 	
-	for(size_t i = 0; i < shopVehicles.getVehicleCount(); ++i)
+	for(size_t i = 0; i < shopVehicles.getItemCount(); ++i)
 	{
-		ShopVehicle vehicle =  shopVehicles.getVehicle(i);
+		Protocol::ShopVehicle vehicle =  shopVehicles.getItem(i);
 		
 		carList.addItem(vehicle.name, i);
 	}	
@@ -64,9 +64,9 @@ void CarShopMenu::onConnectionEvent(Connection& connection)
 
 void CarShopMenu::carlistChange()
 {
-	const ShopVehicles& shopVehicles = connection.getShopVehicles();
+	const Protocol::ShopVehicles& shopVehicles = connection.getShopVehicles();
 
-	ShopVehicle vehicle = shopVehicles.getVehicle(carList.getIndex());
+	Protocol::ShopVehicle vehicle = shopVehicles.getItem(carList.getIndex());
 	
 	carName.setText(vehicle.name);
 		
@@ -86,11 +86,11 @@ void CarShopMenu::carlistChange()
 
 void CarShopMenu::buyClick()
 {
-	const ShopVehicles& shopVehicles = connection.getShopVehicles();
+	const Protocol::ShopVehicles& shopVehicles = connection.getShopVehicles();
 	
 	if(carList.getCurrentItemTag() != -1)
 	{
-		ShopVehicle vehicle = shopVehicles.getVehicle(carList.getCurrentItemTag());
+		Protocol::ShopVehicle vehicle = shopVehicles.getItem(carList.getCurrentItemTag());
 	
 		connection.buyVehicle(vehicle.id);
 	}

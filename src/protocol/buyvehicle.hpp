@@ -5,6 +5,9 @@
 
 class Packet;
 
+namespace Protocol
+{
+
 class BuyVehicle
 {
 	public:
@@ -12,6 +15,8 @@ class BuyVehicle
 
 		friend Packet& operator<<(Packet& packet,const BuyVehicle& buyVehicle);
 		friend Packet& operator>>(Packet& packet,BuyVehicle& buyVehicle);
+
+};
 
 };
 

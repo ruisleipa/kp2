@@ -66,27 +66,27 @@ void Connection::processMessages()
 		
 			switch(message.getType())
 			{
-				case DATA_PLAYER_INFO:
+				case Protocol::DATA_PLAYER_INFO:
 					message >> playerInfo;
 					break;
 				
-				case DATA_PLAYERS:
+				case Protocol::DATA_PLAYERS:
 					message >> players;
 					break;
 					
-				case DATA_SHOP_VEHICLES:
+				case Protocol::DATA_SHOP_VEHICLES:
 					message >> shopVehicles;
 					break;
 					
-				case DATA_SHOP_PARTS:
+				case Protocol::DATA_SHOP_PARTS:
 					message >> shopParts;
 					break;
 					
-				case DATA_PLAYER_VEHICLES:
+				case Protocol::DATA_PLAYER_VEHICLES:
 					message >> playerVehicles;
 					break;
 					
-				case DATA_PLAYER_PARTS:
+				case Protocol::DATA_PLAYER_PARTS:
 					message >> playerParts;
 					break;
 			}
@@ -108,32 +108,32 @@ void Connection::processMessages()
 	}
 }
 
-const PlayerInfo& Connection::getPlayerInfo()
+const Protocol::PlayerInfo& Connection::getPlayerInfo()
 {
 	return playerInfo;
 }
 
-const Players& Connection::getPlayers()
+const Protocol::Players& Connection::getPlayers()
 {
 	return players;
 }
 
-const ShopVehicles& Connection::getShopVehicles()
+const Protocol::ShopVehicles& Connection::getShopVehicles()
 {
 	return shopVehicles;
 }
 
-const ShopParts& Connection::getShopParts()
+const Protocol::ShopParts& Connection::getShopParts()
 {
 	return shopParts;
 }
 
-const PlayerVehicles& Connection::getPlayerVehicles()
+const Protocol::PlayerVehicles& Connection::getPlayerVehicles()
 {
 	return playerVehicles;
 }
 
-const PlayerParts& Connection::getPlayerParts()
+const Protocol::PlayerParts& Connection::getPlayerParts()
 {
 	return playerParts;
 }
@@ -142,7 +142,7 @@ void Connection::setName(const std::string& name)
 {
 	Packet packet;
 	
-	packet.setType(COMMAND_SET_NAME);
+	packet.setType(Protocol::COMMAND_SET_NAME);
 	
 	SetName setName;
 	setName.name = name;
@@ -156,7 +156,7 @@ void Connection::buyVehicle(const std::string& id)
 {
 	Packet packet;
 	
-	packet.setType(COMMAND_BUY_VEHICLE);
+	packet.setType(Protocol::COMMAND_BUY_VEHICLE);
 	
 	BuyVehicle buyVehicle;
 	buyVehicle.id = id;
@@ -170,7 +170,7 @@ void Connection::buyPart(const std::string& id)
 {
 	Packet packet;
 	
-	packet.setType(COMMAND_BUY_PART);
+	packet.setType(Protocol::COMMAND_BUY_PART);
 	
 	BuyPart buyPart;
 	buyPart.id = id;

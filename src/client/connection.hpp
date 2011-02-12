@@ -7,12 +7,7 @@
 #include <tr1/memory>
 #include <tr1/functional>
 
-#include "protocol/playerinfo.hpp"
-#include "protocol/players.hpp"
-#include "protocol/shopvehicles.hpp"
-#include "protocol/shopparts.hpp"
-#include "protocol/playervehicles.hpp"
-#include "protocol/playerparts.hpp"
+#include "protocol/protocol.hpp"
 #include "net/clientsocket.hpp"
 
 class Packet;
@@ -31,12 +26,12 @@ class Connection
 		
 		Connection();
 		
-		const PlayerInfo& getPlayerInfo();
-		const Players& getPlayers();
-		const ShopVehicles& getShopVehicles();
-		const ShopParts& getShopParts();
-		const PlayerVehicles& getPlayerVehicles();
-		const PlayerParts& getPlayerParts();
+		const Protocol::PlayerInfo& getPlayerInfo();
+		const Protocol::Players& getPlayers();
+		const Protocol::ShopVehicles& getShopVehicles();
+		const Protocol::ShopParts& getShopParts();
+		const Protocol::PlayerVehicles& getPlayerVehicles();
+		const Protocol::PlayerParts& getPlayerParts();
 		
 		void setName(const std::string& name);
 		
@@ -59,12 +54,12 @@ class Connection
 		std::string sendBuffer;						
 		char scrapBuffer[BUFFERSIZE];
 		
-		PlayerInfo playerInfo;
-		Players players;
-		ShopVehicles shopVehicles;
-		ShopParts shopParts;
-		PlayerVehicles playerVehicles;
-		PlayerParts playerParts;
+		Protocol::PlayerInfo playerInfo;
+		Protocol::Players players;
+		Protocol::ShopVehicles shopVehicles;
+		Protocol::ShopParts shopParts;
+		Protocol::PlayerVehicles playerVehicles;
+		Protocol::PlayerParts playerParts;
 };
 
 #endif

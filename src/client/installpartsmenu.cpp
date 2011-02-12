@@ -47,11 +47,11 @@ void InstallPartsMenu::handleConnectionEvent()
 {
 	partList.clearItems();
 	
-	const PlayerParts& parts = connection.getPlayerParts();
+	const Protocol::PlayerParts& parts = connection.getPlayerParts();
 		
-	for(size_t i = 0; i < parts.getPartCount(); ++i)
+	for(size_t i = 0; i < parts.getItemCount(); ++i)
 	{
-		PlayerPart part = parts.getPart(i);
+		Protocol::Part part = parts.getItem(i);
 	
 		partList.addItem(part.name, i);
 	}

@@ -1,10 +1,13 @@
-#ifndef PLAYERINFO_HPP
-#define PLAYERINFO_HPP
+#ifndef PROTOCOL_PLAYERINFO_HPP
+#define PROTOCOL_PLAYERINFO_HPP
 
 #include <string>
 #include <stdint.h>
 
 class Packet;
+
+namespace Protocol
+{
 
 class PlayerInfo
 {
@@ -18,5 +21,6 @@ class PlayerInfo
 
 };
 
-#endif // PLAYERINFO_HPP
+};
 
+#endif

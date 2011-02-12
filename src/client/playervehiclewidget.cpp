@@ -34,11 +34,9 @@ PlayerVehicleWidget::PlayerVehicleWidget(Connection& connection):
 	carImage.setFluid(true);	
 }
 
-void PlayerVehicleWidget::shopPlayerVehicle(Connection& connection, size_t vehicleId)
+void PlayerVehicleWidget::showVehicle(Connection& connection, size_t vehicleId)
 {
-	const PlayerVehicles& playerVehicles = connection.getPlayerVehicles();
-
-	PlayerVehicle vehicle = playerVehicles.getVehicle(vehicleId);
+	Protocol::Vehicle vehicle = connection.getPlayerVehicles().getItem(vehicleId);
 	
 	carName.setText(vehicle.name);
 		

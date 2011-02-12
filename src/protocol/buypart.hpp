@@ -5,6 +5,9 @@
 
 class Packet;
 
+namespace Protocol
+{
+
 class BuyPart
 {
 	public:
@@ -12,6 +15,8 @@ class BuyPart
 
 		friend Packet& operator<<(Packet& packet,const BuyPart& buyPart);
 		friend Packet& operator>>(Packet& packet,BuyPart& buyPart);
+
+};
 
 };
 

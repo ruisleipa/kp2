@@ -35,17 +35,13 @@ SRC = \
 	src/graphics/window.cpp \
 	src/protocol/buypart.cpp \
 	src/protocol/buyvehicle.cpp \
-	src/protocol/players.cpp \
+	src/protocol/part.cpp \
 	src/protocol/playerinfo.cpp \
-	src/protocol/playerpart.cpp \
-	src/protocol/playerparts.cpp \
-	src/protocol/playervehicle.cpp \
-	src/protocol/playervehicles.cpp \
+	src/protocol/collection.cpp \
 	src/protocol/setname.cpp \
 	src/protocol/shoppart.cpp \
-	src/protocol/shopparts.cpp \
 	src/protocol/shopvehicle.cpp \
-	src/protocol/shopvehicles.cpp \
+	src/protocol/vehicle.cpp \
 	src/gui/activetextwidget.cpp \
 	src/gui/button.cpp \
 	src/gui/columnlayoutcontainer.cpp \
