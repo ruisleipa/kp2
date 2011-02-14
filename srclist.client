@@ -42,6 +42,7 @@ SRC = \
 	src/protocol/shoppart.cpp \
 	src/protocol/shopvehicle.cpp \
 	src/protocol/vehicle.cpp \
+	src/protocol/setactivevehicle.cpp \
 	src/gui/activetextwidget.cpp \
 	src/gui/button.cpp \
 	src/gui/columnlayoutcontainer.cpp \

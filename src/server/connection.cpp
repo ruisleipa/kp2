@@ -8,6 +8,7 @@
 #include "protocol/setname.hpp"
 #include "protocol/buypart.hpp"
 #include "protocol/buyvehicle.hpp"
+#include "protocol/setactivevehicle.hpp"
 #include "protocol/playerinfo.hpp"
 #include "protocol/shopvehicle.hpp"
 #include "protocol/shoppart.hpp"
@@ -60,6 +61,16 @@ void Connection::processPackets(ClientSocket& socket)
 				gameState.getPlayer(playerId).setName(setName.name);
 								
 				sendPlayerInfo();
+			}
+			else if(type == Protocol::COMMAND_SET_ACTIVE_VEHICLE_ID)
+			{
+				Protocol::SetActiveVehicle command;
+
+				packet >> command;
+				
+				gameState.getPlayer(playerId).setActiveVehicleId(command.id);
+								
+				sendActiveVehicleId();				
 			}
 			else if(type == Protocol::COMMAND_BUY_VEHICLE)
 			{
@@ -282,6 +293,21 @@ void Connection::sendPlayerParts()
 	}
 		
 	packet << playerPartCollection;
+	
+	sendQueue.push(packet);
+}
+
+void Connection::sendActiveVehicleId()
+{
+	Packet packet;
+	
+	packet.setType(Protocol::DATA_ACTIVE_VEHICLE_ID);
+	
+	Protocol::ActiveVehicleId activeVehicleId;
+	
+	activeVehicleId = gameState.getPlayer(playerId).getActiveVehicleId();
+	
+	packet << activeVehicleId;
 	
 	sendQueue.push(packet);
 }

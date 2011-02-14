@@ -41,6 +41,8 @@ class Player
 		const Part& getPart(int id) const;
 		const Vehicle& getVehicle(int id) const;
 		
+		void setActiveVehicleId(int id);
+		int getActiveVehicleId();
 		Player(GameState& gameState,const std::string& name,int money);
 		
 	private:
@@ -48,6 +50,8 @@ class Player
 		
 		std::string name;
 		int money;
+		
+		int activeVehicleId;
 	
 		std::map<int,Vehicle> vehicles;
 		std::map<int,Part> parts;

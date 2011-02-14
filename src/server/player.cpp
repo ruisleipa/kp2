@@ -81,10 +81,23 @@ const Vehicle& Player::getVehicle(int id) const
 	return vehicles.find(id)->second;
 }
 
+void Player::setActiveVehicleId(int id)
+{
+	getVehicle(id);
+	
+	activeVehicleId = id;
+}
+
+int Player::getActiveVehicleId()
+{
+	return activeVehicleId;
+}
+
 Player::Player(GameState& gameState,const std::string& name,int money):
 	gameState(gameState),
 	name(name),
-	money(money)
+	money(money),
+	activeVehicleId(0)
 {
 
 }

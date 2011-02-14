@@ -23,6 +23,7 @@ class Connection
 		void sendShopParts();
 		void sendPlayerVehicles();
 		void sendPlayerParts();
+		void sendActiveVehicleId();
 	
 		Connection(GameState& gameState,int playerId);
 		

@@ -11,6 +11,7 @@
 #include "protocol/setname.hpp"
 #include "protocol/buyvehicle.hpp"
 #include "protocol/buypart.hpp"
+#include "protocol/setactivevehicle.hpp"
 
 #include "utils/sdl.hpp"
 
@@ -68,6 +69,10 @@ void Connection::processMessages()
 			{
 				case Protocol::DATA_PLAYER_INFO:
 					message >> playerInfo;
+					break;
+				
+				case Protocol::DATA_ACTIVE_VEHICLE_ID:
+					message >> activeVehicleId;
 					break;
 				
 				case Protocol::DATA_PLAYERS:
@@ -180,9 +185,23 @@ void Connection::buyPart(const std::string& id)
 	writeToServer(packet);
 }		
 
-void Connection::setActiveVehicle(int vehiceId)
+void Connection::setActiveVehicleId(int vehiceId)
 {
+	Packet packet;
+	
+	packet.setType(Protocol::COMMAND_SET_ACTIVE_VEHICLE_ID);
+	
+	Protocol::SetActiveVehicle command;
+	command.id = vehiceId;
+	
+	packet << command;
+	
+	writeToServer(packet);
+}
 
+int Connection::getActiveVehicleId()
+{
+	return activeVehicleId;
 }
 
 void Connection::addMachining(int vehiclePartId,const std::string& machiningId)
@@ -252,7 +271,8 @@ bool Connection::startLocalServer()
 	return false;
 }
 
-Connection::Connection()
+Connection::Connection():
+	activeVehicleId(0)
 {
 	
 }		
