@@ -100,6 +100,10 @@ void Connection::processPackets(ClientSocket& socket)
 			std::cerr << "Invalid packet!" << std::endl;
 			std::cerr << packet << std::endl;
 		}
+		catch(InsufficientMoneyException)
+		{
+			std::cerr << "Out of money!" << std::endl;
+		}
 	}
 	
 	writePackets(socket);
