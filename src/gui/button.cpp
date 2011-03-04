@@ -17,7 +17,8 @@ void Button::handleMouseDownEvent(MouseDownEvent* event)
 {
 	if(event->isButtonDown(MouseEvent::LEFT))
 	{
-		clickHandler();
+		if(clickHandler)
+			clickHandler();
 	}
 }
 
