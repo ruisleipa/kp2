@@ -53,6 +53,10 @@ void CrashCatcher::catchCrash(int signal_number)
 	CrashCatcher* catcher = exceptionRegistration->object;
 	
 	catcher->handleCrash();
+	
+	#ifdef WIN32
+	return 0;
+	#endif
 }
 
 void CrashCatcher::handleCrash()
