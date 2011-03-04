@@ -156,16 +156,16 @@ void SocketSet::updateActivity()
 	{
 		int socket=(*i)->m_socket;
 		
-		if(socket == INVALID_SOCKET)
+		if(socket == int(INVALID_SOCKET))
 			continue;
 		
 		socket_table[socket]=(*i);
 		
-		FD_SET(socket,&readable);
+		FD_SET(socket, &readable);
 	
 		if((*i)->isWritePending())
 		{
-			FD_SET(socket,&writable);
+			FD_SET(socket, &writable);
 		}
 		
 		if(socket > nfds)
