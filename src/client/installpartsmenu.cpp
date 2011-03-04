@@ -1,58 +1,115 @@
 #include "installpartsmenu.hpp"
 
+#include "connection.hpp"
+
 InstallPartsMenu::InstallPartsMenu(Connection& connection):
 	connection(connection)
 {
 	connection.addEventHandler(std::tr1::bind(&InstallPartsMenu::handleConnectionEvent,this));
 	
-	addWidget(container);
+	addWidget(mainContainer);
 	
-	container.setFactorSize(Vector2D(1,1));
+	mainContainer.setFactorSize(Vector2D(1,1));	
+	mainContainer.addWidget(vehicleInfo);
+	mainContainer.addWidget(vehicleContainer);
+	mainContainer.addWidget(partContainer);
 	
-	container.addWidget(carContainer);
-	container.addWidget(partContainer);
+	vehicleInfo.setFluid(true);	
 	
-	carContainer.setFluid(true);
-	carContainer.addWidget(carTitleContainer);
-	carContainer.addWidget(carPartList);
-	carContainer.showOuterPadding(false);
+	vehicleContainer.setFluid(true);	
+	vehicleContainer.showOuterPadding(false);
+	vehicleContainer.addWidget(vehiclePartLabel);
+	vehicleContainer.addWidget(vehiclePartList);
+	vehicleContainer.addWidget(uninstallButton);
 	
-	carTitleContainer.setFactorSize(Vector2D(0,0.25));
-	carTitleContainer.showOuterPadding(false);
-	carTitleContainer.addWidget(carName);
-	carTitleContainer.addWidget(carImage);
+	vehiclePartLabel.setText("Osat autossa:");
+	vehiclePartLabel.autoSize();
 	
-	carName.setFluid(true);	
+	vehiclePartList.setFluid(true);
 	
-	carImage.setFluid(true);	
+	uninstallButton.setText("Irrota osa");
+	uninstallButton.autoSize();
+	uninstallButton.setClickHandler(std::tr1::bind(&InstallPartsMenu::handleUninstallButtonClick,this));	
 	
-	carPartList.setFluid(true);
-	
-	partContainer.setFluid(true);
+	partContainer.setFluid(true);		
+	partContainer.showOuterPadding(false);
+	partContainer.addWidget(partLabel);
 	partContainer.addWidget(partList);
 	partContainer.addWidget(installButton);
-	partContainer.addWidget(sellButton);
-	partContainer.showOuterPadding(false);
+	
+	partLabel.setText("Osat tallissa:");
+	partLabel.autoSize();
 	
 	partList.setFluid(true);
 	
-	installButton.setText("Asenna");
+	installButton.setText("Asenna osa");
 	installButton.autoSize();
-	
-	sellButton.setText("Myy Osa");
-	sellButton.autoSize();
+	installButton.setClickHandler(std::tr1::bind(&InstallPartsMenu::handleInstallButtonClick,this));	
+}
+
+void InstallPartsMenu::handleInstallButtonClick()
+{
+	if(connection.getActiveVehicleId() == 0)
+		return;
+		
+	connection.installPart(partList.getCurrentItemTag());
+}
+
+void InstallPartsMenu::handleUninstallButtonClick()
+{
+	if(connection.getActiveVehicleId() == 0)
+		return;
+		
+	connection.uninstallPart(vehiclePartList.getCurrentItemTag());
 }
 
 void InstallPartsMenu::handleConnectionEvent()
 {
+	fillVehicleInfo();
+	fillParts();
+	fillVehicleParts();
+}
+
+void InstallPartsMenu::fillVehicleInfo()
+{
+	if(connection.getActiveVehicleId() == 0)
+		return;
+		
+	vehicleInfo.showVehicle(connection, connection.getActiveVehicleId());
+}
+
+void InstallPartsMenu::fillParts()
+{
+	if(connection.getActiveVehicleId() == 0)
+		return;
+		
 	partList.clearItems();
 	
-	const Protocol::PlayerParts& parts = connection.getPlayerParts();
+	std::vector<Protocol::PartId> ids = connection.getPlayerParts().getKeys();	
 		
-	for(size_t i = 0; i < parts.getItemCount(); ++i)
+	for(size_t i = 0; i < ids.size(); ++i)
 	{
-		Protocol::Part part = parts.getItem(i);
-	
-		partList.addItem(part.name, i);
+		Protocol::Part part = connection.getPlayerParts().getItem(ids[i]);
+		
+		partList.addItem(part.name, ids[i]);
 	}
+}
+
+void InstallPartsMenu::fillVehicleParts()
+{
+	if(connection.getActiveVehicleId() == 0)
+		return;
+
+	vehiclePartList.clearItems();
+		
+	const Protocol::Vehicle& vehicle = connection.getPlayerVehicles().getItem(connection.getActiveVehicleId());
+	
+	std::vector<Protocol::PartId> vehiclePartIds = vehicle.parts.getKeys();	
+		
+	for(size_t i = 0; i < vehiclePartIds.size(); ++i)
+	{
+		Protocol::Part part = vehicle.parts.getItem(vehiclePartIds[i]);
+		
+		vehiclePartList.addItem(part.name, vehiclePartIds[i]);
+	}	
 }

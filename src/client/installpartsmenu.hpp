@@ -1,6 +1,8 @@
 #ifndef INSTALLPARTSMENU_HPP
 #define INSTALLPARTSMENU_HPP
 
+#include "playervehiclewidget.hpp"
+
 #include "gui/menu.hpp"
 #include "gui/label.hpp"
 #include "gui/button.hpp"
@@ -9,7 +11,7 @@
 #include "gui/columnlayoutcontainer.hpp"
 #include "gui/rowlayoutcontainer.hpp"
 
-#include "connection.hpp"
+class Connection;
 
 class InstallPartsMenu : public Menu
 {
@@ -17,23 +19,31 @@ class InstallPartsMenu : public Menu
 		InstallPartsMenu(Connection& connection);
 
 	private:
+		void handleInstallButtonClick();
+		void handleUninstallButtonClick();
 		void handleConnectionEvent();
+	
+		void fillVehicleInfo();
+		void fillParts();
+		void fillVehicleParts();
 	
 		Connection& connection;
 	
-		ColumnLayoutContainer maincontainer;
+		ColumnLayoutContainer mainContainer;
 		
-		RowLayoutContainer carContainer;
+		PlayerVehicleWidget vehicleInfo;
 		
-		RowLayoutContainer carPartContainer;
+		RowLayoutContainer vehicleContainer;
 		
-		Label carPartLabel;		
-		Listbox carPartList;
+		Label vehiclePartLabel;		
+		Listbox vehiclePartList;
+		Button uninstallButton;
 		
 		RowLayoutContainer partContainer;
 		
 		Label partLabel;		
 		Listbox partList;
+		Button installButton;
 };
 
 #endif // INSTALLPARTSMENU_HPP

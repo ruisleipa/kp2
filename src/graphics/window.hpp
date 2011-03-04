@@ -25,6 +25,9 @@ class Window
 		
 		int getBitsPerPixel();
 		
+		bool hasModeChanged();
+		void clearModeChangeFlag();
+		
 		void loadSettings();
 		void saveSettings();
 		
@@ -38,7 +41,9 @@ class Window
 		
 		float aspectRatio;
 		
-		SDL_Surface* surface;		
+		SDL_Surface* surface;
+
+		bool modeChanged;
 		
 		IniFile settings;
 		

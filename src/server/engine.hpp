@@ -11,9 +11,12 @@ class Vehicle;
 class Engine: public PartModelImplementation
 {
 	public:	
-		const std::string& getName();
-		int getPrice();	
-		bool fitsInVehicle(const Vehicle& vehicle);
+		const std::string& getName() const;
+		int getPrice() const;
+		const std::string& getCamshaftPosition() const;	
+		const std::string& getCylinderAlignment() const;	
+		int getCylinderCount() const;	
+		bool fitsInVehicle(const Vehicle& vehicle) const;
 		
 		Engine(IniFile& partFile);
 		

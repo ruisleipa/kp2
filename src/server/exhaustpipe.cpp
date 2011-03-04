@@ -3,17 +3,17 @@
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
 
-const std::string& ExhaustPipe::getName()
+const std::string& ExhaustPipe::getName() const
 {
 	return name;
 }
 
-int ExhaustPipe::getPrice()
+int ExhaustPipe::getPrice() const
 {
 	return 0;
 }
 
-bool ExhaustPipe::fitsInVehicle(const Vehicle& vehicle)
+bool ExhaustPipe::fitsInVehicle(const Vehicle& vehicle) const
 {
 	return true;
 }

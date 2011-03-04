@@ -2,9 +2,12 @@
 #define VEHICLE_HPP
 
 #include <string>
+#include <vector>
 
 #include "part.hpp"
+#include "exceptions.hpp"
 
+class Player;
 class GameState;
 class VehicleModel;
 
@@ -16,16 +19,18 @@ class Vehicle
 		int getPartCount() const;
 		const Part& getPart(int id) const;
 		
-		Part uninstallPart(int id);
-		void installPart(const Part& part);		
+		void uninstallPart(int id);
+		void installPart(int playerPartId);
 		
-		Vehicle(GameState& gameState,const std::string& modelName);
+		int getWeight() const;
+		
+		Vehicle(const VehicleModel& vehicleModel, Player& player);
 		
 	private:
 		const Part& getPartFromVector(int id) const;
 	
-		GameState* gameState;
-		std::string vehicleModelName;
+		const VehicleModel* vehicleModel;
+		Player* player;
 		
 		std::vector<Part> parts;
 		

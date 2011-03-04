@@ -92,10 +92,16 @@ TextureFilter Texture::getFilter()
 	return NEAREST;
 }
 
-void Texture::reuploadTexture()
+void Texture::upload()
 {
 	if(preparedTexture.get())
 		preparedTexture->upload();
+}
+
+void Texture::free()
+{
+	if(preparedTexture.get())
+		preparedTexture->free();
 }
 
 void Texture::loadFromFile(const std::string& filename)

@@ -12,7 +12,6 @@ namespace Protocol
 class ShopPart
 {
 	public:
-		std::string id;
 		std::string name;
 		uint32_t price;
 		std::string type;

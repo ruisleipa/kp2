@@ -19,6 +19,8 @@ SRC = src/debug/assert.cpp \
 	src/protocol/shopvehicle.cpp \
 	src/protocol/vehicle.cpp \
 	src/protocol/setactivevehicle.cpp \
+	src/protocol/installpart.cpp \
+	src/protocol/uninstallpart.cpp \
 	src/server/connection.cpp \
 	src/server/gamestate.cpp \
 	src/server/machining.cpp \

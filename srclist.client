@@ -11,6 +11,7 @@ SRC = \
 	src/client/carshopmenu.cpp \
 	src/client/carlistmenu.cpp \
 	src/client/partshopmenu.cpp \
+	src/client/playervehiclewidget.cpp \
 	src/client/installpartsmenu.cpp \
 	src/debug/assert.cpp \
 	src/debug/crashcatcher.cpp \
@@ -43,6 +44,8 @@ SRC = \
 	src/protocol/shopvehicle.cpp \
 	src/protocol/vehicle.cpp \
 	src/protocol/setactivevehicle.cpp \
+	src/protocol/uninstallpart.cpp \
+	src/protocol/installpart.cpp \
 	src/gui/activetextwidget.cpp \
 	src/gui/button.cpp \
 	src/gui/columnlayoutcontainer.cpp \

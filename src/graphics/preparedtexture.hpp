@@ -34,6 +34,7 @@ class PreparedTexture
 	public:		
 		void bind();
 		void upload();
+		void free();
 		
 		void setFilter(TextureFilter filter);
 		TextureFilter getFilter();

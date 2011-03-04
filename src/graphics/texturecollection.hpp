@@ -14,8 +14,9 @@ class TextureCollection
 		Texture& getTexture(int index);
 
 		int getTextureCount();
-	
-		void reuploadTextures();
+		
+		void freeTextures();
+		void uploadTextures();
 
 	private:
 		std::map<std::string,Texture> textures;

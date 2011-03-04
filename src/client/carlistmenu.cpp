@@ -42,38 +42,22 @@ CarListMenu::CarListMenu(Connection& connection):
 
 void CarListMenu::onConnectionEvent(Connection& connection)
 {
-	const Protocol::PlayerVehicles& playerVehicles = connection.getPlayerVehicles();
+	std::vector<Protocol::VehicleId> ids = connection.getPlayerVehicles().getKeys();	
+	std::vector<Protocol::VehicleId>::iterator i;	
 	
 	carList.clearItems();
 	
-	for(size_t i = 0; i < playerVehicles.getItemCount(); ++i)
+	for(i = ids.begin(); i != ids.end(); ++i)
 	{
-		Protocol::Vehicle vehicle = playerVehicles.getItem(i);
+		Protocol::Vehicle vehicle = connection.getPlayerVehicles().getItem(*i);
 		
-		carList.addItem(vehicle.name, i);
+		carList.addItem(vehicle.name, *i);
 	}	
 }
 
 void CarListMenu::carlistChange()
 {
-	const PlayerVehicles& playerVehicles = connection.getPlayerVehicles();
-
-	PlayerVehicle vehicle = playerVehicles.getVehicle(carList.getIndex());
-	
-	carName.setText(vehicle.name);
-		
-	std::string image = "gamedata/vehicleimages/";
-	image += vehicle.imageName;
-	carImage.setTexture(Texture(image));
-	
-	std::stringstream ss;
-	
-	ss << vehicle.info << "\n" << "\n";
-	ss << "Vuosimalli: " << vehicle.year << std::endl;
-	ss << "Korin paino: " << vehicle.chassisWeight << std::endl;
-	ss << "Hinta: " << vehicle.price << std::endl;
-	
-	carInfo.setText(ss.str());
+	vehicleInfo.showVehicle(connection, carList.getCurrentItemTag());
 }
 
 void CarListMenu::sellClick()
@@ -83,6 +67,6 @@ void CarListMenu::sellClick()
 
 void CarListMenu::selectClick()
 {
-
+	connection.setActiveVehicleId(carList.getCurrentItemTag());
 }
 

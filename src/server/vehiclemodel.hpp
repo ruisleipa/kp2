@@ -1,6 +1,7 @@
 #ifndef VEHICLEMODEL_HPP
 #define VEHICLEMODEL_HPP
 
+#include <vector>
 #include <string>
 
 #include "part.hpp"
@@ -23,8 +24,8 @@ class VehicleModel
 		VehicleModel(GameState& gameState,const std::string& filename);
 		
 	private:
-		void load(GameState& gameState,const std::string& filename);
-		void createPart(const std::string& model,const std::string& machinings);
+		void load(const std::string& filename);
+		void createPart(const std::string& modelName,const std::string& machinings);
 	
 		GameState& gameState;
 	

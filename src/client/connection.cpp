@@ -12,6 +12,8 @@
 #include "protocol/buyvehicle.hpp"
 #include "protocol/buypart.hpp"
 #include "protocol/setactivevehicle.hpp"
+#include "protocol/installpart.hpp"
+#include "protocol/uninstallpart.hpp"
 
 #include "utils/sdl.hpp"
 
@@ -26,20 +28,12 @@ bool Connection::connect(std::string hostname,int port)
 void Connection::processMessages()
 {	
 	int read,written;
-	
-	/*
-	Read as long as there is data to read (reads more than
-	zero bytes).
-	*/
+
 	while((read=socket.read(scrapBuffer,BUFFERSIZE))>0)
 	{
 		receiveBuffer.append(scrapBuffer,read);
 	}
 			
-	/*
-	Write as much as we can (writes more than
-	zero bytes).
-	*/
 	while((written=socket.write(sendBuffer.c_str(),sendBuffer.size()))>0)
 	{
 		sendBuffer.erase(0,written);
@@ -149,7 +143,7 @@ void Connection::setName(const std::string& name)
 	
 	packet.setType(Protocol::COMMAND_SET_NAME);
 	
-	SetName setName;
+	Protocol::SetName setName;
 	setName.name = name;
 	
 	packet << setName;
@@ -163,7 +157,7 @@ void Connection::buyVehicle(const std::string& id)
 	
 	packet.setType(Protocol::COMMAND_BUY_VEHICLE);
 	
-	BuyVehicle buyVehicle;
+	Protocol::BuyVehicle buyVehicle;
 	buyVehicle.id = id;
 	
 	packet << buyVehicle;
@@ -177,7 +171,7 @@ void Connection::buyPart(const std::string& id)
 	
 	packet.setType(Protocol::COMMAND_BUY_PART);
 	
-	BuyPart buyPart;
+	Protocol::BuyPart buyPart;
 	buyPart.id = id;
 	
 	packet << buyPart;
@@ -211,12 +205,30 @@ void Connection::addMachining(int vehiclePartId,const std::string& machiningId)
 
 void Connection::installPart(int partId)
 {
-
+	Packet packet;
+	
+	packet.setType(Protocol::COMMAND_INSTALL_PART);
+	
+	Protocol::InstallPart command;
+	command.id = partId;
+	
+	packet << command;
+	
+	writeToServer(packet);
 }
 
 void Connection::uninstallPart(int vehiclePartId)
 {
-
+	Packet packet;
+	
+	packet.setType(Protocol::COMMAND_UNINSTALL_PART);
+	
+	Protocol::UninstallPart command;
+	command.id = vehiclePartId;
+	
+	packet << command;
+	
+	writeToServer(packet);
 }
 
 void Connection::writeToServer(const Packet& packet)

@@ -14,8 +14,6 @@ CarShopMenu::CarShopMenu(Connection& connection):
 	
 	carList.setFont(Font("small"));
 	carList.setChangeHandler(std::tr1::bind(&CarShopMenu::carlistChange,this));
-		
-	carInfo.setFont(Font("small"));	
 	
 	buyButton.setText("Osta auto");
 	buyButton.autoSize();
@@ -50,23 +48,25 @@ CarShopMenu::CarShopMenu(Connection& connection):
 
 void CarShopMenu::onConnectionEvent(Connection& connection)
 {
-	const Protocol::ShopVehicles& shopVehicles = connection.getShopVehicles();
-	
 	carList.clearItems();
+
+	std::vector<std::string> ids = connection.getShopVehicles().getKeys();
 	
-	for(size_t i = 0; i < shopVehicles.getItemCount(); ++i)
+	for(size_t i = 0; i < ids.size(); ++i)
 	{
-		Protocol::ShopVehicle vehicle =  shopVehicles.getItem(i);
+		Protocol::ShopVehicle vehicle = connection.getShopVehicles().getItem(ids[i]);
 		
 		carList.addItem(vehicle.name, i);
+		
+		std::cout << ids[i] << std::endl;
 	}	
 }
 
 void CarShopMenu::carlistChange()
 {
-	const Protocol::ShopVehicles& shopVehicles = connection.getShopVehicles();
-
-	Protocol::ShopVehicle vehicle = shopVehicles.getItem(carList.getIndex());
+	std::vector<std::string> ids = connection.getShopVehicles().getKeys();
+	
+	Protocol::ShopVehicle vehicle = connection.getShopVehicles().getItem(ids[carList.getCurrentItemTag()]);
 	
 	carName.setText(vehicle.name);
 		
@@ -86,13 +86,9 @@ void CarShopMenu::carlistChange()
 
 void CarShopMenu::buyClick()
 {
-	const Protocol::ShopVehicles& shopVehicles = connection.getShopVehicles();
+	std::vector<std::string> ids = connection.getShopVehicles().getKeys();
 	
 	if(carList.getCurrentItemTag() != -1)
-	{
-		Protocol::ShopVehicle vehicle = shopVehicles.getItem(carList.getCurrentItemTag());
-	
-		connection.buyVehicle(vehicle.id);
-	}
+		connection.buyVehicle(ids[carList.getCurrentItemTag()]);
 }
 

@@ -62,7 +62,7 @@ class Connection
 		Protocol::ShopParts shopParts;
 		Protocol::PlayerVehicles playerVehicles;
 		Protocol::PlayerParts playerParts;
-		Protocol::ActiveVehicleId activeVehicleId;
+		Protocol::VehicleId activeVehicleId;
 };
 
 #endif

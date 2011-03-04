@@ -1,40 +1,45 @@
 #include "part.hpp"
 
-#include "gamestate.hpp"
+#include "machining.hpp"
+#include "partmodel.hpp"
 
 #include <stdexcept>
 
 const std::string& Part::getName() const
 {
-	return gameState->getPartModel(partModelName).getName();
+	return partModel->getName();
 }
 
 int Part::getPrice() const
 {
-	return gameState->getPartModel(partModelName).getPrice();
+	return partModel->getPrice();
 }
 
 const std::string& Part::getType() const
 {
-	return gameState->getPartModel(partModelName).getType();
+	return partModel->getType();
 }
 
 float Part::getWeight() const
 {
-	return gameState->getPartModel(partModelName).getWeight();
+	return partModel->getWeight();
 }
 
-void Part::addMachining(const std::string& name)
+bool Part::fitsInVehicle(const Vehicle& vehicle) const
 {
-	if(gameState->getMachining(name).fitsForPart(*this))
-		machinings.push_back(name);
+	return partModel->fitsInVehicle(vehicle);
+}
+
+void Part::addMachining(const Machining& machining)
+{
+	if(machining.fitsForPart(*this))
+		machinings.insert(&machining);
 	else
-		throw std::runtime_error("Machining \"" + name + "\" does not fit for part model \"" + partModelName + "\"");
+		throw std::runtime_error("Machining \"\" does not fit for part model \"\"");
 }
 
-Part::Part(GameState& gameState,const std::string& partModelName):
-	gameState(&gameState),
-	partModelName(partModelName)	
+Part::Part(const PartModel& partModel):
+	partModel(&partModel)	
 {
-	this->gameState->getPartModel(partModelName);
+
 }

@@ -19,7 +19,7 @@ class CarShopMenu : public Menu
 	public:
 		CarShopMenu(Connection& connection);
 
-		virtual void onConnectionEvent(Connection& connection);
+		void onConnectionEvent(Connection& connection);
 		
 	private:
 		void carlistChange();

@@ -17,18 +17,16 @@ int Player::getMoney() const
 	return money;
 }
 
-void Player::buyVehicle(const std::string& modelName)
+void Player::buyVehicle(const VehicleModel& vehicleModel)
 {
-	const VehicleModel& vehicleModel = gameState.getVehicleModel(modelName);
-	
 	if(money < vehicleModel.getPrice())
 		throw InsufficientMoneyException();
 		
 	money -= vehicleModel.getPrice();
 	
-	Vehicle vehicle(gameState,modelName);
+	Vehicle vehicle(vehicleModel, *this);
 	
-	int newId = 0;
+	int newId = 1;
 	
 	if(vehicles.rbegin() != vehicles.rend())
 		newId = vehicles.rbegin()->first + 1;
@@ -36,33 +34,41 @@ void Player::buyVehicle(const std::string& modelName)
 	vehicles.insert(std::make_pair(newId,vehicle));
 }
 
-void Player::buyPart(const std::string& modelName)
+void Player::buyPart(const PartModel& partModel)
 {
-	const PartModel& partModel = gameState.getPartModel(modelName);
-		
 	if(money < partModel.getPrice())
 		throw InsufficientMoneyException();
 		
 	money -= partModel.getPrice();
 	
-	Part part(gameState,modelName);
+	Part part(partModel);
 	
-	int newId = 0;
-	
-	if(parts.rbegin() != parts.rend())
-		newId = parts.rbegin()->first + 1;
-	
-	parts.insert(std::make_pair(newId,part));
+	addPart(part);
 }
 
-int Player::getPartCount() const
+template <class Key,class T>
+std::vector<Key> getKeysFromMap(std::map<Key,T> m)
 {
-	return parts.size();
+	std::vector<Key> keys;
+
+	typename std::map<Key,T>::iterator i;
+	
+	for(i=m.begin();i!=m.end();++i)
+	{
+		keys.push_back(i->first);
+	}
+	
+	return keys;
 }
 
-int Player::getVehicleCount() const
+std::vector<int> Player::getPartIds() const
 {
-	return vehicles.size();
+	return getKeysFromMap(parts);
+}
+
+std::vector<int> Player::getVehicleIds() const
+{
+	return getKeysFromMap(vehicles);
 }
 
 const Part& Player::getPart(int id) const
@@ -73,12 +79,30 @@ const Part& Player::getPart(int id) const
 	return parts.find(id)->second;
 }
 
-const Vehicle& Player::getVehicle(int id) const
+Vehicle& Player::getVehicle(int id)
 {
 	if(vehicles.find(id) == vehicles.end())
 		throw NoSuchVehicleException();
 		
 	return vehicles.find(id)->second;
+}
+
+void Player::addPart(const Part& part)
+{
+	int newId = 1;
+	
+	if(parts.rbegin() != parts.rend())
+		newId = parts.rbegin()->first + 1;
+		
+	parts.insert(std::make_pair(newId, part));
+}
+
+void Player::removePart(int id)
+{
+	if(parts.find(id) == parts.end())
+		throw NoSuchPartException();
+
+	parts.erase(parts.find(id));
 }
 
 void Player::setActiveVehicleId(int id)
@@ -93,8 +117,7 @@ int Player::getActiveVehicleId()
 	return activeVehicleId;
 }
 
-Player::Player(GameState& gameState,const std::string& name,int money):
-	gameState(gameState),
+Player::Player(const std::string& name, int money):
 	name(name),
 	money(money),
 	activeVehicleId(0)

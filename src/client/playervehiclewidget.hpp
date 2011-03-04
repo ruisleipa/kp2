@@ -8,15 +8,14 @@
 
 class Connection;
 
-class PlayerVehicleWidget : public ColumnLayoutContainer
+class PlayerVehicleWidget : public RowLayoutContainer
 {
 	public:
-		void shopPlayerVehicle(Connection& connection, size_t vehicleId);
+		void showVehicle(Connection& connection, size_t vehicleId);
 	
-		PlayerCarWidget();
+		PlayerVehicleWidget();
 		
 	private:
-		ColumnLayoutContainer mainContainer;
 		ColumnLayoutContainer titleContainer;
 		RowLayoutContainer infoContainer;
 	

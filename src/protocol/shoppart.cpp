@@ -7,7 +7,6 @@ namespace Protocol
 
 Packet& operator<<(Packet& packet,const ShopPart& shopPart)
 {
-	packet << shopPart.id;
 	packet << shopPart.name;
 	packet << shopPart.price;
 	packet << shopPart.type;
@@ -18,7 +17,6 @@ Packet& operator<<(Packet& packet,const ShopPart& shopPart)
 
 Packet& operator>>(Packet& packet,ShopPart& shopPart)
 {
-	packet >> shopPart.id;
 	packet >> shopPart.name;
 	packet >> shopPart.price;
 	packet >> shopPart.type;

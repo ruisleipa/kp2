@@ -12,7 +12,6 @@ namespace Protocol
 class ShopVehicle
 {
 	public:
-		std::string id;
 		std::string name;
 		std::string imageName;
 		std::string info;

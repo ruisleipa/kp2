@@ -9,7 +9,6 @@ namespace Protocol
 
 Packet& operator<<(Packet& packet,const PlayerInfo& playerInfo)
 {
-	packet << playerInfo.playerId;
 	packet << playerInfo.money;
 	packet << playerInfo.name;
 	
@@ -18,7 +17,6 @@ Packet& operator<<(Packet& packet,const PlayerInfo& playerInfo)
 
 Packet& operator>>(Packet& packet,PlayerInfo& playerInfo)
 {
-	packet >> playerInfo.playerId;
 	packet >> playerInfo.money;
 	packet >> playerInfo.name;
 		

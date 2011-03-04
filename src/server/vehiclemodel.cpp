@@ -53,10 +53,10 @@ const Part& VehicleModel::getPart(int id) const
 VehicleModel::VehicleModel(GameState& gameState,const std::string& filename):
 	gameState(gameState)
 {
-	load(gameState,filename);
+	load(filename);
 }
 
-void VehicleModel::load(GameState& gameState,const std::string& filename)
+void VehicleModel::load(const std::string& filename)
 {
 	IniFile file(filename);
 	
@@ -92,9 +92,9 @@ void VehicleModel::load(GameState& gameState,const std::string& filename)
 	}	
 }
 
-void VehicleModel::createPart(const std::string& model,const std::string& machinings)
+void VehicleModel::createPart(const std::string& modelName,const std::string& machinings)
 {
-	Part part(gameState,model);
+	Part part(gameState.getPartModel(modelName));
 	
 	std::vector<std::string> machiningList = tokenize(machinings,",");
 	
@@ -102,7 +102,9 @@ void VehicleModel::createPart(const std::string& model,const std::string& machin
 	
 	for(i = machiningList.begin(); i != machiningList.end(); ++i)
 	{
-		part.addMachining(*i);
+		const Machining& machining = gameState.getMachining(*i);
+	
+		part.addMachining(machining);
 	}
 	
 	parts.push_back(part);

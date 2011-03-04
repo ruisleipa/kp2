@@ -8,9 +8,9 @@ class Vehicle;
 class PartModelImplementation
 {
 	public:
-		virtual const std::string& getName()=0;
-		virtual int getPrice()=0;
-		virtual bool fitsInVehicle(const Vehicle& vehicle)=0;
+		virtual const std::string& getName() const = 0;
+		virtual int getPrice() const = 0;
+		virtual bool fitsInVehicle(const Vehicle& vehicle) const = 0;
 
 };
 

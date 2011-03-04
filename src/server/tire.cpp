@@ -3,17 +3,17 @@
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
 
-const std::string& Tire::getName()
+const std::string& Tire::getName() const
 {
 	return name;
 }
 
-int Tire::getPrice()
+int Tire::getPrice() const
 {
 	return 0;
 }
 
-bool Tire::fitsInVehicle(const Vehicle& vehicle)
+bool Tire::fitsInVehicle(const Vehicle& vehicle) const
 {
 	return true;
 }

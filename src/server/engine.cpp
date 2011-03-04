@@ -3,17 +3,32 @@
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
 
-const std::string& Engine::getName()
+const std::string& Engine::getName() const
 {
 	return name;
 }
 
-int Engine::getPrice()
+int Engine::getPrice() const
 {
 	return 0;
 }
 
-bool Engine::fitsInVehicle(const Vehicle& vehicle)
+const std::string& Engine::getCamshaftPosition() const
+{
+	return camshaftPosition;
+}
+
+const std::string& Engine::getCylinderAlignment() const
+{
+	return cylinderAlignment;
+}
+	
+int Engine::getCylinderCount() const
+{
+	return cylinders;
+}
+
+bool Engine::fitsInVehicle(const Vehicle& vehicle) const
 {
 	return true;
 }

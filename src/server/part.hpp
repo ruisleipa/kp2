@@ -2,9 +2,13 @@
 #define PART_HPP
 
 #include <string>
-#include <vector>
+#include <set>
+
+#include "partmodel.hpp"
 
 class GameState;
+class Vehicle;
+class Machining;
 
 class Part
 {
@@ -14,15 +18,22 @@ class Part
 		const std::string& getType() const;
 		float getWeight() const;
 		
-		void addMachining(const std::string& name);
+		template<typename T>
+		const T& getModelImplementation() const
+		{
+			return dynamic_cast<const T&>(partModel->getImplementation());
+		}
 		
-		Part(GameState& gameState,const std::string& partModelName);
+		bool fitsInVehicle(const Vehicle& vehicle) const;
+		
+		void addMachining(const Machining& machining);
+		
+		Part(const PartModel& partModel);
 		
 	private:
-		GameState* gameState;
-		std::string partModelName;
+		const PartModel* partModel;
 		
-		std::vector<std::string> machinings;
+		std::set<const Machining*> machinings;
 };
 
 #endif // PART_HPP

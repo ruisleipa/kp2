@@ -27,7 +27,7 @@ Texture& TextureCollection::getTexture(const std::string& name)
 
 Texture& TextureCollection::getTexture(int index)
 {
-	std::map<std::string,Texture>::iterator i;
+	std::map<std::string, Texture>::iterator i;
 	
 	for(i=textures.begin();i!=textures.end();++i)
 	{
@@ -47,14 +47,18 @@ int TextureCollection::getTextureCount()
 	return textures.size();
 }
 
-void TextureCollection::reuploadTextures()
+void TextureCollection::freeTextures()
 {
-#ifdef WIN32
-	std::map<std::string,Texture>::iterator i;
-		
-	for(i=textures.begin();i!=textures.end();++i)
-	{
-		(*i).second.reuploadTexture();
-	}
-#endif
+	std::map<std::string, Texture>::iterator i;
+	
+	for(i = textures.begin(); i != textures.end(); ++i)
+		i->second.free();
+}
+
+void TextureCollection::uploadTextures()
+{
+	std::map<std::string, Texture>::iterator i;
+	
+	for(i = textures.begin(); i != textures.end(); ++i)
+		i->second.upload();
 }

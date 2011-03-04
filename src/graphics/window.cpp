@@ -25,6 +25,8 @@ void Window::setVideoMode(Vector2D size,int bpp,bool fullscreen)
 	calculateAspectRatio();
 	initOpenGL();
 	initGLEW();
+	
+	modeChanged = true;
 }
 
 void Window::setVsyncPreference(bool vsync)
@@ -136,6 +138,16 @@ int Window::getBitsPerPixel()
 	return surface->format->BitsPerPixel;	
 }
 
+bool Window::hasModeChanged()
+{
+	return modeChanged;
+}
+
+void Window::clearModeChangeFlag()
+{
+	modeChanged = false;
+}
+
 Vector2D Window::getSize()
 {
 	return Vector2D(surface->w,surface->h);
@@ -150,6 +162,8 @@ Window::Window(Sdl& sdl):
 	SDL_WM_SetCaption("Kiihdytyspeli 2","Kiihdytyspeli 2");
 	
 	setVideoMode(surfaceSize,surfaceBpp,surfaceFullscreen);
+	
+	clearModeChangeFlag();
 }
 
 void Window::calculateAspectRatio()

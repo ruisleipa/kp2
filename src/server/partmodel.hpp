@@ -4,6 +4,7 @@
 #include <string>
 
 class PartModelImplementation;
+class Vehicle;
 
 class PartModel
 {
@@ -12,6 +13,11 @@ class PartModel
 		int getPrice() const;		
 		const std::string& getType() const;	
 		float getWeight() const;
+		const PartModelImplementation& getImplementation() const;
+		
+		bool fitsInVehicle(const Vehicle& vehicle) const;
+		
+		
 						
 		PartModel();
 		PartModel(const std::string& filename);

@@ -1,6 +1,7 @@
 #ifndef PROTOCOL_COLLECTION_HPP
 #define PROTOCOL_COLLECTION_HPP
 
+#include <map>
 #include <vector>
 #include <stdint.h>
 
@@ -9,24 +10,30 @@
 namespace Protocol
 {
 
-template <typename T>
+template <typename Key, typename Type>
 class Collection;
 
-template <typename T>
-Packet& operator<<(Packet& packet,const Collection<T>& collection)
+template <typename Key, typename Type>
+Packet& operator<<(Packet& packet, const Collection<Key, Type>& collection)
 {
 	packet << uint32_t(collection.items.size());
 	
-	for(size_t i = 0; i < collection.items.size(); ++i)
+	typename std::map<Key, Type>::const_iterator i;
+	
+	for(i = collection.items.begin(); i != collection.items.end(); ++i)
 	{
-		packet << collection.items[i];
+		Key key = i->first;
+		Type value = i->second;
+		
+		packet << key;
+		packet << value;
 	}
 	
 	return packet;
 }
 
-template <typename T>
-Packet& operator>>(Packet& packet,Collection<T>& collection)
+template <typename Key, typename Type>
+Packet& operator>>(Packet& packet, Collection<Key, Type>& collection)
 {
 	collection.items.clear();
 
@@ -36,51 +43,64 @@ Packet& operator>>(Packet& packet,Collection<T>& collection)
 	
 	for(size_t i = 0; i < itemCount; ++i)
 	{
-		T item;
+		Key key;
+		Type value;
 		
-		packet >> item;
+		packet >> key;
+		packet >> value;
 		
-		collection.items.push_back(item);
+		collection.items[key] = value;
 	}
 		
 	return packet;
 }
 
-template <typename T>
+template <typename Key, typename Type>
 class Collection
 {
 	public:
-		size_t getItemCount() const;
-		T getItem(size_t index) const;
-		void addItem(const T& item);
+		std::vector<Key> getKeys() const;
+		const Type& getItem(const Key& key) const;
+		
+		void addItem(const Key& key, const Type& item);
 		
 		friend Packet& operator<< <>(Packet& packet,const Collection& collection);
 		friend Packet& operator>> <>(Packet& packet,Collection& collection);
 		
 	private:
-		std::vector<T> items;
+		std::map<Key, Type> items;
 
 };
 
-template <typename T>
-size_t Collection<T>::getItemCount() const
+template <typename Key, typename Type>
+std::vector<Key> Collection<Key, Type>::getKeys() const
 {
-	return items.size();
+	std::vector<Key> keys;
+
+	typename std::map<Key, Type>::const_iterator i;
+	
+	for(i = items.begin(); i != items.end(); ++i)
+	{
+		keys.push_back(i->first);
+	}
+	
+	return keys;
 }
 
-template <typename T>
-T Collection<T>::getItem(size_t index) const
+template <typename Key, typename Type>
+const Type& Collection<Key, Type>::getItem(const Key& key) const
 {
-	return items.at(index);
+	if(items.find(key) == items.end())
+		throw 1;
+		
+	return items.find(key)->second;
 }
 
-template <typename T>
-void Collection<T>::addItem(const T& item)
+template <typename Key, typename Type>
+void Collection<Key, Type>::addItem(const Key& key, const Type& item)
 {
-	items.push_back(item);
+	items[key] = item;
 }
-
-
 
 };
 

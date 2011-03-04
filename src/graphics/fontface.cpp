@@ -6,9 +6,8 @@
 #include <iterator>
 
 FontFace::FontFace(Window& window,std::string fontfile,int fontsize):
-	window(window),
-	height(0),
-	font(0)
+	window(&window),
+	height(0)
 {
 	load(fontfile,fontsize);
 }
@@ -20,20 +19,9 @@ FontFace::~FontFace()
 
 int FontFace::load(std::string fontfile,int fontsize)
 {
-	if(!TTF_WasInit())
-	{
-		TTF_Init();
-	}
-
-	font=TTF_OpenFont(fontfile.c_str(),fontsize);
-
-	if(!font)
-	{
-		std::cerr << TTF_GetError() << "\n";
-		return -1;
-	}
-
-	height=TTF_FontHeight(font);
+	font = std::tr1::shared_ptr<FontFile>(new FontFile(fontfile, fontsize));
+	
+	height=TTF_FontHeight(font->font);
 
 	loadPage(0);
 
@@ -43,7 +31,7 @@ int FontFace::load(std::string fontfile,int fontsize)
 
 void FontFace::unload()
 {
-	TTF_CloseFont(font);
+	font.reset();
 }
 
 void FontFace::draw(std::wstring str,Vector2D pos)
@@ -220,6 +208,26 @@ Vector2D FontFace::getTextSize(std::wstring str)
 	return Vector2D(highestw,h);
 }
 
+void FontFace::freeTextures()
+{
+	std::map<unsigned long,FontPage>::iterator i;
+	
+	for(i = fontPages.begin(); i != fontPages.end(); ++i)
+	{
+		i->second.letters.free();
+	}
+}
+
+void FontFace::uploadTextures()
+{
+	std::map<unsigned long,FontPage>::iterator i;
+	
+	for(i = fontPages.begin(); i != fontPages.end(); ++i)
+	{
+		i->second.letters.upload();
+	}
+}
+
 int FontFace::loadPage(unsigned int pagenum)
 {
 	if(fontPages.find(pagenum)!=fontPages.end())
@@ -249,7 +257,7 @@ int FontFace::loadPage(unsigned int pagenum)
 		{
 			ch[0]=unicode;
 
-			if(TTF_SizeUNICODE(font,ch,&w,&h))
+			if(TTF_SizeUNICODE(font->font,ch,&w,&h))
 			{
 				std::cerr << SDL_GetError() << "\n";
 				return -1;
@@ -309,7 +317,7 @@ int FontFace::loadPage(unsigned int pagenum)
 			if(!fontPages[pagenum].letter_rectangles[i].size.getX())
 				continue;
 		
-			temp=TTF_RenderUNICODE_Blended(font,ch,color);
+			temp=TTF_RenderUNICODE_Blended(font->font,ch,color);
 			
 			if(!temp)
 			{

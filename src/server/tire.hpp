@@ -11,9 +11,9 @@ class Vehicle;
 class Tire: public PartModelImplementation
 {
 	public:
-		const std::string& getName();
-		int getPrice();
-		bool fitsInVehicle(const Vehicle& vehicle);
+		const std::string& getName() const;
+		int getPrice() const;
+		bool fitsInVehicle(const Vehicle& vehicle) const;
 		
 		Tire(IniFile& iniFile);
 		

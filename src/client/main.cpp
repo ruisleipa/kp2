@@ -32,6 +32,7 @@
 #include "fontloader.hpp"
 
 #include "connection.hpp"
+#include "net/socket.hpp"
 
 void startGame()
 {
@@ -120,21 +121,41 @@ void startGame()
 	rootContainer.addWidget(menuContainer);
 	
 	//ResizeEvent resizeEvent;
+
 	rootContainer.resize(window);
 	
-	EventArea eventArea(window, Vector2D(0,0), window.getSize());
-	DrawEvent drawEvent(eventArea);
+	bool running = true;
 	
-	FontFace font(window,"data/fonts/freesans.ttf",window.getSize().getY()*(12.0/480.0));
-	
-	while(1)
+	while(running)
 	{
+	
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+		EventArea eventArea(window, Vector2D(0,0), window.getSize());
+		DrawEvent drawEvent(eventArea);
+		
 		rootContainer.handleEvent(&drawEvent);
+		
 		Color(1,1,1).apply();
 		SDL_GL_SwapBuffers();		
-		connection.processMessages();				
-		events.processEvents();				
+		
+		connection.processMessages();		
+		events.processEvents();
+
+		if(window.hasModeChanged())
+		{
+#ifdef WIN32
+			fontLoader.freeTextures();			
+			backgroundTextures.freeTextures();
+			mainmenuTextures.freeTextures();
+			careerTextures.freeTextures();
+			
+			fontLoader.reload();
+#endif		
+			rootContainer.resize(window);
+			
+			window.clearModeChangeFlag();
+		}
 	}
 	
 	window.saveSettings();

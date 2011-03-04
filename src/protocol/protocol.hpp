@@ -3,21 +3,22 @@
 
 #include <stdint.h>
 
-#include "protocol/collection.hpp"
-#include "protocol/playerinfo.hpp"
-#include "protocol/shopvehicle.hpp"
-#include "protocol/shoppart.hpp"
-#include "protocol/vehicle.hpp"
-#include "protocol/part.hpp"
+#include "idtypes.hpp"
+#include "collection.hpp"
+#include "playerinfo.hpp"
+#include "shopvehicle.hpp"
+#include "shoppart.hpp"
+#include "vehicle.hpp"
+#include "part.hpp"
 
 namespace Protocol
 {
 
-typedef Protocol::Collection<Protocol::PlayerInfo> Players;
-typedef Protocol::Collection<Protocol::ShopVehicle> ShopVehicles;
-typedef Protocol::Collection<Protocol::ShopPart> ShopParts;
-typedef Protocol::Collection<Protocol::Vehicle> PlayerVehicles;
-typedef Protocol::Collection<Protocol::Part> PlayerParts;
+typedef Collection<Protocol::PlayerId, Protocol::PlayerInfo> Players;
+typedef Collection<Protocol::VehicleModelId, Protocol::ShopVehicle> ShopVehicles;
+typedef Collection<Protocol::PartModelId, Protocol::ShopPart> ShopParts;
+typedef Collection<Protocol::VehicleId, Protocol::Vehicle> PlayerVehicles;
+typedef Collection<Protocol::PartId, Protocol::Part> PlayerParts;
 
 const uint16_t DATA_PLAYER_INFO = 0;
 const uint16_t DATA_PLAYERS = 1;

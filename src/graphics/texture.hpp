@@ -23,7 +23,8 @@ class Texture
 		void setFilter(TextureFilter filter);
 		TextureFilter getFilter();
 		
-		void reuploadTexture();
+		void upload();
+		void free();
 		
 		Vector2D getSize();
 		

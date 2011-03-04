@@ -6,37 +6,27 @@
 #include "graphics/texture.hpp"
 #include "connection.hpp"
 
-PlayerVehicleWidget::PlayerVehicleWidget(Connection& connection):
-	connection(connection)
+PlayerVehicleWidget::PlayerVehicleWidget()
 {
-	addWidget(mainContainer);
-	
-	mainContainer.setFactorSize(Vector2D(1,1));
-	
-	mainContainer.addWidget(carList);
-	mainContainer.addWidget(infoContainer);
-	
-	carList.setFluid(true);	
-	infoContainer.setFluid(true);	
-	
-	infoContainer.addWidget(titleContainer);
-	infoContainer.addWidget(carInfo);
-	infoContainer.showOuterPadding(false);
+	addWidget(titleContainer);
+	addWidget(carInfo);
+	showOuterPadding(false);
 	
 	titleContainer.setFactorSize(Vector2D(0,0.25));
-	carInfo.setFluid(true);	
-		
+	titleContainer.showOuterPadding(false);
 	titleContainer.addWidget(carName);
 	titleContainer.addWidget(carImage);
-	titleContainer.showOuterPadding(false);
 	
 	carName.setFluid(true);	
 	carImage.setFluid(true);	
+	
+	carInfo.setFluid(true);	
+	carInfo.setFont(Font("small"));	
 }
 
 void PlayerVehicleWidget::showVehicle(Connection& connection, size_t vehicleId)
 {
-	Protocol::Vehicle vehicle = connection.getPlayerVehicles().getItem(vehicleId);
+	const Protocol::Vehicle& vehicle = connection.getPlayerVehicles().getItem(vehicleId);
 	
 	carName.setText(vehicle.name);
 		
@@ -46,10 +36,9 @@ void PlayerVehicleWidget::showVehicle(Connection& connection, size_t vehicleId)
 	
 	std::stringstream ss;
 	
-	ss << vehicle.info << "\n" << "\n";
 	ss << "Vuosimalli: " << vehicle.year << std::endl;
-	ss << "Korin paino: " << vehicle.chassisWeight << std::endl;
-	ss << "Hinta: " << vehicle.price << std::endl;
+	ss << "Korin paino: " << vehicle.chassisWeight << " kg" << std::endl;
+	ss << "Kokonaispaino: " << vehicle.totalWeight << " kg" << std::endl;
 	
 	carInfo.setText(ss.str());
 }

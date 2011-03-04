@@ -3,17 +3,17 @@
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
 
-const std::string& Injector::getName()
+const std::string& Injector::getName() const
 {
 	return name;
 }
 
-int Injector::getPrice()
+int Injector::getPrice() const
 {
 	return 0;
 }
 
-bool Injector::fitsInVehicle(const Vehicle& vehicle)
+bool Injector::fitsInVehicle(const Vehicle& vehicle) const
 {
 	return true;
 }

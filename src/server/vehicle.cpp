@@ -1,5 +1,6 @@
 #include "vehicle.hpp"
 
+#include "player.hpp"
 #include "gamestate.hpp"
 #include "vehiclemodel.hpp"
 
@@ -7,7 +8,7 @@
 
 const VehicleModel& Vehicle::getModel() const
 {
-	return gameState->getVehicleModel(vehicleModelName);
+	return *vehicleModel;
 }
 
 int Vehicle::getPartCount() const
@@ -20,31 +21,50 @@ const Part& Vehicle::getPart(int id) const
 	return getPartFromVector(id);
 }
 
-Part Vehicle::uninstallPart(int id)
+void Vehicle::uninstallPart(int id)
 {
-	Part part = getPartFromVector(id);
+	player->addPart(getPart(id));
+	parts.erase(parts.begin() + id);	
+}
 
-	parts.erase(parts.begin() + id);
+void Vehicle::installPart(int playerPartId)
+{
+	const Part& newPart = player->getPart(playerPartId);
 	
-	return part;
+	if(!newPart.fitsInVehicle(*this))
+		return;
+
+	parts.push_back(newPart);
+	
+	player->removePart(playerPartId);	
 }
 
-void Vehicle::installPart(const Part& part)
+int Vehicle::getWeight() const
 {
-	parts.push_back(part);
+	int weight = getModel().getChassisWeight();
+
+	for(int i = 0; i < getPartCount(); ++i)
+	{
+		weight += getPart(i).getWeight();
+	}
+	
+	return weight;
 }
 
-Vehicle::Vehicle(GameState& gameState,const std::string& modelName):
-	gameState(&gameState),
-	vehicleModelName(modelName)	
+Vehicle::Vehicle(const VehicleModel& vehicleModel, Player& player):
+	vehicleModel(&vehicleModel),
+	player(&player)	
 {
-	this->gameState->getVehicleModel(vehicleModelName);
+	for(int i = 0; i < getModel().getPartCount(); ++i)
+	{
+		parts.push_back(getModel().getPart(i));
+	}
 }
 
 const Part& Vehicle::getPartFromVector(int id) const
 {
 	if(id < 0 || id >= parts.size())
-		throw std::runtime_error("No such part");
+		throw NoSuchPartException();
 		
 	return parts[id];
 }

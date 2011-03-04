@@ -12,7 +12,6 @@ namespace Protocol
 class PlayerInfo
 {
 	public:
-		uint32_t playerId;
 		uint32_t money;
 		std::string name;
 

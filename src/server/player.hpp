@@ -4,25 +4,12 @@
 #include <map>
 #include <string>
 
-class GameState;
-
-class InsufficientMoneyException
-{
-
-};
-
-class NoSuchPartException
-{
-
-};
-
-class NoSuchVehicleException
-{
-
-};
+class VehicleModel;
+class PartModel;
 
 #include "part.hpp"
 #include "vehicle.hpp"
+#include "exceptions.hpp"
 
 class Player
 {
@@ -32,22 +19,23 @@ class Player
 		
 		int getMoney() const;
 		
-		void buyVehicle(const std::string& modelName);
-		void buyPart(const std::string& modelName);
+		void buyVehicle(const VehicleModel& model);
+		void buyPart(const PartModel& model);
 
-		int getPartCount() const;
-		int getVehicleCount() const;
-				
+		std::vector<int> getVehicleIds() const;
+		Vehicle& getVehicle(int id);
+		
+		std::vector<int> getPartIds() const;
 		const Part& getPart(int id) const;
-		const Vehicle& getVehicle(int id) const;
+		void addPart(const Part& part);
+		void removePart(int id);
 		
 		void setActiveVehicleId(int id);
 		int getActiveVehicleId();
-		Player(GameState& gameState,const std::string& name,int money);
+		
+		Player(const std::string& name,int money);
 		
 	private:
-		GameState& gameState;
-		
 		std::string name;
 		int money;
 		

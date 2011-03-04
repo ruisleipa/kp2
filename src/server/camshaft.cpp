@@ -3,17 +3,17 @@
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
 
-const std::string& Camshaft::getName()
+const std::string& Camshaft::getName() const
 {
 	return name;
 }
 
-int Camshaft::getPrice()
+int Camshaft::getPrice() const
 {
 	return 0;
 }
 
-bool Camshaft::fitsInVehicle(const Vehicle& vehicle)
+bool Camshaft::fitsInVehicle(const Vehicle& vehicle) const
 {
 	return true;
 }
@@ -35,6 +35,7 @@ Camshaft::Camshaft(IniFile& iniFile)
 	ss << cylinders;
 	ss << " ";	
 	ss << camshaftPosition;
+	ss << " nokka";
 	
 	name = ss.str();
 }

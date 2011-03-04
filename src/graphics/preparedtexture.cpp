@@ -9,6 +9,9 @@
 
 void PreparedTexture::bind()
 {
+	if(number == 0)
+		upload();
+	
 	GLint bindedTexture;
 	
 	glGetIntegerv(GL_TEXTURE_BINDING_2D,&bindedTexture);
@@ -25,6 +28,11 @@ void PreparedTexture::upload()
 {
 	deleteTexture();
 	createTexture();
+}
+
+void PreparedTexture::free()
+{
+	deleteTexture();
 }
 
 void PreparedTexture::setFilter(TextureFilter filter)
@@ -324,4 +332,6 @@ void PreparedTexture::deleteTexture()
 {
 	if(glIsTexture(number))
 		glDeleteTextures(1,&number);
+	
+	number = 0;
 }

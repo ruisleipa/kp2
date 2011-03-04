@@ -11,9 +11,9 @@ class Vehicle;
 class Cooler: public PartModelImplementation
 {
 	public:
-		const std::string& getName();
-		int getPrice();
-		bool fitsInVehicle(const Vehicle& vehicle);
+		const std::string& getName() const;
+		int getPrice() const;
+		bool fitsInVehicle(const Vehicle& vehicle) const;
 		
 		Cooler(IniFile& iniFile);
 		

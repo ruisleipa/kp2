@@ -7,6 +7,8 @@
 #include "utils/noncopyable.hpp"
 #include <SDL/SDL_ttf.h>
 #include <map>
+#include <stdexcept>
+#include <tr1/memory>
 
 #define FONT_PAGE_SIZE 256
 
@@ -24,13 +26,47 @@ class FontPage
 		LetterRectangle letter_rectangles[FONT_PAGE_SIZE];
 };
 
-class FontFace: public NonCopyable
+class FontFile
+{
+	public:
+		TTF_Font* font;
+		
+		FontFile(const std::string& filename, int fontsize)
+		{
+			if(!TTF_WasInit())
+				TTF_Init();
+
+			font = TTF_OpenFont(filename.c_str(), fontsize);
+
+			if(!font)
+			{
+				std::string error;
+		
+				error += "Unable to load image: '";
+				error += filename;
+				error += "'";
+				
+				throw std::runtime_error(error);
+			}
+		}
+		
+		~FontFile()
+		{
+			if(font)
+				TTF_CloseFont(font);
+		}
+};
+
+class FontFace
 {
 	public:
 		void draw(std::wstring str,Vector2D pos);
 		void drawWrapped(std::wstring str,Vector2D pos,Vector2D size);
 		Vector2D getTextSize(std::wstring str);
 
+		void freeTextures();
+		void uploadTextures();
+		
 		FontFace(Window& window,std::string fontfile,int fontsize);
 		~FontFace();
 
@@ -41,9 +77,9 @@ class FontFace: public NonCopyable
 
 		int loadPage(unsigned int pagenum);
 
-		Window& window;
+		Window* window;
 		int height;
-		TTF_Font* font;
+		std::tr1::shared_ptr<FontFile> font;
 		std::map<unsigned long,FontPage> fontPages;
 };
 

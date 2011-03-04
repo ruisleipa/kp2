@@ -3,17 +3,17 @@
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
 
-const std::string& FuelPump::getName()
+const std::string& FuelPump::getName() const
 {
 	return name;
 }
 
-int FuelPump::getPrice()
+int FuelPump::getPrice() const
 {
 	return 0;
 }
 
-bool FuelPump::fitsInVehicle(const Vehicle& vehicle)
+bool FuelPump::fitsInVehicle(const Vehicle& vehicle) const
 {
 	return true;
 }

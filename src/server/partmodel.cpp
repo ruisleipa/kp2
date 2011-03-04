@@ -42,6 +42,16 @@ float PartModel::getWeight() const
 	return weight;
 }
 
+const PartModelImplementation& PartModel::getImplementation() const
+{
+	return *partModelImplementation;
+}
+
+bool PartModel::fitsInVehicle(const Vehicle& vehicle) const
+{
+	partModelImplementation->fitsInVehicle(vehicle);
+}
+
 PartModel::PartModel():
 	price(0),
 	type(""),

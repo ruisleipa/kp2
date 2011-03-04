@@ -2,20 +2,38 @@
 
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
+#include "engine.hpp"
 
-const std::string& CylinderHead::getName()
+const std::string& CylinderHead::getName() const
 {
 	return name;
 }
 
-int CylinderHead::getPrice()
+int CylinderHead::getPrice() const
 {
 	return 0;
 }
 
-bool CylinderHead::fitsInVehicle(const Vehicle& vehicle)
+bool CylinderHead::fitsInVehicle(const Vehicle& vehicle) const
 {
-	return true;
+	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
+	{
+		const Part& part = vehicle.getPart(i);
+	
+		if(part.getType() == "engine")
+		{
+			const Engine& engine = part.getModelImplementation<Engine>();
+			
+			if(engine.getCylinderCount() != cylinders)
+				return false;
+			
+			if(engine.getCamshaftPosition() != camshaftPosition)
+				return false;
+				
+			if(engine.getCylinderAlignment() != cylinderAlignment)
+				return false;
+		}
+	}
 }
 
 CylinderHead::CylinderHead(IniFile& iniFile)
@@ -40,6 +58,8 @@ CylinderHead::CylinderHead(IniFile& iniFile)
 		ss << "D";
 		
 	ss << camshaftPosition;
+	
+	ss << " kansi";
 	
 	name = ss.str();
 }

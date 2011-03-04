@@ -11,6 +11,7 @@ const Color PASSIVE(0.5, 0.5, 0.5);
 const Color ACTIVE(1, 1, 1);
 
 FontLoader::FontLoader(Window& window):
+	window(window),
 	font(window, "data/fonts/dejavusansbold.ttf", window.getSize().getY()*(12.0/480.0)),
 	smallFont(window, "data/fonts/dejavusansbold.ttf", window.getSize().getY()*(8.0/480.0))
 {
@@ -24,5 +25,23 @@ FontLoader::FontLoader(Window& window):
 	Font::setFontType("Select.active", font, ACTIVE);
 	Font::setFontType("Field", font, NORMAL);
 	Font::setFontType("Listbox", smallFont, NORMAL);	
+}
+
+void FontLoader::freeTextures()
+{
+	font.freeTextures();
+	smallFont.freeTextures();
+}
+
+void FontLoader::uploadTextures()
+{
+	font.uploadTextures();
+	smallFont.uploadTextures();
+}
+
+void FontLoader::reload()
+{	
+	font = FontFace(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(12.0/480.0));
+	smallFont = FontFace(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(11.0/480.0));
 }
 

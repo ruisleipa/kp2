@@ -9,6 +9,8 @@
 #include "protocol/buypart.hpp"
 #include "protocol/buyvehicle.hpp"
 #include "protocol/setactivevehicle.hpp"
+#include "protocol/installpart.hpp"
+#include "protocol/uninstallpart.hpp"
 #include "protocol/playerinfo.hpp"
 #include "protocol/shopvehicle.hpp"
 #include "protocol/shoppart.hpp"
@@ -78,8 +80,10 @@ void Connection::processPackets(ClientSocket& socket)
 
 				packet >> buyVehicle;
 				
-				gameState.getPlayer(playerId).buyVehicle(buyVehicle.id);
-								
+				const VehicleModel& model = gameState.getVehicleModel(buyVehicle.id);
+				
+				gameState.getPlayer(playerId).buyVehicle(model);
+				
 				sendPlayerInfo();
 				sendPlayerVehicles();				
 			}
@@ -89,10 +93,40 @@ void Connection::processPackets(ClientSocket& socket)
 
 				packet >> buyPart;
 				
-				gameState.getPlayer(playerId).buyPart(buyPart.id);
+				const PartModel& model = gameState.getPartModel(buyPart.id);
+				
+				gameState.getPlayer(playerId).buyPart(model);
 								
 				sendPlayerInfo();
 				sendPlayerParts();				
+			}
+			else if(type == Protocol::COMMAND_INSTALL_PART)
+			{
+				Protocol::InstallPart command;
+
+				packet >> command;
+				
+				Player& player = gameState.getPlayer(playerId);
+				Vehicle& vehicle = player.getVehicle(player.getActiveVehicleId());
+					
+				vehicle.installPart(command.id);
+				
+				sendPlayerParts();			
+				sendPlayerVehicles();			
+			}
+			else if(type == Protocol::COMMAND_UNINSTALL_PART)
+			{
+				Protocol::UninstallPart command;
+
+				packet >> command;
+				
+				Player& player = gameState.getPlayer(playerId);
+				Vehicle& vehicle = player.getVehicle(player.getActiveVehicleId());
+					
+				vehicle.uninstallPart(command.id);
+				
+				sendPlayerParts();			
+				sendPlayerVehicles();			
 			}
 		}
 		catch(EndOfDataException)
@@ -103,6 +137,14 @@ void Connection::processPackets(ClientSocket& socket)
 		catch(InsufficientMoneyException)
 		{
 			std::cerr << "Out of money!" << std::endl;
+		}
+		catch(NoSuchPartException)
+		{
+			std::cerr << "No such part!" << std::endl;
+		}
+		catch(NoSuchVehicleException)
+		{
+			std::cerr << "No such vehicle!" << std::endl;
 		}
 	}
 	
@@ -131,7 +173,6 @@ void Connection::sendPlayerInfo()
 		
 	Player& player = gameState.getPlayer(playerId);
 	
-	playerInfo.playerId = playerId;	
 	playerInfo.name = player.getName();
 	playerInfo.money = player.getMoney();
 
@@ -146,7 +187,7 @@ void Connection::sendPlayers()
 	
 	packet.setType(Protocol::DATA_PLAYERS);
 	
-	Protocol::Collection<Protocol::PlayerInfo> playerCollection;
+	Protocol::Players players;
 	
 	std::vector<int> playerIds = gameState.getPlayerIds();
 	std::vector<int>::iterator i;
@@ -157,7 +198,6 @@ void Connection::sendPlayers()
 			
 		const Player& player = gameState.getPlayer((*i));
 		
-		playerInfo.playerId = (*i);	
 		playerInfo.name = player.getName();
 		
 		/*
@@ -166,10 +206,10 @@ void Connection::sendPlayers()
 		*/
 		playerInfo.money = 0;
 		
-		playerCollection.addItem(playerInfo);
+		players.addItem(*i, playerInfo);
 	}
 		
-	packet << playerCollection;
+	packet << players;
 	
 	sendQueue.push(packet);	
 }
@@ -180,7 +220,7 @@ void Connection::sendShopVehicles()
 	
 	packet.setType(Protocol::DATA_SHOP_VEHICLES);
 	
-	Protocol::Collection<Protocol::ShopVehicle> shopVehiclesCollection;
+	Protocol::ShopVehicles shopVehicles;
 	
 	std::vector<std::string> vehicleModelIds = gameState.getVehicleModelIds();
 	std::vector<std::string>::iterator i;
@@ -191,7 +231,6 @@ void Connection::sendShopVehicles()
 			
 		const VehicleModel& vehicleModel = gameState.getVehicleModel((*i));
 		
-		shopVehicle.id = (*i);
 		shopVehicle.name = vehicleModel.getName();
 		shopVehicle.info = vehicleModel.getInfo();
 		shopVehicle.imageName = vehicleModel.getImageName();
@@ -199,10 +238,10 @@ void Connection::sendShopVehicles()
 		shopVehicle.chassisWeight = vehicleModel.getChassisWeight();
 		shopVehicle.price = vehicleModel.getPrice();
 		
-		shopVehiclesCollection.addItem(shopVehicle);
+		shopVehicles.addItem(*i, shopVehicle);
 	}
 		
-	packet << shopVehiclesCollection;
+	packet << shopVehicles;
 	
 	sendQueue.push(packet);	
 }
@@ -213,7 +252,7 @@ void Connection::sendShopParts()
 	
 	packet.setType(Protocol::DATA_SHOP_PARTS);
 	
-	Protocol::Collection<Protocol::ShopPart> shopPartsCollection;
+	Protocol::ShopParts shopParts;
 	
 	std::vector<std::string> PartModelIds = gameState.getPartModelIds();
 	std::vector<std::string>::iterator i;
@@ -224,16 +263,15 @@ void Connection::sendShopParts()
 			
 		const PartModel& PartModel = gameState.getPartModel((*i));
 		
-		shopPart.id = (*i);
 		shopPart.name = PartModel.getName();
 		shopPart.type = PartModel.getType();
 		shopPart.price = PartModel.getPrice();
 		shopPart.weight = PartModel.getWeight();
 				
-		shopPartsCollection.addItem(shopPart);
+		shopParts.addItem(*i, shopPart);
 	}
 		
-	packet << shopPartsCollection;
+	packet << shopParts;
 	
 	sendQueue.push(packet);	
 }
@@ -244,28 +282,44 @@ void Connection::sendPlayerVehicles()
 	
 	packet.setType(Protocol::DATA_PLAYER_VEHICLES);
 	
-	Protocol::Collection<Protocol::Vehicle> playerVehicleCollection;
+	Protocol::PlayerVehicles playerVehicles;
 	
 	Player& player = gameState.getPlayer(playerId);
 	
-	for(int i = 0; i < player.getVehicleCount(); ++i)
+	std::vector<int> ids = player.getVehicleIds();
+	
+	for(size_t i = 0; i < ids.size(); ++i)
 	{
 		Protocol::Vehicle playerVehicle;
 			
-		const Vehicle& vehicle = player.getVehicle(i);
+		const Vehicle& vehicle = player.getVehicle(ids[i]);
 		
-		playerVehicle.id = i;
 		playerVehicle.name = vehicle.getModel().getName();
 		playerVehicle.info = vehicle.getModel().getInfo();
 		playerVehicle.imageName = vehicle.getModel().getImageName();
 		playerVehicle.year = vehicle.getModel().getYear();
 		playerVehicle.chassisWeight = vehicle.getModel().getChassisWeight();
+		playerVehicle.totalWeight = vehicle.getWeight();
 		playerVehicle.price = vehicle.getModel().getPrice();
 		
-		playerVehicleCollection.addItem(playerVehicle);
+		for(size_t j = 0; j < vehicle.getPartCount(); ++j)
+		{
+			Protocol::Part p;
+			
+			const Part& part = vehicle.getPart(j);
+		
+			p.name = part.getName();
+			p.type = part.getType();
+			p.price = part.getPrice();
+			p.weight = part.getWeight();
+
+			playerVehicle.parts.addItem(j, p);
+		}
+		
+		playerVehicles.addItem(ids[i], playerVehicle);
 	}
 		
-	packet << playerVehicleCollection;
+	packet << playerVehicles;
 	
 	sendQueue.push(packet);	
 }
@@ -276,27 +330,27 @@ void Connection::sendPlayerParts()
 	
 	packet.setType(Protocol::DATA_PLAYER_PARTS);
 	
-	Protocol::Collection<Protocol::Part> playerPartCollection;
+	Protocol::PlayerParts playerParts;
 	
 	Player& player = gameState.getPlayer(playerId);
 	
-	for(int i = 0; i < player.getPartCount(); ++i)
+	std::vector<int> ids = player.getPartIds();
+	
+	for(size_t i = 0; i < ids.size(); ++i)
 	{
 		Protocol::Part playerPart;
 			
-		const Part& Part = player.getPart(i);
+		const Part& part = player.getPart(ids[i]);
 		
-		playerPart.id = i;
-		
-		playerPart.name = Part.getName();
-		playerPart.type = Part.getType();
-		playerPart.price = Part.getPrice();
-		playerPart.weight = Part.getWeight();
+		playerPart.name = part.getName();
+		playerPart.type = part.getType();
+		playerPart.price = part.getPrice();
+		playerPart.weight = part.getWeight();
 
-		playerPartCollection.addItem(playerPart);
+		playerParts.addItem(ids[i], playerPart);
 	}
 		
-	packet << playerPartCollection;
+	packet << playerParts;
 	
 	sendQueue.push(packet);
 }
@@ -307,7 +361,7 @@ void Connection::sendActiveVehicleId()
 	
 	packet.setType(Protocol::DATA_ACTIVE_VEHICLE_ID);
 	
-	Protocol::ActiveVehicleId activeVehicleId;
+	Protocol::VehicleId activeVehicleId;
 	
 	activeVehicleId = gameState.getPlayer(playerId).getActiveVehicleId();
 	
