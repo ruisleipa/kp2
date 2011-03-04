@@ -32,6 +32,7 @@ void TabbedMenu::addTab(const std::string& label,Widget& widget)
 	buttons.push_back(button);
 	
 	tabContainer.addWidget(convertToString(&widget),widget);
+	widget.setVisible(false);
 	
 	buttonContainer.addWidget(*button);
 }
