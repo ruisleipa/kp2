@@ -132,7 +132,7 @@ const Packet& Packet::operator>>(float& value)
 	
 	value = float(abs(whole)) + float(fract) / 1000000000.0;
 	
-	if(whole < 1)
+	if(whole < 0)
 		value *= -1.0;
 	
 	return *this;
@@ -233,8 +233,8 @@ std::ostream& operator<<(std::ostream& stream,const Packet& packet)
 	stream << "Payload size: " << str.size() << std::endl;
 	stream << "Payload: " << std::endl;
 	
-	int hex_i=0;
-	int char_i=0;
+	size_t hex_i=0;
+	size_t char_i=0;
 	
 	const int bytes_per_row=20;
 	
