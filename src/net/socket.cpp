@@ -87,7 +87,7 @@ bool Socket::connectImpl(const std::string& hostname,const int port)
 	{
 		m_socket=socket(p->ai_family,p->ai_socktype,p->ai_protocol);
 		
-		if(m_socket == INVALID_SOCKET)
+		if(m_socket == int(INVALID_SOCKET))
 			continue;
 			
 		if(::connect(m_socket,p->ai_addr,p->ai_addrlen) == SOCKET_ERROR)
@@ -95,9 +95,7 @@ bool Socket::connectImpl(const std::string& hostname,const int port)
 			errormsg=getErrorMessage();
 			close();
 			continue;			
-		}
-		
-		
+		}		
 		
 		break;
 	}
@@ -129,7 +127,7 @@ bool Socket::bindImpl(const std::string& hostname,int port)
 	{
 		m_socket=socket(p->ai_family,p->ai_socktype,p->ai_protocol);
 		
-		if(m_socket == INVALID_SOCKET)
+		if(m_socket == int(INVALID_SOCKET))
 		{
 			std::cerr<<"Cannot create a socket: "<<getErrorMessage()<<std::endl;
 			continue;
@@ -181,14 +179,14 @@ bool Socket::bindImpl(const std::string& hostname,int port)
 
 bool Socket::acceptImpl(int& socket)
 {
-	if(m_socket == INVALID_SOCKET)
+	if(m_socket == int(INVALID_SOCKET))
 		return false;
 
 	int newsocket;
 
-	newsocket=::accept(m_socket,0,0);
+	newsocket = ::accept(m_socket, 0, 0);
 	
-	if(newsocket==INVALID_SOCKET)
+	if(newsocket == int(INVALID_SOCKET))
 	{
 #ifdef WIN32
 		if(WSAGetLastError()!=WSAEWOULDBLOCK)		
@@ -222,8 +220,8 @@ bool Socket::acceptImpl(int& socket)
 
 int Socket::readImpl(char* data,int size)
 {
-	if(m_socket == INVALID_SOCKET)
-		return -1;
+	if(m_socket == int(INVALID_SOCKET))
+		return 0;
 
 	int res=recv(m_socket,data,size,0);
 	
@@ -237,7 +235,7 @@ int Socket::readImpl(char* data,int size)
 		{
 			std::cerr<<"Reading from socket failed: "<<getErrorMessage()<<std::endl;
 			close();
-			return -1;
+			throw ConnectionClosedException();
 		}
 		
 		return 0;
@@ -254,7 +252,7 @@ int Socket::readImpl(char* data,int size)
 
 int Socket::writeImpl(const char* data,int size)
 {
-	if(m_socket == INVALID_SOCKET)
+	if(m_socket == int(INVALID_SOCKET))
 		return 0;
 
 	m_write_buffer.append(data,size);
@@ -266,7 +264,7 @@ int Socket::writeImpl(const char* data,int size)
 
 void Socket::close()
 {
-	if(m_socket != INVALID_SOCKET)
+	if(m_socket != int(INVALID_SOCKET))
 #ifdef WIN32
 		closesocket(m_socket);
 #else
@@ -313,6 +311,8 @@ Socket& Socket::operator=(const Socket& b)
 	b.m_socket=0;
 	
 	m_write_buffer=b.m_write_buffer;
+	
+	return *this;
 }
 
 Socket::~Socket()
