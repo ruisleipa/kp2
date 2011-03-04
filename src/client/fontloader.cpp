@@ -12,10 +12,11 @@ const Color ACTIVE(1, 1, 1);
 
 FontLoader::FontLoader(Window& window):
 	window(window),
-	font(window, "data/fonts/dejavusansbold.ttf", window.getSize().getY()*(12.0/480.0)),
-	smallFont(window, "data/fonts/dejavusansbold.ttf", window.getSize().getY()*(8.0/480.0))
+	font(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(12.0/480.0)),
+	smallFont(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(11.0/480.0)),
+	titleFont(window, "data/fonts/dejavusansboldoblique.ttf", window.getSize().getY()*(32.0/480.0))
 {
-	Font::setFontType("title", font, NORMAL);
+	Font::setFontType("title", titleFont, NORMAL);
 	Font::setFontType("small", smallFont, NORMAL);
 	Font::setFontType("Label", font, NORMAL);
 	Font::setFontType("Textborder", font, BORDER);
@@ -24,24 +25,27 @@ FontLoader::FontLoader(Window& window):
 	Font::setFontType("Select", font, PASSIVE);
 	Font::setFontType("Select.active", font, ACTIVE);
 	Font::setFontType("Field", font, NORMAL);
-	Font::setFontType("Listbox", smallFont, NORMAL);	
+	Font::setFontType("Listbox", smallFont, NORMAL);
 }
 
 void FontLoader::freeTextures()
 {
 	font.freeTextures();
 	smallFont.freeTextures();
+	titleFont.freeTextures();
 }
 
 void FontLoader::uploadTextures()
 {
 	font.uploadTextures();
 	smallFont.uploadTextures();
+	titleFont.uploadTextures();
 }
 
 void FontLoader::reload()
 {	
 	font = FontFace(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(12.0/480.0));
 	smallFont = FontFace(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(11.0/480.0));
+	titleFont = FontFace(window, "data/fonts/dejavusansboldoblique.ttf", window.getSize().getY()*(32.0/480.0));
 }
 
