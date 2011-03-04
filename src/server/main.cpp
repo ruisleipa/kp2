@@ -97,6 +97,8 @@ void startServer(int argc,char** argv)
 					}
 					catch(ConnectionClosedException)
 					{
+						sockets.remove(activity.getSocket());
+					
 						connections.erase(i);
 					}
 					
