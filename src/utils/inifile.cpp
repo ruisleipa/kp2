@@ -75,6 +75,10 @@ void IniFile::load(const std::string& filename)
 		/*
 		Check if the value is a string.
 		*/
+
+		if(!key.length() || !value.length())
+			continue;	
+		
 		if(value.at(0) == STRING_BEGIN_CHARACTER)
 		{
 			/*
