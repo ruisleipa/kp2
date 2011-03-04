@@ -71,7 +71,7 @@ void startServer(int argc,char** argv)
 			
 			serverSocket.accept(*socket.get());
 			
-			Player player(gameState, "pelaaja", 20000);
+			Player player("pelaaja", 20000);
 			
 			int playerId = gameState.addPlayer(player);
 		

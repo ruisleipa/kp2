@@ -91,20 +91,24 @@ void startGame()
 	MenuContainer topLevelGameMenus(backgroundTextures);
 		
 	TabbedMenu garageMenu;	
+	
 	CarShopMenu carShopMenu(connection);
+	CarListMenu carListMenu(connection);
+	
 	garageMenu.addTab("Autokauppa",carShopMenu);
-	CarListMenu carListMenu(connection);	
 	garageMenu.addTab("Autotalli",carListMenu);	
 	
 	topLevelGameMenus.addWidget("garage",garageMenu);
 	
 	TabbedMenu tuningMenu;	
 	PartShopMenu partShopMenu(connection);
-	tuningMenu.addTab("Osakauppa",partShopMenu);
 	InstallPartsMenu installPartsMenu(connection);	
-	tuningMenu.addTab("Asenna osia",installPartsMenu);	
+	tuningMenu.addTab("Osakauppa",partShopMenu);
+	tuningMenu.addTab("Asenna osia",installPartsMenu);
 	
 	topLevelGameMenus.addWidget("tuning",tuningMenu);
+	
+	topLevelGameMenus.showOnlyWidget("");
 	
 	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);
 		
@@ -138,6 +142,24 @@ void startGame()
 		
 		Color(1,1,1).apply();
 		SDL_GL_SwapBuffers();		
+		
+		try
+		{
+			connection.processMessages();		
+		}
+		catch(ConnectionClosedException)
+		{
+			menuContainer.showOnlyWidget("mainmenu");
+		}
+		
+		try
+		{
+			events.processEvents();
+		}
+		catch(ExitException)
+		{
+			running = false;
+		}
 		
 		connection.processMessages();		
 		events.processEvents();
