@@ -6,6 +6,11 @@ class InsufficientMoneyException
 
 };
 
+class PartDoesNotFitException
+{
+
+};
+
 class NoSuchPartException
 {
 

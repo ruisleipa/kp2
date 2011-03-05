@@ -11,39 +11,35 @@ const VehicleModel& Vehicle::getModel() const
 	return *vehicleModel;
 }
 
-int Vehicle::getPartCount() const
+size_t Vehicle::getPartCount() const
 {
 	return parts.size();
 }
 
-const Part& Vehicle::getPart(int id) const
+const Part& Vehicle::getPart(size_t id) const
 {
 	return getPartFromVector(id);
 }
 
-void Vehicle::uninstallPart(int id)
+void Vehicle::uninstallPart(size_t id)
 {
 	player->addPart(getPart(id));
-	parts.erase(parts.begin() + id);	
+	
+	removePart(id);
 }
 
-void Vehicle::installPart(int playerPartId)
+void Vehicle::installPart(size_t playerPartId)
 {
 	const Part& newPart = player->getPart(playerPartId);
 	
-	if(!newPart.fitsInVehicle(*this))
-		return;
-
-	parts.push_back(newPart);
-	
-	player->removePart(playerPartId);	
+	player->addPart(newPart);	
 }
 
 int Vehicle::getWeight() const
 {
 	int weight = getModel().getChassisWeight();
 
-	for(int i = 0; i < getPartCount(); ++i)
+	for(size_t i = 0; i < getPartCount(); ++i)
 	{
 		weight += getPart(i).getWeight();
 	}
@@ -55,16 +51,29 @@ Vehicle::Vehicle(const VehicleModel& vehicleModel, Player& player):
 	vehicleModel(&vehicleModel),
 	player(&player)	
 {
-	for(int i = 0; i < getModel().getPartCount(); ++i)
-	{
-		parts.push_back(getModel().getPart(i));
+	for(size_t i = 0; i < vehicleModel.getPartCount(); ++i)
+	{		
+		addPart(vehicleModel.getPart(i));
 	}
 }
 
-const Part& Vehicle::getPartFromVector(int id) const
+const Part& Vehicle::getPartFromVector(size_t id) const
 {
-	if(id < 0 || id >= parts.size())
+	if(id >= parts.size())
 		throw NoSuchPartException();
 		
 	return parts[id];
+}
+
+void Vehicle::addPart(const Part& part)
+{
+	if(!part.fitsInVehicle(*this))
+		throw PartDoesNotFitException();
+
+	parts.push_back(part);
+}
+
+void Vehicle::removePart(size_t id)
+{
+	parts.erase(parts.begin() + id);	
 }

@@ -16,18 +16,21 @@ class Vehicle
 	public:		
 		const VehicleModel& getModel() const;
 		
-		int getPartCount() const;
-		const Part& getPart(int id) const;
+		size_t getPartCount() const;
+		const Part& getPart(size_t id) const;
 		
-		void uninstallPart(int id);
-		void installPart(int playerPartId);
+		void uninstallPart(size_t id);
+		void installPart(size_t playerPartId);
 		
 		int getWeight() const;
 		
 		Vehicle(const VehicleModel& vehicleModel, Player& player);
 		
 	private:
-		const Part& getPartFromVector(int id) const;
+		void addPart(const Part& part);
+		void removePart(size_t id);
+	
+		const Part& getPartFromVector(size_t id) const;
 	
 		const VehicleModel* vehicleModel;
 		Player* player;
