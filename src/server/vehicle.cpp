@@ -32,7 +32,9 @@ void Vehicle::installPart(size_t playerPartId)
 {
 	const Part& newPart = player->getPart(playerPartId);
 	
-	player->addPart(newPart);	
+	addPart(newPart);	
+	
+	player->removePart(playerPartId);	
 }
 
 int Vehicle::getWeight() const
