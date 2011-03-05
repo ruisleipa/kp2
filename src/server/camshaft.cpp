@@ -2,6 +2,7 @@
 
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
+#include "cylinderhead.hpp"
 
 const std::string& Camshaft::getName() const
 {
@@ -15,6 +16,24 @@ int Camshaft::getPrice() const
 
 bool Camshaft::fitsInVehicle(const Vehicle& vehicle) const
 {
+	
+	
+	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
+	{
+		const Part& part = vehicle.getPart(i);
+	
+		if(part.getType() == "cylinderhead")
+		{
+			const CylinderHead& cylinderHead = part.getModelImplementation<CylinderHead>();
+			
+			if(cylinderHead.getCylinderCount() != cylinders)
+				return false;
+			
+			if(cylinderHead.getCamshaftPosition() != camshaftPosition)
+				return false;
+		}
+	}
+	
 	return true;
 }
 
