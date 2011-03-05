@@ -16,24 +16,44 @@ int CylinderHead::getPrice() const
 
 bool CylinderHead::fitsInVehicle(const Vehicle& vehicle) const
 {
+	const Engine* engine = 0;
+		
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
 	{
 		const Part& part = vehicle.getPart(i);
-	
+		
 		if(part.getType() == "engine")
-		{
-			const Engine& engine = part.getModelImplementation<Engine>();
-			
-			if(engine.getCylinderCount() != cylinders)
-				return false;
-			
-			if(engine.getCamshaftPosition() != camshaftPosition)
-				return false;
-				
-			if(engine.getCylinderAlignment() != cylinderAlignment)
-				return false;
-		}
+			engine = &(part.getModelImplementation<Engine>());
 	}
+	
+	//no engine, we cannot install a cylinderhead
+	if(!engine)
+		return false;
+	
+	int cylinderHeadsNeeded = 1;
+	
+	if(engine->getCylinderAlignment() == "V")
+		cylinderHeadsNeeded = 2;
+
+	int cylinderHeadsInstalled = 0;
+		
+	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
+	{
+		if(vehicle.getPart(i).getType() == "cylinderhead")
+			cylinderHeadsInstalled++;
+	}
+	
+	//no room for additional cylinderheads
+	if(cylinderHeadsInstalled == cylinderHeadsNeeded)
+		return false;
+		
+	if(engine->getCylinderCount() != cylinders)
+		return false;
+	
+	if(engine->getCamshaftPosition() != camshaftPosition)
+		return false;
+
+	return true;
 }
 
 CylinderHead::CylinderHead(IniFile& iniFile)
