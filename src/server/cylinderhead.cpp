@@ -14,6 +14,16 @@ int CylinderHead::getPrice() const
 	return 0;
 }
 
+const std::string& CylinderHead::getCamshaftPosition() const
+{
+	return camshaftPosition;
+}
+
+int CylinderHead::getCylinderCount() const
+{
+	return cylinders;
+}
+
 bool CylinderHead::fitsInVehicle(const Vehicle& vehicle) const
 {
 	const Engine* engine = 0;
