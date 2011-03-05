@@ -146,6 +146,10 @@ void Connection::processPackets(ClientSocket& socket)
 		{
 			std::cerr << "No such vehicle!" << std::endl;
 		}
+		catch(PartDoesNotFitException)
+		{
+			std::cerr << "Part does not fit!" << std::endl;
+		}
 	}
 	
 	writePackets(socket);
