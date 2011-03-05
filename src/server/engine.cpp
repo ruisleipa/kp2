@@ -30,6 +30,12 @@ int Engine::getCylinderCount() const
 
 bool Engine::fitsInVehicle(const Vehicle& vehicle) const
 {
+	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
+	{
+		if(vehicle.getPart(i).getType() == "engine")
+			return false;
+	}
+	
 	return true;
 }
 
