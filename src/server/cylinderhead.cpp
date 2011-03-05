@@ -40,7 +40,6 @@ CylinderHead::CylinderHead(IniFile& iniFile)
 {
 	iniFile.getValue("cylinders",cylinders);
 	iniFile.getValue("camshaftPosition",camshaftPosition);
-	iniFile.getValue("cylinderAlignment",cylinderAlignment);
 	iniFile.getValue("doubleCam",doubleCam);
 		
 	std::stringstream ss;
@@ -50,9 +49,8 @@ CylinderHead::CylinderHead(IniFile& iniFile)
 	//S4 CIH
 	//S6 OHV
 	
-	ss << cylinderAlignment;
 	ss << cylinders;
-	ss << " ";
+	ss << "-syl. ";
 	
 	if(doubleCam)
 		ss << "D";

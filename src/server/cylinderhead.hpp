@@ -21,7 +21,6 @@ class CylinderHead: public PartModelImplementation
 		std::string name;
 		int doubleCam;
 		std::string camshaftPosition;
-		std::string cylinderAlignment;		
 		int cylinders;
 };
 
