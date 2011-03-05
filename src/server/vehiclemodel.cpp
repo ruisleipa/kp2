@@ -37,17 +37,17 @@ int VehicleModel::getPrice() const
 	return price;
 }	
 
-int VehicleModel::getPartCount() const
+size_t VehicleModel::getPartCount() const
 {
 	return parts.size();
 }
 
-const Part& VehicleModel::getPart(int id) const
+const Part& VehicleModel::getPart(size_t id) const
 {
-	if(id >= 0 && id < parts.size())
+	if(id < parts.size())
 		return parts[id];
 	else
-		throw std::runtime_error("No such part");
+		throw NoSuchPartException();
 }
 
 VehicleModel::VehicleModel(GameState& gameState,const std::string& filename):

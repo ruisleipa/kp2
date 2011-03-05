@@ -18,8 +18,8 @@ class VehicleModel
 		int getYear() const;
 		int getPrice() const;		
 		
-		int getPartCount() const;
-		const Part& getPart(int id) const;
+		size_t getPartCount() const;
+		const Part& getPart(size_t id) const;
 				
 		VehicleModel(GameState& gameState,const std::string& filename);
 		
