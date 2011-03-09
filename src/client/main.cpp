@@ -34,11 +34,15 @@
 #include "connection.hpp"
 #include "net/socket.hpp"
 
+#include "sounds/musicplayer.hpp"
+
 void startGame()
 {
 	Sdl sdl;
 	Window window(sdl);
 	Events events(window);
+	
+	MusicPlayer musicPlayer;
 	
 	LoadingScreen loadingScreen;
 	loadingScreen.setTotalLoadCount(13);
@@ -161,6 +165,7 @@ void startGame()
 			running = false;
 		}
 		
+		musicPlayer.update();
 		connection.processMessages();		
 		events.processEvents();
 
