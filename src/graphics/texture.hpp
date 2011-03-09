@@ -19,6 +19,7 @@ class Texture
 		
 		void draw(Vector2D position,Vector2D size);
 		void drawClipped(Vector2D position,Vector2D size,Vector2D clip_position,Vector2D clip_size);		
+		void drawNineSliceScaled(Vector2D position,Vector2D size,Vector2D topleft, Vector2D bottomright);		
 		
 		void setFilter(TextureFilter filter);
 		TextureFilter getFilter();
