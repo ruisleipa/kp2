@@ -50,6 +50,11 @@ Vector2D Widget::getSize()
 	return size;
 }
 
+void Widget::autoSize()
+{
+
+}
+
 void Widget::setFluid(bool fluid)
 {
 	this->fluid = fluid;

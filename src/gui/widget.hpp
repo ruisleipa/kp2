@@ -25,6 +25,8 @@ class Widget: public EventListener, public NonCopyable
 		void setFactorSize(Vector2D size);	
 		void setPixelSize(Vector2D size);	
 		
+		virtual void autoSize();
+		
 		void setFluid(bool fluid);
 		bool getFluid();
 		
