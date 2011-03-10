@@ -184,8 +184,6 @@ void startGame()
 			window.clearModeChangeFlag();
 		}
 	}
-	
-	window.saveSettings();
 }
 
 int main(int argc,char** argv)

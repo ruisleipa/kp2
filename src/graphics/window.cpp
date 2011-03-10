@@ -166,6 +166,18 @@ Window::Window(Sdl& sdl):
 	clearModeChangeFlag();
 }
 
+Window::~Window()
+{
+	try
+	{
+		saveSettings();
+	}
+	catch(...)
+	{
+		
+	}
+}
+
 void Window::calculateAspectRatio()
 {
 	if(isFullscreen())

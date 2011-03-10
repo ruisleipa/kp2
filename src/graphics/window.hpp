@@ -28,10 +28,8 @@ class Window
 		bool hasModeChanged();
 		void clearModeChangeFlag();
 		
-		void loadSettings();
-		void saveSettings();
-		
 		Window(Sdl& sdl);
+		~Window();
 
 	private:
 		Vector2D surfaceSize;
@@ -46,7 +44,10 @@ class Window
 		bool modeChanged;
 		
 		IniFile settings;
-		
+			
+		void loadSettings();
+		void saveSettings();
+
 		void createSurface();
 		void setAttributes();
 		void checkAttributes();
