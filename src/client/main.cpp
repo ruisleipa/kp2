@@ -128,8 +128,6 @@ void startGame()
 	RootContainer rootContainer(window,events);	
 	rootContainer.addWidget(menuContainer);
 	
-	//ResizeEvent resizeEvent;
-
 	rootContainer.resize(window);
 	
 	bool running = true;
