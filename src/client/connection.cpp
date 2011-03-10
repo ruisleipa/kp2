@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "utils/inifile.hpp"
+#include "utils/string.hpp"
 #include "net/packet.hpp"
 #include "net/clientsocket.hpp"
 #include "protocol/protocol.hpp"
@@ -16,6 +17,10 @@
 #include "protocol/uninstallpart.hpp"
 
 #include "utils/sdl.hpp"
+
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 bool Connection::connect(std::string hostname,int port)
 {
@@ -59,35 +64,48 @@ void Connection::processMessages()
 		{
 			std::cout << "RECEIVING" << std::endl << message << std::endl;
 		
-			switch(message.getType())
+			if(message.getType() == Protocol::DATA_PLAYER_INFO)
 			{
-				case Protocol::DATA_PLAYER_INFO:
-					message >> playerInfo;
-					break;
+				message >> playerInfo;
+			}
+			else if(message.getType() == Protocol::DATA_ACTIVE_VEHICLE_ID)
+			{
+				message >> activeVehicleId;
+			}
+			else if(message.getType() == Protocol::DATA_PLAYERS)
+			{
+				message >> players;
+			}
+			else if(message.getType() == Protocol::DATA_SHOP_VEHICLES)
+			{
+				message >> shopVehicles;
+			}
+			else if(message.getType() == Protocol::DATA_SHOP_PARTS)
+			{
+				message >> shopParts;
+			}
+			else if(message.getType() == Protocol::DATA_PLAYER_VEHICLES)
+			{
+				message >> playerVehicles;
+			}
+			else if(message.getType() == Protocol::DATA_PLAYER_PARTS)
+			{
+				message >> playerParts;
+			}
+			else if(message.getType() == Protocol::DATA_INSTALL_ERROR)
+			{
+				std::string error;
+			
+				message >> error;
 				
-				case Protocol::DATA_ACTIVE_VEHICLE_ID:
-					message >> activeVehicleId;
-					break;
+				std::cout << error;
 				
-				case Protocol::DATA_PLAYERS:
-					message >> players;
-					break;
-					
-				case Protocol::DATA_SHOP_VEHICLES:
-					message >> shopVehicles;
-					break;
-					
-				case Protocol::DATA_SHOP_PARTS:
-					message >> shopParts;
-					break;
-					
-				case Protocol::DATA_PLAYER_VEHICLES:
-					message >> playerVehicles;
-					break;
-					
-				case Protocol::DATA_PLAYER_PARTS:
-					message >> playerParts;
-					break;
+				std::wstring errorMessage = convertToWideString(error);
+				
+				const WCHAR* errorCaption=L"Kiihdytyspeli 2";
+				
+				MessageBoxW(NULL, (const WCHAR*)errorMessage.c_str(), errorCaption, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL);
+				
 			}
 		
 			std::vector<std::tr1::function<void(Connection&)> >::iterator i;

@@ -146,9 +146,11 @@ void Connection::processPackets(ClientSocket& socket)
 		{
 			std::cerr << "No such vehicle!" << std::endl;
 		}
-		catch(PartDoesNotFitException)
+		catch(PartDoesNotFitException e)
 		{
-			std::cerr << "Part does not fit!" << std::endl;
+			std::cerr << "Part does not fit: " << e.reason << std::endl;
+			
+			sendInstallError(e.reason);
 		}
 	}
 	
@@ -370,6 +372,21 @@ void Connection::sendActiveVehicleId()
 	activeVehicleId = gameState.getPlayer(playerId).getActiveVehicleId();
 	
 	packet << activeVehicleId;
+	
+	sendQueue.push(packet);
+}
+
+void Connection::sendInstallError(const std::string& error)
+{
+	Packet packet;
+	
+	packet.setType(Protocol::DATA_INSTALL_ERROR);
+	
+	Protocol::InstallError installError;
+	
+	installError = error;
+	
+	packet << installError;
 	
 	sendQueue.push(packet);
 }

@@ -24,6 +24,7 @@ class Connection
 		void sendPlayerVehicles();
 		void sendPlayerParts();
 		void sendActiveVehicleId();
+		void sendInstallError(const std::string& error);
 	
 		Connection(GameState& gameState,int playerId);
 		
