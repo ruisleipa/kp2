@@ -70,6 +70,33 @@ void LayoutContainer::showOuterPadding(bool padding)
 	applyOuterPadding = padding;
 }
 
+void LayoutContainer::autoSize()
+{
+	int size = 0;
+
+	for(int i = 0; i < getChildCount(); i++)
+	{
+ 		Widget* child = getChild(i);
+		
+		if(!child)
+			continue;
+			
+		if(child->getVisible())
+		{
+			if(child->getFluid())
+				continue;
+		
+			//XXX: Because the widget is not fluid the ourSize does not matter.
+			int widgetSize = getNonDividedAxis(calculateWidgetSize(child, Vector2D(0, 0)));
+		
+			if(widgetSize > size)
+				size = widgetSize;
+		}
+	}
+	
+	setPixelSize(convertDimensionsToVector(0, size));
+}
+
 LayoutContainer::LayoutContainer():
 	applyOuterPadding(true)
 {

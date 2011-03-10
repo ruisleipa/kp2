@@ -16,6 +16,8 @@ class LayoutContainer : public Container
 		
 		void showOuterPadding(bool padding);
 		
+		virtual void autoSize();
+		
 		LayoutContainer();
 	
 	protected:
