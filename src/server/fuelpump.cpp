@@ -13,11 +13,6 @@ int FuelPump::getPrice() const
 	return 0;
 }
 
-bool FuelPump::fitsInVehicle(const Vehicle& vehicle) const
-{
-	return true;
-}
-
 FuelPump::FuelPump(IniFile& iniFile)
 {
 	iniFile.getValue("name",name);

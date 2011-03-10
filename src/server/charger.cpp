@@ -13,11 +13,6 @@ int Charger::getPrice() const
 	return 150;
 }
 
-bool Charger::fitsInVehicle(const Vehicle& vehicle) const
-{
-	return true;
-}
-
 Charger::Charger(IniFile& iniFile)
 {
 	iniFile.getValue("size",size);

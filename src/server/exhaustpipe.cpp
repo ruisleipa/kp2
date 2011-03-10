@@ -13,11 +13,6 @@ int ExhaustPipe::getPrice() const
 	return 0;
 }
 
-bool ExhaustPipe::fitsInVehicle(const Vehicle& vehicle) const
-{
-	return true;
-}
-
 ExhaustPipe::ExhaustPipe(IniFile& iniFile)
 {
 	iniFile.getValue("pipeCount",pipeCount);

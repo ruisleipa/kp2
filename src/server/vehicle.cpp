@@ -26,6 +26,23 @@ void Vehicle::uninstallPart(size_t id)
 	player->addPart(getPart(id));
 	
 	removePart(id);
+	
+	for(size_t i = 0; i < getPartCount(); ++i)
+	{
+		bool fits = true;
+	
+		try
+		{
+			getPart(i).checkKeepingConstraints(*this);
+		}
+		catch(PartDoesNotFitException e)
+		{
+			fits = false;
+		}
+		
+		if(!fits)
+			uninstallPart(i);
+	}
 }
 
 void Vehicle::installPart(size_t playerPartId)
@@ -69,8 +86,7 @@ const Part& Vehicle::getPartFromVector(size_t id) const
 
 void Vehicle::addPart(const Part& part)
 {
-	if(!part.fitsInVehicle(*this))
-		throw PartDoesNotFitException();
+	part.checkInstallationConstraints(*this);
 
 	parts.push_back(part);
 }

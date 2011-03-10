@@ -25,9 +25,14 @@ float Part::getWeight() const
 	return partModel->getWeight();
 }
 
-bool Part::fitsInVehicle(const Vehicle& vehicle) const
+void Part::checkInstallationConstraints(const Vehicle& vehicle) const
 {
-	return partModel->fitsInVehicle(vehicle);
+	partModel->checkInstallationConstraints(vehicle);
+}
+
+void Part::checkKeepingConstraints(const Vehicle& vehicle) const
+{
+	partModel->checkKeepingConstraints(vehicle);
 }
 
 void Part::addMachining(const Machining& machining)

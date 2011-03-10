@@ -35,7 +35,17 @@ int VehicleModel::getYear() const
 int VehicleModel::getPrice() const
 {
 	return price;
-}	
+}
+
+int VehicleModel::getMaxEngineVolume() const
+{
+	return maxEngineVolume;
+}
+
+int VehicleModel::getMaxEngineCylinderCount() const
+{
+	return maxEngineCylinderCount;
+}
 
 size_t VehicleModel::getPartCount() const
 {
@@ -60,12 +70,14 @@ void VehicleModel::load(const std::string& filename)
 {
 	IniFile file(filename);
 	
-	file.getValue("name",name);
-	file.getValue("info",info);
-	file.getValue("imageName",imageName);
-	file.getValue("chassisWeight",chassisWeight);
-	file.getValue("year",year);
-	file.getValue("price",price);
+	file.getValue("name", name);
+	file.getValue("info", info);
+	file.getValue("imageName", imageName);
+	file.getValue("chassisWeight", chassisWeight);
+	file.getValue("year", year);
+	file.getValue("price", price);
+	file.getValue("maxEngineVolume", maxEngineVolume);
+	file.getValue("maxEngineCylinderCount", maxEngineCylinderCount);
 
 	int partCount;
 	

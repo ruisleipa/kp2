@@ -14,8 +14,12 @@ class CylinderHead: public PartModelImplementation
 		const std::string& getName() const;
 		int getPrice() const;
 		const std::string& getCamshaftPosition() const;	
+		const std::string& getCylinderAlignment() const;	
 		int getCylinderCount() const;
-		bool fitsInVehicle(const Vehicle& vehicle) const;
+		bool isDoubleCam() const;
+		
+		void checkPrerequisiteParts(const Vehicle& vehicle) const;
+		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
 		
 		CylinderHead(IniFile& iniFile);
 		
@@ -23,6 +27,7 @@ class CylinderHead: public PartModelImplementation
 		std::string name;
 		int doubleCam;
 		std::string camshaftPosition;
+		std::string cylinderAlignment;
 		int cylinders;
 };
 

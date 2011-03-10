@@ -28,15 +28,22 @@ int Engine::getCylinderCount() const
 	return cylinders;
 }
 
-bool Engine::fitsInVehicle(const Vehicle& vehicle) const
+void Engine::checkPrerequisiteParts(const Vehicle& vehicle) const
+{
+	if(vehicle.getModel().getMaxEngineVolume() < volume)
+			throw PartDoesNotFitException("ENGINE_TOO_LARGE_FOR_CHASSIS");
+
+	if(vehicle.getModel().getMaxEngineCylinderCount() < cylinders)
+			throw PartDoesNotFitException("ENGINE_TOO_LARGE_FOR_CHASSIS");	
+}
+
+void Engine::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
 {
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
 	{
 		if(vehicle.getPart(i).getType() == "engine")
-			return false;
+			throw PartDoesNotFitException("NO_ROOM_FOR_EXTRA_ENGINE");
 	}
-	
-	return true;
 }
 
 Engine::Engine(IniFile& iniFile)
@@ -47,8 +54,6 @@ Engine::Engine(IniFile& iniFile)
 	
 	iniFile.getValue("compression",compression);
 	iniFile.getValue("volume",volume);
-	
-	volume /= 1000.0;
 		
 	std::stringstream ss;
 	
@@ -57,7 +62,7 @@ Engine::Engine(IniFile& iniFile)
 	//3.0L S6 DOHC
 	//2.6L V6 OHC
 	
-	ss << volume;
+	ss << volume / 1000.0;
 	ss << "L ";
 	
 	ss << cylinderAlignment;

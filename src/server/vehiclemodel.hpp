@@ -17,6 +17,8 @@ class VehicleModel
 		int getChassisWeight() const;
 		int getYear() const;
 		int getPrice() const;		
+		int getMaxEngineVolume() const;		
+		int getMaxEngineCylinderCount() const;		
 		
 		size_t getPartCount() const;
 		const Part& getPart(size_t id) const;
@@ -35,6 +37,8 @@ class VehicleModel
 		int chassisWeight;
 		int year;
 		int price;
+		int maxEngineVolume;
+		int maxEngineCylinderCount;
 		
 		std::vector<Part> parts;
 		

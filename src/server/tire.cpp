@@ -13,11 +13,6 @@ int Tire::getPrice() const
 	return 0;
 }
 
-bool Tire::fitsInVehicle(const Vehicle& vehicle) const
-{
-	return true;
-}
-
 Tire::Tire(IniFile& iniFile)
 {
 	iniFile.getValue("name",name);

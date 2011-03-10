@@ -16,7 +16,9 @@ class Engine: public PartModelImplementation
 		const std::string& getCamshaftPosition() const;	
 		const std::string& getCylinderAlignment() const;	
 		int getCylinderCount() const;	
-		bool fitsInVehicle(const Vehicle& vehicle) const;
+		
+		void checkPrerequisiteParts(const Vehicle& vehicle) const;
+		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
 		
 		Engine(IniFile& partFile);
 		

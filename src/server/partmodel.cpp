@@ -47,9 +47,14 @@ const PartModelImplementation& PartModel::getImplementation() const
 	return *partModelImplementation;
 }
 
-bool PartModel::fitsInVehicle(const Vehicle& vehicle) const
+void PartModel::checkInstallationConstraints(const Vehicle& vehicle) const
 {
-	partModelImplementation->fitsInVehicle(vehicle);
+	partModelImplementation->checkInstallationConstraints(vehicle);
+}
+
+void PartModel::checkKeepingConstraints(const Vehicle& vehicle) const
+{
+	partModelImplementation->checkKeepingConstraints(vehicle);
 }
 
 PartModel::PartModel():

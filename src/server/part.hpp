@@ -24,8 +24,9 @@ class Part
 			return dynamic_cast<const T&>(partModel->getImplementation());
 		}
 		
-		bool fitsInVehicle(const Vehicle& vehicle) const;
-		
+		void checkInstallationConstraints(const Vehicle& vehicle) const;
+		void checkKeepingConstraints(const Vehicle& vehicle) const;
+
 		void addMachining(const Machining& machining);
 		
 		Part(const PartModel& partModel);

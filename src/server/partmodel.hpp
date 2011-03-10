@@ -15,10 +15,9 @@ class PartModel
 		float getWeight() const;
 		const PartModelImplementation& getImplementation() const;
 		
-		bool fitsInVehicle(const Vehicle& vehicle) const;
-		
-		
-						
+		void checkInstallationConstraints(const Vehicle& vehicle) const;
+		void checkKeepingConstraints(const Vehicle& vehicle) const;
+				
 		PartModel();
 		PartModel(const std::string& filename);
 		~PartModel();

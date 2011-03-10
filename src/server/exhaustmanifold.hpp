@@ -13,12 +13,17 @@ class ExhaustManifold: public PartModelImplementation
 	public:
 		const std::string& getName() const;
 		int getPrice() const;
-		bool fitsInVehicle(const Vehicle& vehicle) const;
+		
+		void checkPrerequisiteParts(const Vehicle& vehicle) const;
+		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
 		
 		ExhaustManifold(IniFile& iniFile);
 		
 	private:
 		std::string name;
+		std::string camshaftPosition;
+		std::string cylinderAlignment;
+		int cylinders;
 		
 };
 

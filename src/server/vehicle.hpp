@@ -6,10 +6,10 @@
 
 #include "part.hpp"
 #include "exceptions.hpp"
+#include "vehiclemodel.hpp"
 
 class Player;
 class GameState;
-class VehicleModel;
 
 class Vehicle
 {

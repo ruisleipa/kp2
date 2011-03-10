@@ -13,7 +13,6 @@ class FuelIntake: public PartModelImplementation
 	public:
 		const std::string& getName() const;
 		int getPrice() const;
-		bool fitsInVehicle(const Vehicle& vehicle) const;
 		
 		FuelIntake(IniFile& iniFile);
 		
