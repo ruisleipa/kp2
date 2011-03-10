@@ -15,7 +15,7 @@ class SettingsMenu : public Menu
 		SettingsMenu(Window& window);
 
 		virtual void onResize(Window& window);
-		virtual void onShow();
+		virtual void handleEvent(Event* event);
 	
 		void updateDisplayOptions();
 			

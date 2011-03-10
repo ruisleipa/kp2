@@ -102,9 +102,12 @@ void SettingsMenu::onResize(Window& window)
 
 }
 
-void SettingsMenu::onShow()
+void SettingsMenu::handleEvent(Event* event)
 {
-	updateDisplayOptions();
+	Menu::handleEvent(event);
+	
+	if(dynamic_cast<ShowEvent*>(event))
+		updateDisplayOptions();
 }
 
 void SettingsMenu::updateDisplayOptions()
