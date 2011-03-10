@@ -14,7 +14,7 @@ class LayoutContainer : public Container
 	public:
 		virtual void handleEvent(Event* event);
 		
-		bool showOuterPadding(bool padding);
+		void showOuterPadding(bool padding);
 		
 		LayoutContainer();
 	

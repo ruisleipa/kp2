@@ -65,7 +65,7 @@ void LayoutContainer::handleDrawEvent(DrawEvent* event)
 	}	
 }
 
-bool LayoutContainer::showOuterPadding(bool padding)
+void LayoutContainer::showOuterPadding(bool padding)
 {
 	applyOuterPadding = padding;
 }
