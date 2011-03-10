@@ -166,8 +166,6 @@ void startGame()
 		}
 		
 		musicPlayer.update();
-		connection.processMessages();		
-		events.processEvents();
 
 		if(window.hasModeChanged())
 		{
