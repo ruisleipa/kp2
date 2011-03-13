@@ -44,7 +44,7 @@ void startGame()
 	
 	MusicPlayer musicPlayer;
 	
-	LoadingScreen loadingScreen;
+	LoadingScreen loadingScreen(window);
 	loadingScreen.setTotalLoadCount(13);
 
 	FontLoader fontLoader(window);	
