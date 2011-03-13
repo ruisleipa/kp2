@@ -8,7 +8,7 @@
 
 void MusicPlayer::update()
 {
-	if(sound && sound->isPlaying())
+	if(volume == 0 || (sound && sound->isPlaying()))
 		return;
 
 	play(pick());
@@ -19,11 +19,37 @@ void MusicPlayer::playRandomSong()
 	play(pick());
 }
 
+void MusicPlayer::setVolume(int volume)
+{
+	if(volume > 100)
+		volume = 100;
+	
+	if(this->volume == 0 && volume > 0)
+	{
+		playRandomSong();		
+	}
+	
+	if(volume == 0)
+	{
+		sound = 0;
+	}
+	
+	if(sound)
+		sound->setVolume(volume / 100.0);
+		
+	this->volume = volume;
+}
+
+int MusicPlayer::getVolume()
+{
+	return volume;
+}
+
 MusicPlayer::MusicPlayer():
 	device(0),
 	sound(0),
 	currentSong(0),
-	volume(1.0)
+	volume(100)
 {
 	loadSettings();
 
@@ -63,8 +89,7 @@ void MusicPlayer::play(const std::string& file)
 
 	sound = audiere::OpenSound(device, (MUSIC_DIRECTORY + file).c_str());
 
-	sound->setPitchShift(1.0);
-	sound->setVolume(volume);
+	sound->setVolume(volume / 100.0);
 	sound->play();
 }
 

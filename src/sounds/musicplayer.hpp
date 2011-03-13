@@ -16,8 +16,8 @@ class MusicPlayer
 		void update();
 		void playRandomSong();
 		
-		void setVolume(float volume);
-		void getVolume();
+		void setVolume(int volume);
+		int getVolume();
 		
 		MusicPlayer();
 		~MusicPlayer();
