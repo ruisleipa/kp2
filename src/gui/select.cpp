@@ -14,12 +14,12 @@ void Select::handleEvent(Event* event)
 
 void Select::handleMouseDownEvent(MouseDownEvent* event)
 {
-	if(m_index == -1)
+	if(selectedIndex == -1)
 		return;
 
 	if(event->isButtonDown(MouseEvent::LEFT) || event->isButtonDown(MouseEvent::WHEELDOWN))
 	{
-		if(m_index==m_items.size()-1)
+		if(selectedIndex==items.size()-1)
 			setIndex(0);
 		else
 			setIndex(getIndex()+1);
@@ -27,8 +27,8 @@ void Select::handleMouseDownEvent(MouseDownEvent* event)
 		
 	if(event->isButtonDown(MouseEvent::RIGHT) || event->isButtonDown(MouseEvent::WHEELUP))
 	{
-		if(m_index==0)
-			setIndex(m_items.size()-1);
+		if(selectedIndex==0)
+			setIndex(items.size()-1);
 		else
 			setIndex(getIndex()-1);
 	}
@@ -41,30 +41,30 @@ void Select::setChangeHandler(std::tr1::function<void()> handler)
 
 void Select::addItem(std::string item)
 {
-	if(m_index == -1)
+	if(selectedIndex == -1)
 		setIndex(0);
 		
-	m_items.push_back(convertToWideString(item));
+	items.push_back(convertToWideString(item));
 }
 
 void Select::clearItems()
 {
-	m_items.clear();
-	m_index=-1;
+	items.clear();
+	selectedIndex=-1;
 }
 
 int Select::getIndex()
 {
-	return m_index;
+	return selectedIndex;
 }
 
 void Select::setIndex(int index)
 {
-	if(index >= 0 && index < m_items.size())
+	if(index >= 0 && index < items.size())
 	{
-		m_index=index;
+		selectedIndex=index;
 		
-		setText(m_items[m_index]);
+		setText(items[selectedIndex]);
 		autoSize();
 		
 		if(changeHandler)
@@ -73,7 +73,7 @@ void Select::setIndex(int index)
 }
 
 Select::Select():
-	m_index(-1)
+	selectedIndex(-1)
 {
 	setFont(Font("Select"));
 	setActiveFont(Font("Select.active"));

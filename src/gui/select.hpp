@@ -11,7 +11,6 @@ class Select : public ActiveTextWidget
 	public:
 		virtual void handleEvent(Event* event);
 			
-		Select();
 		void setChangeHandler(std::tr1::function<void()> handler);
 		
 		void addItem(std::string item);
@@ -20,13 +19,15 @@ class Select : public ActiveTextWidget
 		int getIndex();
 		void setIndex(int index);
 		
+		Select();
+		
 	private:
 		void handleMouseDownEvent(MouseDownEvent* event);
 	
-		int m_index;
+		int selectedIndex;
+		std::vector<std::wstring> items;
 		
 		std::tr1::function<void()> changeHandler;		
-		std::vector<std::wstring> m_items;
 };
 
 #endif // SELECT_HPP
