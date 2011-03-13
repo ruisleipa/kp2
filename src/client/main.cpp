@@ -88,7 +88,7 @@ void startGame()
 	
 	MainMenu mainMenu(mainmenuTextures);
 	
-	SettingsMenu settingsMenu(window);
+	SettingsMenu settingsMenu(window, musicPlayer);
 	LocalGameMenu localGameMenu;
 	NewLocalGameMenu newLocalGameMenu(connection);
 	

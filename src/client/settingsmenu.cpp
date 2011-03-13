@@ -5,11 +5,13 @@
 #include "ui.hpp"
 #include "utils/string.hpp"
 
+#include "sounds/musicplayer.hpp"
 #include "graphics/window.hpp"
 
+SettingsMenu::SettingsMenu(Window& window, MusicPlayer& musicPlayer):
+	window(window),
+	musicPlayer(musicPlayer),
 	windowOptionsChanged(false)
-SettingsMenu::SettingsMenu(Window& window):
-	window(window)
 {
 	setVisible(false);
 
@@ -19,6 +21,7 @@ SettingsMenu::SettingsMenu(Window& window):
 	sizeLabel.setText("Ikkunan koko");
 	fullscreenLabel.setText("Kokoruututila");
 	vsyncLabel.setText("Vsync");	
+	musicVolumeLabel.setText("Musiikin voimakkuus");	
 	
 	std::vector<Vector2D> possibleSizes = window.getPossibleSizes();
 	std::vector<Vector2D>::iterator i;
@@ -39,6 +42,18 @@ SettingsMenu::SettingsMenu(Window& window):
 	vsyncSelect.addItem("ei");
 	vsyncSelect.addItem("kyllä");
 	
+	musicVolumeSelect.addItem("0 %");
+	musicVolumeSelect.addItem("10 %");
+	musicVolumeSelect.addItem("20 %");
+	musicVolumeSelect.addItem("30 %");
+	musicVolumeSelect.addItem("40 %");
+	musicVolumeSelect.addItem("50 %");
+	musicVolumeSelect.addItem("60 %");
+	musicVolumeSelect.addItem("70 %");
+	musicVolumeSelect.addItem("80 %");
+	musicVolumeSelect.addItem("90 %");
+	musicVolumeSelect.addItem("100 %");
+	
 	backButton.setText("Takaisin");
 	backButton.setClickHandler(std::tr1::bind(&SettingsMenu::backClick,this));
 	applyButton.setText("Ota käyttöön");
@@ -51,10 +66,12 @@ SettingsMenu::SettingsMenu(Window& window):
 	addWidget(sizeLabel);
 	addWidget(fullscreenLabel);
 	addWidget(vsyncLabel);	
+	addWidget(musicVolumeLabel);	
 			
 	addWidget(sizeSelect);
 	addWidget(fullscreenSelect);	
 	addWidget(vsyncSelect);
+	addWidget(musicVolumeSelect);
 		
 	addWidget(backButton);	
 	addWidget(applyButton);
@@ -82,6 +99,10 @@ void SettingsMenu::onResize(Window& window)
 	vsyncLabel.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 	
+	musicVolumeLabel.setPosition(buttonpos);
+	musicVolumeLabel.autoSize();
+	buttonpos+=BUTTON_HEIGHT;
+	
 	buttonpos=CONTENT_POSITION;
 	buttonpos.setX(0.5);
 	
@@ -98,6 +119,10 @@ void SettingsMenu::onResize(Window& window)
 	vsyncSelect.setPosition(buttonpos);
 	vsyncSelect.autoSize();
 	vsyncSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
+	buttonpos+=BUTTON_HEIGHT;	
+	
+	musicVolumeSelect.setPosition(buttonpos);
+	musicVolumeSelect.autoSize();
 	buttonpos+=BUTTON_HEIGHT;
 
 	backButton.setPosition(BACK_BUTTON_POSITION);
@@ -113,7 +138,10 @@ void SettingsMenu::handleEvent(Event* event)
 	Menu::handleEvent(event);
 	
 	if(dynamic_cast<ShowEvent*>(event))
+	{
 		updateDisplayOptions();
+		updateMusicOptions();
+	}
 }
 
 void SettingsMenu::handleDisplayOptionChange()
@@ -145,6 +173,13 @@ void SettingsMenu::updateDisplayOptions()
 	windowOptionsChanged = false;
 }
 
+void SettingsMenu::updateMusicOptions()
+{
+	int index = musicPlayer.getVolume() / 10;
+	
+	musicVolumeSelect.setIndex(index);
+}
+
 void SettingsMenu::backClick()
 {
 	getParent()->showOnlyWidget("mainmenu");
@@ -166,7 +201,12 @@ void SettingsMenu::applyClick()
 		updateDisplayOptions();
 	}
 	
+	int musicVolume = musicVolumeSelect.getIndex()*10;
 	
+	std::cout << musicVolume << std::endl;
 	
+	musicPlayer.setVolume(musicVolume);	
+	
+	updateMusicOptions();
 }
 

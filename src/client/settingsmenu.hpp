@@ -8,10 +8,12 @@
 #include "gui/image.hpp"
 
 class Window;
+class MusicPlayer;
+
 class SettingsMenu : public Menu
 {
 	public:
-		SettingsMenu(Window& window);
+		SettingsMenu(Window& window, MusicPlayer& musicPlayer);
 
 		virtual void onResize(Window& window);
 		virtual void handleEvent(Event* event);
@@ -20,10 +22,13 @@ class SettingsMenu : public Menu
 		void handleDisplayOptionChange();
 	
 		void updateDisplayOptions();
+		void updateMusicOptions();
+
 		void backClick();
 		void applyClick();
 		
 		Window& window;
+		MusicPlayer& musicPlayer;
 		
 		bool windowOptionsChanged;
 
@@ -37,6 +42,8 @@ class SettingsMenu : public Menu
 		Select fullscreenSelect;
 		Label vsyncLabel; 
 		Select vsyncSelect;
+		Label musicVolumeLabel; 
+		Select musicVolumeSelect;
 		
 		Button backButton;
 		Button applyButton;
