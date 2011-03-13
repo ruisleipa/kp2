@@ -5,6 +5,9 @@
 #include "ui.hpp"
 #include "utils/string.hpp"
 
+#include "graphics/window.hpp"
+
+	windowOptionsChanged(false)
 SettingsMenu::SettingsMenu(Window& window):
 	window(window)
 {
@@ -84,14 +87,17 @@ void SettingsMenu::onResize(Window& window)
 	
 	sizeSelect.setPosition(buttonpos);
 	sizeSelect.autoSize();	
+	sizeSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
 	buttonpos+=BUTTON_HEIGHT;
 	
 	fullscreenSelect.setPosition(buttonpos);
 	fullscreenSelect.autoSize();
+	fullscreenSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange,this));
 	buttonpos+=BUTTON_HEIGHT;	
 
 	vsyncSelect.setPosition(buttonpos);
 	vsyncSelect.autoSize();
+	vsyncSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
 	buttonpos+=BUTTON_HEIGHT;
 
 	backButton.setPosition(BACK_BUTTON_POSITION);
@@ -108,6 +114,11 @@ void SettingsMenu::handleEvent(Event* event)
 	
 	if(dynamic_cast<ShowEvent*>(event))
 		updateDisplayOptions();
+}
+
+void SettingsMenu::handleDisplayOptionChange()
+{
+	windowOptionsChanged = true;
 }
 
 void SettingsMenu::updateDisplayOptions()
@@ -130,6 +141,8 @@ void SettingsMenu::updateDisplayOptions()
 	sizeSelect.autoSize();	
 	fullscreenSelect.autoSize();
 	vsyncSelect.autoSize();
+	
+	windowOptionsChanged = false;
 }
 
 void SettingsMenu::backClick()
@@ -139,15 +152,21 @@ void SettingsMenu::backClick()
 
 void SettingsMenu::applyClick()
 {
-	std::vector<Vector2D> possibleSizes = window.getPossibleSizes();
-	Vector2D size=possibleSizes[sizeSelect.getIndex()];
+	if(windowOptionsChanged)
+	{
+		std::vector<Vector2D> possibleSizes = window.getPossibleSizes();
+		Vector2D size=possibleSizes[sizeSelect.getIndex()];
 
-	bool fullscreen=fullscreenSelect.getIndex();
-	bool vsync=vsyncSelect.getIndex();
+		bool fullscreen=fullscreenSelect.getIndex();
+		bool vsync=vsyncSelect.getIndex();
+		
+		window.setVideoMode(size,32,fullscreen);
+		window.setVsyncPreference(vsync);
+		
+		updateDisplayOptions();
+	}
 	
-	window.setVideoMode(size,32,fullscreen);
-	window.setVsyncPreference(vsync);
 	
-	updateDisplayOptions();
+	
 }
 

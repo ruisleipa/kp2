@@ -1,14 +1,13 @@
 #ifndef SETTINGSMENU_HPP
 #define SETTINGSMENU_HPP
 
-#include "graphics/texturecollection.hpp"
-
 #include "gui/menu.hpp"
 #include "gui/label.hpp"
 #include "gui/select.hpp"
 #include "gui/button.hpp"
 #include "gui/image.hpp"
 
+class Window;
 class SettingsMenu : public Menu
 {
 	public:
@@ -17,13 +16,16 @@ class SettingsMenu : public Menu
 		virtual void onResize(Window& window);
 		virtual void handleEvent(Event* event);
 	
-		void updateDisplayOptions();
-			
 	private:
+		void handleDisplayOptionChange();
+	
+		void updateDisplayOptions();
 		void backClick();
 		void applyClick();
 		
 		Window& window;
+		
+		bool windowOptionsChanged;
 
 		Image background;
 		
