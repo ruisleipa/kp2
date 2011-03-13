@@ -34,6 +34,11 @@ void Select::handleMouseDownEvent(MouseDownEvent* event)
 	}
 }
 
+void Select::setChangeHandler(std::tr1::function<void()> handler)
+{
+	changeHandler = handler;
+}
+
 void Select::addItem(std::string item)
 {
 	if(m_index == -1)
@@ -61,6 +66,9 @@ void Select::setIndex(int index)
 		
 		setText(m_items[m_index]);
 		autoSize();
+		
+		if(changeHandler)
+			changeHandler();
 	}
 }
 

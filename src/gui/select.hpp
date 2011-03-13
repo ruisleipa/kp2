@@ -3,6 +3,7 @@
 
 #include "activetextwidget.hpp"
 
+#include <tr1/functional>
 #include <vector>
 
 class Select : public ActiveTextWidget
@@ -11,6 +12,7 @@ class Select : public ActiveTextWidget
 		virtual void handleEvent(Event* event);
 			
 		Select();
+		void setChangeHandler(std::tr1::function<void()> handler);
 		
 		void addItem(std::string item);
 		void clearItems();
@@ -23,6 +25,7 @@ class Select : public ActiveTextWidget
 	
 		int m_index;
 		
+		std::tr1::function<void()> changeHandler;		
 		std::vector<std::wstring> m_items;
 };
 
