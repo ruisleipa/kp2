@@ -46,7 +46,11 @@ void Window::createSurface()
 	if(surfaceFullscreen)
 		flags|=SDL_FULLSCREEN;	
 	
+	setAttributes();
+	
 	SDL_Surface* newsurface = SDL_SetVideoMode(surfaceSize.getX(), surfaceSize.getY(), surfaceBpp, flags);
+	
+	checkAttributes();
 	
 	if(!newsurface)
 	{
