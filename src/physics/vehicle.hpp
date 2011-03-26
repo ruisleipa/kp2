@@ -19,14 +19,12 @@
 class Vehicle
 {
 	public:
-		Vehicle(Engine engine, Gearbox gearbox,
-			Clutch clutch, Chassis chassis,
-			Tire fltire, Tire frtire,
-			Tire bltire, Tire brtire,
-			Brake flbrake, Brake frbrake,
-			Brake blbrake, Brake brbrake);
-		~Vehicle();
-
+		Vehicle(Engine& engine, Gearbox& gearbox, Clutch& clutch,
+			Chassis& chassis, Tire& frontLeftTire, Tire& frontRightTire,
+			Tire& backLeftTire, Tire& backRightTire, Brake& frontLeftBrake,
+			Brake& frontRightBrake, Brake& backLeftBrake,
+			Brake& backRightBrake);
+		
 		class State
 		{
 		public:
@@ -82,12 +80,18 @@ class Vehicle
 		float getEngineSpeed();
 
 	private:	
-		Engine m_engine;
-		Gearbox m_gearbox;
-		Clutch m_clutch;
-		Chassis m_chassis;
-		Tire m_tires[4];
-		Brake m_brakes[4];
+		Engine& engine;
+		Gearbox& gearbox;
+		Clutch& clutch;
+		Chassis& chassis;
+		Tire& frontLeftTire;
+		Tire& frontRightTire;
+		Tire& backLeftTire;
+		Tire& backRightTire;
+		Brake& frontLeftBrake;
+		Brake& frontRightBrake;
+		Brake& backLeftBrake;
+		Brake& backRightBrake;
 
 		State m_current_x, m_current_v, m_current_a;
 		void getDerivates(State*, State*, State*);
