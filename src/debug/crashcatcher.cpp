@@ -8,6 +8,8 @@
 #include "crashmessage.hpp"
 #include "stack.hpp"
 
+CrashCatcher* CrashCatcher::catcher = 0;
+
 CrashCatcher::CrashCatcher(CrashMessage& crash_message):
 	crashMessage(crash_message)
 {
@@ -27,8 +29,10 @@ void CrashCatcher::installCatcher()
 	asm volatile("movl %%fs:0, %0" : "=r" (exceptionRegistration.prev));
 	asm volatile("movl %0, %%fs:0" : : "r" (&exceptionRegistration));
 #else	
-	std::signal(SIGSEGV, &CrashCatcher::handleCrash);
-	std::signal(SIGFPE, &CrashCatcher::handleCrash);
+	std::signal(SIGSEGV, &CrashCatcher::catchCrash);
+	std::signal(SIGFPE, &CrashCatcher::catchCrash);
+
+	catcher = this;
 #endif
 }
 
@@ -48,15 +52,17 @@ LONG CrashCatcher::catchCrash(PEXCEPTION_RECORD, EXCEPTION_REGISTRATION* registr
 void CrashCatcher::catchCrash(int signal_number)
 #endif
 {
+#ifdef WIN32
 	ExceptionRegistration* exceptionRegistration = reinterpret_cast<ExceptionRegistration*>(registration);
-	
-	CrashCatcher* catcher = exceptionRegistration->object;
-	
+
+	exceptionRegistration->object->handleCrash();
+#else	
 	catcher->handleCrash();
+#endif
 	
-	#ifdef WIN32
+#ifdef WIN32
 	return 0;
-	#endif
+#endif
 }
 
 void CrashCatcher::handleCrash()

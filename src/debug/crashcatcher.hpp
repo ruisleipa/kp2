@@ -8,12 +8,14 @@
 class CrashMessage;
 class CrashCatcher;
 
+#ifdef WIN32
 struct ExceptionRegistration
 {
 	ExceptionRegistration* prev;
 	PEXCEPTION_HANDLER handler;
 	CrashCatcher* object;
 };
+#endif
 
 class CrashCatcher
 {
@@ -38,8 +40,11 @@ class CrashCatcher
 		void showMessage();
 		
 		CrashMessage& crashMessage;
-		
+#ifdef WIN32
 		ExceptionRegistration exceptionRegistration;
+#else
+		static CrashCatcher* catcher;
+#endif
 };
 
 #endif // CRASHCATCHER_HPP

@@ -1,6 +1,6 @@
 include srclist.client
 
-LIBS = -lSDLmain -lSDL -lSDL_ttf -lSDL_image -lSDL_net -lGL -lGLEW -lGLU -lalut -lopenal
+LIBS = -lSDLmain -lSDL -lSDL_ttf -lSDL_image -lGL -lGLEW -lGLU -lalut -lopenal -laudiere
 BIN = kp2_client
 
 include Makefile.common

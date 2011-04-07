@@ -1,0 +1,8 @@
+include srclist.physicstest
+
+LIBS = -lrt 
+BIN = kp2_phystest
+
+include Makefile.common
+
+
