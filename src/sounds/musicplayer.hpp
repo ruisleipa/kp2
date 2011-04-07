@@ -3,7 +3,7 @@
 
 #include <cstring>
 #include <string>
-#include <audiere/audiere.h>
+#include <audiere.h>
 
 #include "utils/inifile.hpp"
 
