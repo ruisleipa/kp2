@@ -6,7 +6,7 @@
 #include "math_tools.hpp"
 
 #include "engine.hpp"
-#include "gearbox.hpp"
+#include "transmission.hpp"
 #include "tire.hpp"
 #include "clutch.hpp"
 #include "brake.hpp"
@@ -15,7 +15,7 @@
 class Vehicle
 {
 	public:
-		Vehicle(Engine& engine, Gearbox& gearbox, Clutch& clutch,
+		Vehicle(Engine& engine, Transmission& transmission, Clutch& clutch,
 			Chassis& chassis, Tire& frontLeftTire, Tire& frontRightTire,
 			Tire& backLeftTire, Tire& backRightTire, Brake& frontLeftBrake,
 			Brake& frontRightBrake, Brake& backLeftBrake,
@@ -26,7 +26,7 @@ class Vehicle
 			public:
 				double position;
 				double m_flywheel;	//rad/s
-				double m_gearbox_out;
+				double gearbox_out;
 				double m_planet_gear;
 				double m_f_l_tire;
 				double m_f_r_tire;
@@ -35,21 +35,15 @@ class Vehicle
 				void add(double factor, State& dx);
 		};	
 		
-		tVector<double>& getPos(){return m_current_x.position;}
-		void setPos(tVector<double>& pos){m_current_x.position = pos;}
+		double getPos(){return m_current_x.position;}
+		void setPos(double pos){m_current_x.position = pos;}
 	
 		State& getVel(){return m_current_v;}
 		State& getAcc(){return m_current_a;}
 		
 		void setBrakeUsage(float usage);
 		float getBrakeUsage();
-		
-		void setClutchUsage(float usage);
-		float getClutchUsage();
-		
-		void setGear(int gear);
-		int getGear();
-		
+
 		float getEngineSpeed();
 		
 		void advanceSimulation();
@@ -58,7 +52,7 @@ class Vehicle
 
 	private:	
 		Engine& engine;
-		Gearbox& gearbox;
+		Transmission& transmission;
 		Clutch& clutch;
 		Chassis& chassis;
 		Tire& frontLeftTire;
@@ -74,10 +68,6 @@ class Vehicle
 		void getDerivates(State*, State*, State*);
 		
 		float m_brake_usage;
-		float m_throttle;
-		float m_clutch_usage;
-		bool m_ignition;
-		int m_current_gear;
 		
 		int step;
 };

@@ -3,36 +3,29 @@
 
 #include <iostream>
 #include <string>
-
-#define TORQUE_CURVE_SIZE 64
+#include <map>
 
 class Engine
 {
 	public:
-		int load(const std::string& filename);
+		void setThrottle(float throttle);
+		void setIgnition(bool ignition);
 		
-		double getTorque(float throttle, bool ignition, double revs);
-		double getFlywheelInertia();
+		float getTorque(float speedInRads);
+		float getFlywheelInertia();
 		
-		Engine();
-
-		friend std::ostream& operator<<(std::ostream& stream, Engine& engine);	
+		Engine(const std::map<int, float>& torqueCurve, float idleSpeed, float idleThrottle, int rpmLimit, float flywheelInertia, float startEngineEffect);
 
 	private:
-		int readTorqueCurve(const std::string& filename);
+		std::map<int, float> torqueCurve;
+		float idleSpeed;
+		float idleThrottle;
+		int rpmLimit;
+		float startEngineEffect;
+		float flywheelInertia;
 		
-		// static data
-		std::string m_name;
-		float m_static_friction;
-		float m_rotating_friction;
-		float m_start_engine_effect;
-		float m_flywheel_inertia;
-		float m_idle_throttle;
-		float m_idle_speed;
-		bool m_is_power_on;
-		double m_rev_limit;
-		bool m_is_rev_limited;
-		double m_torque_curve[TORQUE_CURVE_SIZE]; // 0-1575 rad/s, at 25 rad/s steps
+		float throttle;
+		bool ignition;		
 };
 
 

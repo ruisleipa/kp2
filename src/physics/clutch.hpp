@@ -1,24 +1,19 @@
 #ifndef _CLUTCH_HPP
 #define _CLUTCH_HPP
 
-#include <iostream>
-#include <string>
-
 class Clutch
 {
-	public:
+	public:		
+		float getTorque(float inputSpeed, float outputSpeed);
+
+		void setUsage(float usage);
+		float getUsage();
 		
-		int load(const std::string& filename);
-
-		float getTorque(float usage, float input_speed, float output_speed);
-
-		friend std::ostream& operator<<(std::ostream& stream, Clutch& clutch);
-				
-		Clutch();	
+		Clutch(float maxTorque);	
 		
 	private:
-		std::string m_name;
-		float m_max_torque;
+		float maxTorque;
+		float usage;
 
 };
 
