@@ -1,0 +1,14 @@
+include srclist.physicstest
+
+LIBS = 
+BIN = kp2_phystest.exe
+RES = kp2.res
+
+all_hack: all
+
+$(RES): kp2.ico
+	windres kp2.rc -O coff -o $(RES)
+
+include Makefile.common
+
+

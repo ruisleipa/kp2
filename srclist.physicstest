@@ -1,0 +1,12 @@
+SRC = \
+	src/physics/brake.cpp \
+	src/physics/chassis.cpp \
+	src/physics/clutch.cpp \
+	src/physics/engine.cpp \
+	src/physics/test.cpp \
+	src/physics/tire.cpp \
+	src/physics/transmission.cpp \
+	src/physics/vehicle.cpp \
+	src/utils/timer.cpp 
+
+
