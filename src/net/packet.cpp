@@ -130,7 +130,7 @@ const Packet& Packet::operator>>(float& value)
 	operator>>(whole);
 	operator>>(fract);
 	
-	value = float(abs(whole)) + float(fract) / 1000000000.0;
+	value = float(fabs(whole)) + float(fract) / 1000000000.0;
 	
 	if(whole < 0)
 		value *= -1.0;
