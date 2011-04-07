@@ -96,16 +96,16 @@ void Connection::processMessages()
 			{
 				std::string error;
 			
-				message >> error;
-				
-				std::cout << error;
-				
+				message >> error;				
+#ifdef WIN32
 				std::wstring errorMessage = convertToWideString(error);
 				
 				const WCHAR* errorCaption=L"Kiihdytyspeli 2";
 				
 				MessageBoxW(NULL, (const WCHAR*)errorMessage.c_str(), errorCaption, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL);
-				
+#else								
+				std::cout << error;
+#endif				
 			}
 		
 			std::vector<std::tr1::function<void(Connection&)> >::iterator i;
