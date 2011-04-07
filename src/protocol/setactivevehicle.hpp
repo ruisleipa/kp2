@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "idtypes.hpp"
+
 class Packet;
 
 namespace Protocol
@@ -11,7 +13,7 @@ namespace Protocol
 class SetActiveVehicle
 {
 	public:
-		uint32_t id;
+		Protocol::VehicleId id;
 
 		friend Packet& operator<<(Packet& packet,const SetActiveVehicle& setActiveVehicle);
 		friend Packet& operator>>(Packet& packet,SetActiveVehicle& setActiveVehicle);
