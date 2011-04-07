@@ -1,6 +1,6 @@
 include srclist.server
 
-LIBS = -lrt 
+LIBS = -lrt -ldl
 BIN = kp2_server
 
 include Makefile.common
