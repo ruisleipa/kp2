@@ -60,6 +60,8 @@ void Vehicle::advanceSimulation()
 	getDerivates(&m_current_x, &m_current_v, &m_current_a);
 	m_current_v.add(time_chunk, m_current_a);
 	m_current_x.add(time_chunk, m_current_v);
+
+	step++;
 }
 
 void Vehicle::getDerivates(State* p0, State* v0, State* a0)
