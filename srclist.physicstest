@@ -1,4 +1,18 @@
 SRC = \
+	src/debug/assert.cpp \
+	src/events/areaevent.cpp \
+	src/events/eventarea.cpp \
+	src/events/event.cpp \
+	src/events/eventlistener.cpp \
+	src/events/events.cpp \
+	src/events/mouseevent.cpp \
+	src/events/keyevent.cpp \
+	src/graphics/color.cpp \
+	src/graphics/fontface.cpp \
+	src/graphics/preparedtexture.cpp \
+	src/graphics/texture.cpp \
+	src/graphics/vector2d.cpp \
+	src/graphics/window.cpp\
 	src/physics/brake.cpp \
 	src/physics/chassis.cpp \
 	src/physics/clutch.cpp \
@@ -7,6 +21,9 @@ SRC = \
 	src/physics/tire.cpp \
 	src/physics/transmission.cpp \
 	src/physics/vehicle.cpp \
+	src/utils/demangle.cpp \
+	src/utils/inifile.cpp \
+	src/utils/sdl.cpp \
 	src/utils/timer.cpp 
 
 

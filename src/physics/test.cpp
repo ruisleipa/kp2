@@ -4,6 +4,61 @@
 #include "engine.hpp"
 #include "math_tools.hpp"
 
+#include "utils/sdl.hpp"
+#include "utils/timer.hpp"
+#include "graphics/color.hpp"
+#include "graphics/window.hpp"
+#include "graphics/fontface.hpp"
+#include "events/events.hpp"
+
+class Controller : public EventListener
+{
+	public:
+		Controller(Engine& engine, Transmission& transmission, Clutch& clutch):
+			engine(engine),
+			transmission(transmission),
+			clutch(clutch)
+		{
+			
+		}
+
+		void handleEvent(Event* event)
+		{
+			if(dynamic_cast<KeyDownEvent*>(event))
+			{
+				KeyEvent& keyEvent = *dynamic_cast<KeyDownEvent*>(event);
+
+				if(keyEvent.getKey() == SDLK_a)
+					transmission.upperGear();
+				if(keyEvent.getKey() == SDLK_z)
+					transmission.lowerGear();
+				if(keyEvent.getKey() == SDLK_UP)
+					engine.setThrottle(1.0);
+				if(keyEvent.getKey() == SDLK_SPACE)
+					clutch.setUsage(0.0);
+				if(keyEvent.getKey() == SDLK_s)
+					engine.setIgnition(true);
+			}
+			if(dynamic_cast<KeyUpEvent*>(event))
+			{
+				KeyEvent& keyEvent = *dynamic_cast<KeyUpEvent*>(event);
+
+				if(keyEvent.getKey() == SDLK_UP)
+					engine.setThrottle(0.0);
+				if(keyEvent.getKey() == SDLK_SPACE)
+					clutch.setUsage(1.0);
+				if(keyEvent.getKey() == SDLK_s)
+					engine.setIgnition(false);
+			}
+		}
+
+	private:
+		Engine& engine;
+		Transmission& transmission;
+		Clutch& clutch;
+};
+
+
 int main()
 {
 	std::map<int, float> torqueCurve;
@@ -47,4 +102,44 @@ int main()
 	
 	Vehicle vehicle(engine, transmission, clutch, chassis, tire, tire, tire, tire, brake, brake, brake, brake);
 
+	Sdl sdl;
+	Window window(sdl);
+	Events events(window);
+
+	Controller controller(engine, transmission, clutch);
+
+	events.setEventListener(&controller);
+
+	FontFace debugFont(window, "data/fonts/dejavusans.ttf", 24);
+
+	Timer realTime;
+
+	while(1)
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		std::wstringstream ss;
+
+		Color(1, 1, 1).apply();
+
+		ss << "Throttle: " << engine.getThrottle() << "\n";
+		ss << "Clutch: " << clutch.getUsage() << "\n";
+		ss << "Gear: " << transmission.getRatio() << "\n";
+		ss << "RPM: " << vehicle.getEngineSpeed() << "\n";
+		ss << "Speed: " << vehicle.getVel().position * 60 * 60 / 1000 << " km/h\n";
+		ss << "Position: " << vehicle.getPos() << " m\n";
+		ss << "Lag: " << vehicle.getLagInSteps(realTime.getSeconds()) << " steps\n";
+
+
+		debugFont.draw(ss.str(), Vector2D(0, 0));
+
+		while(vehicle.getLagInSteps(realTime.getSeconds()) > 0)
+		{
+			vehicle.advanceSimulation();
+		}	
+
+		events.processEvents();
+
+		SDL_GL_SwapBuffers();
+	}
 }
