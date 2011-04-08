@@ -8,7 +8,10 @@
 class Engine
 {
 	public:
+		float getThrottle();
 		void setThrottle(float throttle);
+
+		bool getIgnition();
 		void setIgnition(bool ignition);
 		
 		float getTorque(float speedInRads);

@@ -2,9 +2,19 @@
 #include "math_tools.hpp"
 #include <cmath>
 
+float Engine::getThrottle()
+{
+	return throttle;
+}
+
 void Engine::setThrottle(float throttle)
 {
 	this->throttle = throttle;
+}
+
+bool Engine::getIgnition()
+{
+	return ignition;
 }
 
 void Engine::setIgnition(bool ignition)
