@@ -46,7 +46,9 @@ Vehicle::Vehicle(Engine& engine, Transmission& transmission, Clutch& clutch,
 	backRightBrake(backRightBrake),
 	m_current_x(),
 	m_current_v(),
-	m_current_a()
+	m_current_a(),
+	m_brake_usage(0.0),
+	step(0)
 {
 
 }
