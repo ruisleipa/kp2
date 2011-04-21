@@ -36,10 +36,7 @@ double Tire::getFriction(double load)
 
 double Tire::getRollingResistance(double load,double speed)
 {
-	if (fabs(speed) > 1.0f)
-		return rollingResistanceCoefficient * load;
-	else
-		return 0.0f;
+	return rollingResistanceCoefficient * load * std::min(1.0, speed);
 }
 
 double Tire::setSlipRatio(double slipRatio)
