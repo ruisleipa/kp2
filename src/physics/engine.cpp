@@ -38,7 +38,7 @@ float Engine::getTorque(float speedInRads)
 			trq += startEngineEffect / fabs(speedInRads);
 	}
 
-	if(rpmLimit > 0 || (speedInRpm < rpmLimit))
+	if(rpmLimit == 0 || (speedInRpm < rpmLimit))
 	{
 		std::map<int, float>::iterator previous = torqueCurve.begin();
 		std::map<int, float>::iterator current = torqueCurve.begin();
