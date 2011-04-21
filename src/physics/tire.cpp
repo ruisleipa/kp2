@@ -1,11 +1,13 @@
 #include "tire.hpp"
 #include "math_tools.hpp"
 
+#include <algorithm>
+
 Tire::Tire(float mass, float radius, float rollingResistanceCoefficient):
 	slipRatio(0),
-	radius(0),
+	radius(radius),
 	inertia(0),
-	rollingResistanceCoefficient(0)
+	rollingResistanceCoefficient(rollingResistanceCoefficient)
 {
 	inertia = 0.5f * mass * radius * radius;
 }
