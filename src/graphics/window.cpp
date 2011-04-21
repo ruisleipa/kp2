@@ -161,7 +161,15 @@ Window::Window(Sdl& sdl):
 	surface(0)
 {
 	applyDefaultSettings();
-	loadSettings();
+	
+	try
+	{
+		loadSettings();
+	}
+	catch(...)
+	{
+		
+	}
 		
 	SDL_WM_SetCaption("Kiihdytyspeli 2","Kiihdytyspeli 2");
 	
