@@ -71,6 +71,8 @@ float Engine::getTorque(float speedInRads)
 
 		trq += torque * throttle;
 	}
+	
+	trq -= 0.07 * speedInRads * (1.0 - throttle);
 
 	return trq;
 }
@@ -80,12 +82,12 @@ float Engine::getFlywheelInertia()
 	return flywheelInertia;	
 }
 
-Engine::Engine(const std::map<int, float>& torqueCurve,	float idleSpeed,
+Engine::Engine(const std::map<int, float>& torqueCurve,	float idleRpm,
 	float idleThrottle, int rpmLimit, float startEngineEffect,
 	float flywheelInertia
 	):
 	torqueCurve(torqueCurve),
-	idleSpeed(idleSpeed),
+	idleRpm(idleRpm),
 	idleThrottle(idleThrottle),
 	rpmLimit(rpmLimit),
 	startEngineEffect(startEngineEffect),
