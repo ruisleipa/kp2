@@ -26,8 +26,9 @@ float Engine::getTorque(float speedInRads)
 {
 	int speedInRpm = speedInRads * RADS_TO_RPM;
 	float trq = 0.0;
+	float throttle = this->throttle;
 
-	if ((speedInRads <= idleSpeed) && (throttle < idleThrottle))
+	if ((speedInRpm <= idleRpm) && (throttle < idleThrottle))
 		throttle = idleThrottle;
 
 	if(ignition)

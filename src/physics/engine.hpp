@@ -17,11 +17,11 @@ class Engine
 		float getTorque(float speedInRads);
 		float getFlywheelInertia();
 		
-		Engine(const std::map<int, float>& torqueCurve, float idleSpeed, float idleThrottle, int rpmLimit, float flywheelInertia, float startEngineEffect);
+		Engine(const std::map<int, float>& torqueCurve, float idleRpm, float idleThrottle, int rpmLimit, float flywheelInertia, float startEngineEffect);
 
 	private:
 		std::map<int, float> torqueCurve;
-		float idleSpeed;
+		float idleRpm;
 		float idleThrottle;
 		int rpmLimit;
 		float startEngineEffect;
