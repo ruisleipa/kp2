@@ -10,7 +10,7 @@ float Brake::getTorque(float usage, float discSpeed)
 	if (absoluteTorque > maxTorque)
 		absoluteTorque = maxTorque;
 		
-	return -absoluteTorque * sgn(discSpeed);
+	return absoluteTorque * -sgn(discSpeed);
 }
 
 Brake::Brake(float coefficientOfFriction, float maxTorque):
