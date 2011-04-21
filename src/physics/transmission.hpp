@@ -17,7 +17,7 @@ class Transmission
 		float getDifferentialRatio();
 		float getDriveshaftInertia();
 		
-		Transmission(std::vector<float> ratios, size_t neutralIndex,
+		Transmission(std::vector<float> ratios, std::vector<float>::size_type neutralIndex,
 			float efficiency, float differentialRatio, float driveshaftInertia);
 
 	private:
@@ -26,9 +26,9 @@ class Transmission
 		float driveshaftInertia;
 		
 		std::vector<float> ratios;
-		size_t neutralIndex;
+		std::vector<float>::size_type neutralIndex;
 		
-		size_t currentIndex;
+		std::vector<float>::size_type currentIndex;
 };
 
 #endif
