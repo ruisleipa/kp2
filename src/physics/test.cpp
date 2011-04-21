@@ -74,15 +74,15 @@ int main()
 	torqueCurve[6000] = 50;
 	torqueCurve[8000] = 0;
 	
-	Engine engine(torqueCurve, 1000, 0.15, 7000, 2000, 0.22);
+	Engine engine(torqueCurve, 1000, 0.3, 7000, 2000, 0.22);
 		
 	std::vector<float> gearRatios;
 	gearRatios.push_back(-2.86);
 	gearRatios.push_back(0);
-	gearRatios.push_back(2.42);
-	gearRatios.push_back(1.61);
-	gearRatios.push_back(1.14);
-	gearRatios.push_back(0.85);
+	gearRatios.push_back(3.9);
+	gearRatios.push_back(2.6);
+	gearRatios.push_back(1.9);
+	gearRatios.push_back(1.0);
 	gearRatios.push_back(0.7);
 	
 	Transmission transmission(gearRatios, 1, 0.8, 4.22, 0.1);
@@ -95,13 +95,16 @@ int main()
 	chassis.centerOfGravityHeight = 0.3;
 	chassis.length = 2.8;
 	chassis.width = 1.7;
-	chassis.wheelBase = 0.0;
-	chassis.dragCoefficient = 0.0;
+	chassis.wheelBase = 2.0;
+	chassis.dragCoefficient = 0.4;
 	
-	Tire tire(9, 0.3048, 0.015);
+	Tire frontLeftTire(9, 0.3048, 0.015);
+	Tire frontRightTire(9, 0.3048, 0.015);
+	Tire backLeftTire(9, 0.3048, 0.015);
+	Tire backRightTire(9, 0.3048, 0.015);
 	Brake brake(0.8, 6000);
 	
-	Vehicle vehicle(engine, transmission, clutch, chassis, tire, tire, tire, tire, brake, brake, brake, brake);
+	Vehicle vehicle(engine, transmission, clutch, chassis, frontLeftTire, frontRightTire, backLeftTire, backRightTire, brake, brake, brake, brake);
 
 	Sdl sdl;
 	Window window(sdl);
