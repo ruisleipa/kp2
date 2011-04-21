@@ -117,12 +117,14 @@ void Vehicle::getDerivates(State* p0, State* v0, State* a0)
 	double f_r_traction_force = frontRightTire.getFriction(0.5 * weight_front);
 
 	double total_force = r_l_traction_force + r_r_traction_force + f_l_traction_force + f_r_traction_force;
+	
 	total_force -= backLeftTire.getRollingResistance(0.5 * weight_rear, velocity);
 	total_force -= backRightTire.getRollingResistance(0.5 * weight_rear, velocity);
 	total_force -= frontLeftTire.getRollingResistance(0.5 * weight_front, velocity);
 	total_force -= frontRightTire.getRollingResistance(0.5 * weight_front, velocity);
+	
 	// aerodynamic drag
-	total_force += velocity * velocity * chassis.dragCoefficient;
+	total_force -= velocity * velocity * chassis.dragCoefficient;
 
 	double rear_left_trq = backLeftBrake.getTorque(m_brake_usage,r_l_tire) - backLeftTire.getRadius() * r_l_traction_force;
 	double rear_right_trq = backRightBrake.getTorque(m_brake_usage,r_r_tire) - backRightTire.getRadius() * r_r_traction_force;
