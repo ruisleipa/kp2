@@ -60,7 +60,7 @@ class Controller : public EventListener
 };
 
 
-int main()
+int main(int argc, char** argv)
 {
 	std::map<int, float> torqueCurve;
 	
