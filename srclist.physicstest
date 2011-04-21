@@ -21,6 +21,7 @@ SRC = \
 	src/physics/tire.cpp \
 	src/physics/transmission.cpp \
 	src/physics/vehicle.cpp \
+	src/sounds/sound.cpp \
 	src/utils/demangle.cpp \
 	src/utils/inifile.cpp \
 	src/utils/sdl.cpp \
