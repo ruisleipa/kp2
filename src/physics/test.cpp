@@ -4,6 +4,7 @@
 #include "engine.hpp"
 #include "math_tools.hpp"
 
+#include "sounds/sound.hpp"
 #include "utils/sdl.hpp"
 #include "utils/timer.hpp"
 #include "graphics/color.hpp"
@@ -114,6 +115,11 @@ int main()
 
 	Timer realTime;
 
+	Sound engineSound;
+	engineSound.load("data/sounds/s4.wav");
+	engineSound.play();
+	engineSound.setLooping(true);
+	
 	while(1)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -130,6 +136,8 @@ int main()
 		ss << "Position: " << vehicle.getPos() << " m\n";
 		ss << "Lag: " << vehicle.getLagInSteps(realTime.getSeconds()) << " steps\n";
 
+		engineSound.setPitch(1.0 + (vehicle.getEngineSpeed() - 1000.0) / 10000.0);
+		engineSound.setVolume(vehicle.getEngineSpeed() / 1000.0);
 
 		debugFont.draw(ss.str(), Vector2D(0, 0));
 
