@@ -131,11 +131,18 @@ int main(int argc, char** argv)
 
 		Color(1, 1, 1).apply();
 
+		while(vehicle.getLagInSteps(realTime.getSeconds()) > 0)
+		{
+			vehicle.advanceSimulation();
+		}	
+		
 		ss << "Throttle: " << engine.getThrottle() << "\n";
 		ss << "Clutch: " << clutch.getUsage() << "\n";
 		ss << "Gear: " << transmission.getRatio() << "\n";
 		ss << "RPM: " << vehicle.getEngineSpeed() << "\n";
+		ss << "Torque: " << engine.getTorque(vehicle.getEngineSpeed() * RPM_TO_RADS) << "\n";
 		ss << "Speed: " << vehicle.getVel().position * 60 * 60 / 1000 << " km/h\n";
+		ss << "Gearbox out: " << vehicle.getVel().gearbox_out * RADS_TO_RPM << "\n";
 		ss << "Position: " << vehicle.getPos() << " m\n";
 		ss << "Lag: " << vehicle.getLagInSteps(realTime.getSeconds()) << " steps\n";
 
@@ -144,12 +151,16 @@ int main(int argc, char** argv)
 
 		debugFont.draw(ss.str(), Vector2D(0, 0));
 
-		while(vehicle.getLagInSteps(realTime.getSeconds()) > 0)
-		{
-			vehicle.advanceSimulation();
-		}	
+		
 
-		events.processEvents();
+		try
+		{
+			events.processEvents();
+		}
+		catch(ExitException)
+		{
+			return 0;
+		}
 
 		SDL_GL_SwapBuffers();
 	}
