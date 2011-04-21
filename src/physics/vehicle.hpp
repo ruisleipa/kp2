@@ -38,6 +38,9 @@ class Vehicle
 		double getPos(){return m_current_x.position;}
 		void setPos(double pos){m_current_x.position = pos;}
 	
+		
+	
+		State& getState(){return m_current_x;}
 		State& getVel(){return m_current_v;}
 		State& getAcc(){return m_current_a;}
 		
