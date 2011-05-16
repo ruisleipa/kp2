@@ -1,9 +1,8 @@
 #ifndef _ENGINE_HPP
 #define _ENGINE_HPP
 
-#include <iostream>
-#include <string>
-#include <map>
+#include "curve.hpp"
+#include "pipe.hpp"
 
 class Engine
 {
@@ -15,12 +14,22 @@ class Engine
 		void setIgnition(bool ignition);
 		
 		float getTorque(float speedInRads);
+		float calculateTheoreticalMixtureUsage(float speedInRpm);
+		float calculateMaxFromIntakeManifold(float speedInRpm);
+		float calculateMaxToExhaustManifold(float speedInRpm);
+		float calculateFreshMixtureInCylinder(float speedInRpm);
+		float calculateExhaustLeftInCylinder(float speedInRpm);
+		
 		float getFlywheelInertia();
 		
-		Engine(const std::map<int, float>& torqueCurve, float idleRpm, float idleThrottle, int rpmLimit, float flywheelInertia, float startEngineEffect);
+		Engine(const Curve& torqueCurve, float volume, int cylinderCount, const Pipe& intakePipe, const Pipe& exhaustPipe, float idleRpm, float idleThrottle, int rpmLimit, float flywheelInertia, float startEngineEffect);
 
 	private:
-		std::map<int, float> torqueCurve;
+		Curve torqueCurve;
+		float volume;
+		int cylinderCount;
+		const Pipe& intakePipe;
+		const Pipe& exhaustPipe;
 		float idleRpm;
 		float idleThrottle;
 		int rpmLimit;

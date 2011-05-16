@@ -41,41 +41,45 @@ float Engine::getTorque(float speedInRads)
 
 	if(rpmLimit == 0 || (speedInRpm < rpmLimit))
 	{
-		std::map<int, float>::iterator previous = torqueCurve.begin();
-		std::map<int, float>::iterator current = torqueCurve.begin();
+		float theoreticalMixtureUsage = calculateTheoreticalMixtureUsage(speedInRpm);		
+		float freshMixtureInCylinder = calculateFreshMixtureInCylinder(speedInRpm);
 		
-		while(current != torqueCurve.end() && current->first <= speedInRpm)
-		{
-			previous = current;
+		if(freshMixtureInCylinder != 0 && theoreticalMixtureUsage != 0)
+		{		
+			float intakeRatio = freshMixtureInCylinder / theoreticalMixtureUsage;
 			
-			++current;
+			trq += torqueCurve.getValue(speedInRpm) * intakeRatio;
 		}
-		
-		if(current == torqueCurve.end())
-		{
-			current = previous;
-		}
-		
-		int lowRpm = previous->first;
-		int highRpm = current->first;
-		float lowTorque = previous->second;
-		float highTorque = current->second;
-		
-		float amount;
-		
-		if(lowRpm != speedInRpm)
-			amount = float(speedInRpm - lowRpm) / float(highRpm - lowRpm);
-		else
-			amount = 0.0;
-		
-		float torque = lowTorque + ((highTorque - lowTorque) * amount);
-
-		trq += torque * throttle;
 	}
-	
+		
 	trq -= 0.07 * speedInRads * (1.0 - throttle);
 
 	return trq;
+}
+
+float Engine::calculateTheoreticalMixtureUsage(float speedInRpm)
+{
+	return volume * cylinderCount / 2.0 * speedInRpm;
+}
+
+float Engine::calculateMaxFromIntakeManifold(float speedInRpm)
+{
+	return intakePipe.getFlow(calculateTheoreticalMixtureUsage(speedInRpm)) * throttle;
+}
+
+float Engine::calculateMaxToExhaustManifold(float speedInRpm)
+{
+	return exhaustPipe.getFlow(calculateMaxFromIntakeManifold(speedInRpm));
+}
+
+float Engine::calculateFreshMixtureInCylinder(float speedInRpm)
+{
+	return calculateMaxFromIntakeManifold(speedInRpm) - calculateExhaustLeftInCylinder(speedInRpm);
+}
+
+float Engine::calculateExhaustLeftInCylinder(float speedInRpm)
+{	
+	return calculateMaxFromIntakeManifold(speedInRpm) - calculateMaxToExhaustManifold(speedInRpm);
 }
 
 float Engine::getFlywheelInertia()
@@ -83,11 +87,16 @@ float Engine::getFlywheelInertia()
 	return flywheelInertia;	
 }
 
-Engine::Engine(const std::map<int, float>& torqueCurve,	float idleRpm,
+Engine::Engine(const Curve& torqueCurve, float volume, int cylinderCount,
+	const Pipe& intakePipe, const Pipe& exhaustPipe, float idleRpm, 
 	float idleThrottle, int rpmLimit, float startEngineEffect,
 	float flywheelInertia
 	):
 	torqueCurve(torqueCurve),
+	volume(volume),
+	cylinderCount(cylinderCount),
+	intakePipe(intakePipe),
+	exhaustPipe(exhaustPipe),
 	idleRpm(idleRpm),
 	idleThrottle(idleThrottle),
 	rpmLimit(rpmLimit),
