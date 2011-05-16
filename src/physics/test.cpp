@@ -2,6 +2,9 @@
 
 #include "vehicle.hpp"
 #include "engine.hpp"
+#include "graph.hpp"
+#include "curve.hpp"
+#include "pipe.hpp"
 #include "math_tools.hpp"
 
 #include "sounds/sound.hpp"
@@ -12,69 +15,62 @@
 #include "graphics/fontface.hpp"
 #include "events/events.hpp"
 
-class Controller : public EventListener
+class DataPoint
 {
 	public:
-		Controller(Engine& engine, Transmission& transmission, Clutch& clutch):
-			engine(engine),
-			transmission(transmission),
-			clutch(clutch)
+		float speed;
+		float torque;
+		float power;
+		float maxIntake;
+		float maxExhaust;
+		float freshMixture;
+		float usedMixture;
+		
+		DataPoint():
+			speed(0),
+			torque(0),
+			power(0),
+			maxIntake(0),
+			maxExhaust(0),
+			freshMixture(0),
+			usedMixture(0)
 		{
-			
+		
 		}
-
-		void handleEvent(Event* event)
-		{
-			if(dynamic_cast<KeyDownEvent*>(event))
-			{
-				KeyEvent& keyEvent = *dynamic_cast<KeyDownEvent*>(event);
-
-				if(keyEvent.getKey() == SDLK_a)
-					transmission.upperGear();
-				if(keyEvent.getKey() == SDLK_z)
-					transmission.lowerGear();
-				if(keyEvent.getKey() == SDLK_UP)
-					engine.setThrottle(1.0);
-				if(keyEvent.getKey() == SDLK_SPACE)
-					clutch.setUsage(0.0);
-				if(keyEvent.getKey() == SDLK_s)
-					engine.setIgnition(true);
-			}
-			if(dynamic_cast<KeyUpEvent*>(event))
-			{
-				KeyEvent& keyEvent = *dynamic_cast<KeyUpEvent*>(event);
-
-				if(keyEvent.getKey() == SDLK_UP)
-					engine.setThrottle(0.0);
-				if(keyEvent.getKey() == SDLK_SPACE)
-					clutch.setUsage(1.0);
-				if(keyEvent.getKey() == SDLK_s)
-					engine.setIgnition(false);
-			}
-		}
-
-	private:
-		Engine& engine;
-		Transmission& transmission;
-		Clutch& clutch;
 };
 
+float round(float a, float s)
+{
+	float b = 0.0;
+	
+	while(b < a)
+		b += s;
+	
+	return b;
+}
 
 int main(int argc, char** argv)
 {
-	std::map<int, float> torqueCurve;
+	Curve torqueCurve;
 	
-	torqueCurve[0] = 0;
-	torqueCurve[1500] = 65;
-	torqueCurve[2000] = 75;
-	torqueCurve[2500] = 78;
-	torqueCurve[3000] = 78;
-	torqueCurve[4000] = 73;
-	torqueCurve[4900] = 65;
-	torqueCurve[6000] = 50;
-	torqueCurve[8000] = 0;
+	torqueCurve.addPoint(0, 0);
+	torqueCurve.addPoint(1500, 65);
+	torqueCurve.addPoint(2000, 75);
+	torqueCurve.addPoint(2500, 78);
+	torqueCurve.addPoint(3000, 78);
+	torqueCurve.addPoint(4000, 73);
+	torqueCurve.addPoint(4900, 65);
+	torqueCurve.addPoint(6000, 50);
+	torqueCurve.addPoint(8000, 0);
+	torqueCurve.addPoint(100000, 0);
 	
-	Engine engine(torqueCurve, 1000, 0.3, 7000, 2000, 0.22);
+	float idleSpeed = 1000.0;
+	float speedLimit = 6500.0;
+	
+	Pipe intakePipe(8000);
+	Pipe exhaustPipe(10000);
+	
+	Engine engine(torqueCurve, 1.0, 4, intakePipe, exhaustPipe, idleSpeed, 0.3, speedLimit, 2000, 0.22);
 		
 	std::vector<float> gearRatios;
 	gearRatios.push_back(-2.86);
@@ -110,49 +106,98 @@ int main(int argc, char** argv)
 	Window window(sdl);
 	Events events(window);
 
-	Controller controller(engine, transmission, clutch);
-
-	events.setEventListener(&controller);
-
-	FontFace debugFont(window, "data/fonts/dejavusans.ttf", 24);
-
+	FontFace debugFont(window, "data/fonts/dejavusans.ttf", 12);
+	
+	int nextSpeed = 0;
+	const int speedStep = 250;
+	
+	std::vector<DataPoint> data;
+	
 	Timer realTime;
+	
+	while(/*vehicle.getEngineSpeed() < speedLimit && */vehicle.getLagInSteps(60.0) > 0)
+	{
+		vehicle.advanceSimulation();
+			
+		if(vehicle.getEngineSpeed() < idleSpeed)
+			engine.setIgnition(true);
+		else
+			engine.setIgnition(false);
+			
+		if(vehicle.getEngineSpeed() >= idleSpeed)
+			engine.setThrottle(1.0);
+			
+		if(vehicle.getEngineSpeed() >= nextSpeed && vehicle.getEngineSpeed() > 1000)		
+		{
+			DataPoint dataPoint;
+			
+			dataPoint.speed = vehicle.getEngineSpeed();
+			dataPoint.torque = engine.getTorque(vehicle.getEngineSpeed() * RPM_TO_RADS);
+			dataPoint.power = dataPoint.torque * (vehicle.getEngineSpeed() * RPM_TO_RADS) / 1000.0;
+			dataPoint.maxIntake = engine.calculateMaxFromIntakeManifold(vehicle.getEngineSpeed());
+			dataPoint.maxExhaust = engine.calculateMaxToExhaustManifold(vehicle.getEngineSpeed());
+			dataPoint.freshMixture = engine.calculateFreshMixtureInCylinder(vehicle.getEngineSpeed());
+			dataPoint.usedMixture = engine.calculateExhaustLeftInCylinder(vehicle.getEngineSpeed());
+			
+			data.push_back(dataPoint);
+			
+			nextSpeed += speedStep;
+		}
+	}
+	
+	std::cout << "Calculation took " << realTime.getSeconds() << " seconds." << std::endl; 
+	
+	Curve torqueData;
+	Curve powerData;
+	Curve maxIntakeData;
+	Curve maxExhaustData;
+	Curve freshMixtureData;
+	Curve usedMixtureData;
+	
+	for(std::vector<DataPoint>::size_type i = 0; i < data.size(); ++i)
+	{
+		DataPoint& dataPoint = data[i];
+		int speed = dataPoint.speed;
 
-	Sound engineSound;
-	engineSound.load("data/sounds/s4.wav");
-	engineSound.play();
-	engineSound.setLooping(true);
+		powerData.addPoint(speed, dataPoint.power);
+		torqueData.addPoint(speed, dataPoint.torque);
+		maxIntakeData.addPoint(speed, dataPoint.maxIntake);
+		maxExhaustData.addPoint(speed, dataPoint.maxExhaust);
+		freshMixtureData.addPoint(speed, dataPoint.freshMixture);
+		usedMixtureData.addPoint(speed, dataPoint.usedMixture);
+	}
+
+	FontFace graphFont(window, "data/fonts/dejavusans.ttf", 8);
+	
+	Graph performanceGraph(graphFont);
+	performanceGraph.setPrimaryData(powerData, Color(1, 0, 0), "Teho (kW)", round(powerData.getMax() * 1.1, 5));
+	performanceGraph.setSecondaryData(torqueData, Color(0, 0, 1), "Vääntö (Nm)", round(torqueData.getMax() * 2.5, 25));
+	performanceGraph.setDomain(0, 10000);
+	
+	float flowRange = round(std::max(freshMixtureData.getMax(), maxExhaustData.getMax()) * 1.2, 5000);
+	
+	Graph flowGraph(graphFont);
+	flowGraph.setPrimaryData(freshMixtureData, Color(0, 0, 1), "Imu (L / min)", flowRange);
+	flowGraph.setSecondaryData(maxExhaustData, Color(1, 0, 0), "Pako (L / min)", flowRange);
+	flowGraph.setDomain(0, 10000);
+	
+	float mixtureFlowRange = round(std::max(freshMixtureData.getMax(), usedMixtureData.getMax()) * 1.2, 5000);
+	
+	Graph mixtureFlowGraph(graphFont);
+	mixtureFlowGraph.setPrimaryData(freshMixtureData, Color(0, 0, 1), "Tuoretta", mixtureFlowRange);
+	mixtureFlowGraph.setSecondaryData(usedMixtureData, Color(1, 0, 0), "Vanhaa", mixtureFlowRange);
+	mixtureFlowGraph.setDomain(0, 10000);
+	
 	
 	while(1)
-	{
+	{	
+		glClearColor(1, 1, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		std::wstringstream ss;
-
-		Color(1, 1, 1).apply();
-
-		while(vehicle.getLagInSteps(realTime.getSeconds()) > 0)
-		{
-			vehicle.advanceSimulation();
-		}	
+		performanceGraph.draw(Vector2D(8, 8), Vector2D(500, 250));
+		flowGraph.draw(Vector2D(508, 8), Vector2D(500, 250));
+		mixtureFlowGraph.draw(Vector2D(508, 268), Vector2D(500, 250));
 		
-		ss << "Throttle: " << engine.getThrottle() << "\n";
-		ss << "Clutch: " << clutch.getUsage() << "\n";
-		ss << "Gear: " << transmission.getRatio() << "\n";
-		ss << "RPM: " << vehicle.getEngineSpeed() << "\n";
-		ss << "Torque: " << engine.getTorque(vehicle.getEngineSpeed() * RPM_TO_RADS) << "\n";
-		ss << "Speed: " << vehicle.getVel().position * 60 * 60 / 1000 << " km/h\n";
-		ss << "Gearbox out: " << vehicle.getVel().gearbox_out * RADS_TO_RPM << "\n";
-		ss << "Position: " << vehicle.getPos() << " m\n";
-		ss << "Lag: " << vehicle.getLagInSteps(realTime.getSeconds()) << " steps\n";
-
-		engineSound.setPitch(1.0 + (vehicle.getEngineSpeed() - 1000.0) / 10000.0);
-		engineSound.setVolume(vehicle.getEngineSpeed() / 1000.0);
-
-		debugFont.draw(ss.str(), Vector2D(0, 0));
-
-		
-
 		try
 		{
 			events.processEvents();

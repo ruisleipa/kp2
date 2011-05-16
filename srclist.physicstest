@@ -16,7 +16,10 @@ SRC = \
 	src/physics/brake.cpp \
 	src/physics/chassis.cpp \
 	src/physics/clutch.cpp \
+	src/physics/curve.cpp \
 	src/physics/engine.cpp \
+	src/physics/graph.cpp \
+	src/physics/pipe.cpp \
 	src/physics/test.cpp \
 	src/physics/tire.cpp \
 	src/physics/transmission.cpp \
@@ -25,6 +28,7 @@ SRC = \
 	src/utils/demangle.cpp \
 	src/utils/inifile.cpp \
 	src/utils/sdl.cpp \
+	src/utils/string.cpp \
 	src/utils/timer.cpp 
 
 
