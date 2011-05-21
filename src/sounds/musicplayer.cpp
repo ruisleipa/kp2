@@ -1,6 +1,7 @@
 #include "musicplayer.hpp"
 
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <algorithm>
 
@@ -54,6 +55,8 @@ MusicPlayer::MusicPlayer():
 	loadSettings();
 
 	files = readDirectory(MUSIC_DIRECTORY);
+	
+	srand(time(NULL));
 	
 	std::random_shuffle(files.begin(), files.end());
 	
