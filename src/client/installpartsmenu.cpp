@@ -11,10 +11,19 @@ InstallPartsMenu::InstallPartsMenu(Connection& connection):
 	
 	mainContainer.setFactorSize(Vector2D(1,1));	
 	mainContainer.addWidget(vehicleInfo);
-	mainContainer.addWidget(vehicleContainer);
-	mainContainer.addWidget(partContainer);
-	
+	mainContainer.addWidget(rightContainer);
+
 	vehicleInfo.setFluid(true);	
+	
+	rightContainer.setFluid(true);
+	rightContainer.showOuterPadding(false);
+	rightContainer.addWidget(partsContainer);	
+	rightContainer.addWidget(graph);
+	
+	partsContainer.setFluid(true);
+	partsContainer.showOuterPadding(false);
+	partsContainer.addWidget(vehicleContainer);	
+	partsContainer.addWidget(partContainer);
 	
 	vehicleContainer.setFluid(true);	
 	vehicleContainer.showOuterPadding(false);
@@ -44,7 +53,9 @@ InstallPartsMenu::InstallPartsMenu(Connection& connection):
 	
 	installButton.setText("Asenna osa");
 	installButton.autoSize();
-	installButton.setClickHandler(std::tr1::bind(&InstallPartsMenu::handleInstallButtonClick,this));	
+	installButton.setClickHandler(std::tr1::bind(&InstallPartsMenu::handleInstallButtonClick,this));
+
+	graph.setFluid(true);
 }
 
 void InstallPartsMenu::handleInstallButtonClick()
@@ -68,6 +79,7 @@ void InstallPartsMenu::handleConnectionEvent()
 	fillVehicleInfo();
 	fillParts();
 	fillVehicleParts();
+	fillPerformanceGraph();
 }
 
 void InstallPartsMenu::fillVehicleInfo()
@@ -112,4 +124,13 @@ void InstallPartsMenu::fillVehicleParts()
 		
 		vehiclePartList.addItem(part.name, vehiclePartIds[i]);
 	}	
+}
+
+void InstallPartsMenu::fillPerformanceGraph()
+{
+	const Protocol::PerformanceData data = connection.getPerformanceData();
+		
+	graph.setPrimaryData(data.power, Color(1, 0, 0), "Teho\n(kW)", data.power.getMax() * 1.25);
+	graph.setSecondaryData(data.torque, Color(0, 0, 1), "Vääntö\n(Nm)", data.torque.getMax() * 2.5);
+	graph.setDomain(0, 10000);	
 }

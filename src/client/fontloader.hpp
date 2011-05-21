@@ -18,6 +18,7 @@ class FontLoader
 		FontFace font;		
 		FontFace smallFont;		
 		FontFace titleFont;		
+		FontFace tinyFont;		
 };
 
 #endif // FONTLOADER_HPP

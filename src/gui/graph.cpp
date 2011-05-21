@@ -7,23 +7,12 @@
 #include "utils/string.hpp"
 
 const int horizontalLines = 4;
-const int verticalLines = 9;
+const int verticalLines = 4;
 const int stepCount = 50;
 
-const Vector2D margin(80, 0);
-
-void Graph::draw(Vector2D pos, Vector2D size)
-{	
-	Vector2D innerPos = pos + margin;
-	Vector2D innerSize = size - margin - margin;	
-	
-	drawGrid(innerPos, innerSize);
-	drawFrame(innerPos, innerSize);
-	drawPrimaryData(innerPos, innerSize);
-	drawSecondaryData(innerPos, innerSize);
-	drawPrimaryLabels(pos, size);
-	drawSecondaryLabels(pos, size);
-}
+const Vector2D border(2, 2);
+const Vector2D margin(8, 0);
+const Vector2D verticalMargin(0, 8);
 
 void Graph::setPrimaryData(const Curve& data, Color color, std::string label, float range)
 {
@@ -47,17 +36,65 @@ void Graph::setDomain(int begin, int end)
 	domainEnd = end;
 }
 
-Graph::Graph(FontFace& fontFace):
-	fontFace(fontFace),
+void Graph::handleEvent(Event* event)
+{
+	if(dynamic_cast<DrawEvent*>(event))
+		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
+}
+
+void Graph::handleDrawEvent(DrawEvent* event)
+{	
+	Vector2D pos = event->getAreaPosition();
+	Vector2D size = event->getAreaSize();
+	
+	std::wstringstream ssLeft;	
+	ssLeft << int(primaryRange);
+	Vector2D leftMargin = font.getTextSize(ssLeft.str()) * Vector2D(1, 0) + margin * 2;
+	
+	std::wstringstream ssRight;	
+	ssRight << int(secondaryRange);
+	Vector2D rightMargin = font.getTextSize(ssRight.str()) * Vector2D(1, 0) + margin * 2;
+	
+	Vector2D innerPos = pos + leftMargin + verticalMargin;
+	Vector2D innerSize = size - leftMargin - rightMargin - verticalMargin * 2 - Vector2D(0, 32);	
+	
+	drawBackground(pos, size);
+	drawGrid(innerPos, innerSize);
+	drawFrame(innerPos, innerSize);
+	drawPrimaryData(innerPos, innerSize);
+	drawSecondaryData(innerPos, innerSize);
+	drawPrimaryLabels(innerPos, innerSize);
+	drawSecondaryLabels(innerPos, innerSize);
+}
+
+Graph::Graph():
 	domainBegin(0),
 	domainEnd(0)
 {
+	font = Font("Graph");
+}
 
+void Graph::drawBackground(Vector2D pos, Vector2D size)
+{
+	Color(1, 1, 1, 0.5).apply();
+	Texture().bind();
+	
+	Vector2D begin = pos;
+	Vector2D end = pos + size;
+	
+	glBegin(GL_QUADS);
+	
+	glVertex2i(begin.getX(), begin.getY());
+	glVertex2i(end.getX(), begin.getY());
+	glVertex2i(end.getX(), end.getY());
+	glVertex2i(begin.getX(), end.getY());
+	
+	glEnd();	
 }
 
 void Graph::drawFrame(Vector2D pos, Vector2D size)
 {
-	Color(0,0,0,1).apply();
+	Color(0, 0, 0, 1).apply();
 	Texture().bind();
 	
 	Vector2D begin = pos;
@@ -81,7 +118,7 @@ void Graph::drawGrid(Vector2D pos, Vector2D size)
 	for(int i = 1; i <= verticalLines; i++)
 	{
 		Texture().bind();
-		Color(0.7,0.7,0.7,1).apply();
+		Color(0.7, 0.7, 0.7, 1).apply();
 		
 		glBegin(GL_LINES);
 		glVertex2i(begin.getX() + size.getX() / (verticalLines + 1) * i, end.getY());
@@ -92,7 +129,7 @@ void Graph::drawGrid(Vector2D pos, Vector2D size)
 	for(int i = 1; i <= horizontalLines; i++)
 	{
 		Texture().bind();
-		Color(0.7,0.7,0.7,1).apply();
+		Color(0.7, 0.7, 0.7, 1).apply();
 		
 		glBegin(GL_LINES);
 		glVertex2i(begin.getX(), end.getY() - size.getY() / (horizontalLines + 1) * i);
@@ -149,17 +186,20 @@ void Graph::drawPrimaryLabels(Vector2D pos, Vector2D size)
 	
 	primaryColor.apply();
 	
-	fontFace.draw(convertToWideString(primaryLabel), Vector2D(pos.getX(), end.getY()));
-
+	font.draw(convertToWideString(primaryLabel), Vector2D(pos.getX(), end.getY()));
+	
 	for(int i = 1; i <= horizontalLines; i++)
 	{
-		Vector2D base(pos.getX(), end.getY() - size.getY() / (horizontalLines + 1) * i);
-
 		std::wstringstream ss;
 		
 		ss << int(primaryRange / (horizontalLines + 1) * i);
 		
-		fontFace.draw(ss.str(), base);
+		Vector2D offset = font.getTextSize(ss.str()) * Vector2D(1, 0.5) + margin;
+		
+		Vector2D base(pos.getX(), end.getY() - size.getY() / (horizontalLines + 1) * i);
+		base -= offset;
+		
+		font.draw(ss.str(), base, primaryColor);
 	}
 }
 
@@ -169,16 +209,19 @@ void Graph::drawSecondaryLabels(Vector2D pos, Vector2D size)
 
 	secondaryColor.apply();
 	
-	fontFace.draw(convertToWideString(secondaryLabel), Vector2D(end.getX(), end.getY()) - margin + Vector2D(8, 0));
+	font.draw(convertToWideString(secondaryLabel), Vector2D(end.getX(), end.getY()) - margin + Vector2D(8, 0));
 	
 	for(int i = 1; i <= horizontalLines; i++)
-	{
-		Vector2D base = Vector2D(end.getX(), end.getY() - size.getY() / (horizontalLines + 1) * i) - margin + Vector2D(8,0);
-			
+	{		
 		std::wstringstream ss;
+		
+		Vector2D offset = font.getTextSize(ss.str()) * Vector2D(1, -0.5) + margin;
+	
+		Vector2D base = Vector2D(end.getX(), end.getY() - size.getY() / (horizontalLines + 1) * i);
+		base += offset;		
 		
 		ss << int(secondaryRange / (horizontalLines + 1) * i);
 		
-		fontFace.draw(ss.str(), base);
+		font.draw(ss.str(), base, secondaryColor);
 	}
 }

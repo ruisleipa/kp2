@@ -14,7 +14,8 @@ FontLoader::FontLoader(Window& window):
 	window(window),
 	font(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(12.0/480.0)),
 	smallFont(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(11.0/480.0)),
-	titleFont(window, "data/fonts/dejavusansboldoblique.ttf", window.getSize().getY()*(32.0/480.0))
+	titleFont(window, "data/fonts/dejavusansboldoblique.ttf", window.getSize().getY()*(32.0/480.0)),
+	tinyFont(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(8.0/480.0))
 {
 	Font::setFontType("title", titleFont, NORMAL);
 	Font::setFontType("small", smallFont, NORMAL);
@@ -26,6 +27,7 @@ FontLoader::FontLoader(Window& window):
 	Font::setFontType("Select.active", font, ACTIVE);
 	Font::setFontType("Field", font, NORMAL);
 	Font::setFontType("Listbox", smallFont, NORMAL);
+	Font::setFontType("Graph", tinyFont, NORMAL);
 }
 
 void FontLoader::freeTextures()
@@ -33,6 +35,7 @@ void FontLoader::freeTextures()
 	font.freeTextures();
 	smallFont.freeTextures();
 	titleFont.freeTextures();
+	tinyFont.freeTextures();
 }
 
 void FontLoader::uploadTextures()
@@ -40,6 +43,7 @@ void FontLoader::uploadTextures()
 	font.uploadTextures();
 	smallFont.uploadTextures();
 	titleFont.uploadTextures();
+	tinyFont.uploadTextures();
 }
 
 void FontLoader::reload()
@@ -47,5 +51,6 @@ void FontLoader::reload()
 	font = FontFace(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(12.0/480.0));
 	smallFont = FontFace(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(11.0/480.0));
 	titleFont = FontFace(window, "data/fonts/dejavusansboldoblique.ttf", window.getSize().getY()*(32.0/480.0));
+	tinyFont = FontFace(window, "data/fonts/dejavusans.ttf", window.getSize().getY()*(8.0/480.0));
 }
 

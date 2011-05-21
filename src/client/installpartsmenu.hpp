@@ -6,6 +6,7 @@
 #include "gui/menu.hpp"
 #include "gui/label.hpp"
 #include "gui/button.hpp"
+#include "gui/graph.hpp"
 #include "gui/image.hpp"
 #include "gui/listbox.hpp"
 #include "gui/columnlayoutcontainer.hpp"
@@ -26,12 +27,19 @@ class InstallPartsMenu : public Menu
 		void fillVehicleInfo();
 		void fillParts();
 		void fillVehicleParts();
+		void fillPerformanceGraph();
 	
 		Connection& connection;
 	
 		ColumnLayoutContainer mainContainer;
 		
 		PlayerVehicleWidget vehicleInfo;
+		
+		RowLayoutContainer rightContainer;
+		
+		Graph graph;
+		
+		ColumnLayoutContainer partsContainer;
 		
 		RowLayoutContainer vehicleContainer;
 		

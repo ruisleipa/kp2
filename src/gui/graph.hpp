@@ -1,24 +1,29 @@
-#ifndef PHYSICS_GRAPH_HPP
-#define PHYSICS_GRAPH_HPP
+#ifndef GUI_GRAPH_HPP
+#define GUI_GRAPH_HPP
 
-#include "curve.hpp"
+#include "widget.hpp"
+#include "font.hpp"
+
+#include "utils/curve.hpp"
 #include "graphics/vector2d.hpp"
 #include "graphics/color.hpp"
 #include "graphics/fontface.hpp"
 
-class Graph
+class Graph : public Widget
 {
 	public:
-		void draw(Vector2D pos, Vector2D size);
-		
 		void setPrimaryData(const Curve& data, Color color, std::string label, float range);
 		void setSecondaryData(const Curve& data, Color color, std::string label, float range);
 		
 		void setDomain(int begin, int end);
 		
-		Graph(FontFace& fontFace);
+		virtual void handleEvent(Event* event);
+			
+		Graph();
 
 	private:
+		void handleDrawEvent(DrawEvent* event);	
+		void drawBackground(Vector2D pos, Vector2D size);
 		void drawFrame(Vector2D pos, Vector2D size);
 		void drawGrid(Vector2D pos, Vector2D size);
 		void drawPrimaryData(Vector2D pos, Vector2D size);
@@ -26,7 +31,7 @@ class Graph
 		void drawPrimaryLabels(Vector2D pos, Vector2D size);
 		void drawSecondaryLabels(Vector2D pos, Vector2D size);
 		
-		FontFace& fontFace;
+		Font font;
 		
 		Curve primaryData;
 		Color primaryColor;
