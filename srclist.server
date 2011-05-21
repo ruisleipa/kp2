@@ -9,6 +9,14 @@ SRC = src/debug/assert.cpp \
 	src/net/socket.cpp \
 	src/net/socketactivity.cpp \
 	src/net/socketset.cpp \
+	src/physics/brake.cpp \
+	src/physics/chassis.cpp \
+	src/physics/clutch.cpp \
+	src/physics/engine.cpp \
+	src/physics/pipe.cpp \
+	src/physics/tire.cpp \
+	src/physics/transmission.cpp \
+	src/physics/vehicle.cpp \
 	src/protocol/buypart.cpp \
 	src/protocol/buyvehicle.cpp \
 	src/protocol/part.cpp \
@@ -42,6 +50,7 @@ SRC = src/debug/assert.cpp \
 	src/server/fuelpump.cpp \
 	src/server/injector.cpp \
 	src/server/intakemanifold.cpp \
+	src/server/simulation.cpp \
 	src/server/tire.cpp \
 	src/server/transmission.cpp \
 	src/server/vehicle.cpp \

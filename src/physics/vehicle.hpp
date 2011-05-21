@@ -12,6 +12,9 @@
 #include "brake.hpp"
 #include "chassis.hpp"
 
+namespace Physics
+{
+
 class Vehicle
 {
 	public:
@@ -73,6 +76,8 @@ class Vehicle
 		float m_brake_usage;
 		
 		int step;
+};
+
 };
 
 #endif

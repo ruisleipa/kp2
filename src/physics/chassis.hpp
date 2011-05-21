@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 
+namespace Physics
+{
+
 class Chassis
 {
 	public:
@@ -16,6 +19,8 @@ class Chassis
 		float width;
 		float wheelBase;
 		float dragCoefficient;
+
+};
 
 };
 

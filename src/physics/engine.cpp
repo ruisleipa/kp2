@@ -2,6 +2,9 @@
 #include "math_tools.hpp"
 #include <cmath>
 
+namespace Physics
+{
+
 float Engine::getThrottle()
 {
 	return throttle;
@@ -107,3 +110,5 @@ Engine::Engine(const Curve& torqueCurve, float volume, int cylinderCount,
 {	
 
 }
+
+};

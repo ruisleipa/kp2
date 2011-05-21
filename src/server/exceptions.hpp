@@ -20,6 +20,18 @@ class PartDoesNotFitException
 		std::string reason;		
 };
 
+class VehicleDoesNotWorkException
+{
+	public:
+		VehicleDoesNotWorkException(const std::string& reason):
+			reason(reason)
+		{
+		
+		}
+		
+		std::string reason;		
+};
+
 class NoSuchPartException
 {
 

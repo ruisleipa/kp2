@@ -1,6 +1,9 @@
 #ifndef _CLUTCH_HPP
 #define _CLUTCH_HPP
 
+namespace Physics
+{
+
 class Clutch
 {
 	public:		
@@ -14,6 +17,8 @@ class Clutch
 	private:
 		float maxTorque;
 		float usage;
+
+};
 
 };
 

@@ -2,6 +2,9 @@
 
 #include <algorithm>
 
+namespace Physics
+{
+
 float Pipe::getFlow(float needed) const
 {
 	float ratio = needed / maxFlow;	
@@ -23,3 +26,5 @@ Pipe::Pipe(float maxFlow):
 	flowCurve.addPoint(150, 1.0);	
 	flowCurve.addPoint(1000000000, 1.0);
 }
+
+};

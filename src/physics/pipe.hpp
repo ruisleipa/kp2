@@ -1,7 +1,10 @@
 #ifndef PHYSICS_PIPE_HPP
 #define PHYSICS_PIPE_HPP
 
-#include "curve.hpp"
+#include "utils/curve.hpp"
+
+namespace Physics
+{
 
 class Pipe
 {
@@ -17,5 +20,6 @@ class Pipe
 	
 };
 
+};
 
 #endif

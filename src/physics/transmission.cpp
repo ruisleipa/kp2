@@ -1,6 +1,9 @@
 #include "transmission.hpp"
 #include <stdexcept>
 
+namespace Physics
+{
+
 Transmission::Transmission(std::vector<float> ratios, size_t neutralIndex,
 	float efficiency, float differentialRatio, float driveshaftInertia
 	):
@@ -57,3 +60,5 @@ float Transmission::getDriveshaftInertia()
 {
 	return driveshaftInertia;
 }
+
+};

@@ -1,8 +1,11 @@
 #ifndef _ENGINE_HPP
 #define _ENGINE_HPP
 
-#include "curve.hpp"
+#include "utils/curve.hpp"
 #include "pipe.hpp"
+
+namespace Physics
+{
 
 class Engine
 {
@@ -40,5 +43,6 @@ class Engine
 		bool ignition;		
 };
 
+};
 
 #endif

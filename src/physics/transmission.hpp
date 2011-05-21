@@ -3,6 +3,9 @@
 
 #include <vector>
 
+namespace Physics
+{
+
 class Transmission
 {
 	public:	
@@ -29,6 +32,8 @@ class Transmission
 		std::vector<float>::size_type neutralIndex;
 		
 		std::vector<float>::size_type currentIndex;
+};
+
 };
 
 #endif

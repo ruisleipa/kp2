@@ -3,6 +3,9 @@
 #include <cmath>
 #include "math_tools.hpp"
 
+namespace Physics
+{
+
 float Brake::getTorque(float usage, float discSpeed)
 {
 	float absoluteTorque = usage * coefficientOfFriction * fabs(discSpeed);
@@ -19,3 +22,5 @@ Brake::Brake(float coefficientOfFriction, float maxTorque):
 {	
 
 }
+
+};

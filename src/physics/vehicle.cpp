@@ -1,6 +1,10 @@
 #include "vehicle.hpp"
 #include "math_tools.hpp"
 
+
+namespace Physics
+{
+
 const int TICKS_PER_SECOND = 300;
 
 const double g = 9.81;	//m/s
@@ -179,3 +183,5 @@ int Vehicle::getLagInSteps(double realTime)
 	
 	return int((realTime - simulationTime) / stepTime);
 }
+
+};

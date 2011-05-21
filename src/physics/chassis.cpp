@@ -3,6 +3,9 @@
 #include <cmath>
 #include "math_tools.hpp"
 
+namespace Physics
+{
+
 Chassis::Chassis():
 	totalMass(0),
 	massOnRear(0),
@@ -14,3 +17,5 @@ Chassis::Chassis():
 {	
 
 }
+
+};

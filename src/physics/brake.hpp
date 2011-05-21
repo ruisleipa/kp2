@@ -1,6 +1,9 @@
 #ifndef BRAKE_HPP
 #define BRAKE_HPP
 
+namespace Physics
+{
+
 class Brake
 {
 	public:
@@ -11,6 +14,8 @@ class Brake
 	private:
 		float coefficientOfFriction;
 		float maxTorque;
+
+};
 
 };
 

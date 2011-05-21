@@ -3,6 +3,9 @@
 
 #include <algorithm>
 
+namespace Physics
+{
+
 Tire::Tire(float mass, float radius, float rollingResistanceCoefficient):
 	slipRatio(0),
 	radius(radius),
@@ -43,3 +46,5 @@ double Tire::setSlipRatio(double slipRatio)
 {
 	this->slipRatio = slipRatio;
 }
+
+};

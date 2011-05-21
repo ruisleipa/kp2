@@ -1,6 +1,9 @@
 #ifndef _TIRE_HPP
 #define _TIRE_HPP
 
+namespace Physics
+{
+
 class Tire
 {
 	public:
@@ -18,6 +21,8 @@ class Tire
 		double radius;
 		double inertia;
 		double rollingResistanceCoefficient;
+};
+
 };
 
 #endif
