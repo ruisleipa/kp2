@@ -14,6 +14,11 @@ int ExhaustManifold::getPrice() const
 	return 0;
 }
 
+float ExhaustManifold::getFlow() const
+{
+	return flow;
+}
+
 void ExhaustManifold::checkPrerequisiteParts(const Vehicle& vehicle) const
 {
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
@@ -51,16 +56,16 @@ ExhaustManifold::ExhaustManifold(IniFile& iniFile):
 	iniFile.getValue("cylinders",cylinders);
 	iniFile.getValue("camshaftPosition",camshaftPosition);
 	iniFile.getValue("cylinderAlignment",cylinderAlignment);
+	iniFile.getValue("flow", flow);
 		
 	std::stringstream ss;
 	
 	ss << cylinderAlignment;
 	ss << cylinders;
 	ss << " ";
-		
-	ss << camshaftPosition;
 	
-	ss << " -pakosarja";
+	ss << " -pakosarja ";
+	ss << flow;
 	
 	name = ss.str();
 }
