@@ -2,6 +2,7 @@
 #define ENGINE_HPP
 
 #include "partmodel.hpp"
+#include "utils/curve.hpp"
 
 #include <string>
 
@@ -16,6 +17,7 @@ class Engine: public PartModel
 		const std::string& getCamshaftPosition() const;	
 		const std::string& getCylinderAlignment() const;	
 		int getCylinderCount() const;	
+		const Curve& getTorqueCurve() const;
 		
 		void checkPrerequisiteParts(const Vehicle& vehicle) const;
 		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
@@ -31,6 +33,8 @@ class Engine: public PartModel
 		float volume;	
 
 		std::string name;
+		
+		Curve torqueCurve;
 };
 
 #endif // ENGINE_HPP

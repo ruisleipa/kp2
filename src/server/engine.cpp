@@ -28,6 +28,11 @@ int Engine::getCylinderCount() const
 	return cylinders;
 }
 
+const Curve& Engine::getTorqueCurve() const
+{
+	return torqueCurve;
+}
+
 void Engine::checkPrerequisiteParts(const Vehicle& vehicle) const
 {
 	if(vehicle.getModel().getMaxEngineVolume() < volume)
@@ -54,6 +59,27 @@ Engine::Engine(IniFile& iniFile):
 	iniFile.getValue("cylinderAlignment",cylinderAlignment);
 	
 	iniFile.getValue("compression",compression);
+	iniFile.getValue("volume",volume);
+	
+	int torqueCurvePointCount;
+	
+	iniFile.getValue("torqueCurvePointCount",torqueCurvePointCount);
+	
+	for(int i = 0; i < torqueCurvePointCount; i++)
+	{
+		int position;
+		float value;
+		
+		std::stringstream ss;
+		
+		ss << "torqueCurve[" << i << "]";
+		
+		iniFile.getValue(ss.str() + ".position", position);
+		iniFile.getValue(ss.str() + ".value", value);
+		
+		torqueCurve.addPoint(position, value);
+	}
+	
 	iniFile.getValue("volume",volume);
 		
 	std::stringstream ss;
