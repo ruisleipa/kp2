@@ -13,6 +13,7 @@ class IntakeManifold: public PartModel
 	public:
 		const std::string& getName() const;
 		int getPrice() const;
+		float getFlow() const;
 		
 		void checkPrerequisiteParts(const Vehicle& vehicle) const;
 		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
@@ -24,6 +25,8 @@ class IntakeManifold: public PartModel
 		std::string camshaftPosition;
 		std::string cylinderAlignment;
 		int cylinders;
+		
+		float flow;
 		
 };
 

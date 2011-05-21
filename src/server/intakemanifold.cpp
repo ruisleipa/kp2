@@ -14,6 +14,11 @@ int IntakeManifold::getPrice() const
 	return 0;
 }
 
+float IntakeManifold::getFlow() const
+{
+	return flow;
+}
+
 void IntakeManifold::checkPrerequisiteParts(const Vehicle& vehicle) const
 {
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
@@ -47,6 +52,7 @@ IntakeManifold::IntakeManifold(IniFile& iniFile):
 {
 	iniFile.getValue("cylinders", cylinders);
 	iniFile.getValue("cylinderAlignment", cylinderAlignment);
+	iniFile.getValue("flow", flow);
 		
 	std::stringstream ss;
 	
