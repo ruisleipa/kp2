@@ -15,6 +15,11 @@ class VehicleModel
 		const std::string& getInfo() const;
 		const std::string& getImageName() const;
 		int getChassisWeight() const;
+		float getDragCoefficient() const;
+		float getLength() const;
+		float getWidth() const;
+		float getHeight() const;
+		float getWheelbase() const;
 		int getYear() const;
 		int getPrice() const;		
 		int getMaxEngineVolume() const;		
@@ -35,6 +40,11 @@ class VehicleModel
 		std::string info;
 		std::string imageName;
 		int chassisWeight;
+		float dragCoefficient;
+		float length;
+		float width;
+		float height;
+		float wheelbase;
 		int year;
 		int price;
 		int maxEngineVolume;

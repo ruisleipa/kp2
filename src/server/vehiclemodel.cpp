@@ -26,6 +26,30 @@ int VehicleModel::getChassisWeight() const
 {
 	return chassisWeight;
 }
+float VehicleModel::getDragCoefficient() const
+{
+	return dragCoefficient;
+}
+
+float VehicleModel::getLength() const
+{
+	return length;
+}
+
+float VehicleModel::getWidth() const
+{
+	return width;
+}
+
+float VehicleModel::getHeight() const
+{
+	return height;
+}
+
+float VehicleModel::getWheelbase() const
+{
+	return wheelbase;
+}
 
 int VehicleModel::getYear() const
 {
@@ -74,11 +98,16 @@ void VehicleModel::load(const std::string& filename)
 	file.getValue("info", info);
 	file.getValue("imageName", imageName);
 	file.getValue("chassisWeight", chassisWeight);
+	file.getValue("dragCoefficient", dragCoefficient);
+	file.getValue("length", length);
+	file.getValue("width", width);
+	file.getValue("height", height);
+	file.getValue("wheelbase", wheelbase);
 	file.getValue("year", year);
 	file.getValue("price", price);
 	file.getValue("maxEngineVolume", maxEngineVolume);
 	file.getValue("maxEngineCylinderCount", maxEngineCylinderCount);
-
+	
 	int partCount;
 	
 	file.getValue("partCount",partCount);
