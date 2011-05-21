@@ -17,7 +17,7 @@ static std::string trim(std::string str,const std::string& chars)
 	return str;
 }
 
-void IniFile::getValue(const std::string& key,std::string& value)
+void IniFile::getValue(const std::string& key,std::string& value) const
 {
 	if(values.find(key) == values.end())
 	{
@@ -30,7 +30,7 @@ void IniFile::getValue(const std::string& key,std::string& value)
 		throw std::runtime_error(ss.str());
 	}
 	
-	value=values[key];
+	value = values.find(key)->second;
 }
 
 void IniFile::setValue(const std::string& key,const std::string& str)

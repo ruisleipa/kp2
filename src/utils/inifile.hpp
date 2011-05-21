@@ -13,8 +13,8 @@ class IniFile
 {
 	public:
 		template<typename T>
-		void getValue(const std::string& key,T& value);
-		void getValue(const std::string& key,std::string& value);
+		void getValue(const std::string& key,T& value) const;
+		void getValue(const std::string& key,std::string& value) const;
 			
 		template<typename T>
 		void setValue(const std::string& key,const T& value);
@@ -52,7 +52,7 @@ void IniFile::setValue(const std::string& key,const T& value)
 };
 
 template<typename T>
-void IniFile::getValue(const std::string& key,T& value)
+void IniFile::getValue(const std::string& key,T& value) const
 {
 	if(values.find(key) == values.end())
 	{
@@ -68,7 +68,7 @@ void IniFile::getValue(const std::string& key,T& value)
 	T temp;
 	
 	std::stringstream ss;
-	ss << values[key];
+	ss << values.find(key)->second;
 	
 	ss >> temp;
 	
