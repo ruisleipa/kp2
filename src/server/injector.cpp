@@ -13,7 +13,8 @@ int Injector::getPrice() const
 	return 0;
 }
 
-Injector::Injector(IniFile& iniFile)
+Injector::Injector(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

@@ -1,14 +1,14 @@
 #ifndef COOLER_HPP
 #define COOLER_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Cooler: public PartModelImplementation
+class Cooler: public PartModel
 {
 	public:
 		const std::string& getName() const;

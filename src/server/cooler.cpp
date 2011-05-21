@@ -13,7 +13,8 @@ int Cooler::getPrice() const
 	return 0;
 }
 
-Cooler::Cooler(IniFile& iniFile)
+Cooler::Cooler(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

@@ -1,14 +1,14 @@
 #ifndef CLUTCH_HPP
 #define CLUTCH_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Clutch: public PartModelImplementation
+class Clutch: public PartModel
 {
 	public:
 		const std::string& getName() const;

@@ -2,7 +2,7 @@
 
 #include "utils/inifile.hpp"
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 //#include "accessory.hpp"
 #include "camshaft.hpp"
@@ -24,12 +24,12 @@
 
 const std::string& PartModel::getName() const
 {
-	return partModelImplementation->getName();
+	return name;
 }
 
 int PartModel::getPrice() const
 {
-	return partModelImplementation->getPrice();
+	return price;
 }
 
 const std::string& PartModel::getType() const
@@ -42,81 +42,30 @@ float PartModel::getWeight() const
 	return weight;
 }
 
-const PartModelImplementation& PartModel::getImplementation() const
-{
-	return *partModelImplementation;
-}
-
 void PartModel::checkInstallationConstraints(const Vehicle& vehicle) const
 {
-	partModelImplementation->checkInstallationConstraints(vehicle);
+	checkPrerequisiteParts(vehicle);
+	checkForExtraPartsOfThisType(vehicle);
 }
 
 void PartModel::checkKeepingConstraints(const Vehicle& vehicle) const
 {
-	partModelImplementation->checkKeepingConstraints(vehicle);
+	checkPrerequisiteParts(vehicle);
 }
 
-PartModel::PartModel():
-	price(0),
-	type(""),
-	weight(0.0),
-	partModelImplementation(0)
-{
-
-}
-	
-PartModel::PartModel(const std::string& filename)
-{
-	load(filename);
-}
-
-PartModel::~PartModel()
+void PartModel::checkPrerequisiteParts(const Vehicle& vehicle) const
 {
 
 }
 
-void PartModel::load(const std::string& filename)
+void PartModel::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
 {
-	IniFile partFile(filename);
-	
+
+}
+
+PartModel::PartModel(const IniFile& partFile)
+{
 	partFile.getValue("type",type);
 	partFile.getValue("weight",weight);
 	price = 100;
-	
-	PartModelImplementation* impl = 0;
-	
-	if(type == "camshaft")
-		impl = new Camshaft(partFile);
-	else if(type == "charger")
-		impl = new Charger(partFile);
-	else if(type == "clutch")
-		impl = new Clutch(partFile);
-	else if(type == "cooler")
-		impl = new Cooler(partFile);
-	else if(type == "cylinderhead")
-		impl = new CylinderHead(partFile);
-	else if(type == "differential")
-		impl = new Differential(partFile);
-	else if(type == "engine")
-		impl = new Engine(partFile);
-	else if(type == "exhaustmanifold")
-		impl = new ExhaustManifold(partFile);
-	else if(type == "exhaustpipe")
-		impl = new ExhaustPipe(partFile);
-	else if(type == "fuelintake")
-		impl = new FuelIntake(partFile);
-	else if(type == "fuelpump")
-		impl = new FuelPump(partFile);
-	else if(type == "injector")
-		impl = new Injector(partFile);
-	else if(type == "intakemanifold")
-		impl = new IntakeManifold(partFile);
-	else if(type == "tire")
-		impl = new Tire(partFile);
-	
-	if(impl == 0)
-		throw std::runtime_error("Invalid part type \"" + type + "\" in file \"" + filename + "\".");
-		
-	partModelImplementation = impl;
 }

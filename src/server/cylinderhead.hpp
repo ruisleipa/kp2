@@ -1,14 +1,14 @@
 #ifndef CYLINDERHEAD_HPP
 #define CYLINDERHEAD_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class CylinderHead: public PartModelImplementation
+class CylinderHead: public PartModel
 {
 	public:
 		const std::string& getName() const;

@@ -13,7 +13,8 @@ int FuelIntake::getPrice() const
 	return 0;
 }
 
-FuelIntake::FuelIntake(IniFile& iniFile)
+FuelIntake::FuelIntake(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

@@ -1,14 +1,14 @@
 #ifndef CAMSHAFT_HPP
 #define CAMSHAFT_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Camshaft: public PartModelImplementation
+class Camshaft: public PartModel
 {
 	public:
 		const std::string& getName() const;

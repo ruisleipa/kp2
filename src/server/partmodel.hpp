@@ -3,24 +3,26 @@
 
 #include <string>
 
-class PartModelImplementation;
+#include "utils/inifile.hpp"
+
+class PartModel;
 class Vehicle;
 
 class PartModel
 {
 	public:
-		const std::string& getName() const;	
-		int getPrice() const;		
+		virtual const std::string& getName() const;	
+		virtual int getPrice() const;		
 		const std::string& getType() const;	
 		float getWeight() const;
-		const PartModelImplementation& getImplementation() const;
 		
 		void checkInstallationConstraints(const Vehicle& vehicle) const;
 		void checkKeepingConstraints(const Vehicle& vehicle) const;
-				
-		PartModel();
-		PartModel(const std::string& filename);
-		~PartModel();
+		
+		virtual void checkPrerequisiteParts(const Vehicle& vehicle) const;
+		virtual void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
+	
+		PartModel(const IniFile& partFile);
 		
 	private:
 		void load(const std::string& filename);
@@ -28,8 +30,7 @@ class PartModel
 		int price;
 		std::string type;
 		float weight;
-		
-		PartModelImplementation* partModelImplementation;
+		std::string name;
 	
 };
 

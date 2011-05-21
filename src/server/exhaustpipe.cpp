@@ -13,7 +13,8 @@ int ExhaustPipe::getPrice() const
 	return 0;
 }
 
-ExhaustPipe::ExhaustPipe(IniFile& iniFile)
+ExhaustPipe::ExhaustPipe(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("pipeCount",pipeCount);
 	iniFile.getValue("diameter",diameter);

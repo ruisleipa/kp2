@@ -1,14 +1,14 @@
 #ifndef FUELINTAKE_HPP
 #define FUELINTAKE_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class FuelIntake: public PartModelImplementation
+class FuelIntake: public PartModel
 {
 	public:
 		const std::string& getName() const;

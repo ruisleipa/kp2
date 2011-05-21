@@ -1,14 +1,14 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Engine: public PartModelImplementation
+class Engine: public PartModel
 {
 	public:	
 		const std::string& getName() const;

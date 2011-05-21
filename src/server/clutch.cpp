@@ -13,7 +13,8 @@ int Clutch::getPrice() const
 	return 0;
 }
 
-Clutch::Clutch(IniFile& iniFile)
+Clutch::Clutch(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

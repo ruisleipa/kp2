@@ -13,7 +13,8 @@ int Differential::getPrice() const
 	return 0;
 }
 
-Differential::Differential(IniFile& iniFile)
+Differential::Differential(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

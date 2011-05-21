@@ -1,14 +1,14 @@
 #ifndef INTAKEMANIFOLD_HPP
 #define INTAKEMANIFOLD_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class IntakeManifold: public PartModelImplementation
+class IntakeManifold: public PartModel
 {
 	public:
 		const std::string& getName() const;

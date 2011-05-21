@@ -1,14 +1,14 @@
 #ifndef CHARGER_HPP
 #define CHARGER_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Charger: public PartModelImplementation
+class Charger: public PartModel
 {
 	public:
 		const std::string& getName() const;

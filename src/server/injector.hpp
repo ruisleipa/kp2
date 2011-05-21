@@ -1,14 +1,14 @@
 #ifndef INJECTOR_HPP
 #define INJECTOR_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Injector: public PartModelImplementation
+class Injector: public PartModel
 {
 	public:
 		const std::string& getName() const;

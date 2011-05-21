@@ -2,6 +2,8 @@
 
 #include "utils/directory.hpp"
 
+#include "partmodelfactory.hpp"
+
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
@@ -46,7 +48,7 @@ std::vector<std::string> GameState::getPartModelIds()
 const PartModel& GameState::getPartModel(const std::string& id)
 {
 	if(partModels.find(id) != partModels.end())
-		return partModels[id];
+		return *partModels[id];
 	else
 		throw std::runtime_error("Part model \"" + id + "\" not found.");
 }
@@ -113,11 +115,13 @@ void GameState::loadPartModels()
 	std::vector<std::string> files = readDirectory(PARTMODEL_DIRECTORY);	
 	std::vector<std::string>::iterator i;
 	
+	PartModelFactory factory;
+	
 	for(i = files.begin(); i != files.end(); ++i)
 	{
 		try
 		{
-			partModels[(*i)] = PartModel(PARTMODEL_DIRECTORY + (*i));
+			partModels[(*i)] = std::tr1::shared_ptr<PartModel>(factory.loadPartModel(PARTMODEL_DIRECTORY + (*i)));
 		}
 		catch(std::runtime_error e)
 		{

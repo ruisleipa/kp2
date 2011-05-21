@@ -13,7 +13,8 @@ int Tire::getPrice() const
 	return 0;
 }
 
-Tire::Tire(IniFile& iniFile)
+Tire::Tire(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

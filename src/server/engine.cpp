@@ -46,7 +46,8 @@ void Engine::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
 	}
 }
 
-Engine::Engine(IniFile& iniFile)
+Engine::Engine(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("cylinders",cylinders);
 	iniFile.getValue("camshaftPosition",camshaftPosition);

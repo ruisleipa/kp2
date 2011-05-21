@@ -13,7 +13,8 @@ int Charger::getPrice() const
 	return 150;
 }
 
-Charger::Charger(IniFile& iniFile)
+Charger::Charger(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("size",size);
 	iniFile.getValue("efficiency",efficiency);

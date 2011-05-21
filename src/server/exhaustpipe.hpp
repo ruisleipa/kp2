@@ -1,14 +1,14 @@
 #ifndef EXHAUSTPIPE_HPP
 #define EXHAUSTPIPE_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class ExhaustPipe: public PartModelImplementation
+class ExhaustPipe: public PartModel
 {
 	public:
 		const std::string& getName() const;

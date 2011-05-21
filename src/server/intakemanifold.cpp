@@ -13,7 +13,8 @@ int IntakeManifold::getPrice() const
 	return 0;
 }
 
-IntakeManifold::IntakeManifold(IniFile& iniFile)
+IntakeManifold::IntakeManifold(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

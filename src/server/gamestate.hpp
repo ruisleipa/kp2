@@ -37,9 +37,9 @@ class GameState
 		void loadPartModels();
 		void loadMachinings();
 			
+		std::map<std::string, std::tr1::shared_ptr<PartModel> > partModels;		
 		std::map<int,Player> players;
 		std::map<std::string,VehicleModel> vehicleModels;
-		std::map<std::string,PartModel> partModels;		
 		std::map<std::string,Machining> machinings;		
 };
 

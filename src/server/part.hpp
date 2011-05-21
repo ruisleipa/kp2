@@ -19,9 +19,9 @@ class Part
 		float getWeight() const;
 		
 		template<typename T>
-		const T& getModelImplementation() const
+		const T& getModel() const
 		{
-			return dynamic_cast<const T&>(partModel->getImplementation());
+			return dynamic_cast<const T&>(*partModel);
 		}
 		
 		void checkInstallationConstraints(const Vehicle& vehicle) const;

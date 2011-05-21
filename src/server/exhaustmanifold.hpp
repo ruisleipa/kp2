@@ -1,14 +1,14 @@
 #ifndef EXHAUSTMANIFOLD_HPP
 #define EXHAUSTMANIFOLD_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class ExhaustManifold: public PartModelImplementation
+class ExhaustManifold: public PartModel
 {
 	public:
 		const std::string& getName() const;

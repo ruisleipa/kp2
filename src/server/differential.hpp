@@ -1,14 +1,14 @@
 #ifndef DIFFERENTIAL_HPP
 #define DIFFERENTIAL_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Differential: public PartModelImplementation
+class Differential: public PartModel
 {
 	public:
 		const std::string& getName() const;

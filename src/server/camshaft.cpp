@@ -24,7 +24,7 @@ void Camshaft::checkPrerequisiteParts(const Vehicle& vehicle) const
 		
 		if(part.getType() == "cylinderhead")
 		{
-			const CylinderHead& cylinderHead = part.getModelImplementation<CylinderHead>();
+			const CylinderHead& cylinderHead = part.getModel<CylinderHead>();
 			
 			//check if we are a right kind of a camshaft
 			if(cylinderHead.getCylinderCount() != cylinders)
@@ -52,7 +52,7 @@ void Camshaft::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
 		
 		if(part.getType() == "cylinderhead")
 		{
-			const CylinderHead& cylinderHead = part.getModelImplementation<CylinderHead>();
+			const CylinderHead& cylinderHead = part.getModel<CylinderHead>();
 							
 			if(cylinderHead.isDoubleCam())
 				camshaftsNeeded += 2;
@@ -73,7 +73,8 @@ void Camshaft::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
 		throw PartDoesNotFitException("NO_ROOM_FOR_EXTRA_CAMSHAFT");
 }
 
-Camshaft::Camshaft(IniFile& iniFile)
+Camshaft::Camshaft(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("cylinders",cylinders);
 	iniFile.getValue("camshaftPosition",camshaftPosition);

@@ -13,7 +13,8 @@ int Transmission::getPrice() const
 	return 0;
 }
 
-Transmission::Transmission(IniFile& iniFile)
+Transmission::Transmission(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

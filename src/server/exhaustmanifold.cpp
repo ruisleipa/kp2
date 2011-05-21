@@ -22,7 +22,7 @@ void ExhaustManifold::checkPrerequisiteParts(const Vehicle& vehicle) const
 		
 		if(part.getType() == "cylinderhead")
 		{
-			const CylinderHead& cylinderHead = part.getModelImplementation<CylinderHead>();
+			const CylinderHead& cylinderHead = part.getModel<CylinderHead>();
 							
 			if(cylinderHead.getCylinderCount() != cylinders)
 				throw PartDoesNotFitException("EXHAUSTMANIFOLD_CYLINDERCOUNT_DOES_NOT_MATCH");
@@ -45,7 +45,8 @@ void ExhaustManifold::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
 	}
 }
 
-ExhaustManifold::ExhaustManifold(IniFile& iniFile)
+ExhaustManifold::ExhaustManifold(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("cylinders",cylinders);
 	iniFile.getValue("camshaftPosition",camshaftPosition);

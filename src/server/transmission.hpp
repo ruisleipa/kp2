@@ -1,14 +1,14 @@
 #ifndef TRANSMISSION_HPP
 #define TRANSMISSION_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Transmission: public PartModelImplementation
+class Transmission: public PartModel
 {
 	public:
 		const std::string& getName() const;

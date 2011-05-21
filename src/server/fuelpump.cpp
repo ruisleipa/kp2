@@ -13,7 +13,8 @@ int FuelPump::getPrice() const
 	return 0;
 }
 
-FuelPump::FuelPump(IniFile& iniFile)
+FuelPump::FuelPump(IniFile& iniFile):
+	PartModel(iniFile)
 {
 	iniFile.getValue("name",name);
 }

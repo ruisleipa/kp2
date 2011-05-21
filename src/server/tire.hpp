@@ -1,14 +1,14 @@
 #ifndef TIRE_HPP
 #define TIRE_HPP
 
-#include "partmodelimplementation.hpp"
+#include "partmodel.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Tire: public PartModelImplementation
+class Tire: public PartModel
 {
 	public:
 		const std::string& getName() const;
