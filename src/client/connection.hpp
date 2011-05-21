@@ -32,6 +32,7 @@ class Connection
 		const Protocol::ShopParts& getShopParts();
 		const Protocol::PlayerVehicles& getPlayerVehicles();
 		const Protocol::PlayerParts& getPlayerParts();
+		const Protocol::PerformanceData& getPerformanceData();
 		
 		void setName(const std::string& name);
 		
@@ -39,7 +40,9 @@ class Connection
 		void buyPart(const std::string& id);		
 		
 		void setActiveVehicleId(int vehiceId);
-		int getActiveVehicleId();		
+		int getActiveVehicleId();
+
+		void updatePerformanceData();
 		
 		void addMachining(int vehiclePartId,const std::string& machiningId);
 		void installPart(int partId);
@@ -63,6 +66,7 @@ class Connection
 		Protocol::PlayerVehicles playerVehicles;
 		Protocol::PlayerParts playerParts;
 		Protocol::VehicleId activeVehicleId;
+		Protocol::PerformanceData performanceData;
 };
 
 #endif

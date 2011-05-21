@@ -107,6 +107,11 @@ void Connection::processMessages()
 				std::cout << error;
 #endif				
 			}
+			else if(message.getType() == Protocol::DATA_PERFORMANCE)
+			{
+				message >> performanceData;
+			}
+		
 		
 			std::vector<std::tr1::function<void(Connection&)> >::iterator i;
 			
@@ -153,6 +158,11 @@ const Protocol::PlayerVehicles& Connection::getPlayerVehicles()
 const Protocol::PlayerParts& Connection::getPlayerParts()
 {
 	return playerParts;
+}
+
+const Protocol::PerformanceData& Connection::getPerformanceData()
+{
+	return performanceData;
 }
 
 void Connection::setName(const std::string& name)
@@ -245,6 +255,15 @@ void Connection::uninstallPart(int vehiclePartId)
 	command.id = vehiclePartId;
 	
 	packet << command;
+	
+	writeToServer(packet);
+}
+
+void Connection::updatePerformanceData()
+{
+	Packet packet;
+	
+	packet.setType(Protocol::COMMAND_UPDATE_PERFORMANCE);
 	
 	writeToServer(packet);
 }

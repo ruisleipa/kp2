@@ -10,6 +10,7 @@
 #include "shoppart.hpp"
 #include "vehicle.hpp"
 #include "part.hpp"
+#include "performancedata.hpp"
 
 namespace Protocol
 {
@@ -30,6 +31,7 @@ const uint16_t DATA_SHOP_PARTS = 31;
 
 const uint16_t DATA_PLAYER_VEHICLES = 60;
 const uint16_t DATA_PLAYER_PARTS = 61;
+const uint16_t DATA_PERFORMANCE = 62;
 
 const uint16_t DATA_INSTALL_ERROR = 90;
 
@@ -43,6 +45,7 @@ const uint16_t COMMAND_ADD_MACHINING = 200;
 
 const uint16_t COMMAND_INSTALL_PART = 300;
 const uint16_t COMMAND_UNINSTALL_PART = 301;
+const uint16_t COMMAND_UPDATE_PERFORMANCE = 302;
 
 };
 

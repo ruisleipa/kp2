@@ -20,6 +20,7 @@ SRC = src/debug/assert.cpp \
 	src/protocol/buypart.cpp \
 	src/protocol/buyvehicle.cpp \
 	src/protocol/part.cpp \
+	src/protocol/performancedata.cpp \
 	src/protocol/playerinfo.cpp \
 	src/protocol/collection.cpp \
 	src/protocol/setname.cpp \

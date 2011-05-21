@@ -18,6 +18,8 @@
 #include "protocol/vehicle.hpp"
 #include "protocol/part.hpp"
 
+#include "simulation.hpp"
+
 #include <sstream>
 #include <algorithm>
 #include <iostream>
@@ -112,7 +114,8 @@ void Connection::processPackets(ClientSocket& socket)
 				vehicle.installPart(command.id);
 				
 				sendPlayerParts();			
-				sendPlayerVehicles();			
+				sendPlayerVehicles();
+				sendPerformanceData();					
 			}
 			else if(type == Protocol::COMMAND_UNINSTALL_PART)
 			{
@@ -127,6 +130,11 @@ void Connection::processPackets(ClientSocket& socket)
 				
 				sendPlayerParts();			
 				sendPlayerVehicles();			
+				sendPerformanceData();		
+			}
+			else if(type == Protocol::COMMAND_UPDATE_PERFORMANCE)
+			{			
+				sendPerformanceData();			
 			}
 		}
 		catch(EndOfDataException)
@@ -387,6 +395,38 @@ void Connection::sendInstallError(const std::string& error)
 	installError = error;
 	
 	packet << installError;
+	
+	sendQueue.push(packet);
+}
+
+void Connection::sendPerformanceData()
+{
+	Player& player = gameState.getPlayer(playerId);
+	Vehicle& vehicle = player.getVehicle(player.getActiveVehicleId());
+
+	Simulation simulation(vehicle);
+	
+	try
+	{
+		simulation.run();
+	}
+	catch(VehicleDoesNotWorkException e)
+	{
+		std::cout << e.reason << std::endl;
+	
+		return;
+	}
+	
+	Packet packet;
+	
+	packet.setType(Protocol::DATA_PERFORMANCE);
+	
+	Protocol::PerformanceData performanceData;
+	
+	performanceData.torque = simulation.getTorqueData();
+	performanceData.power = simulation.getPowerData();
+	
+	packet << performanceData;
 	
 	sendQueue.push(packet);
 }
