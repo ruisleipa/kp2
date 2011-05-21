@@ -32,9 +32,6 @@ void ExhaustManifold::checkPrerequisiteParts(const Vehicle& vehicle) const
 			if(cylinderHead.getCylinderCount() != cylinders)
 				throw PartDoesNotFitException("EXHAUSTMANIFOLD_CYLINDERCOUNT_DOES_NOT_MATCH");
 			
-			if(cylinderHead.getCamshaftPosition() != camshaftPosition)
-				throw PartDoesNotFitException("EXHAUSTMANIFOLD_CAMSHAFTPOSITION_DOES_NOT_MATCH");
-			
 			if(cylinderHead.getCylinderAlignment() != cylinderAlignment)
 				throw PartDoesNotFitException("EXHAUSTMANIFOLD_CYLINDERALIGNMENT_DOES_NOT_MATCH");
 		}		
@@ -54,7 +51,6 @@ ExhaustManifold::ExhaustManifold(IniFile& iniFile):
 	PartModel(iniFile)
 {
 	iniFile.getValue("cylinders",cylinders);
-	iniFile.getValue("camshaftPosition",camshaftPosition);
 	iniFile.getValue("cylinderAlignment",cylinderAlignment);
 	iniFile.getValue("flow", flow);
 		
