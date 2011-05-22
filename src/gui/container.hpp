@@ -10,8 +10,10 @@ class Container : public Widget
 		virtual void showOnlyWidget(const std::string& tag);
 		
 		void addWidget(Widget& child);
-		void addWidget(const std::string& tag,Widget& child);
+		void addWidget(const std::string& name, Widget& child);
 
+		Widget& getChildByName(const std::string& name);
+		
 		virtual void handleEvent(Event* event);
 		
 		virtual void resize(Window& window);
@@ -42,7 +44,7 @@ class Container : public Widget
 		Widget* focusedChild;
 		Widget* mouseOverChild;
 
-		std::map<std::string,Widget*> tags;
+		std::map<std::string,Widget*> names;
 		std::vector<Widget*> children;
 		
 		bool showBounds;

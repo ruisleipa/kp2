@@ -180,7 +180,7 @@ void Container::resize(Window& window)
 	}	
 }
 
-void Container::showOnlyWidget(const std::string& tag)
+void Container::showOnlyWidget(const std::string& name)
 {
 	std::vector<Widget*>::iterator i;
 	
@@ -189,24 +189,53 @@ void Container::showOnlyWidget(const std::string& tag)
 		(*i)->setVisible(false);
 	}
 	
-	if(tags.find(tag) != tags.end())
+	if(names.find(name) != names.end())
 	{
-		tags[tag]->setVisible(true);
+		names[name]->setVisible(true);
 	}
 }
 
 void Container::addWidget(Widget& child)
 {
 	children.push_back(&child);
-	
-	child.setParent(this);
 }
 
-void Container::addWidget(const std::string& tag,Widget& child)
+void Container::addWidget(const std::string& name,Widget& child)
 {
-	tags[tag]=&child;
+	names[name]=&child;
 	
 	addWidget(child);
+}
+
+Widget& Container::getChildByName(const std::string& name)
+{
+	std::map<std::string, Widget*>::iterator i;
+
+	if(names.find(name) != names.end())
+	{
+		return *(names.find(name)->second);
+	}
+	
+	for(int i = 0; i != getChildCount(); ++i)
+	{
+		Widget* child = getChild(i);
+		
+		Container* container = dynamic_cast<Container*>(child);
+		
+		if(container)
+		{	
+			try
+			{		
+				return container->getChildByName(name);
+			}
+			catch(...)
+			{
+			
+			}
+		}
+	}
+	
+	throw 1;
 }
 
 int Container::getChildCount()
