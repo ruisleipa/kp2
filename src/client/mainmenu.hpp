@@ -1,6 +1,7 @@
 #ifndef MAINMENU_HPP
 #define MAINMENU_HPP
 
+#include "gui/menucontainer.hpp"
 #include "gui/menu.hpp"
 #include "gui/button.hpp"
 #include "gui/image.hpp"
@@ -10,11 +11,13 @@
 class MainMenu : public Menu
 {
 	public:
-		MainMenu(TextureCollection& textureCollection);
+		MainMenu(MenuContainer& menuContainer, TextureCollection& textureCollection);
 		
 		virtual void onResize(Window& window);
 
 	private:
+		MenuContainer& menuContainer;
+		
 		Image background;
 		Image title;
 	

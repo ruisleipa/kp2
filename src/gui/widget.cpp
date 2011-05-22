@@ -114,7 +114,6 @@ void Widget::onResize(Window& window)
 
 Widget::Widget():
 	visible(true),
-	parent(0),
 	pixelPosition(true),
 	pixelSize(true),
 	fluid(false),
@@ -153,14 +152,4 @@ bool Widget::hasPixelPosition()
 bool Widget::hasPixelSize()
 {
 	return pixelSize;
-}
-
-Container* Widget::getParent()
-{
-	return parent;
-}
-
-void Widget::setParent(Container* parent)
-{
-	this->parent=parent;
 }

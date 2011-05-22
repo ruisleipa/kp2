@@ -1,6 +1,7 @@
 #ifndef NEWLOCALGAMEMENU_HPP
 #define NEWLOCALGAMEMENU_HPP
 
+#include "gui/menucontainer.hpp"
 #include "gui/menu.hpp"
 #include "gui/label.hpp"
 #include "gui/select.hpp"
@@ -13,7 +14,7 @@
 class NewLocalGameMenu : public Menu
 {
 	public:
-		NewLocalGameMenu(Connection& connection);
+		NewLocalGameMenu(MenuContainer& menuContainer, Connection& connection);
 
 		virtual void onResize(Window& window);
 		virtual void onShow();
@@ -22,6 +23,7 @@ class NewLocalGameMenu : public Menu
 		void backClickHandler();
 		void startClickHandler();
 	
+		MenuContainer& menuContainer;
 		Connection& connection;
 
 		Label title;

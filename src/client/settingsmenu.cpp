@@ -8,7 +8,8 @@
 #include "sounds/musicplayer.hpp"
 #include "graphics/window.hpp"
 
-SettingsMenu::SettingsMenu(Window& window, MusicPlayer& musicPlayer):
+SettingsMenu::SettingsMenu(MenuContainer& menuContainer, Window& window, MusicPlayer& musicPlayer):
+	menuContainer(menuContainer),
 	window(window),
 	musicPlayer(musicPlayer),
 	windowOptionsChanged(false)
@@ -182,7 +183,7 @@ void SettingsMenu::updateMusicOptions()
 
 void SettingsMenu::backClick()
 {
-	getParent()->showOnlyWidget("mainmenu");
+	menuContainer.showOnlyWidget("mainmenu");
 }
 
 void SettingsMenu::applyClick()

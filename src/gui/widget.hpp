@@ -42,8 +42,6 @@ class Widget: public EventListener, public NonCopyable
 		virtual void resize(Window& window);
 		virtual void onResize(Window& window);
 		
-		Container* getParent();
-		
 		Widget();
 		virtual ~Widget();
 	
@@ -56,13 +54,9 @@ class Widget: public EventListener, public NonCopyable
 	
 	private:
 		void handleDrawEvent(DrawEvent* event);
-		
-		void setParent(Container* container);
 			
 		bool visible;
-			
-		Container* parent;
-	
+		
 		Vector2D position;
 		bool pixelPosition;
 		

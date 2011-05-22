@@ -86,14 +86,14 @@ void startGame()
 	
 	Connection connection;
 	
-	MainMenu mainMenu(mainmenuTextures);
-	
-	SettingsMenu settingsMenu(window, musicPlayer);
-	LocalGameMenu localGameMenu;
-	NewLocalGameMenu newLocalGameMenu(connection);
-	
 	MenuContainer topLevelGameMenus(backgroundTextures);
-		
+	
+	MainMenu mainMenu(topLevelGameMenus, mainmenuTextures);
+	
+	SettingsMenu settingsMenu(topLevelGameMenus, window, musicPlayer);
+	LocalGameMenu localGameMenu(topLevelGameMenus);
+	NewLocalGameMenu newLocalGameMenu(topLevelGameMenus, connection);	
+	
 	TabbedMenu garageMenu;	
 	
 	CarShopMenu carShopMenu(connection);

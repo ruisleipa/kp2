@@ -6,7 +6,8 @@
 #include "utils/string.hpp"
 #include "net/packet.hpp"
 
-NewLocalGameMenu::NewLocalGameMenu(Connection& connection):
+NewLocalGameMenu::NewLocalGameMenu(MenuContainer& menuContainer, Connection& connection):
+	menuContainer(menuContainer),
 	connection(connection)
 {
 	title.setFont(Font("title"));
@@ -78,14 +79,14 @@ void NewLocalGameMenu::onShow()
 
 void NewLocalGameMenu::backClickHandler()
 {
-	getParent()->showOnlyWidget("localgamemenu");
+	menuContainer.showOnlyWidget("localgamemenu");
 }
 
 void NewLocalGameMenu::startClickHandler()
 {
 	if(connection.startLocalServer())
 	{
-		getParent()->showOnlyWidget("careermenu");
+		menuContainer.showOnlyWidget("careermenu");
 		
 		connection.setName(nameField.getText());
 	}

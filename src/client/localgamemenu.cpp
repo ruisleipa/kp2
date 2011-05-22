@@ -4,7 +4,8 @@
 
 #include "ui.hpp"
 
-LocalGameMenu::LocalGameMenu()
+LocalGameMenu::LocalGameMenu(MenuContainer& menuContainer):
+	menuContainer(menuContainer)
 {
 	title.setFont(Font("title"));
 	title.setText("Yksinpeli");			
@@ -52,11 +53,11 @@ void LocalGameMenu::onShow()
 
 void LocalGameMenu::backClickHandler()
 {
-	getParent()->showOnlyWidget("mainmenu");
+	menuContainer.showOnlyWidget("mainmenu");
 }
 
 void LocalGameMenu::newClickHandler()
 {
-	getParent()->showOnlyWidget("newlocalgamemenu");
+	menuContainer.showOnlyWidget("newlocalgamemenu");
 }
 

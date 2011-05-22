@@ -4,7 +4,8 @@
 
 #include "ui.hpp"
 
-MainMenu::MainMenu(TextureCollection& textureCollection)
+MainMenu::MainMenu(MenuContainer& menuContainer, TextureCollection& textureCollection):
+	menuContainer(menuContainer)
 {
 	background.setFill(true);
 	
@@ -61,7 +62,7 @@ void MainMenu::onResize(Window& window)
 
 void MainMenu::localgameClickHandler()
 {
-	getParent()->showOnlyWidget("localgamemenu");
+	menuContainer.showOnlyWidget("localgamemenu");
 }
 
 void MainMenu::aboutClickHandler()
@@ -71,7 +72,7 @@ void MainMenu::aboutClickHandler()
 
 void MainMenu::settingsClickHandler()
 {
-	getParent()->showOnlyWidget("settingsmenu");
+	menuContainer.showOnlyWidget("settingsmenu");
 }
 
 void MainMenu::quitClickHandler()
