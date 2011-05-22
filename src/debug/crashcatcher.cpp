@@ -8,7 +8,9 @@
 #include "crashmessage.hpp"
 #include "stack.hpp"
 
+#ifndef WIN32
 CrashCatcher* CrashCatcher::catcher = 0;
+#endif
 
 CrashCatcher::CrashCatcher(CrashMessage& crash_message):
 	crashMessage(crash_message)
