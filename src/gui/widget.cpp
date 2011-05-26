@@ -6,6 +6,16 @@
 
 #include "graphics/texture.hpp"
 
+const std::string& Widget::getName()
+{
+	return name;
+}
+
+void Widget::setName(const std::string& name)
+{
+	this->name = name;
+}
+
 void Widget::setPosition(Vector2D position)
 {
 	setFactorPosition(position);

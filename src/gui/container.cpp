@@ -186,12 +186,12 @@ void Container::showOnlyWidget(const std::string& name)
 	
 	for(i=children.begin(); i!=children.end(); ++i)
 	{
-		(*i)->setVisible(false);
-	}
+		Widget* widget = *i;
 	
-	if(names.find(name) != names.end())
-	{
-		names[name]->setVisible(true);
+		if(widget->getName() == name)
+			widget->setVisible(true);
+		else
+			widget->setVisible(false);
 	}
 }
 
@@ -202,18 +202,19 @@ void Container::addWidget(Widget& child)
 
 void Container::addWidget(const std::string& name,Widget& child)
 {
-	names[name]=&child;
+	child.setName(name);
 	
 	addWidget(child);
 }
 
 Widget& Container::getChildByName(const std::string& name)
 {
-	std::map<std::string, Widget*>::iterator i;
-
-	if(names.find(name) != names.end())
+	for(int i = 0; i != getChildCount(); ++i)
 	{
-		return *(names.find(name)->second);
+		Widget* child = getChild(i);
+		
+		if(child->getName() == name)
+			return *child;
 	}
 	
 	for(int i = 0; i != getChildCount(); ++i)
@@ -223,10 +224,12 @@ Widget& Container::getChildByName(const std::string& name)
 		Container* container = dynamic_cast<Container*>(child);
 		
 		if(container)
-		{	
+		{			
 			try
 			{		
-				return container->getChildByName(name);
+				Widget& widget = container->getChildByName(name);
+			
+				return widget;
 			}
 			catch(...)
 			{
@@ -235,7 +238,11 @@ Widget& Container::getChildByName(const std::string& name)
 		}
 	}
 	
-	throw 1;
+	std::stringstream ss;
+
+	ss << "No child of name '" << name << "'";
+
+	throw std::runtime_error(ss.str());
 }
 
 int Container::getChildCount()

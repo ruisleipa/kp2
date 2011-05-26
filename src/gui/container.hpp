@@ -10,7 +10,7 @@ class Container : public Widget
 		virtual void showOnlyWidget(const std::string& tag);
 		
 		void addWidget(Widget& child);
-		void addWidget(const std::string& name, Widget& child);
+		void addWidget(const std::string& name, Widget& child) __attribute__((__deprecated__));
 
 		Widget& getChildByName(const std::string& name);
 		
@@ -44,8 +44,7 @@ class Container : public Widget
 		Widget* focusedChild;
 		Widget* mouseOverChild;
 
-		std::map<std::string,Widget*> names;
-		std::vector<Widget*> children;
+		std::vector<Widget*> children;		
 		
 		bool showBounds;
 };

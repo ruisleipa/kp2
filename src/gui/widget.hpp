@@ -17,6 +17,9 @@ class Container;
 class Widget: public EventListener, public NonCopyable
 {
 	public:
+		const std::string& getName();
+		void setName(const std::string& name);		
+		
 		void setPosition(Vector2D position) __attribute__((__deprecated__));
 		void setFactorPosition(Vector2D position);
 		void setPixelPosition(Vector2D position);
@@ -54,7 +57,9 @@ class Widget: public EventListener, public NonCopyable
 	
 	private:
 		void handleDrawEvent(DrawEvent* event);
-			
+		
+		std::string name;
+		
 		bool visible;
 		
 		Vector2D position;
