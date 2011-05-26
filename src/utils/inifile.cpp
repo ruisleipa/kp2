@@ -33,6 +33,22 @@ void IniFile::getValue(const std::string& key,std::string& value) const
 	value = values.find(key)->second;
 }
 
+std::string IniFile::getValueWithDefault(const std::string& key, const char* defaultValue) const
+{
+	std::string value = defaultValue;
+	
+	try
+	{
+		getValue(key, value);
+	}
+	catch(...)
+	{
+	
+	}
+	
+	return value;
+}
+
 void IniFile::setValue(const std::string& key,const std::string& str)
 {
 	values[key] = str;

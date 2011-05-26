@@ -14,7 +14,11 @@ class IniFile
 	public:
 		template<typename T>
 		void getValue(const std::string& key,T& value) const;
-		void getValue(const std::string& key,std::string& value) const;
+		void getValue(const std::string& key, std::string& value) const;
+		
+		template<typename T>
+		T getValueWithDefault(const std::string& key, T defaultValue) const;
+		std::string getValueWithDefault(const std::string& key, const char* defaultValue) const;
 			
 		template<typename T>
 		void setValue(const std::string& key,const T& value);
@@ -50,6 +54,23 @@ void IniFile::setValue(const std::string& key,const T& value)
 	
 	values[key] = ss.str();
 };
+
+template<typename T>
+T IniFile::getValueWithDefault(const std::string& key, T defaultValue) const
+{
+	T value = defaultValue;
+	
+	try
+	{
+		getValue(key, value);
+	}
+	catch(...)
+	{
+	
+	}
+	
+	return value;
+}
 
 template<typename T>
 void IniFile::getValue(const std::string& key,T& value) const
