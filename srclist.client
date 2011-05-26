@@ -66,6 +66,8 @@ SRC = \
 	src/gui/tabbedmenu.cpp \
 	src/gui/textwidget.cpp \
 	src/gui/widget.cpp \
+	src/gui/widgetfactory.cpp \
+	src/gui/widgetloader.cpp \
 	src/net/clientsocket.cpp \
 	src/net/packet.cpp \
 	src/net/serversocket.cpp \
