@@ -17,8 +17,7 @@ PlayerVehicleWidget::PlayerVehicleWidget()
 	titleContainer.addWidget(carName);
 	titleContainer.addWidget(carImage);
 	
-	carName.setFluid(true);	
-	carImage.setFluid(true);	
+	carImage.setFluid(true);
 	
 	carInfo.setFluid(true);	
 	carInfo.setFont(Font("small"));	

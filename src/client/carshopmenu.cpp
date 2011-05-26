@@ -41,7 +41,6 @@ CarShopMenu::CarShopMenu(Connection& connection):
 	titleContainer.addWidget(carImage);
 	titleContainer.showOuterPadding(false);
 	
-	carName.setFluid(true);	
 	carImage.setFluid(true);	
 	
 }
