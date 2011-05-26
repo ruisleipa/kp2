@@ -27,6 +27,7 @@
 
 #include "partshopmenu.hpp"
 #include "installpartsmenu.hpp"
+#include "performancemenu.hpp"
 
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
@@ -88,12 +89,6 @@ void startGame()
 	
 	MenuContainer topLevelGameMenus(backgroundTextures);
 	
-	MainMenu mainMenu(topLevelGameMenus, mainmenuTextures);
-	
-	SettingsMenu settingsMenu(topLevelGameMenus, window, musicPlayer);
-	LocalGameMenu localGameMenu(topLevelGameMenus);
-	NewLocalGameMenu newLocalGameMenu(topLevelGameMenus, connection);	
-	
 	TabbedMenu garageMenu;	
 	
 	CarShopMenu carShopMenu(connection);
@@ -107,16 +102,25 @@ void startGame()
 	TabbedMenu tuningMenu;	
 	PartShopMenu partShopMenu(connection);
 	InstallPartsMenu installPartsMenu(connection);	
-	tuningMenu.addTab("Osakauppa",partShopMenu);
-	tuningMenu.addTab("Asenna osia",installPartsMenu);
+	PerformanceMenu performanceMenu(connection);	
+	tuningMenu.addTab("Osakauppa", partShopMenu);
+	tuningMenu.addTab("Asenna osia", installPartsMenu);
+	tuningMenu.addTab("Säädöt", performanceMenu);
 	
 	topLevelGameMenus.addWidget("tuning",tuningMenu);
 	
 	topLevelGameMenus.showOnlyWidget("");
 	
-	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);
-		
 	MenuContainer menuContainer(backgroundTextures);	
+	
+	MenuContainer asd(backgroundTextures);
+	
+	MainMenu mainMenu(menuContainer, mainmenuTextures);	
+	SettingsMenu settingsMenu(menuContainer, window, musicPlayer);
+	LocalGameMenu localGameMenu(menuContainer);
+	NewLocalGameMenu newLocalGameMenu(menuContainer, connection);	
+	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);	
+	
 	menuContainer.addWidget("mainmenu",mainMenu);
 	menuContainer.addWidget("settingsmenu",settingsMenu);
 	menuContainer.addWidget("localgamemenu",localGameMenu);	
