@@ -425,6 +425,8 @@ void Connection::sendPerformanceData()
 	
 	performanceData.torque = simulation.getTorqueData();
 	performanceData.power = simulation.getPowerData();
+	performanceData.intake = simulation.getIntakeData();
+	performanceData.exhaust = simulation.getExhaustData();
 	
 	packet << performanceData;
 	
