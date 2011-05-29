@@ -11,6 +11,8 @@ Packet& operator<<(Packet& packet,const PerformanceData& performanceData)
 	packet << performanceData.power;
 	packet << performanceData.intake;
 	packet << performanceData.exhaust;
+	packet << performanceData.boost;
+	packet << performanceData.intakeTemperature;
 	
 	return packet;
 }
@@ -21,6 +23,8 @@ Packet& operator>>(Packet& packet, PerformanceData& performanceData)
 	packet >> performanceData.power;
 	packet >> performanceData.intake;
 	packet >> performanceData.exhaust;
+	packet >> performanceData.boost;
+	packet >> performanceData.intakeTemperature;
 	
 	return packet;
 }

@@ -74,7 +74,8 @@ void Connection::processPackets(ClientSocket& socket)
 				
 				gameState.getPlayer(playerId).setActiveVehicleId(command.id);
 								
-				sendActiveVehicleId();				
+				sendActiveVehicleId();
+				sendPerformanceData();				
 			}
 			else if(type == Protocol::COMMAND_BUY_VEHICLE)
 			{
@@ -427,6 +428,8 @@ void Connection::sendPerformanceData()
 	performanceData.power = simulation.getPowerData();
 	performanceData.intake = simulation.getIntakeData();
 	performanceData.exhaust = simulation.getExhaustData();
+	performanceData.boost = simulation.getBoostData();
+	performanceData.intakeTemperature = simulation.getIntakeTemperatureData();
 	
 	packet << performanceData;
 	

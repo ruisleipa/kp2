@@ -92,6 +92,8 @@ void Simulation::run()
 			powerData.addPoint(speed, torque * (vehicle.getEngineSpeed() * RPM_TO_RADS) / 1000.0);
 			intakeData.addPoint(speed, engine.calculateMaxFromIntakeManifold());
 			exhaustData.addPoint(speed, engine.calculateMaxToExhaustManifold());
+			boostData.addPoint(speed, air.getPressure() / 100000.0 - 1.0);
+			intakeTemperatureData.addPoint(speed, air.getTemperature() - 273.0);
 			
 			nextSpeed += speedStep;
 		}
@@ -116,6 +118,16 @@ const Curve& Simulation::getIntakeData()
 const Curve& Simulation::getExhaustData()
 {
 	return exhaustData;
+}
+
+const Curve& Simulation::getBoostData()
+{
+	return boostData;
+}
+
+const Curve& Simulation::getIntakeTemperatureData()
+{
+	return intakeTemperatureData;
 }
 
 const Engine& Simulation::findEngine()

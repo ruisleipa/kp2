@@ -18,6 +18,7 @@ class PerformanceMenu : public Menu
 		void fillBoostGraph();
 		void fillAirGraph();
 		void fillFuelGraph();
+		void fillTemperatureGraph();
 		
 		void showGraph(const std::string& name);
 	

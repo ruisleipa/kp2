@@ -19,6 +19,7 @@ PerformanceMenu::PerformanceMenu(Connection& connection):
 	dynamic_cast<Button&>(getChildByName("boostCurveButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "boostGraph"));
 	dynamic_cast<Button&>(getChildByName("flowCurveButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "flowGraph"));
 	dynamic_cast<Button&>(getChildByName("fuelButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "fuelGraph"));
+	dynamic_cast<Button&>(getChildByName("temperatureButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "temperatureGraph"));
 }
 
 void PerformanceMenu::handleConnectionEvent()
@@ -28,6 +29,7 @@ void PerformanceMenu::handleConnectionEvent()
 	fillBoostGraph();
 	fillAirGraph();
 	fillFuelGraph();
+	fillTemperatureGraph();
 }
 
 void PerformanceMenu::fillPerformanceGraph()
@@ -47,7 +49,7 @@ void PerformanceMenu::fillBoostGraph()
 
 	const Protocol::PerformanceData data = connection.getPerformanceData();
 		
-	graph.setPrimaryData(data.power, Color(1, 0, 0), "Ahtopaine", data.power.getMax() * 1.25);
+	graph.setPrimaryData(data.boost, Color(1, 0, 0), "Ahtopaine", data.boost.getMax());
 	graph.setDomain(0, 10000);
 }
 
@@ -70,6 +72,16 @@ void PerformanceMenu::fillFuelGraph()
 
 	const Protocol::PerformanceData data = connection.getPerformanceData();
 		
+	graph.setDomain(0, 10000);
+}
+
+void PerformanceMenu::fillTemperatureGraph()
+{
+	Graph& graph = dynamic_cast<Graph&>(getChildByName("temperatureGraph"));
+
+	const Protocol::PerformanceData data = connection.getPerformanceData();
+		
+	graph.setPrimaryData(data.intakeTemperature, Color(1, 0, 0), "Imuilma\n(°C)", data.intakeTemperature.getMax());
 	graph.setDomain(0, 10000);
 }
 

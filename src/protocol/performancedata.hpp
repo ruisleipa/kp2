@@ -13,6 +13,8 @@ class PerformanceData
 		Curve power;
 		Curve intake;
 		Curve exhaust;
+		Curve boost;
+		Curve intakeTemperature;
 
 		friend Packet& operator<<(Packet& packet,const PerformanceData& performanceData);
 		friend Packet& operator>>(Packet& packet,PerformanceData& performanceData);

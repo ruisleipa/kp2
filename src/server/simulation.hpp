@@ -17,6 +17,8 @@ class Simulation
 		const Curve& getPowerData();
 		const Curve& getIntakeData();
 		const Curve& getExhaustData();
+		const Curve& getBoostData();
+		const Curve& getIntakeTemperatureData();
 		
 		Simulation(Vehicle& vehicle);
 		
@@ -32,6 +34,8 @@ class Simulation
 		Curve powerData;
 		Curve intakeData;
 		Curve exhaustData;
+		Curve boostData;
+		Curve intakeTemperatureData;
 
 };
 
