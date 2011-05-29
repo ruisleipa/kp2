@@ -95,7 +95,9 @@ void Vehicle::getDerivates(State* p0, State* v0, State* a0)
 		engine_overall_torque += clutch_torque_deliver;
 	}
 
-	engine_overall_torque += engine.getTorque(v0->m_flywheel);
+	engine.setSpeed(v0->m_flywheel * RADS_TO_RPM);
+	
+	engine_overall_torque += engine.getTorque();
 	
 	// determine the slip ratio, notice, that this won't get your car
 	// moving if your pacjeka curve reaches zero when sr != 0

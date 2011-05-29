@@ -6,6 +6,7 @@
 #include "engine.hpp"
 #include "intakemanifold.hpp"
 #include "exhaustmanifold.hpp"
+#include "charger.hpp"
 
 class Simulation
 {
@@ -23,6 +24,7 @@ class Simulation
 		const Engine& findEngine();
 		const IntakeManifold& findIntakeManifold();
 		const ExhaustManifold& findExhaustManifold();
+		const Charger* findCharger();
 	
 		Vehicle& vehicle;
 		

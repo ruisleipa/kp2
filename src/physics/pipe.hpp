@@ -3,18 +3,26 @@
 
 #include "utils/curve.hpp"
 
+#include "air.hpp"
+
 namespace Physics
 {
 
 class Pipe
 {
 	public:
-		float getFlow(float needed) const;
+		virtual Air getAir(float maxVolume);
 		
-		Pipe(float maxFlow);
+		Pipe(Pipe& intake, float maxVolume);
 
+	protected:
+		Pipe& getIntake();
+	
 	private:
-		float maxFlow;
+		
+		
+		Pipe* intake;
+		float maxVolume;
 		
 		Curve flowCurve;
 	

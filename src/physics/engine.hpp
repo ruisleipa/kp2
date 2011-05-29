@@ -7,32 +7,41 @@
 namespace Physics
 {
 
-class Engine
+class Engine : public Pipe
 {
 	public:
+		virtual Air getAir(float maxVolume);
+		
+		void setSpeed(float speedInRpm);
+		
 		float getThrottle();
 		void setThrottle(float throttle);
 
 		bool getIgnition();
 		void setIgnition(bool ignition);
 		
-		float getTorque(float speedInRads);
-		float calculateTheoreticalMixtureUsage(float speedInRpm);
-		float calculateMaxFromIntakeManifold(float speedInRpm);
-		float calculateMaxToExhaustManifold(float speedInRpm);
-		float calculateFreshMixtureInCylinder(float speedInRpm);
-		float calculateExhaustLeftInCylinder(float speedInRpm);
+		float getTorque();
+		float calculateTheoreticalMixtureVolume();
+		
+		float calculateMaxFromIntakeManifold();
+		float calculateMaxToExhaustManifold();
+		float calculateFreshMixtureInCylinder();
+		float calculateExhaustLeftInCylinder();
 		
 		float getFlywheelInertia();
 		
-		Engine(const Curve& torqueCurve, float volume, int cylinderCount, const Pipe& intakePipe, const Pipe& exhaustPipe, float idleRpm, float idleThrottle, int rpmLimit, float flywheelInertia, float startEngineEffect);
+		Engine(const Curve& torqueCurve, float volume, int cylinderCount, Pipe& intakePipe, float idleRpm, float idleThrottle, int rpmLimit, float flywheelInertia, float startEngineEffect);
 
 	private:
+		Air intakeAir;
+		Air exhaustLeft;
+		Air exhaust;
+		
+		float speedInRpm;
+		
 		Curve torqueCurve;
 		float volume;
 		int cylinderCount;
-		const Pipe& intakePipe;
-		const Pipe& exhaustPipe;
 		float idleRpm;
 		float idleThrottle;
 		int rpmLimit;

@@ -5,6 +5,25 @@
 namespace Physics
 {
 
+Air Engine::getAir(float maxVolume)
+{
+	intakeAir = getIntake().getAir(calculateTheoreticalMixtureVolume() - exhaustLeft.getVolume());
+	
+	exhaustLeft = intakeAir;
+
+	exhaust = exhaustLeft;
+	exhaust.restrict(maxVolume);
+
+	exhaustLeft.restrict(exhaustLeft.getVolume() - exhaust.getVolume());
+	
+	return exhaust;
+}
+
+void Engine::setSpeed(float speedInRpm)
+{
+	this->speedInRpm = speedInRpm;
+}
+
 float Engine::getThrottle()
 {
 	return throttle;
@@ -25,9 +44,10 @@ void Engine::setIgnition(bool ignition)
 	this->ignition = ignition;
 }
 
-float Engine::getTorque(float speedInRads)
+float Engine::getTorque()
 {
-	int speedInRpm = speedInRads * RADS_TO_RPM;
+	float speedInRads = speedInRpm * RPM_TO_RADS;
+
 	float trq = 0.0;
 	float throttle = this->throttle;
 
@@ -44,12 +64,12 @@ float Engine::getTorque(float speedInRads)
 
 	if(rpmLimit == 0 || (speedInRpm < rpmLimit))
 	{
-		float theoreticalMixtureUsage = calculateTheoreticalMixtureUsage(speedInRpm);		
-		float freshMixtureInCylinder = calculateFreshMixtureInCylinder(speedInRpm);
+		float theoreticalMixtureMass = calculateTheoreticalMixtureVolume() * 1.22521 / 1000.0;
+		float freshMixtureMass = intakeAir.getMass();
 		
-		if(freshMixtureInCylinder != 0 && theoreticalMixtureUsage != 0)
+		if(freshMixtureMass != 0 && theoreticalMixtureMass != 0)
 		{		
-			float intakeRatio = freshMixtureInCylinder / theoreticalMixtureUsage;
+			float intakeRatio = freshMixtureMass / theoreticalMixtureMass;
 			
 			trq += torqueCurve.getValue(speedInRpm) * intakeRatio;
 		}
@@ -60,46 +80,48 @@ float Engine::getTorque(float speedInRads)
 	return trq;
 }
 
-float Engine::calculateTheoreticalMixtureUsage(float speedInRpm)
+float Engine::calculateTheoreticalMixtureVolume()
 {
 	return volume * cylinderCount / 2.0 * speedInRpm;
 }
 
-float Engine::calculateMaxFromIntakeManifold(float speedInRpm)
+float Engine::calculateMaxFromIntakeManifold()
 {
-	return intakePipe.getFlow(calculateTheoreticalMixtureUsage(speedInRpm)) * throttle;
+	return intakeAir.getVolume();
 }
 
-float Engine::calculateMaxToExhaustManifold(float speedInRpm)
+float Engine::calculateMaxToExhaustManifold()
 {
-	return exhaustPipe.getFlow(calculateMaxFromIntakeManifold(speedInRpm));
+	return exhaust.getVolume();
 }
 
-float Engine::calculateFreshMixtureInCylinder(float speedInRpm)
+float Engine::calculateFreshMixtureInCylinder()
 {
-	return calculateMaxFromIntakeManifold(speedInRpm) - calculateExhaustLeftInCylinder(speedInRpm);
+	return exhaust.getVolume();
 }
 
-float Engine::calculateExhaustLeftInCylinder(float speedInRpm)
-{	
-	return calculateMaxFromIntakeManifold(speedInRpm) - calculateMaxToExhaustManifold(speedInRpm);
+float Engine::calculateExhaustLeftInCylinder()
+{
+	return exhaustLeft.getVolume();
 }
 
 float Engine::getFlywheelInertia()
 {
-	return flywheelInertia;	
+	return flywheelInertia;
 }
 
 Engine::Engine(const Curve& torqueCurve, float volume, int cylinderCount,
-	const Pipe& intakePipe, const Pipe& exhaustPipe, float idleRpm, 
-	float idleThrottle, int rpmLimit, float startEngineEffect,
-	float flywheelInertia
+	Pipe& intakePipe, float idleRpm, float idleThrottle, int rpmLimit,
+	float startEngineEffect, float flywheelInertia
 	):
+	Pipe(intakePipe, 0),
+	intakeAir(0, 0, 0),
+	exhaustLeft(0, 0, 0),
+	exhaust(0, 0, 0),
+	speedInRpm(0),
 	torqueCurve(torqueCurve),
 	volume(volume),
 	cylinderCount(cylinderCount),
-	intakePipe(intakePipe),
-	exhaustPipe(exhaustPipe),
 	idleRpm(idleRpm),
 	idleThrottle(idleThrottle),
 	rpmLimit(rpmLimit),
@@ -107,7 +129,7 @@ Engine::Engine(const Curve& torqueCurve, float volume, int cylinderCount,
 	flywheelInertia(flywheelInertia),
 	throttle(0.0),
 	ignition(false)
-{	
+{
 
 }
 

@@ -9,7 +9,10 @@ SRC = src/debug/assert.cpp \
 	src/net/socket.cpp \
 	src/net/socketactivity.cpp \
 	src/net/socketset.cpp \
+	src/physics/air.cpp \
+	src/physics/atmosphere.cpp \
 	src/physics/brake.cpp \
+	src/physics/charger.cpp \
 	src/physics/chassis.cpp \
 	src/physics/clutch.cpp \
 	src/physics/engine.cpp \
