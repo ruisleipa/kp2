@@ -50,9 +50,6 @@ static addrinfo* getAddrInfo(const char* host,int port,bool passive)
 	hints.ai_socktype=SOCK_STREAM;
 	hints.ai_protocol=IPPROTO_TCP;
 	
-//	if(passive)
-//		hints.ai_flags=AI_PASSIVE;	
-	
 	status=getaddrinfo(host,portstring.c_str(),&hints,&addrs);
 	
 	if(status)
@@ -130,15 +127,6 @@ bool Socket::bindImpl(const std::string& hostname,int port)
 		if(m_socket == int(INVALID_SOCKET))
 		{
 			std::cerr<<"Cannot create a socket: "<<getErrorMessage()<<std::endl;
-			continue;
-		}
-		
-		int yes=1;
-		
-		if(setsockopt(m_socket,SOL_SOCKET,SO_REUSEADDR,(const char*)&yes,sizeof(yes))==SOCKET_ERROR)
-		{
-			std::cerr<<"Cannot set SO_REUSEADDR: "<<getErrorMessage()<<std::endl;
-			close();
 			continue;
 		}
 		

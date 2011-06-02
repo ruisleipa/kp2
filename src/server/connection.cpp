@@ -176,6 +176,9 @@ void Connection::writePackets(ClientSocket& socket)
 		
 		sendQueue.pop();
 	}
+	
+	if(socket.isWritePending())
+		socket.commitWrite();
 }
 
 void Connection::sendPlayerInfo()

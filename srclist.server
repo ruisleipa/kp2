@@ -34,6 +34,7 @@ SRC = src/debug/assert.cpp \
 	src/protocol/installpart.cpp \
 	src/protocol/uninstallpart.cpp \
 	src/server/connection.cpp \
+	src/server/connectionmanager.cpp \
 	src/server/gamestate.cpp \
 	src/server/machining.cpp \
 	src/server/main.cpp \

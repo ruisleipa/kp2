@@ -18,6 +18,8 @@ class Socket
 		int releaseSocket();
 		
 		Socket();
+		Socket(const Socket&);
+		Socket& operator=(const Socket&);	
 		
 		virtual ~Socket();
 		
@@ -33,9 +35,6 @@ class Socket
 		mutable int m_socket;
 		
 	private:
-		Socket(const Socket&);
-		Socket& operator=(const Socket&);	
-	
 		bool isWritePending();
 		void commitWrite();
 		

@@ -36,33 +36,33 @@ static std::string getErrorMessage()
 
 void SocketSet::add(Socket* socket)
 {
-	m_sockets.insert(socket);
+	sockets.insert(socket);
 	
 	socket->m_socket_sets.insert(this);
 }
 
 void SocketSet::remove(Socket* socket)
 {
-	m_sockets.erase(socket);
+	sockets.erase(socket);
 	
 	socket->m_socket_sets.erase(this);
 	
 	std::vector<Socket*>::iterator i;
 	
-	for(i=m_writable_sockets.begin();i!=m_writable_sockets.end();++i)
+	for(i=writableSockets.begin();i!=writableSockets.end();++i)
 	{
 		if((*i) == socket)
 		{
-			m_writable_sockets.erase(i);
+			writableSockets.erase(i);
 			break;
 		}
 	}
 	
-	for(i=m_readable_sockets.begin();i!=m_readable_sockets.end();++i)
+	for(i=readableSockets.begin();i!=readableSockets.end();++i)
 	{
 		if((*i) == socket)
 		{
-			m_readable_sockets.erase(i);
+			readableSockets.erase(i);
 			break;
 		}
 	}
@@ -72,57 +72,67 @@ void SocketSet::socketClosed(Socket* socket)
 {
 	std::vector<Socket*>::iterator i;
 	
-	for(i=m_writable_sockets.begin();i!=m_writable_sockets.end();++i)
+	for(i=writableSockets.begin();i!=writableSockets.end();++i)
 	{
 		if((*i) == socket)
 		{
-			m_writable_sockets.erase(i);
+			writableSockets.erase(i);
 			break;
 		}
 	}
 	
-	for(i=m_readable_sockets.begin();i!=m_readable_sockets.end();++i)
+	for(i=readableSockets.begin();i!=readableSockets.end();++i)
 	{
 		if((*i) == socket)
 		{
-			m_readable_sockets.erase(i);
+			readableSockets.erase(i);
 			break;
 		}
 	}
 }
 
-SocketActivity SocketSet::waitForActivity()
+SocketActivity SocketSet::waitForActivity(unsigned int timeOutInMilliseconds)
 {
-	if(m_readable_sockets.size() > 0)
-	{		
-		if(m_writable_sockets.size() > 0)
-		{
-			Socket* socket=m_writable_sockets.back();
-			m_writable_sockets.pop_back();
-			
-			if(socket->isWritePending())
-				socket->commitWrite();
-		}
-		
-		Socket* socket=m_readable_sockets.back();
-		m_readable_sockets.pop_back();
-		
-		return SocketActivity(socket,true,false);
-	}
-	
-	while(m_writable_sockets.size() > 0)
+	updateActivity(timeOutInMilliseconds);
+
+	while(writableSockets.size() > 0)
 	{
-		Socket* socket=m_writable_sockets.back();
-		m_writable_sockets.pop_back();
+		Socket* socket=writableSockets.back();
+		writableSockets.pop_back();
 		
-		if(socket->isWritePending())
-			socket->commitWrite();
+		SocketActivity activity;
+		
+		activity.socket = socket;
+		activity.canRead = false;
+		activity.canWrite = true;
+		activity.timeoutExpired = false;
+		
+		return activity;
 	}
 	
-	if(m_readable_sockets.size() == 0 && m_writable_sockets.size() == 0)
-		updateActivity();
+	if(readableSockets.size() > 0)
+	{
+		Socket* socket=readableSockets.back();
+		readableSockets.pop_back();
+		
+		SocketActivity activity;
+		
+		activity.socket = socket;
+		activity.canRead = true;
+		activity.canWrite = false;
+		activity.timeoutExpired = false;
+		
+		return activity;
+	}
 	
-	return waitForActivity();
+	SocketActivity activity;
+	
+	activity.socket = 0;
+	activity.canRead = false;
+	activity.canWrite = false;
+	activity.timeoutExpired = true;
+	
+	return activity;
 }
 
 SocketSet::SocketSet()
@@ -134,13 +144,13 @@ SocketSet::~SocketSet()
 {
 	std::set<Socket*>::iterator i;
 	
-	for(i=m_sockets.begin();i!=m_sockets.end();++i)
+	for(i=sockets.begin();i!=sockets.end();++i)
 	{
 		(*i)->m_socket_sets.erase(this);
 	}
 }
 
-void SocketSet::updateActivity()
+void SocketSet::updateActivity(unsigned int timeOutInMilliseconds)
 {
 	fd_set readable;
 	fd_set writable;
@@ -152,7 +162,7 @@ void SocketSet::updateActivity()
 	FD_ZERO(&readable);
 	FD_ZERO(&writable);
 		
-	for(std::set<Socket*>::iterator i=m_sockets.begin();i!=m_sockets.end();++i)
+	for(std::set<Socket*>::iterator i=sockets.begin();i!=sockets.end();++i)
 	{
 		int socket=(*i)->m_socket;
 		
@@ -174,7 +184,19 @@ void SocketSet::updateActivity()
 	
 	nfds++;
 	
-	if(select(nfds,&readable,&writable,0,NULL)==SOCKET_ERROR)
+	timeval* timeout = 0;
+	
+	timeval val;
+	
+	if(timeOutInMilliseconds != 0)
+	{
+		val.tv_sec = timeOutInMilliseconds / 1000;
+		val.tv_usec = (timeOutInMilliseconds % 1000) * 1000;
+		
+		timeout = &val;
+	}
+	
+	if(select(nfds,&readable,&writable,0,timeout)==SOCKET_ERROR)
 	{
 		std::cerr << "select(";
 		std::cerr << nfds << ",";
@@ -195,10 +217,10 @@ void SocketSet::updateActivity()
 			continue;
 	
 		if(FD_ISSET((*i).first,&readable))
-			m_readable_sockets.push_back(socket);
+			readableSockets.push_back(socket);
 		
 		if(FD_ISSET((*i).first,&writable))
-			m_writable_sockets.push_back(socket);
+			writableSockets.push_back(socket);
 	}
 }
 

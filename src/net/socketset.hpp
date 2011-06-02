@@ -25,7 +25,7 @@ class SocketSet
 		void add(Socket* socket);
 		void remove(Socket* socket);
 			
-		SocketActivity waitForActivity();
+		SocketActivity waitForActivity(unsigned int timeOutInMilliseconds = 0);
 
 		SocketSet();
 		~SocketSet();
@@ -34,12 +34,12 @@ class SocketSet
 		SocketSet(const SocketSet&);
 		SocketSet& operator=(const SocketSet&);
 	
-		void updateActivity();
+		void updateActivity(unsigned int timeOutInMilliseconds);
 		void socketClosed(Socket* socket);
 	
-		std::set<Socket*> m_sockets;
-		std::vector<Socket*> m_readable_sockets;
-		std::vector<Socket*> m_writable_sockets;
+		std::set<Socket*> sockets;
+		std::vector<Socket*> readableSockets;
+		std::vector<Socket*> writableSockets;
 		
 		friend class Socket;
 };
