@@ -4,6 +4,7 @@
 #include "utils/inifile.hpp"
 #include "utils/outputredirector.hpp"
 #include "utils/commandlineparser.hpp"
+#include "utils/timer.hpp"
 
 #include "net/serversocket.hpp"
 
@@ -55,9 +56,27 @@ void startServer(int argc,char** argv)
 	bool playersHaveJoined = false;
 	bool running = true;
 	
+	Timer raceUpdateTimer;
+	
+	const float raceUpdateInterval = 1.0 / 60.0;
+	
 	while(running)
 	{
 		connectionManager.processConnections(0.001);
+		
+		gameState.updateRaces();
+		
+		if(raceUpdateTimer.getSeconds() > raceUpdateInterval)
+		{
+			for(int i = 0; i < connectionManager.getConnectionCount(); ++i)
+			{
+				Connection& connection = connectionManager.getConnectionByIndex(i);
+				
+				connection.sendRaceState();
+			}
+			
+			raceUpdateTimer.reset();
+		}
 		
 		if(connectionManager.getConnectionCount() > 0)
 			playersHaveJoined = true;

@@ -25,7 +25,9 @@ class CareerMenu : public Menu
 		void tuningButtonClick();
 		void financeButtonClick();
 		void raceButtonClick();
-	
+		
+		Connection& connection;
+		
 		Container& topLevelGameMenus;
 		
 		Image sidebar;

@@ -96,23 +96,30 @@ void Connection::processMessages()
 			{
 				std::string error;
 			
-				message >> error;				
+				message >> error;
 #ifdef WIN32
 				std::wstring errorMessage = convertToWideString(error);
 				
 				const WCHAR* errorCaption=L"Kiihdytyspeli 2";
 				
 				MessageBoxW(NULL, (const WCHAR*)errorMessage.c_str(), errorCaption, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL);
-#else								
+#else			
 				std::cout << error;
-#endif				
+#endif			
 			}
 			else if(message.getType() == Protocol::DATA_PERFORMANCE)
 			{
 				message >> performanceData;
 			}
-		
-		
+			else if(message.getType() == Protocol::DATA_RACE_STATE)
+			{
+				Protocol::RaceState state;
+			
+				message >> state;
+				
+				std::cout << "received race state: " << state.time << std::endl;
+			}
+			
 			std::vector<std::tr1::function<void(Connection&)> >::iterator i;
 			
 			for(i=eventHandlers.begin();i!=eventHandlers.end();++i)
@@ -264,6 +271,15 @@ void Connection::updatePerformanceData()
 	Packet packet;
 	
 	packet.setType(Protocol::COMMAND_UPDATE_PERFORMANCE);
+	
+	writeToServer(packet);
+}
+
+void Connection::startRace()
+{
+	Packet packet;
+	
+	packet.setType(Protocol::COMMAND_RACE_START);
 	
 	writeToServer(packet);
 }

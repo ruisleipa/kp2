@@ -18,7 +18,7 @@
 #include "protocol/vehicle.hpp"
 #include "protocol/part.hpp"
 
-#include "simulation.hpp"
+#include "dynamometer.hpp"
 
 #include <sstream>
 #include <algorithm>
@@ -137,6 +137,24 @@ void Connection::processPackets(ClientSocket& socket)
 			{			
 				sendPerformanceData();			
 			}
+			else if(type == Protocol::COMMAND_RACE_START)
+			{			
+				gameState.startRace(playerId, 0);
+			}
+			else if(type == Protocol::COMMAND_RACE_CONTROL_STATE)
+			{			
+				VehicleSimulation* simulation = gameState.getRaceSimulationByPlayerId(playerId);
+				
+				if(simulation)
+				{
+					Protocol::RaceControlState state;
+					
+					packet >> state;
+					
+					simulation->setThrottleUsage(state.throttle);
+					simulation->setClutchUsage(state.clutch);
+				}
+			}
 		}
 		catch(EndOfDataException)
 		{
@@ -177,8 +195,8 @@ void Connection::writePackets(ClientSocket& socket)
 		sendQueue.pop();
 	}
 	
-	if(socket.isWritePending())
-		socket.commitWrite();
+	//if(socket.isWritePending())
+	//	socket.commitWrite();
 }
 
 void Connection::sendPlayerInfo()
@@ -408,11 +426,24 @@ void Connection::sendPerformanceData()
 	Player& player = gameState.getPlayer(playerId);
 	Vehicle& vehicle = player.getVehicle(player.getActiveVehicleId());
 
-	Simulation simulation(vehicle);
+	Packet packet;
+	
+	packet.setType(Protocol::DATA_PERFORMANCE);
+	
+	Protocol::PerformanceData performanceData;
 	
 	try
 	{
+		Dynamometer simulation(vehicle);
+	
 		simulation.run();
+		
+		performanceData.torque = simulation.getTorqueData();
+		performanceData.power = simulation.getPowerData();
+		performanceData.intake = simulation.getIntakeData();
+		performanceData.exhaust = simulation.getExhaustData();
+		performanceData.boost = simulation.getBoostData();
+		performanceData.intakeTemperature = simulation.getIntakeTemperatureData();
 	}
 	catch(VehicleDoesNotWorkException e)
 	{
@@ -420,23 +451,36 @@ void Connection::sendPerformanceData()
 	
 		return;
 	}
-	
-	Packet packet;
-	
-	packet.setType(Protocol::DATA_PERFORMANCE);
-	
-	Protocol::PerformanceData performanceData;
-	
-	performanceData.torque = simulation.getTorqueData();
-	performanceData.power = simulation.getPowerData();
-	performanceData.intake = simulation.getIntakeData();
-	performanceData.exhaust = simulation.getExhaustData();
-	performanceData.boost = simulation.getBoostData();
-	performanceData.intakeTemperature = simulation.getIntakeTemperatureData();
-	
+
 	packet << performanceData;
 	
 	sendQueue.push(packet);
+}
+
+void Connection::sendRaceState()
+{
+	VehicleSimulation* simulation = gameState.getRaceSimulationByPlayerId(playerId);
+
+	if(simulation)
+	{
+		Packet packet;
+	
+		packet.setType(Protocol::DATA_RACE_STATE);
+		
+		Protocol::RaceState state;
+		
+		state.time = simulation->getTimeInSeconds(); 
+		state.position = simulation->getPosition(); 
+		state.speed = simulation->getSpeed(); 
+		state.engineSpeedInRpm = simulation->getEngineSpeedInRpm(); 
+		state.boostPressure = simulation->getBoostPressure(); 
+		
+		packet << state;
+		
+		sendQueue.push(packet);
+		
+		std::cout << "sending simulation state: " << simulation->getTimeInSeconds() << std::endl;
+	}
 }
 
 Connection::Connection(GameState& gameState,int playerId):

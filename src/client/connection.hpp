@@ -47,7 +47,9 @@ class Connection
 		void addMachining(int vehiclePartId,const std::string& machiningId);
 		void installPart(int partId);
 		void uninstallPart(int vehiclePartId);
-	
+		
+		void startRace();
+		
 	private:
 		void writeToServer(const Packet& packet);
 

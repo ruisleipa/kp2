@@ -18,6 +18,8 @@ class ConnectionManager
 		void processConnections(float timeoutInSeconds);
 		
 		int getConnectionCount();
+		Connection& getConnectionByIndex(int index);
+		
 		ConnectionManager(ServerSocket& serverSocket, GameState& gameState);
 		
 	private:

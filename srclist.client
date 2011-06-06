@@ -41,6 +41,9 @@ SRC = \
 	src/protocol/performancedata.cpp \
 	src/protocol/playerinfo.cpp \
 	src/protocol/collection.cpp \
+	src/protocol/racecontrolstate.cpp \
+	src/protocol/racestart.cpp \
+	src/protocol/racestate.cpp \
 	src/protocol/setname.cpp \
 	src/protocol/shoppart.cpp \
 	src/protocol/shopvehicle.cpp \

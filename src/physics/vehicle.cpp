@@ -178,6 +178,12 @@ int Vehicle::getCurrentStep()
 	return step;
 }
 
+float Vehicle::getCurrentTime()
+{
+	double stepTime = 1.0 / double(TICKS_PER_SECOND);
+	return step * stepTime;
+}
+
 int Vehicle::getLagInSteps(double realTime)
 {
 	double stepTime = 1.0 / double(TICKS_PER_SECOND);

@@ -32,6 +32,25 @@ int ConnectionManager::getConnectionCount()
 	return connections.size();
 }
 
+Connection& ConnectionManager::getConnectionByIndex(int index)
+{
+	std::map<ClientSocket*, Connection>::iterator i;
+	
+	i = connections.begin();
+	
+	while(index > 0) 
+	{
+		if(i == connections.end())
+			throw std::runtime_error("No connection for index");
+		
+		i++;
+		
+		index--;
+	}
+	
+	return i->second;
+}
+
 void ConnectionManager::acceptConnection()
 {
 	ClientSocket socket;
