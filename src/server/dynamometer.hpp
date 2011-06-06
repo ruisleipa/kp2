@@ -1,14 +1,11 @@
-#ifndef SERVER_SIMULATION_HPP
-#define SERVER_SIMULATION_HPP
+#ifndef SERVER_DYNAMOMETER_HPP
+#define SERVER_DYNAMOMETER_HPP
 
 #include "utils/curve.hpp"
 #include "vehicle.hpp"
-#include "engine.hpp"
-#include "intakemanifold.hpp"
-#include "exhaustmanifold.hpp"
-#include "charger.hpp"
+#include "vehiclesimulation.hpp"
 
-class Simulation
+class Dynamometer
 {
 	public:
 		void run();
@@ -20,15 +17,10 @@ class Simulation
 		const Curve& getBoostData();
 		const Curve& getIntakeTemperatureData();
 		
-		Simulation(Vehicle& vehicle);
+		Dynamometer(Vehicle& vehicle);
 		
 	private:
-		const Engine& findEngine();
-		const IntakeManifold& findIntakeManifold();
-		const ExhaustManifold& findExhaustManifold();
-		const Charger* findCharger();
-	
-		Vehicle& vehicle;
+		VehicleSimulation simulation;
 		
 		Curve torqueData;
 		Curve powerData;
@@ -36,8 +28,7 @@ class Simulation
 		Curve exhaustData;
 		Curve boostData;
 		Curve intakeTemperatureData;
-
+		
 };
 
-#endif // SERVER_SIMULATION_HPP
-
+#endif

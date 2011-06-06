@@ -4,12 +4,15 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <list>
 #include <tr1/memory>
 
 #include "vehiclemodel.hpp"
 #include "partmodel.hpp"
 #include "player.hpp"
 #include "machining.hpp"
+#include "vehiclesimulation.hpp"
+#include "race.hpp"
 
 class GameState
 {
@@ -27,6 +30,10 @@ class GameState
 		std::vector<std::string> getMachiningIds();
 		const Machining& getMachining(const std::string& id);
 		
+		void startRace(int firstPlayer, int secondPlayer);
+		VehicleSimulation* getRaceSimulationByPlayerId(int playerId);
+		void updateRaces();
+		
 		GameState();
 		
 		//void load(const std::string& name);
@@ -39,8 +46,12 @@ class GameState
 			
 		std::map<int, Player> players;
 		std::map<std::string, VehicleModel> vehicleModels;
-		std::map<std::string, std::tr1::shared_ptr<PartModel> > partModels;		
-		std::map<std::string, Machining> machinings;		
+		std::map<std::string, std::tr1::shared_ptr<PartModel> > partModels;
+		std::map<std::string, Machining> machinings;
+		
+		std::list<std::tr1::shared_ptr<VehicleSimulation> > raceSimulations;
+		std::list<Race> races;
+		
 };
 
 #endif // GAMESTATE_HPP

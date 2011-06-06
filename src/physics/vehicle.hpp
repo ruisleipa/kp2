@@ -12,10 +12,12 @@
 #include "brake.hpp"
 #include "chassis.hpp"
 
+#include "utils/noncopyable.hpp"
+
 namespace Physics
 {
 
-class Vehicle
+class Vehicle: public NonCopyable
 {
 	public:
 		Vehicle(Engine& engine, Transmission& transmission, Clutch& clutch,
@@ -39,9 +41,7 @@ class Vehicle
 		};	
 		
 		double getPos(){return m_current_x.position;}
-		void setPos(double pos){m_current_x.position = pos;}
-	
-		
+		void setPos(double pos){m_current_x.position = pos;}	
 	
 		State& getState(){return m_current_x;}
 		State& getVel(){return m_current_v;}
@@ -54,6 +54,7 @@ class Vehicle
 		
 		void advanceSimulation();
 		int getCurrentStep();
+		float getCurrentTime();
 		int getLagInSteps(double realTime);
 
 	private:	

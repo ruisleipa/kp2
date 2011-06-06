@@ -103,6 +103,48 @@ const Machining& GameState::getMachining(const std::string& id)
 		throw std::runtime_error("Machining \"" + id + "\" not found.");
 }
 
+void GameState::startRace(int firstPlayer, int secondPlayer)
+{
+	Player& player = getPlayer(firstPlayer);
+	Vehicle& vehicle = player.getVehicle(player.getActiveVehicleId());
+	
+	std::tr1::shared_ptr<VehicleSimulation> simulation(new VehicleSimulation(vehicle));
+	
+	raceSimulations.push_back(simulation);
+	
+	Race::Driver firstDriver(simulation.get(), firstPlayer);
+	Race::Driver secondDriver(simulation.get(), secondPlayer);
+	
+	Race race(firstDriver, secondDriver);
+	
+	races.push_back(race);
+}
+
+VehicleSimulation* GameState::getRaceSimulationByPlayerId(int playerId)
+{
+	std::list<Race>::iterator i;
+
+	for(i = races.begin(); i != races.end(); ++i)
+	{
+		VehicleSimulation* simulation = i->getSimulationByPlayerId(playerId);
+		
+		if(simulation)
+			return simulation;
+	}
+	
+	return 0;
+}
+
+void GameState::updateRaces()
+{
+	std::list<Race>::iterator i;
+	
+	for(i = races.begin(); i != races.end(); ++i)
+	{
+		i->update();
+	}
+}
+
 GameState::GameState()
 {
 	loadMachinings();

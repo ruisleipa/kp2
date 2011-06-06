@@ -7,6 +7,7 @@
 const float CAREER_SIDEBAR_WIDTH=0.20;
 
 CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus,Connection& connection):
+	connection(connection),
 	topLevelGameMenus(topLevelGameMenus)
 {
 	connection.addEventHandler(std::tr1::bind(&CareerMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
@@ -21,7 +22,7 @@ CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGam
 	financeButton.setText("Raha-asiat");
 	financeButton.setClickHandler(std::tr1::bind(&CareerMenu::tuningButtonClick,this));
 	raceButton.setText("Kisat");
-	raceButton.setClickHandler(std::tr1::bind(&CareerMenu::tuningButtonClick,this));
+	raceButton.setClickHandler(std::tr1::bind(&CareerMenu::raceButtonClick,this));
 	
 	addWidget(topLevelGameMenus);
 	
@@ -94,6 +95,6 @@ void CareerMenu::financeButtonClick()
 
 void CareerMenu::raceButtonClick()
 {
-	topLevelGameMenus.showOnlyWidget("race");
+	connection.startRace();
 }
 
