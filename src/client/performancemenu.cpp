@@ -11,9 +11,9 @@ PerformanceMenu::PerformanceMenu(Connection& connection):
 	connection(connection),
 	loader("data/ui/performancemenu.ui")
 {
-	connection.addEventHandler(std::tr1::bind(&PerformanceMenu::handleConnectionEvent,this));
+	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
 	
-	addWidget(loader.getRootWidget());
+	connection.addEventHandler(std::tr1::bind(&PerformanceMenu::handleConnectionEvent,this));
 	
 	dynamic_cast<Button&>(getChildByName("performaceButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "performanceGraph"));
 	dynamic_cast<Button&>(getChildByName("boostCurveButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "boostGraph"));

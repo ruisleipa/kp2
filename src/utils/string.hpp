@@ -25,5 +25,16 @@ inline std::wstring convertToWideString(const T& t)
 	return ss.str();
 }
 
+template <class B, class A>
+inline B convertTo(const A& a)
+{
+	std::stringstream ss;
+	ss << a;
+	B b;
+	ss >> b;
+	
+	return b;
+}
+
 #endif
 

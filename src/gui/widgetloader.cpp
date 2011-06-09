@@ -252,11 +252,37 @@ Widget* WidgetLoader::createWidgets(WidgetNode& rootNode)
 		
 		for(i = rootNode.children.begin(); i != rootNode.children.end(); ++i)
 		{
-			container->addWidget(*(createWidgets(*i)));
-		}	
+			Widget* widget = createWidgets(*i);
+			
+			if(!widget)
+				continue;
+			
+			if(dynamic_cast<LayoutContainer*>(container))
+				addWidgetToContainer(dynamic_cast<LayoutContainer*>(container), widget, i->attributes);
+			if(dynamic_cast<FreeContainer*>(container))
+				addWidgetToContainer(dynamic_cast<FreeContainer*>(container), widget, i->attributes);
+		}
 	}
 	
 	return widget.get();
+}
+
+void WidgetLoader::addWidgetToContainer(LayoutContainer* container, Widget* widget, const IniFile& attributes)
+{
+	std::string width = attributes.getValueWithDefault("width", "auto");
+	std::string height = attributes.getValueWithDefault("height", "auto");
+	
+	container->addWidget(*widget, width, height);
+}
+
+void WidgetLoader::addWidgetToContainer(FreeContainer* container, Widget* widget, const IniFile& attributes)
+{
+	std::string left = attributes.getValueWithDefault("left", "0px");
+	std::string top = attributes.getValueWithDefault("top", "0px");
+	std::string width = attributes.getValueWithDefault("width", "auto");
+	std::string height = attributes.getValueWithDefault("height", "auto");
+	
+	container->addWidget(*widget, left, top, width, height);
 }
 
 WidgetLoader::WidgetLoader(const std::string& filename)

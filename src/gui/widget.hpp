@@ -18,57 +18,31 @@ class Widget: public EventListener, public NonCopyable
 {
 	public:
 		const std::string& getName();
-		void setName(const std::string& name);		
-		
-		void setPosition(Vector2D position) __attribute__((__deprecated__));
-		void setFactorPosition(Vector2D position);
-		void setPixelPosition(Vector2D position);
-
-		void setSize(Vector2D size) __attribute__((__deprecated__));	
-		void setFactorSize(Vector2D size);	
-		void setPixelSize(Vector2D size);	
-		
-		virtual void autoSize();
-		
-		void setFluid(bool fluid);
-		bool getFluid();
+		void setName(const std::string& name);
 		
 		void setVisible(bool visible);
 		bool getVisible();
+		
+		virtual Vector2D getAutoSize();
 		
 		void setBackgroundColor(const Color& color);
 		const Color& getBackgroundColor();
 
 		virtual void handleEvent(Event* event);
-				
+		
 		//legacy functions for size setting
 		virtual void resize(Window& window);
 		virtual void onResize(Window& window);
 		
 		Widget();
 		virtual ~Widget();
-	
-	protected:	
-		bool hasPixelPosition();
-		Vector2D getPosition();
 		
-		bool hasPixelSize();
-		Vector2D getSize();	
-	
 	private:
 		void handleDrawEvent(DrawEvent* event);
 		
 		std::string name;
 		
 		bool visible;
-		
-		Vector2D position;
-		bool pixelPosition;
-		
-		Vector2D size;
-		bool pixelSize;
-		
-		bool fluid;
 		
 		Color backgroundColor;
 		

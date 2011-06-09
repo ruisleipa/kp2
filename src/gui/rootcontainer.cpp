@@ -2,7 +2,7 @@
 
 void RootContainer::onDraw(Window& window)
 {
-	setPixelSize(window.getSize());
+
 }
 
 RootContainer::RootContainer(Window& window,Events& events)

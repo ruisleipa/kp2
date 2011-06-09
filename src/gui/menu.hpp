@@ -1,9 +1,9 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
-#include "container.hpp"
+#include "freecontainer.hpp"
 
-class Menu : public Container
+class Menu : public FreeContainer
 {
 	public:
 		Menu();

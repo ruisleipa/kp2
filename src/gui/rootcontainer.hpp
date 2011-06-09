@@ -1,13 +1,13 @@
-#ifndef ROOTCONTAINER_HPP
-#define ROOTCONTAINER_HPP
+#ifndef GUI_ROOTCONTAINER_HPP
+#define GUI_ROOTCONTAINER_HPP
 
-#include "container.hpp"
+#include "freecontainer.hpp"
 
 #include "graphics/window.hpp"
 
 #include "events/events.hpp"
 
-class RootContainer : public Container
+class RootContainer : public FreeContainer
 {
 	public:
 		virtual void onDraw(Window& window);
@@ -17,5 +17,5 @@ class RootContainer : public Container
 	private:
 };
 
-#endif // ROOTCONTAINER_HPP
+#endif
 

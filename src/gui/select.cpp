@@ -65,7 +65,6 @@ void Select::setIndex(int index)
 		selectedIndex=index;
 		
 		setText(items[selectedIndex]);
-		autoSize();
 		
 		if(changeHandler)
 			changeHandler();

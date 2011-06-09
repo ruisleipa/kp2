@@ -5,9 +5,6 @@
 void TextWidget::setText(std::string text)
 {
 	this->text=convertToWideString(text);
-	
-	if(doAutoSizeOnChange())
-		autoSize();
 }
 
 std::string TextWidget::getText()
@@ -18,9 +15,6 @@ std::string TextWidget::getText()
 void TextWidget::setText(std::wstring text)
 {
 	this->text=text;
-	
-	if(doAutoSizeOnChange())
-		autoSize();
 }
 
 std::wstring TextWidget::getWideText()
@@ -38,18 +32,7 @@ Font& TextWidget::getFont()
 	return font;
 }
 
-void TextWidget::autoSize()
+Vector2D TextWidget::getAutoSize()
 {
-	setPixelSize(font.getTextSize(text));
+	return font.getTextSize(text);
 }
-
-TextWidget::TextWidget()
-{
-	
-}
-
-bool TextWidget::doAutoSizeOnChange()
-{
-	return true;
-}
-

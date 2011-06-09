@@ -1,6 +1,59 @@
 #include "layoutcontainer.hpp"
 
+#include "utils/string.hpp"
+
 const float PADDING=10;
+
+LayoutContainer::DimensionValue::DimensionValue(const std::string& value)
+{
+	const std::string pixelSuffix = "px";
+	const std::string relativeSuffix = "%";
+	const std::string fluidSuffix = "~";
+	const std::string autoValue = "auto";
+	
+	if(value == autoValue)
+	{
+		this->value = 0.0;
+		this->type = AUTO;
+	}
+	else if(value.substr(value.size() - pixelSuffix.size()) == pixelSuffix)
+	{
+		this->value = convertTo<float>(value.substr(0, value.size() - pixelSuffix.size()));
+		this->type = PIXEL;
+	}
+	else if(value.substr(value.size() - relativeSuffix.size()) == relativeSuffix)
+	{
+		this->value = convertTo<float>(value.substr(0, value.size() - relativeSuffix.size()));
+		this->value /= 100.0;
+		this->type = RELATIVE;
+	}
+	else if(value.substr(value.size() - fluidSuffix.size()) == fluidSuffix)
+	{
+		this->value = convertTo<float>(value.substr(0, value.size() - fluidSuffix.size()));
+		this->type = FLUID;
+	}
+}
+
+LayoutContainer::DimensionValue::DimensionValue()
+{
+	this->value = 0.0;
+	this->type = AUTO;
+}
+
+void LayoutContainer::addWidget(Widget& widget, const std::string& w, const std::string& h)
+{
+	DimensionValue width(w);
+	DimensionValue height(h);
+	
+	Container::addWidget(&widget);
+	
+	Dimensions widgetDimensions;
+	
+	widgetDimensions.width = width;
+	widgetDimensions.height = height;
+	
+	dimensions[&widget] = widgetDimensions;
+}
 
 void LayoutContainer::handleEvent(Event* event)
 {
@@ -12,89 +65,166 @@ void LayoutContainer::handleEvent(Event* event)
 
 void LayoutContainer::handleDrawEvent(DrawEvent* event)
 {
-	int dividedAxis = getDividedAxis(event->getAreaSize());
-	int sizeAvailableForWidgets = dividedAxis - (getVisibleWidgetCount() - 1) * PADDING;
-	int nonDividedAxis = getNonDividedAxis(event->getAreaSize());
-	int outerPadding=0;
-	int position=0;
+	int spaceAvailable = getStackedAxis(event->getAreaSize());
+	int nonStackedSpaceAvailable = getNonStackedAxis(event->getAreaSize());
 	
 	if(applyOuterPadding)
 	{
-		sizeAvailableForWidgets -= PADDING * 2;
-		nonDividedAxis -= PADDING * 2;
-		outerPadding = PADDING;
-		position = PADDING;
+		spaceAvailable -= PADDING * 2;
+		nonStackedSpaceAvailable -= PADDING * 2;
 	}
 	
-	int sizeAvailableForFluidWidgets = sizeAvailableForWidgets - calculateTotalSizeOfNonFluidWidgets(event->getAreaSize());
-	int totalSizeOfFluidWidgets = calculateTotalSizeOfFluidWidgets(event->getAreaSize());
+	//remove padding from available spacing
+	int visibleWidgetCount = 0;
 	
-	layouts.clear();
+	for(int i=0; i < getChildCount(); i++)
+	{
+		if(getChild(i)->getVisible())
+			visibleWidgetCount++;
+	}
 	
-	for(int i=0;i<getChildCount();i++)
+	spaceAvailable -= PADDING * (visibleWidgetCount - 1);
+	
+	//calculate size occupied by widgets with non fluid dimensions	
+	float totalSizeOfNonFluidWidgets = 0;
+	
+	for(int i=0; i < getChildCount(); i++)
 	{
 		Widget* child = getChild(i);
 		
-		if(!child)
+		if(!child->getVisible())
 			continue;
 			
-		if(child->getVisible())
-		{
-			int widgetSize = getDividedAxis(calculateWidgetSize(child,event->getAreaSize()));
+		Dimensions childDimensions = dimensions[child];
 		
-			if(child->getFluid())
-			{
-				if(widgetSize == 0)
-					widgetSize = 1;
-				
-				float ratio = float(widgetSize) / float(totalSizeOfFluidWidgets);
-				
-				widgetSize = sizeAvailableForFluidWidgets * ratio;
-			}
+		DimensionValue dimension = getStackedDimension(childDimensions);
 		
-			Layout layout;
-			
-			layout.position = convertDimensionsToVector(position,outerPadding);
-			layout.size = convertDimensionsToVector(widgetSize,nonDividedAxis);
-			
-			layouts[child] = layout;
-			
-			position += widgetSize;
-			position += PADDING;		
-		}
-	}	
-}
-
-void LayoutContainer::showOuterPadding(bool padding)
-{
-	applyOuterPadding = padding;
-}
-
-void LayoutContainer::autoSize()
-{
-	int size = 0;
-
-	for(int i = 0; i < getChildCount(); i++)
-	{
- 		Widget* child = getChild(i);
-		
-		if(!child)
+		if(dimension.type == DimensionValue::FLUID)
 			continue;
-			
-		if(child->getVisible())
-		{
-			if(child->getFluid())
-				continue;
-		
-			//XXX: Because the widget is not fluid the ourSize does not matter.
-			int widgetSize = getNonDividedAxis(calculateWidgetSize(child, Vector2D(0, 0)));
-		
-			if(widgetSize > size)
-				size = widgetSize;
-		}
+		if(dimension.type == DimensionValue::AUTO)
+			totalSizeOfNonFluidWidgets += getStackedAxis(child->getAutoSize());
+		if(dimension.type == DimensionValue::PIXEL)
+			totalSizeOfNonFluidWidgets += dimension.value;
+		if(dimension.type == DimensionValue::RELATIVE)
+			totalSizeOfNonFluidWidgets += dimension.value * spaceAvailable;
 	}
 	
-	setPixelSize(convertDimensionsToVector(0, size));
+	//calculate total fluid proportion value
+	float totalFluidProportionValue = 0;
+	
+	for(int i=0; i < getChildCount(); i++)
+	{
+		Widget* child = getChild(i);
+		
+		if(!child->getVisible())
+			continue;
+			
+		Dimensions childDimensions = dimensions[child];
+		
+		DimensionValue dimension = getStackedDimension(childDimensions);
+		
+		if(dimension.type == DimensionValue::FLUID)
+			totalFluidProportionValue += dimension.value;
+	}
+	
+	float totalSpaceForFluidWidgets = spaceAvailable - totalSizeOfNonFluidWidgets;
+	
+	sizes.clear();
+	positions.clear();
+	
+	float position = 0;
+	float nonStackedPosition = 0;
+	
+	if(applyOuterPadding)
+	{
+		position = PADDING;
+		nonStackedPosition = PADDING;
+	}
+	
+	for(int i=0; i < getChildCount(); i++)
+	{
+		Widget* child = getChild(i);
+		
+		if(!child->getVisible())
+			continue;
+			
+		Dimensions childDimensions = dimensions[child];
+		
+		DimensionValue stackedDimension = getStackedDimension(childDimensions);
+		DimensionValue nonStackedDimension = getNonStackedDimension(childDimensions);
+		
+		float stackedSize = 0;
+		float nonStackedSize = 0;
+		
+		if(stackedDimension.type == DimensionValue::FLUID)
+			stackedSize = stackedDimension.value / totalFluidProportionValue * totalSpaceForFluidWidgets;
+		else if(stackedDimension.type == DimensionValue::PIXEL)
+			stackedSize = stackedDimension.value;
+		else if(stackedDimension.type == DimensionValue::AUTO)
+			stackedSize = getStackedAxis(child->getAutoSize());
+		else if(stackedDimension.type == DimensionValue::RELATIVE)
+			stackedSize = stackedDimension.value * spaceAvailable;
+			
+		if(nonStackedDimension.type == DimensionValue::FLUID)
+			nonStackedSize = 0;
+		else if(nonStackedDimension.type == DimensionValue::PIXEL)
+			nonStackedSize = nonStackedDimension.value;
+		else if(nonStackedDimension.type == DimensionValue::AUTO)
+			nonStackedSize = getNonStackedAxis(child->getAutoSize());
+		else if(nonStackedDimension.type == DimensionValue::RELATIVE)
+			nonStackedSize = nonStackedDimension.value * nonStackedSpaceAvailable;
+			
+		sizes[child] = convertDimensionsToVector(stackedSize, nonStackedSize);
+		positions[child] = convertDimensionsToVector(position, nonStackedPosition);
+		
+		position += stackedSize;
+		position += PADDING;
+	}
+}
+
+Vector2D LayoutContainer::getAutoSize()
+{
+	float totalStackedSize = 0;
+	float totalNonStackedSize = 0;
+	
+	for(int i=0; i < getChildCount(); i++)
+	{
+		Widget* child = getChild(i);
+		
+		if(!child->getVisible())
+			continue;
+			
+		Dimensions childDimensions = dimensions[child];
+		
+		DimensionValue stackedDimension = getStackedDimension(childDimensions);
+		DimensionValue nonStackedDimension = getNonStackedDimension(childDimensions);
+		
+		float stackedSize = 0;
+		float nonStackedSize = 0;
+		
+		if(stackedDimension.type == DimensionValue::PIXEL)
+			stackedSize = stackedDimension.value;
+		else if(stackedDimension.type == DimensionValue::AUTO)
+			stackedSize = getStackedAxis(child->getAutoSize());
+
+		if(nonStackedDimension.type == DimensionValue::PIXEL)
+			nonStackedSize = nonStackedDimension.value;
+		else if(nonStackedDimension.type == DimensionValue::AUTO)
+			nonStackedSize = getNonStackedAxis(child->getAutoSize());
+		
+		totalStackedSize += stackedSize;
+		totalStackedSize += PADDING;
+		
+		totalNonStackedSize = std::max(totalNonStackedSize, nonStackedSize);
+	}
+	
+	if(applyOuterPadding)
+	{
+		totalStackedSize += PADDING * 2;
+		totalNonStackedSize += PADDING * 2;
+	}
+	
+	return convertDimensionsToVector(totalStackedSize, totalNonStackedSize);
 }
 
 LayoutContainer::LayoutContainer():
@@ -103,79 +233,17 @@ LayoutContainer::LayoutContainer():
 
 }
 
-int LayoutContainer::getVisibleWidgetCount()
-{
-	int count=0;
-
-	for(int i=0;i<getChildCount();i++)
-	{
-		Widget* child=getChild(i);
-		
-		if(!child)
-			continue;
-			
-		if(child->getVisible())
-			count++;
-	}
-	
-	return count;
-}
-
-int LayoutContainer::calculateTotalSizeOfFluidWidgets(Vector2D ourSize)
-{
-	int totalsize=0;
-
-	for(int i=0;i<getChildCount();i++)
-	{
-		Widget* child=getChild(i);
-		
-		if(!child)
-			continue;
-			
-		if(!child->getVisible())
-			continue;
-			
-		if(child->getFluid())
-		{
-			int size = getDividedAxis(calculateWidgetSize(child,ourSize));
-		
-			if(size == 0)
-				size = 1;
-		
-			totalsize += size;
-		}
-	}
-	
-	return totalsize;
-}
-
-int LayoutContainer::calculateTotalSizeOfNonFluidWidgets(Vector2D ourSize)
-{
-	int totalsize=0;
-
-	for(int i=0;i<getChildCount();i++)
-	{
-		Widget* child=getChild(i);
-		
-		if(!child)
-			continue;
-			
-		if(!child->getVisible())
-			continue;
-			
-		if(!child->getFluid())
-			totalsize += getDividedAxis(calculateWidgetSize(child,ourSize));
-	}
-	
-	return totalsize;
-}
-
 Vector2D LayoutContainer::getWidgetPosition(Widget* widget,Vector2D ourSize)
 {
-	return layouts[widget].position;
+	return positions[widget];
 }
 
 Vector2D LayoutContainer::getWidgetSize(Widget* widget,Vector2D ourSize)
 {
-	return layouts[widget].size;
+	return sizes[widget];
+}
+
+void LayoutContainer::showOuterPadding(bool padding)
+{
+	applyOuterPadding = padding;
 }

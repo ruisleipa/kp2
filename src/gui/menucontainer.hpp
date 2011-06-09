@@ -1,15 +1,17 @@
-#ifndef MENUCONTAINER_HPP
-#define MENUCONTAINER_HPP
+#ifndef GUI_MENUCONTAINER_HPP
+#define GUI_MENUCONTAINER_HPP
 
-#include "container.hpp"
+#include "freecontainer.hpp"
 #include "image.hpp"
 
 #include "graphics/texturecollection.hpp"
 #include "utils/timer.hpp"
 
-class MenuContainer : public Container
+class MenuContainer : public FreeContainer
 {
 	public:
+		void addWidget(const std::string& name, Widget& widget);
+		
 		virtual void handleEvent(Event* event);
 	
 		virtual void showOnlyWidget(const std::string& tag);
@@ -31,5 +33,5 @@ class MenuContainer : public Container
 		Timer backgroundChangeTimer;
 };
 
-#endif // MENUCONTAINER_HPP
+#endif
 

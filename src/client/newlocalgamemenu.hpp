@@ -1,13 +1,9 @@
-#ifndef NEWLOCALGAMEMENU_HPP
-#define NEWLOCALGAMEMENU_HPP
+#ifndef GUI_NEWLOCALGAMEMENU_HPP
+#define GUI_NEWLOCALGAMEMENU_HPP
 
 #include "gui/menucontainer.hpp"
 #include "gui/menu.hpp"
-#include "gui/label.hpp"
-#include "gui/select.hpp"
-#include "gui/button.hpp"
-#include "gui/image.hpp"
-#include "gui/field.hpp"
+#include "gui/widgetloader.hpp"
 
 #include "connection.hpp"
 
@@ -16,7 +12,6 @@ class NewLocalGameMenu : public Menu
 	public:
 		NewLocalGameMenu(MenuContainer& menuContainer, Connection& connection);
 
-		virtual void onResize(Window& window);
 		virtual void onShow();
 		
 	private:
@@ -26,16 +21,7 @@ class NewLocalGameMenu : public Menu
 		MenuContainer& menuContainer;
 		Connection& connection;
 
-		Label title;
-
-		Label nameLabel;
-		Label difficultyLabel; 
-		
-		Field nameField;
-		Select difficultySelect;
-		
-		Button backButton;		
-		Button startButton;
+		WidgetLoader loader;
 };
 
-#endif // NEWLOCALGAMEMENU_HPP
+#endif
