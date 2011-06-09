@@ -31,6 +31,10 @@ void Container::handleEvent(Event* event)
 		handleMouseUpEvent(dynamic_cast<MouseUpEvent*>(event));
 	else if(dynamic_cast<MouseMoveEvent*>(event))
 		handleMouseMoveEvent(dynamic_cast<MouseMoveEvent*>(event));
+	else if(dynamic_cast<MouseOutEvent*>(event))
+		handleMouseOutEvent(dynamic_cast<MouseOutEvent*>(event));
+	else if(dynamic_cast<BlurEvent*>(event))
+		handleBlurEvent(dynamic_cast<BlurEvent*>(event));
 }
 
 void Container::handleKeyEvent(KeyEvent* event)
@@ -86,6 +90,28 @@ void Container::handleMouseUpEvent(MouseUpEvent* event)
 	{
 		convertAreaEventForChild(event,widget);
 		widget->handleEvent(event);
+	}
+}
+
+void Container::handleMouseOutEvent(MouseOutEvent* event)
+{
+	if(mouseOverChild)
+	{
+		MouseOutEvent mouseOutEvent;
+		mouseOverChild->handleEvent(&mouseOutEvent);
+		
+		mouseOverChild = 0;
+	}
+}
+
+void Container::handleBlurEvent(BlurEvent* event)
+{
+	if(focusedChild)
+	{
+		BlurEvent blurEvent;
+		focusedChild->handleEvent(&blurEvent);
+		
+		focusedChild = 0;
 	}
 }
 
@@ -195,16 +221,9 @@ void Container::showOnlyWidget(const std::string& name)
 	}
 }
 
-void Container::addWidget(Widget& child)
+void Container::addWidget(Widget* child)
 {
-	children.push_back(&child);
-}
-
-void Container::addWidget(const std::string& name,Widget& child)
-{
-	child.setName(name);
-	
-	addWidget(child);
+	children.push_back(child);
 }
 
 Widget& Container::getChildByName(const std::string& name)
@@ -306,30 +325,3 @@ void Container::convertAreaEventForChild(AreaEvent* event,Widget* widget)
 	event->moveOrigin(getWidgetPosition(widget,event->getAreaSize()));
 	event->setAreaSize(getWidgetSize(widget,event->getAreaSize()));
 }
-
-Vector2D Container::calculateWidgetPosition(Widget* widget,Vector2D ourSize)
-{
-	if(widget->hasPixelPosition())
-		return widget->getPosition();
-	else
-		return widget->getPosition() * ourSize;
-}
-
-Vector2D Container::calculateWidgetSize(Widget* widget,Vector2D ourSize)
-{
-	if(widget->hasPixelSize())
-		return widget->getSize();
-	else
-		return widget->getSize() * ourSize;
-}
-
-Vector2D Container::getWidgetPosition(Widget* widget,Vector2D ourSize)
-{
-	return calculateWidgetPosition(widget,ourSize);
-}
-
-Vector2D Container::getWidgetSize(Widget* widget,Vector2D ourSize)
-{
-	return calculateWidgetSize(widget,ourSize);
-}
-

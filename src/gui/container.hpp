@@ -9,9 +9,6 @@ class Container : public Widget
 	public:
 		virtual void showOnlyWidget(const std::string& tag);
 		
-		void addWidget(Widget& child);
-		void addWidget(const std::string& name, Widget& child) __attribute__((__deprecated__));
-
 		Widget& getChildByName(const std::string& name);
 		
 		virtual void handleEvent(Event* event);
@@ -20,31 +17,32 @@ class Container : public Widget
 		
 		Container();
 		
-	protected:	
+	protected:
+		void addWidget(Widget* child);
+		
 		int getChildCount();
 		Widget* getChild(int index);
 		
 		void handleKeyEvent(KeyEvent* event);
 		void handleMouseDownEvent(MouseDownEvent* event);
 		void handleMouseUpEvent(MouseUpEvent* event);
+		void handleMouseOutEvent(MouseOutEvent* event);
+		void handleBlurEvent(BlurEvent* event);
 		void handleMouseMoveEvent(MouseMoveEvent* event);
 		void handleDrawEvent(DrawEvent* event);
 		
-		Vector2D calculateWidgetPosition(Widget* widget,Vector2D ourSize);
-		Vector2D calculateWidgetSize(Widget* widget,Vector2D ourSize);
-		
-		virtual Vector2D getWidgetPosition(Widget* widget,Vector2D ourSize);
-		virtual Vector2D getWidgetSize(Widget* widget,Vector2D ourSize);
+		virtual Vector2D getWidgetPosition(Widget* widget,Vector2D ourSize) = 0;
+		virtual Vector2D getWidgetSize(Widget* widget,Vector2D ourSize) = 0;
 	
 	private:
 		Widget* findWidgetUnderMouse(MouseEvent* event);
 		
 		void convertAreaEventForChild(AreaEvent* event,Widget* widget);
-				
+		
 		Widget* focusedChild;
 		Widget* mouseOverChild;
 
-		std::vector<Widget*> children;		
+		std::vector<Widget*> children;
 		
 		bool showBounds;
 };
