@@ -19,7 +19,7 @@ class TabbedMenu : public Menu
 	private:
 		RowLayoutContainer topContainer;
 		ColumnLayoutContainer buttonContainer;
-		Container tabContainer;
+		FreeContainer tabContainer;
 		
 		std::vector<std::tr1::shared_ptr<Button> > buttons;
 		

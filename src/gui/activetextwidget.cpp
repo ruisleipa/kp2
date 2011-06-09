@@ -121,10 +121,7 @@ ActiveTextWidget::ActiveTextWidget():
 	borderFont=Font("Textborder");
 }
 
-void ActiveTextWidget::autoSize()
+Vector2D ActiveTextWidget::getAutoSize()
 {
-	//needed for the bordered look
-	//TODO: better calculation (this is an ugly hack :P)
-	TextWidget::autoSize();
-	setPixelSize(getSize()+Vector2D(2,2));
+	return TextWidget::getAutoSize() + Vector2D(2,2);
 }

@@ -1,63 +1,25 @@
 #include "mainmenu.hpp"
 
-#include <iostream>
-
-#include "ui.hpp"
+#include "gui/image.hpp"
+#include "gui/button.hpp"
 
 MainMenu::MainMenu(MenuContainer& menuContainer, TextureCollection& textureCollection):
-	menuContainer(menuContainer)
+	menuContainer(menuContainer),
+	loader("data/ui/mainmenu.ui")
 {
-	background.setFill(true);
+	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
 	
-	title.setTexture(textureCollection.getTexture("title"));
+	dynamic_cast<Image&>(getChildByName("title")).setTexture(textureCollection.getTexture("title"));
 	
-	localgameButton.setText("Yksinpeli");
-	localgameButton.setClickHandler(std::tr1::bind(&MainMenu::localgameClickHandler,this));
-	
-	aboutButton.setText("Tietoja pelistä");
-	
-	settingsButton.setText("Asetukset");
-	settingsButton.setClickHandler(std::tr1::bind(&MainMenu::settingsClickHandler,this));
-	
-	quitButton.setText("Lopeta");
-	quitButton.setClickHandler(std::tr1::bind(&MainMenu::quitClickHandler,this));
-	
-	addWidget(background);
-	
-	addWidget(title);
-	
-	addWidget(localgameButton);
-	addWidget(aboutButton);
-	addWidget(settingsButton);
-	addWidget(quitButton);
+	dynamic_cast<Button&>(getChildByName("remoteGameButton")).setClickHandler(std::tr1::bind(&MainMenu::remotegameClickHandler,this));	
+	dynamic_cast<Button&>(getChildByName("localgameButton")).setClickHandler(std::tr1::bind(&MainMenu::localgameClickHandler,this));
+	dynamic_cast<Button&>(getChildByName("settingsButton")).setClickHandler(std::tr1::bind(&MainMenu::settingsClickHandler,this));	
+	dynamic_cast<Button&>(getChildByName("quitButton")).setClickHandler(std::tr1::bind(&MainMenu::quitClickHandler,this));
 }
 
-void MainMenu::onResize(Window& window)
+void MainMenu::remotegameClickHandler()
 {
-	setSize(Vector2D(1,1));
-
-	background.setSize(Vector2D(1,1));
-
-	title.setPosition(TITLE_POSITION);
-	title.setSize(TITLE_SIZE);
-	
-	Vector2D buttonpos=CONTENT_POSITION;
-
-	localgameButton.setPosition(buttonpos);
-	localgameButton.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	aboutButton.setPosition(buttonpos);
-	aboutButton.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	settingsButton.setPosition(buttonpos);
-	settingsButton.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-
-	quitButton.setPosition(buttonpos);
-	quitButton.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
+	menuContainer.showOnlyWidget("remotegamemenu");
 }
 
 void MainMenu::localgameClickHandler()

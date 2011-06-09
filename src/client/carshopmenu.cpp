@@ -1,53 +1,31 @@
 #include "carshopmenu.hpp"
 
-#include <iostream>
 #include <sstream>
 
-#include "ui.hpp"
+#include "gui/label.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+#include "gui/field.hpp"
+#include "gui/listbox.hpp"
+
 #include "utils/string.hpp"
 #include "connection.hpp"
 
 CarShopMenu::CarShopMenu(Connection& connection):
-	connection(connection)
+	connection(connection),
+	loader("data/ui/carshopmenu.ui")
 {
+	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
+	
 	connection.addEventHandler(std::tr1::bind(&CarShopMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
 	
-	carList.setFont(Font("small"));
-	carList.setChangeHandler(std::tr1::bind(&CarShopMenu::carlistChange,this));
-	
-	buyButton.setText("Osta auto");
-	buyButton.autoSize();
-	buyButton.setClickHandler(std::tr1::bind(&CarShopMenu::buyClick,this));
-				
-	addWidget(mainContainer);
-	
-	mainContainer.setFactorSize(Vector2D(1,1));
-	
-	mainContainer.addWidget(carList);
-	mainContainer.addWidget(infoContainer);
-	
-	carList.setFluid(true);	
-	infoContainer.setFluid(true);	
-	
-	infoContainer.addWidget(titleContainer);
-	infoContainer.addWidget(carInfo);
-	infoContainer.addWidget(buyButton);
-	infoContainer.showOuterPadding(false);
-	
-	titleContainer.setFactorSize(Vector2D(0,0.25));
-	carInfo.setFluid(true);	
-		
-	titleContainer.addWidget(carName);
-	titleContainer.addWidget(carImage);
-	titleContainer.showOuterPadding(false);
-	
-	carImage.setFluid(true);	
-	
+	dynamic_cast<Listbox&>(getChildByName("carList")).setChangeHandler(std::tr1::bind(&CarShopMenu::carlistChange,this));
+	dynamic_cast<Button&>(getChildByName("buyButton")).setClickHandler(std::tr1::bind(&CarShopMenu::buyClick,this));
 }
 
 void CarShopMenu::onConnectionEvent(Connection& connection)
 {
-	carList.clearItems();
+	dynamic_cast<Listbox&>(getChildByName("carList")).clearItems();
 
 	std::vector<std::string> ids = connection.getShopVehicles().getKeys();
 	
@@ -55,23 +33,21 @@ void CarShopMenu::onConnectionEvent(Connection& connection)
 	{
 		Protocol::ShopVehicle vehicle = connection.getShopVehicles().getItem(ids[i]);
 		
-		carList.addItem(vehicle.name, i);
-		
-		std::cout << ids[i] << std::endl;
-	}	
+		dynamic_cast<Listbox&>(getChildByName("carList")).addItem(vehicle.name, i);
+	}
 }
 
 void CarShopMenu::carlistChange()
 {
 	std::vector<std::string> ids = connection.getShopVehicles().getKeys();
 	
-	Protocol::ShopVehicle vehicle = connection.getShopVehicles().getItem(ids[carList.getCurrentItemTag()]);
+	Protocol::ShopVehicle vehicle = connection.getShopVehicles().getItem(ids[dynamic_cast<Listbox&>(getChildByName("carList")).getCurrentItemTag()]);
 	
-	carName.setText(vehicle.name);
+	dynamic_cast<Label&>(getChildByName("carName")).setText(vehicle.name);
 		
 	std::string image = "gamedata/vehicleimages/";
 	image += vehicle.imageName;
-	carImage.setTexture(Texture(image));
+	dynamic_cast<Image&>(getChildByName("carImage")).setTexture(Texture(image));
 	
 	std::stringstream ss;
 	
@@ -80,14 +56,14 @@ void CarShopMenu::carlistChange()
 	ss << "Korin paino: " << vehicle.chassisWeight << std::endl;
 	ss << "Hinta: " << vehicle.price << std::endl;
 	
-	carInfo.setText(ss.str());
+	dynamic_cast<Label&>(getChildByName("carInfo")).setText(ss.str());
 }
 
 void CarShopMenu::buyClick()
 {
 	std::vector<std::string> ids = connection.getShopVehicles().getKeys();
 	
-	if(carList.getCurrentItemTag() != -1)
-		connection.buyVehicle(ids[carList.getCurrentItemTag()]);
+	if(dynamic_cast<Listbox&>(getChildByName("carList")).getCurrentItemTag() != -1)
+		connection.buyVehicle(ids[dynamic_cast<Listbox&>(getChildByName("carList")).getCurrentItemTag()]);
 }
 

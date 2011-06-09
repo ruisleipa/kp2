@@ -1,14 +1,8 @@
-#ifndef CARSHOPMENU_HPP
-#define CARSHOPMENU_HPP
+#ifndef GUI_CARSHOPMENU_HPP
+#define GUI_CARSHOPMENU_HPP
 
 #include "gui/menu.hpp"
-#include "gui/label.hpp"
-#include "gui/button.hpp"
-#include "gui/image.hpp"
-#include "gui/field.hpp"
-#include "gui/listbox.hpp"
-#include "gui/rowlayoutcontainer.hpp"
-#include "gui/columnlayoutcontainer.hpp"
+#include "gui/widgetloader.hpp"
 
 #include "graphics/texture.hpp"
 
@@ -27,17 +21,7 @@ class CarShopMenu : public Menu
 	
 		Connection& connection;
 		
-		ColumnLayoutContainer mainContainer;
-		ColumnLayoutContainer titleContainer;
-		RowLayoutContainer infoContainer;
-	
-		Image carImage;
-		
-		Label carName;
-		Label carInfo;
-		
-		Listbox carList;		
-		Button buyButton;				
+		WidgetLoader loader;
 };
 
-#endif // CARSHOPMENU_HPP
+#endif

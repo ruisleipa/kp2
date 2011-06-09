@@ -4,77 +4,33 @@
 
 #include "ui.hpp"
 #include "utils/string.hpp"
-#include "net/packet.hpp"
+#include "gui/label.hpp"
+#include "gui/select.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+#include "gui/field.hpp"
 
 NewLocalGameMenu::NewLocalGameMenu(MenuContainer& menuContainer, Connection& connection):
 	menuContainer(menuContainer),
-	connection(connection)
+	connection(connection),
+	loader("data/ui/newlocalgamemenu.ui")
 {
-	title.setFont(Font("title"));
-	title.setText("Uusi tilanne");			
-	
-	nameLabel.setText("Nimi:");
-	difficultyLabel.setText("Vaikeusaste:");
-	
-	difficultySelect.addItem("helppo");
-	difficultySelect.addItem("normaali");
-	difficultySelect.addItem("vaikea");
+	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
 
-	backButton.setText("Peruuta");
-	backButton.setClickHandler(std::tr1::bind(&NewLocalGameMenu::backClickHandler,this));
-	startButton.setText("Aloita");
-	startButton.setClickHandler(std::tr1::bind(&NewLocalGameMenu::startClickHandler,this));
+	dynamic_cast<Label&>(getChildByName("title")).setFont(Font("title"));
 	
-	addWidget(title);
-	
-	addWidget(nameLabel);
-	addWidget(difficultyLabel);
-		
-	addWidget(nameField);	
-	addWidget(difficultySelect);
-	
-	addWidget(backButton);	
-	addWidget(startButton);
-}
+	dynamic_cast<Select&>(getChildByName("difficultySelect")).addItem("helppo");
+	dynamic_cast<Select&>(getChildByName("difficultySelect")).addItem("normaali");
+	dynamic_cast<Select&>(getChildByName("difficultySelect")).addItem("vaikea");
 
-void NewLocalGameMenu::onResize(Window& window)
-{
-	title.setPosition(TITLE_POSITION);
-	title.setSize(TITLE_SIZE);
-		
-	Vector2D buttonpos=CONTENT_POSITION;
-
-	nameLabel.setPosition(buttonpos);
-	nameLabel.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	difficultyLabel.setPosition(buttonpos);
-	difficultyLabel.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	buttonpos=CONTENT_POSITION;
-	buttonpos.setX(0.5);
-	
-	nameField.setPosition(buttonpos);
-	nameField.setSize(FIELD_SIZE);	
-	buttonpos+=BUTTON_HEIGHT;
-	
-	difficultySelect.setPosition(buttonpos);
-	difficultySelect.autoSize();
-	buttonpos+=BUTTON_HEIGHT;	
-
-	backButton.setPosition(BACK_BUTTON_POSITION);
-	backButton.autoSize();
-
-	startButton.setPosition(NEXT_BUTTON_POSITION);
-	startButton.autoSize();
-
+	dynamic_cast<Button&>(getChildByName("backButton")).setClickHandler(std::tr1::bind(&NewLocalGameMenu::backClickHandler,this));
+	dynamic_cast<Button&>(getChildByName("startButton")).setClickHandler(std::tr1::bind(&NewLocalGameMenu::startClickHandler,this));
 }
 
 void NewLocalGameMenu::onShow()
 {
-	nameField.setText("");
-	difficultySelect.setIndex(1);
+	dynamic_cast<Field&>(getChildByName("nameField")).setText("");
+	dynamic_cast<Select&>(getChildByName("difficultySelect")).setIndex(1);
 }
 
 void NewLocalGameMenu::backClickHandler()
@@ -88,7 +44,7 @@ void NewLocalGameMenu::startClickHandler()
 	{
 		menuContainer.showOnlyWidget("careermenu");
 		
-		connection.setName(nameField.getText());
+		connection.setName(dynamic_cast<Field&>(getChildByName("nameField")).getText());
 	}
 }
 

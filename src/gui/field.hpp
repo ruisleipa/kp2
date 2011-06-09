@@ -11,9 +11,8 @@ class Field : public TextWidget
 		virtual void handleEvent(Event* event);
 		
 		Field();
-	
-	protected:
-		virtual bool doAutoSizeOnChange();
+		
+		virtual Vector2D getAutoSize();
 		
 	private:
 		void handleDrawEvent(DrawEvent* event);

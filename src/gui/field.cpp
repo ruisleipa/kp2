@@ -14,14 +14,19 @@ void Field::handleEvent(Event* event)
 		handleBlurEvent();
 }
 
+Vector2D Field::getAutoSize()
+{
+	return TextWidget::getAutoSize() + Vector2D(2, 2);
+}
+
 void Field::handleDrawEvent(DrawEvent* event)
 {
 	float cursorpos=getFont().getTextSize(getWideText().substr(0,cursorPosition)).getX();
 		
-	float textoffset=-(cursorpos+0.02-event->getAreaSize().getX());
+	float textoffset=-(cursorpos + 10 - event->getAreaSize().getX());
 	
-	if(textoffset>0.001)
-		textoffset=0.001;
+	if(textoffset>0)
+		textoffset=0;
 	
 	cursorpos+=event->getAreaPosition().getX()+textoffset;
 
@@ -44,14 +49,14 @@ void Field::handleDrawEvent(DrawEvent* event)
 	if(isFocused && int(blinkTimer.getSeconds()/0.750)%2)
 	{
 		glBegin(GL_LINES);
-		glVertex2d(cursorpos,event->getAreaPosition().getY());
-		glVertex2d(cursorpos,event->getAreaPosition().getY()+event->getAreaSize().getY());
+		glVertex2d(cursorpos + 1,event->getAreaPosition().getY());
+		glVertex2d(cursorpos + 1,event->getAreaPosition().getY()+event->getAreaSize().getY());
 		glEnd();
 	}
 	
 	scissor.set(event->getAreaPosition(),event->getAreaSize());
 	//glClear(GL_COLOR_BUFFER_BIT);
-	getFont().draw(getWideText(),event->getAreaPosition()+Vector2D(textoffset,0));
+	getFont().draw(getWideText(),event->getAreaPosition()+Vector2D(textoffset + 1, 1));
 }
 
 void Field::handleKeyDownEvent(KeyDownEvent* event)
@@ -130,9 +135,3 @@ Field::Field():
 {
 	setFont(Font("Field"));
 }
-
-bool Field::doAutoSizeOnChange()
-{
-	return false;
-}
-

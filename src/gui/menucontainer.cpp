@@ -2,6 +2,13 @@
 
 #include <cstdlib>
 
+void MenuContainer::addWidget(const std::string& name, Widget& widget)
+{
+	widget.setName(name);
+	
+	FreeContainer::addWidget(widget, "0px", "0px", "100%", "100%");
+}
+
 void MenuContainer::showOnlyWidget(const std::string& tag)
 {
 	Container::showOnlyWidget(tag);
@@ -43,15 +50,12 @@ MenuContainer::MenuContainer(TextureCollection& backgroundtextures):
 	backgroundIndex(0)
 {
 	backgroundFront.setTexture(backgroundtextures.getTexture(getRandomTextureIndex()));
-	backgroundFront.setSize(Vector2D(1,1));
-	
-	backgroundBack.setSize(Vector2D(1,1));
 	
 	backgroundBack.setFill(true);
 	backgroundFront.setFill(true);
 	
-	addWidget(backgroundFront);
-	addWidget(backgroundBack);
+	FreeContainer::addWidget(backgroundFront, "0px", "0px", "100%", "100%");
+	FreeContainer::addWidget(backgroundBack, "0px", "0px", "100%", "100%");
 }
 
 int MenuContainer::getRandomTextureIndex()

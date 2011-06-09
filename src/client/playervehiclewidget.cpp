@@ -8,18 +8,14 @@
 
 PlayerVehicleWidget::PlayerVehicleWidget()
 {
-	addWidget(titleContainer);
-	addWidget(carInfo);
+	addWidget((Widget&)titleContainer, "100%", "25%");
+	addWidget(carInfo, "100%", "75%");
 	showOuterPadding(false);
 	
-	titleContainer.setFactorSize(Vector2D(0,0.25));
 	titleContainer.showOuterPadding(false);
-	titleContainer.addWidget(carName);
-	titleContainer.addWidget(carImage);
+	titleContainer.addWidget(carName, "2~", "100%");
+	titleContainer.addWidget(carImage, "1~", "100%");
 	
-	carImage.setFluid(true);
-	
-	carInfo.setFluid(true);	
 	carInfo.setFont(Font("small"));	
 }
 

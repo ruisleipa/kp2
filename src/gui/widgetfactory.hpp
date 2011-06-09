@@ -5,9 +5,11 @@
 
 #include "widgetloader.hpp"
 
-#include "layoutcontainer.hpp"
-#include "button.hpp"
-#include "widget.hpp"
+class Widget;
+class LayoutContainer;
+class TextWidget;
+class Image;
+class Gauge;
 
 class WidgetFactory
 {
@@ -17,9 +19,10 @@ class WidgetFactory
 	private:
 		Widget* createWidget(const std::string& name);
 		
-		void applyLayoutContainerAttributes(LayoutContainer* layoutContainer, const IniFile& attributes);
-		void applyTextWidgetAttributes(TextWidget* textWidget, const IniFile& attributes);
-		void applyWidgetAttributes(Widget* widget, const IniFile& attributes);
+		void applyAttributes(LayoutContainer* layoutContainer, const IniFile& attributes);
+		void applyAttributes(TextWidget* textWidget, const IniFile& attributes);
+		void applyAttributes(Image* image, const IniFile& attributes);
+		void applyAttributes(Widget* widget, const IniFile& attributes);
 
 };
 
