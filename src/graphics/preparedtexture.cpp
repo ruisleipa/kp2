@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
 #include <stdint.h>
 
 void PreparedTexture::bind()
@@ -134,7 +135,7 @@ void PreparedTexture::loadFromSurface(SDL_Surface* surface)
 	
 	calculatePaddedSize();
 	createSurface();
-	copySurface(surface);	
+	copySurface(surface);
 	downScaleSurface();
 	createTexture();
 }
@@ -147,7 +148,23 @@ void PreparedTexture::calculatePaddedSize()
 
 void PreparedTexture::createSurface()
 {
-	data=SDL_CreateRGBSurface(SDL_SWSURFACE,paddedWidth,paddedHeight,32,RGBAMASK);
+	data = SDL_CreateRGBSurface(SDL_SWSURFACE,paddedWidth,paddedHeight,32,RGBAMASK);
+	
+	if(!data)
+	{
+		std::stringstream ss;
+		
+		ss << "PreparedTexture::createSurface: ";
+		ss << "SDL_CreateRGBSurface(";
+		ss << "SDL_SWSURFACE, ";
+		ss << paddedWidth << ", ";
+		ss << paddedHeight << ", ";
+		ss << 32 << ", ";
+		ss << "RGBAMASK) failed: ";
+		ss << SDL_GetError();
+		
+		throw std::runtime_error(ss.str());
+	}
 }
 
 void PreparedTexture::copySurface(SDL_Surface* surface)
@@ -290,6 +307,22 @@ SDL_Surface* PreparedTexture::downScale(int factor)
 		SDL_UnlockSurface(data);
 		
 	SDL_Surface* newsurface=SDL_CreateRGBSurface(SDL_SWSURFACE,cw,ch,32,RGBAMASK);
+	
+	if(!newsurface)
+	{
+		std::stringstream ss;
+		
+		ss << "PreparedTexture::downScale: ";
+		ss << "SDL_CreateRGBSurface(";
+		ss << "SDL_SWSURFACE, ";
+		ss << paddedWidth << ", ";
+		ss << paddedHeight << ", ";
+		ss << 32 << ", ";
+		ss << "RGBAMASK) failed: ";
+		ss << SDL_GetError();
+		
+		throw std::runtime_error(ss.str());
+	}
 		
 	SDL_Rect size;
 	size.x = 0;
