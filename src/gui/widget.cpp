@@ -16,65 +16,6 @@ void Widget::setName(const std::string& name)
 	this->name = name;
 }
 
-void Widget::setPosition(Vector2D position)
-{
-	setFactorPosition(position);
-}
-
-void Widget::setFactorPosition(Vector2D position)
-{
-	pixelPosition=false;
-	this->position=position;
-}
-	
-void Widget::setPixelPosition(Vector2D position)
-{
-	pixelPosition=true;
-	this->position=position;
-}
-	
-Vector2D Widget::getPosition()
-{
-	return position;
-}
-
-void Widget::setSize(Vector2D size)
-{
-	setFactorSize(size);
-}
-
-void Widget::setFactorSize(Vector2D size)
-{
-	pixelSize=false;
-	this->size=size;
-}
-	
-void Widget::setPixelSize(Vector2D size)
-{
-	pixelSize=true;
-	this->size=size;
-}
-	
-Vector2D Widget::getSize()
-{
-	return size;
-}
-
-void Widget::autoSize()
-{
-
-}
-
-void Widget::setFluid(bool fluid)
-{
-	this->fluid = fluid;
-}
-
-bool Widget::getFluid()
-{
-	return fluid;
-}
-
 void Widget::setVisible(bool visible)
 {
 	this->visible=visible;
@@ -94,6 +35,11 @@ void Widget::setVisible(bool visible)
 bool Widget::getVisible()
 {
 	return visible;
+}
+
+Vector2D Widget::getAutoSize()
+{
+	return Vector2D(0, 0);
 }
 
 void Widget::setBackgroundColor(const Color& color)
@@ -124,9 +70,6 @@ void Widget::onResize(Window& window)
 
 Widget::Widget():
 	visible(true),
-	pixelPosition(true),
-	pixelSize(true),
-	fluid(false),
 	backgroundColor(1,1,1,0)
 {
 
@@ -147,19 +90,9 @@ void Widget::handleDrawEvent(DrawEvent* event)
 	backgroundColor.apply();
 
 	glBegin(GL_QUADS);
-		glVertex2f(begin.getX(),begin.getY());
-		glVertex2f(end.getX(),	begin.getY());
-		glVertex2f(end.getX(),	end.getY());
-		glVertex2f(begin.getX(),end.getY());
+		glVertex2f(begin.getX(), begin.getY());
+		glVertex2f(end.getX(), begin.getY());
+		glVertex2f(end.getX(), end.getY());
+		glVertex2f(begin.getX(), end.getY());
 	glEnd();
-}
-
-bool Widget::hasPixelPosition()
-{
-	return pixelPosition;
-}
-
-bool Widget::hasPixelSize()
-{
-	return pixelSize;
 }

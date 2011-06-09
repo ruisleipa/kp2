@@ -1,16 +1,27 @@
 #include "rowlayoutcontainer.hpp"
 
-int RowLayoutContainer::getDividedAxis(Vector2D size)
+float RowLayoutContainer::getStackedAxis(Vector2D ourSize)
 {
-	return size.getY();
+	return ourSize.getY();
 }
 
-int RowLayoutContainer::getNonDividedAxis(Vector2D size)
+float RowLayoutContainer::getNonStackedAxis(Vector2D ourSize)
 {
-	return size.getX();
+	return ourSize.getX();
 }
 
-Vector2D RowLayoutContainer::convertDimensionsToVector(int dividedAxis,int nonDividedAxis)
+RowLayoutContainer::DimensionValue RowLayoutContainer::getStackedDimension(const Dimensions& dimensions)
 {
-	return Vector2D(nonDividedAxis,dividedAxis);
+	return dimensions.height;
 }
+
+RowLayoutContainer::DimensionValue RowLayoutContainer::getNonStackedDimension(const Dimensions& dimensions)
+{
+	return dimensions.width;
+}
+
+Vector2D RowLayoutContainer::convertDimensionsToVector(float stacked, float nonStacked)
+{
+	return Vector2D(nonStacked, stacked);
+}
+

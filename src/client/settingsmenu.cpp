@@ -1,31 +1,28 @@
 #include "settingsmenu.hpp"
 
-#include <iostream>
-
-#include "ui.hpp"
 #include "utils/string.hpp"
-
 #include "sounds/musicplayer.hpp"
 #include "graphics/window.hpp"
+
+#include "gui/label.hpp"
+#include "gui/select.hpp"
+#include "gui/button.hpp"
 
 SettingsMenu::SettingsMenu(MenuContainer& menuContainer, Window& window, MusicPlayer& musicPlayer):
 	menuContainer(menuContainer),
 	window(window),
 	musicPlayer(musicPlayer),
-	windowOptionsChanged(false)
+	windowOptionsChanged(false),
+	loader("data/ui/settingsmenu.ui")
 {
-	setVisible(false);
-
-	title.setFont(Font("title"));
-	title.setText("Asetukset");			
+	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
 	
-	sizeLabel.setText("Ikkunan koko");
-	fullscreenLabel.setText("Kokoruututila");
-	vsyncLabel.setText("Vsync");	
-	musicVolumeLabel.setText("Musiikin voimakkuus");	
+	dynamic_cast<Label&>(getChildByName("title")).setFont(Font("title"));
 	
 	std::vector<Vector2D> possibleSizes = window.getPossibleSizes();
 	std::vector<Vector2D>::iterator i;
+	
+	Select& sizeSelect = dynamic_cast<Select&>(getChildByName("sizeSelect"));
 	
 	for(i=possibleSizes.begin();i!=possibleSizes.end();++i)
 	{
@@ -37,11 +34,21 @@ SettingsMenu::SettingsMenu(MenuContainer& menuContainer, Window& window, MusicPl
 		sizeSelect.addItem(str);
 	}
 	
+	Select& fullscreenSelect = dynamic_cast<Select&>(getChildByName("fullscreenSelect"));
+	
 	fullscreenSelect.addItem("ei");
 	fullscreenSelect.addItem("kyllä");
 	
+	fullscreenSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
+	
+	Select& vsyncSelect = dynamic_cast<Select&>(getChildByName("vsyncSelect"));
+	
 	vsyncSelect.addItem("ei");
 	vsyncSelect.addItem("kyllä");
+	
+	vsyncSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
+	
+	Select& musicVolumeSelect = dynamic_cast<Select&>(getChildByName("musicVolumeSelect"));
 	
 	musicVolumeSelect.addItem("0 %");
 	musicVolumeSelect.addItem("10 %");
@@ -55,83 +62,10 @@ SettingsMenu::SettingsMenu(MenuContainer& menuContainer, Window& window, MusicPl
 	musicVolumeSelect.addItem("90 %");
 	musicVolumeSelect.addItem("100 %");
 	
-	backButton.setText("Takaisin");
-	backButton.setClickHandler(std::tr1::bind(&SettingsMenu::backClick,this));
-	applyButton.setText("Ota käyttöön");
-	applyButton.setClickHandler(std::tr1::bind(&SettingsMenu::applyClick,this));
-
-	addWidget(background);
+	musicVolumeSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
 	
-	addWidget(title);
-	
-	addWidget(sizeLabel);
-	addWidget(fullscreenLabel);
-	addWidget(vsyncLabel);	
-	addWidget(musicVolumeLabel);	
-			
-	addWidget(sizeSelect);
-	addWidget(fullscreenSelect);	
-	addWidget(vsyncSelect);
-	addWidget(musicVolumeSelect);
-		
-	addWidget(backButton);	
-	addWidget(applyButton);
-}
-
-void SettingsMenu::onResize(Window& window)
-{
-	setSize(Vector2D(1,1));
-	background.setSize(Vector2D(1,1));
-		
-	title.setPosition(TITLE_POSITION);
-	title.setSize(TITLE_SIZE);
-		
-	Vector2D buttonpos=CONTENT_POSITION;
-
-	sizeLabel.setPosition(buttonpos);
-	sizeLabel.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	fullscreenLabel.setPosition(buttonpos);
-	fullscreenLabel.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	vsyncLabel.setPosition(buttonpos);
-	vsyncLabel.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	musicVolumeLabel.setPosition(buttonpos);
-	musicVolumeLabel.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-	
-	buttonpos=CONTENT_POSITION;
-	buttonpos.setX(0.5);
-	
-	sizeSelect.setPosition(buttonpos);
-	sizeSelect.autoSize();	
-	sizeSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
-	buttonpos+=BUTTON_HEIGHT;
-	
-	fullscreenSelect.setPosition(buttonpos);
-	fullscreenSelect.autoSize();
-	fullscreenSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange,this));
-	buttonpos+=BUTTON_HEIGHT;	
-
-	vsyncSelect.setPosition(buttonpos);
-	vsyncSelect.autoSize();
-	vsyncSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
-	buttonpos+=BUTTON_HEIGHT;	
-	
-	musicVolumeSelect.setPosition(buttonpos);
-	musicVolumeSelect.autoSize();
-	buttonpos+=BUTTON_HEIGHT;
-
-	backButton.setPosition(BACK_BUTTON_POSITION);
-	backButton.autoSize();
-
-	applyButton.setPosition(NEXT_BUTTON_POSITION);
-	applyButton.autoSize();
-
+	dynamic_cast<Button&>(getChildByName("backButton")).setClickHandler(std::tr1::bind(&SettingsMenu::backClick,this));
+	dynamic_cast<Button&>(getChildByName("applyButton")).setClickHandler(std::tr1::bind(&SettingsMenu::applyClick,this));
 }
 
 void SettingsMenu::handleEvent(Event* event)
@@ -158,18 +92,13 @@ void SettingsMenu::updateDisplayOptions()
 	{
 		if(window.getSize() == possibleSizes[i])
 		{
-			sizeSelect.setIndex(i);
+			dynamic_cast<Select&>(getChildByName("sizeSelect")).setIndex(i);
 			break;
 		}			
 	}		
 
-	fullscreenSelect.setIndex(window.isFullscreen());
-	
-	vsyncSelect.setIndex(window.getVsyncPreference());
-	
-	sizeSelect.autoSize();	
-	fullscreenSelect.autoSize();
-	vsyncSelect.autoSize();
+	dynamic_cast<Select&>(getChildByName("fullscreenSelect")).setIndex(window.isFullscreen());
+	dynamic_cast<Select&>(getChildByName("vsyncSelect")).setIndex(window.getVsyncPreference());
 	
 	windowOptionsChanged = false;
 }
@@ -178,7 +107,7 @@ void SettingsMenu::updateMusicOptions()
 {
 	int index = musicPlayer.getVolume() / 10;
 	
-	musicVolumeSelect.setIndex(index);
+	dynamic_cast<Select&>(getChildByName("musicVolumeSelect")).setIndex(index);
 }
 
 void SettingsMenu::backClick()
@@ -191,10 +120,10 @@ void SettingsMenu::applyClick()
 	if(windowOptionsChanged)
 	{
 		std::vector<Vector2D> possibleSizes = window.getPossibleSizes();
-		Vector2D size=possibleSizes[sizeSelect.getIndex()];
+		Vector2D size=possibleSizes[dynamic_cast<Select&>(getChildByName("sizeSelect")).getIndex()];
 
-		bool fullscreen=fullscreenSelect.getIndex();
-		bool vsync=vsyncSelect.getIndex();
+		bool fullscreen=dynamic_cast<Select&>(getChildByName("fullscreenSelect")).getIndex();
+		bool vsync=dynamic_cast<Select&>(getChildByName("vsyncSelect")).getIndex();
 		
 		window.setVideoMode(size,32,fullscreen);
 		window.setVsyncPreference(vsync);
@@ -202,9 +131,7 @@ void SettingsMenu::applyClick()
 		updateDisplayOptions();
 	}
 	
-	int musicVolume = musicVolumeSelect.getIndex()*10;
-	
-	std::cout << musicVolume << std::endl;
+	int musicVolume = dynamic_cast<Select&>(getChildByName("musicVolumeSelect")).getIndex()*10;
 	
 	musicPlayer.setVolume(musicVolume);	
 	

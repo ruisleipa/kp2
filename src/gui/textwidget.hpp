@@ -17,12 +17,9 @@ class TextWidget : public Widget
 		void setFont(Font font);
 		Font& getFont();
 		
-		virtual void autoSize();
-		
-		TextWidget();
+		virtual Vector2D getAutoSize();
 	
 	protected:
-		virtual bool doAutoSizeOnChange();
 	
 	private:	
 		Font font;		

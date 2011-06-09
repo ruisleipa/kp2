@@ -5,20 +5,26 @@
 
 #include "utils/string.hpp"
 
+#include "gui/columnlayoutcontainer.hpp"
+#include "gui/rowlayoutcontainer.hpp"
+#include "gui/label.hpp"
+#include "gui/button.hpp"
+#include "gui/image.hpp"
+#include "gui/field.hpp"
+#include "gui/listbox.hpp"
+
 const std::string PART_TYPES[] = {"camshaft", "charger", "clutch", "cooler", "cylinderhead", "differential", "engine", "exhaustmanifold", "exhaustpipe", "fuelintake", "fuelpump", "injector", "intakemanifold", "tire"};
 
 PartShopMenu::PartShopMenu(Connection& connection):
-	connection(connection)
+	connection(connection),
+	loader("data/ui/partshopmenu.ui")
 {
-	partImage.setTexture(Texture("data/images/parts/engine.jpg"));
+	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
 	
-	partInfo.setFont(Font("small"));
-	
-	categoryInfo.setText("Tähän tulee kategoriainfo.");	
+	Listbox& categoryBox = dynamic_cast<Listbox&>(getChildByName("categoryBox"));
 	
 	categoryBox.setChangeHandler(std::tr1::bind(&PartShopMenu::categoryChangeHandler,this));
-	categoryBox.setFluid(true);
-	
+
 	categoryBox.addItem("Nokka-akselit", 0);
 	categoryBox.addItem("Ahtimet", 1);
 	categoryBox.addItem("Kytkimet", 2);
@@ -34,55 +40,15 @@ PartShopMenu::PartShopMenu(Connection& connection):
 	categoryBox.addItem("Imusarjat", 12);
 	categoryBox.addItem("Renkaat", 13);
 	
-	buyButton.setText("Osta");
-	buyButton.setClickHandler(std::tr1::bind(&PartShopMenu::buyHandler,this));
-	buyButton.autoSize();
-	
-	container.setFactorSize(Vector2D(1,1));
-	
-	addWidget(container);
-	
-	container.addWidget(categoryContainer);
-	container.addWidget(partContainer);
-	container.addWidget(partInfoContainer);
-	
-	categoryContainer.setFluid(true);
-	categoryContainer.showOuterPadding(false);
-	
-	categoryContainer.addWidget(categoryInfo);
-	categoryInfo.setFactorSize(Vector2D(0,0.25));
-	
-	categoryContainer.addWidget(categoryBox);	
-	categoryBox.setFluid(true);
-				
-	partContainer.setFluid(true);
-	partContainer.showOuterPadding(false);
-
-	partContainer.addWidget(partImage);
-	partImage.setFactorSize(Vector2D(0,0.25));
-	partImage.setFill(true);
-	
-	partContainer.addWidget(partBox);	
-	partBox.setChangeHandler(std::tr1::bind(&PartShopMenu::partChange, this));
-	partBox.setFluid(true);
-	
-	partInfoContainer.setFluid(true);
-	partInfoContainer.showOuterPadding(false);
-	
-	partInfoContainer.addWidget(partInfo);
-	partInfo.setFluid(true);
-	
-	partInfoContainer.addWidget(buyButton);
-
-}
-
-void PartShopMenu::onResize(Window& window)
-{
-
+	dynamic_cast<Button&>(getChildByName("buyButton")).setClickHandler(std::tr1::bind(&PartShopMenu::buyHandler,this));
+	dynamic_cast<Listbox&>(getChildByName("partBox")).setChangeHandler(std::tr1::bind(&PartShopMenu::partChange, this));
 }
 
 void PartShopMenu::categoryChangeHandler()
-{	
+{
+	Listbox& partBox = dynamic_cast<Listbox&>(getChildByName("partBox"));
+	Listbox& categoryBox = dynamic_cast<Listbox&>(getChildByName("categoryBox"));
+	
 	partBox.clearItems();
 	
 	std::vector<std::string> ids = connection.getShopParts().getKeys();	
@@ -100,6 +66,9 @@ void PartShopMenu::categoryChangeHandler()
 
 void PartShopMenu::partChange()
 {
+	Listbox& partBox = dynamic_cast<Listbox&>(getChildByName("partBox"));
+	Label& partInfo = dynamic_cast<Label&>(getChildByName("partInfo"));
+	
 	std::vector<std::string> ids = connection.getShopParts().getKeys();	
 	
 	Protocol::ShopPart part = connection.getShopParts().getItem(ids[partBox.getCurrentItemTag()]);
@@ -115,6 +84,8 @@ void PartShopMenu::partChange()
 
 void PartShopMenu::buyHandler()
 {
+	Listbox& partBox = dynamic_cast<Listbox&>(getChildByName("partBox"));
+	
 	std::vector<std::string> ids = connection.getShopParts().getKeys();	
 	
 	if(partBox.getCurrentItemTag() != -1)

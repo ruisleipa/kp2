@@ -10,7 +10,7 @@ class Select : public ActiveTextWidget
 {
 	public:
 		virtual void handleEvent(Event* event);
-			
+		
 		void setChangeHandler(std::tr1::function<void()> handler);
 		
 		void addItem(std::string item);
@@ -27,7 +27,7 @@ class Select : public ActiveTextWidget
 		int selectedIndex;
 		std::vector<std::wstring> items;
 		
-		std::tr1::function<void()> changeHandler;		
+		std::tr1::function<void()> changeHandler;
 };
 
 #endif // SELECT_HPP

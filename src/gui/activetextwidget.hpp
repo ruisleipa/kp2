@@ -16,7 +16,7 @@ class ActiveTextWidget : public TextWidget
 		
 		virtual void handleEvent(Event* event);
 		
-		virtual void autoSize();
+		virtual Vector2D getAutoSize();
 		
 		ActiveTextWidget();
 	

@@ -1,14 +1,8 @@
-#ifndef CARLISTMENU_HPP
-#define CARLISTMENU_HPP
-
-#include "playervehiclewidget.hpp"
+#ifndef GUI_CARLISTMENU_HPP
+#define GUI_CARLISTMENU_HPP
 
 #include "gui/menu.hpp"
-#include "gui/label.hpp"
-#include "gui/button.hpp"
-#include "gui/listbox.hpp"
-#include "gui/rowlayoutcontainer.hpp"
-#include "gui/columnlayoutcontainer.hpp"
+#include "gui/widgetloader.hpp"
 
 class Connection;
 
@@ -26,16 +20,7 @@ class CarListMenu : public Menu
 	
 		Connection& connection;
 		
-		ColumnLayoutContainer mainContainer;
-		
-		Listbox carList;
-		
-		RowLayoutContainer infoContainer;
-		
-		PlayerVehicleWidget vehicleInfo;
-
-		Button sellButton;		
-		Button selectButton;				
+		WidgetLoader loader;
 };
 
-#endif // CARLISTMENU_HPP
+#endif

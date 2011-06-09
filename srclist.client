@@ -57,6 +57,7 @@ SRC = \
 	src/gui/container.cpp \
 	src/gui/field.cpp \
 	src/gui/font.cpp \
+	src/gui/freecontainer.cpp \
 	src/gui/graph.cpp \
 	src/gui/image.cpp \
 	src/gui/label.cpp \
