@@ -2,6 +2,7 @@ SRC = \
 	src/client/careermenu.cpp \
 	src/client/connection.cpp \
 	src/client/fontloader.cpp \
+	src/client/gauge.cpp \
 	src/client/main.cpp \
 	src/client/mainmenu.cpp \
 	src/client/newlocalgamemenu.cpp \
@@ -13,7 +14,9 @@ SRC = \
 	src/client/partshopmenu.cpp \
 	src/client/performancemenu.cpp \
 	src/client/playervehiclewidget.cpp \
+	src/client/remotegamemenu.cpp \
 	src/client/installpartsmenu.cpp \
+	src/client/raceview.cpp \
 	src/debug/assert.cpp \
 	src/debug/crashcatcher.cpp \
 	src/debug/crashmessage.cpp \
@@ -27,6 +30,7 @@ SRC = \
 	src/events/events.cpp \
 	src/events/keyevent.cpp \
 	src/events/mouseevent.cpp \
+	src/exception/exception.cpp \
 	src/graphics/color.cpp \
 	src/graphics/fontface.cpp \
 	src/graphics/preparedtexture.cpp \

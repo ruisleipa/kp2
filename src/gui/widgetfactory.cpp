@@ -38,6 +38,10 @@ Widget* WidgetFactory::build(WidgetNode& node)
 		widget = new PlayerVehicleWidget();
 	else if(node.type == "Select")
 		widget = new Select();
+	else if(node.type == "Gauge")
+		widget = new Gauge();
+	else if(node.type == "Spacer")
+		widget = new Widget();
 	
 	if(dynamic_cast<LayoutContainer*>(widget))
 		applyAttributes(dynamic_cast<LayoutContainer*>(widget), node.attributes);
@@ -45,6 +49,8 @@ Widget* WidgetFactory::build(WidgetNode& node)
 		applyAttributes(dynamic_cast<TextWidget*>(widget), node.attributes);
 	if(dynamic_cast<Image*>(widget))
 		applyAttributes(dynamic_cast<Image*>(widget), node.attributes);
+	if(dynamic_cast<Gauge*>(widget))
+		applyAttributes(dynamic_cast<Gauge*>(widget), node.attributes);
 	if(dynamic_cast<Widget*>(widget))
 		applyAttributes(widget, node.attributes);
 	
@@ -80,15 +86,25 @@ void WidgetFactory::applyAttributes(Widget* widget, const IniFile& attributes)
 	widget->setName(attributes.getValueWithDefault("name", ""));
 	widget->setVisible(attributes.getValueWithDefault("visible", 1));
 }
-	
-	float width = attributes.getValueWithDefault("width", 0.0);
-	float height = attributes.getValueWithDefault("height", 0.0);
-	
-	std::string size = attributes.getValueWithDefault("size", "");
-	
-	if(size == "pixel")
-		widget->setPixelSize(Vector2D(width, height));
-	else if(size == "factor")
-		widget->setFactorSize(Vector2D(width, height));
+
+void WidgetFactory::applyAttributes(Gauge* gauge, const IniFile& attributes)
+{
+	float minValue = attributes.getValueWithDefault("minValue", 0.0);
+	float maxValue = attributes.getValueWithDefault("maxValue", 100.0);
+	float minAngle = attributes.getValueWithDefault("minAngle", 0.0);
+	float maxAngle = attributes.getValueWithDefault("maxAngle", 0.0);
+
+	gauge->setValueRange(minValue, maxValue);
+	gauge->setAngleRange(minAngle, maxAngle);
+
+	std::string gaugeFileName = attributes.getValueWithDefault("gauge", "");
+
+	if(gaugeFileName != "")
+		gauge->setGaugeTexture(Texture(gaugeFileName));
+
+	std::string needleFileName = attributes.getValueWithDefault("needle", "");
+
+	if(needleFileName != "")
+		gauge->setNeedleTexture(Texture(needleFileName));
 }
 

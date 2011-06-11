@@ -15,6 +15,7 @@ Packet& operator<<(Packet& packet,const Protocol::Vehicle& vehicle)
 	packet << vehicle.totalWeight;
 	packet << vehicle.price;
 	packet << vehicle.parts;
+	packet << vehicle.width;
 	
 	return packet;
 }
@@ -28,7 +29,8 @@ Packet& operator>>(Packet& packet,Protocol::Vehicle& vehicle)
 	packet >> vehicle.chassisWeight;
 	packet >> vehicle.totalWeight;
 	packet >> vehicle.price;
-	packet >> vehicle.parts;	
+	packet >> vehicle.parts;
+	packet >> vehicle.width;
 	
 	return packet;
 }

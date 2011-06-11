@@ -41,7 +41,7 @@ class Vehicle: public NonCopyable
 		};	
 		
 		double getPos(){return m_current_x.position;}
-		void setPos(double pos){m_current_x.position = pos;}	
+		void setPos(double pos){m_current_x.position = pos;}
 	
 		State& getState(){return m_current_x;}
 		State& getVel(){return m_current_v;}

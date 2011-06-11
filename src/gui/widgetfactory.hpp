@@ -22,6 +22,7 @@ class WidgetFactory
 		void applyAttributes(LayoutContainer* layoutContainer, const IniFile& attributes);
 		void applyAttributes(TextWidget* textWidget, const IniFile& attributes);
 		void applyAttributes(Image* image, const IniFile& attributes);
+		void applyAttributes(Gauge* widget, const IniFile& attributes);
 		void applyAttributes(Widget* widget, const IniFile& attributes);
 
 };

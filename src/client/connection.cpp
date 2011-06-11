@@ -16,6 +16,9 @@
 #include "protocol/installpart.hpp"
 #include "protocol/uninstallpart.hpp"
 
+#include "racestartevent.hpp"
+#include "racestateevent.hpp"
+
 #include "utils/sdl.hpp"
 
 #ifdef WIN32
@@ -59,6 +62,8 @@ void Connection::processMessages()
 			*/
 			return;
 		}
+		
+		eventPropagatedInNewWay = false;
 		
 		try
 		{
@@ -111,21 +116,33 @@ void Connection::processMessages()
 			{
 				message >> performanceData;
 			}
+			else if(message.getType() == Protocol::DATA_RACE_START)
+			{
+				RaceStartEvent event;
+				
+				propagateEvent(&event);
+			}
 			else if(message.getType() == Protocol::DATA_RACE_STATE)
 			{
 				Protocol::RaceState state;
-			
+				
 				message >> state;
 				
-				std::cout << "received race state: " << state.time << std::endl;
+				RaceStateEvent event;
+				event.state = state;
+				
+				propagateEvent(&event);
 			}
 			
-			std::vector<std::tr1::function<void(Connection&)> >::iterator i;
-			
-			for(i=eventHandlers.begin();i!=eventHandlers.end();++i)
+			if(eventPropagatedInNewWay == false)
 			{
-				(*i)(*this);
-			}	
+				std::vector<std::tr1::function<void(Connection&)> >::iterator i;
+				
+				for(i=eventHandlers.begin();i!=eventHandlers.end();++i)
+				{
+					(*i)(*this);
+				}
+			}
 		}
 		catch(EndOfDataException)
 		{
@@ -284,6 +301,29 @@ void Connection::startRace()
 	writeToServer(packet);
 }
 
+void Connection::sendRaceControlState(const Protocol::RaceControlState& state)
+{
+	Packet packet;
+	
+	packet.setType(Protocol::COMMAND_RACE_CONTROL_STATE);
+	
+	packet << state;
+	
+	writeToServer(packet);
+}
+
+void Connection::propagateEvent(Event* event)
+{
+	std::vector<EventListener*>::iterator i;
+
+	for(i = listeners.begin(); i != listeners.end(); ++i)
+	{
+		(*i)->handleEvent(event);
+	}
+	
+	eventPropagatedInNewWay = true;
+}
+
 void Connection::writeToServer(const Packet& packet)
 {
 	std::cout << "SENDING" << std::endl << packet << std::endl;
@@ -296,6 +336,11 @@ void Connection::writeToServer(const Packet& packet)
 void Connection::addEventHandler(std::tr1::function<void(Connection&)> handler)
 {
 	eventHandlers.push_back(handler);
+}
+
+void Connection::addEventListener(EventListener* listener)
+{
+	listeners.push_back(listener);
 }
 
 bool Connection::startLocalServer()
@@ -337,7 +382,8 @@ bool Connection::startLocalServer()
 }
 
 Connection::Connection():
-	activeVehicleId(0)
+	activeVehicleId(0),
+	eventPropagatedInNewWay(false)
 {
 	
 }		

@@ -14,8 +14,8 @@ const int BUFFERSIZE=512;
 class Connection
 {
 	public:
-		void processPackets(ClientSocket& socket);
-		void writePackets(ClientSocket& socket);
+		void processPackets();
+		void writePackets();
 		
 		void sendPlayerInfo();
 		void sendPlayers();
@@ -28,10 +28,13 @@ class Connection
 		void sendPerformanceData();
 		
 		void sendRaceState();
-	
-		Connection(GameState& gameState,int playerId);
+		void sendRaceStart();
 		
-	private:	
+		ClientSocket* getSocket();
+	
+		Connection(GameState& gameState, int playerId, ClientSocket& socket);
+		
+	private:
 		std::string receiveBuffer;
 		char scrapBuffer[BUFFERSIZE];
 		
@@ -39,6 +42,7 @@ class Connection
 		
 		GameState& gameState;
 		int playerId;
+		ClientSocket* socket;
 };
 
 #endif // CONNECTION_HPP

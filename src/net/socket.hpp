@@ -4,11 +4,18 @@
 #include <string>
 #include <set>
 
+#include "exception/exception.hpp"
+
 class SocketSet;
 
-class ConnectionClosedException
+class ConnectionClosedException : public Exception
 {
-
+	public:
+		ConnectionClosedException(const std::string& msg):
+			Exception(msg)
+		{
+		
+		}
 };
 
 class Socket

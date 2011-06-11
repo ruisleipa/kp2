@@ -36,14 +36,14 @@ bool Transmission::isOnNeutral()
 
 void Transmission::lowerGear()
 {
-	if(currentIndex != ratios.size() - 1)
-		currentIndex++;
+	if(currentIndex > 0)
+		currentIndex--;
 }
 
 void Transmission::upperGear()
 {
-	if(currentIndex > 0)
-		currentIndex--;
+	if(currentIndex != ratios.size() - 1)
+		currentIndex++;
 }
 
 float Transmission::getEfficiency()

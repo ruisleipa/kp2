@@ -17,13 +17,14 @@ void Race::update()
 	while(second.simulation->getTimeInSeconds() < realTime.getSeconds())
 		second.simulation->advance();
 	
+	const float QUARTER_MILE = 402.336;
+	const float finishLinePosition = QUARTER_MILE;
+	
+	float firstPosition = first.simulation->getPosition();
+	float secondPosition = second.simulation->getPosition();
+	
 	if(!winnerChosen)
 	{
-		const float finishLinePosition = 402.336;
-		
-		float firstPosition = first.simulation->getPosition();
-		float secondPosition = second.simulation->getPosition();
-		
 		if(firstPosition > finishLinePosition || secondPosition > finishLinePosition)
 		{
 			if(firstPosition > secondPosition)
@@ -34,6 +35,12 @@ void Race::update()
 		
 		winnerChosen = true;
 	}
+	
+	if(firstPosition > finishLinePosition)
+		first.simulation->setBrakeUsage(1.0);
+		
+	if(secondPosition > finishLinePosition)
+		second.simulation->setBrakeUsage(1.0);
 }
 
 VehicleSimulation* Race::getSimulationByPlayerId(int playerId)

@@ -36,6 +36,8 @@ class VehicleSimulation: public NonCopyable
 		void setThrottleUsage(float usage);
 		void setClutchUsage(float usage);
 		void setBrakeUsage(float usage);
+		void upperGear();
+		void lowerGear();
 		
 		VehicleSimulation(Vehicle& vehicle);
 		

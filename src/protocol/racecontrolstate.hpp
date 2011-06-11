@@ -11,6 +11,7 @@ namespace Protocol
 class RaceControlState
 {
 	public:
+		bool ignition;
 		float throttle;
 		float clutch;
 		float brake;

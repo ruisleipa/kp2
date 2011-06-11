@@ -1,6 +1,7 @@
 #include "engine.hpp"
 #include "math_tools.hpp"
 #include <cmath>
+#include <iostream>
 
 namespace Physics
 {
@@ -50,9 +51,11 @@ float Engine::getTorque()
 
 	float trq = 0.0;
 	float throttle = this->throttle;
-
+	
 	if ((speedInRpm <= idleRpm) && (throttle < idleThrottle))
 		throttle = idleThrottle;
+		
+	//std::cout << throttle << " " << idleRpm << " " << idleThrottle << " " << speedInRpm << " " << ignition << std::endl;
 
 	if(ignition)
 	{
@@ -71,7 +74,17 @@ float Engine::getTorque()
 		{		
 			float intakeRatio = freshMixtureMass / theoreticalMixtureMass;
 			
-			trq += torqueCurve.getValue(speedInRpm) * intakeRatio;
+			float curveValue = torqueCurve.getValue(speedInRpm);
+			
+			
+			
+			if(curveValue != curveValue)
+				curveValue = 0;
+				
+			//std::cout << curveValue << std::endl;
+			
+			
+			trq += torqueCurve.getValue(speedInRpm) * intakeRatio * throttle;
 		}
 	}
 		

@@ -3,6 +3,7 @@ SRC = src/debug/assert.cpp \
 	src/debug/crashmessage.cpp \
 	src/debug/stack.cpp \
 	src/debug/stacktrace.cpp \
+	src/exception/exception.cpp \
 	src/net/clientsocket.cpp \
 	src/net/packet.cpp \
 	src/net/serversocket.cpp \

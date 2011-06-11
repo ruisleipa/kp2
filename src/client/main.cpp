@@ -30,6 +30,10 @@
 #include "installpartsmenu.hpp"
 #include "performancemenu.hpp"
 
+#include "raceview.hpp"
+
+#include "racestartevent.hpp"
+
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
 
@@ -37,6 +41,26 @@
 #include "net/socket.hpp"
 
 #include "sounds/musicplayer.hpp"
+
+class RaceStartListener: public EventListener
+{
+	public:
+		void handleEvent(Event* event)
+		{
+			if(dynamic_cast<RaceStartEvent*>(event))
+				menus.showOnlyWidget("raceview");
+		}
+		
+		RaceStartListener(MenuContainer& menus):
+			menus(menus)
+		{
+		
+		}
+	
+	private:
+		MenuContainer& menus;
+		
+};
 
 void startGame()
 {
@@ -109,13 +133,19 @@ void startGame()
 	LocalGameMenu localGameMenu(menuContainer);
 	NewLocalGameMenu newLocalGameMenu(menuContainer, connection);	
 	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);	
+	RaceView raceView(connection);
+	connection.addEventListener(&raceView);
 	
 	menuContainer.addWidget("mainmenu",mainMenu);
 	menuContainer.addWidget("settingsmenu",settingsMenu);
 	menuContainer.addWidget("localgamemenu",localGameMenu);	
 	menuContainer.addWidget("newlocalgamemenu",newLocalGameMenu);	
 	menuContainer.addWidget("careermenu",careerMenu);	
+	menuContainer.addWidget("raceview",raceView);	
 	menuContainer.showOnlyWidget("mainmenu");
+	
+	RaceStartListener raceStartListener(menuContainer);
+	connection.addEventListener(&raceStartListener);
 	menuContainer.setSize(Vector2D(1,1));
 	
 	RootContainer rootContainer(window,events);	

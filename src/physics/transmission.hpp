@@ -13,7 +13,7 @@ class Transmission
 		bool isOnNeutral();
 		
 		void lowerGear();
-		void upperGear();		
+		void upperGear();
 		
 		float getEfficiency();
 		
