@@ -141,32 +141,6 @@ void Vehicle::getDerivates(State* p0, State* v0, State* a0)
 	{
 		double torqueFromTransmissionToEngine = clutch.getTorque(v0->gearbox_out * transmission.getRatio(), v0->m_flywheel);
 		
-		double torqueBeforeTransmission = fabs(gearbox_overall_torque / transmission.getRatio());
-		
-		//limit torque transfer to ensure that the direction of torque transfer doesn't change
-		
-		double sign = sgn(torqueFromTransmissionToEngine);
-		
-		torqueFromTransmissionToEngine = fabs(torqueFromTransmissionToEngine);
-		
-		double maxTransfer;
-		
-		if(sign > 0)
-			maxTransfer = torqueBeforeTransmission - engineTorque;
-		else
-			maxTransfer = engineTorque - torqueBeforeTransmission;
-		
-		maxTransfer /= 2.0;
-		
-		torqueFromTransmissionToEngine = std::min(torqueFromTransmissionToEngine, maxTransfer);
-		
-		torqueFromTransmissionToEngine = sign * torqueFromTransmissionToEngine;
-		
-		std::cout << engineTorque << " " << torqueBeforeTransmission << " " << torqueFromTransmissionToEngine << " " << maxTransfer << std::endl;
-		std::cout << clutch.getTorque(v0->gearbox_out * transmission.getRatio(), v0->m_flywheel) << std::endl;
-		
-		//torqueFromTransmissionToEngine = clutch.getTorque(v0->gearbox_out * transmission.getRatio(), v0->m_flywheel);
-		
 		gearbox_overall_torque -= torqueFromTransmissionToEngine * transmission.getRatio();
 		// check the sign
 		engineTorque += torqueFromTransmissionToEngine;
