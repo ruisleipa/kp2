@@ -1,11 +1,10 @@
 #include "vehicle.hpp"
 #include "math_tools.hpp"
 
+#include <algorithm>
 
 namespace Physics
 {
-
-const int TICKS_PER_SECOND = 300;
 
 const double g = 9.81;	//m/s
 
@@ -33,7 +32,8 @@ void Vehicle::State::add(double factor, State& dx)
 Vehicle::Vehicle(Engine& engine, Transmission& transmission, Clutch& clutch,
 	Chassis& chassis, Tire& frontLeftTire, Tire& frontRightTire,
 	Tire& backLeftTire, Tire& backRightTire, Brake& frontLeftBrake,
-	Brake& frontRightBrake,	Brake& backLeftBrake, Brake& backRightBrake
+	Brake& frontRightBrake, Brake& backLeftBrake, Brake& backRightBrake,
+	int ticksPerSecond
 	):
 	engine(engine),
 	transmission(transmission),
@@ -52,7 +52,8 @@ Vehicle::Vehicle(Engine& engine, Transmission& transmission, Clutch& clutch,
 	m_current_v(),
 	m_current_a(),
 	m_brake_usage(0.0),
-	step(0)
+	step(0),
+	TICKS_PER_SECOND(ticksPerSecond)
 {
 
 }
@@ -83,21 +84,12 @@ void Vehicle::getDerivates(State* p0, State* v0, State* a0)
 	// absolute value of the longitudinal speed
 	double _abs_veh_vel_ = dabs(velocity);
 
-	double engine_overall_torque = 0.0;
+	double engineTorque = 0.0;
 	double gearbox_overall_torque = 0.0;	
 		
-	// Consider how to get the gear ratio
-	if(!transmission.isOnNeutral())
-	{
-		double clutch_torque_deliver = clutch.getTorque(v0->gearbox_out * transmission.getRatio(), v0->m_flywheel);
-		gearbox_overall_torque = -clutch_torque_deliver * transmission.getRatio();
-		// check the sign
-		engine_overall_torque += clutch_torque_deliver;
-	}
-
 	engine.setSpeed(v0->m_flywheel * RADS_TO_RPM);
 	
-	engine_overall_torque += engine.getTorque();
+	engineTorque += engine.getTorque();
 	
 	// determine the slip ratio, notice, that this won't get your car
 	// moving if your pacjeka curve reaches zero when sr != 0
@@ -110,7 +102,7 @@ void Vehicle::getDerivates(State* p0, State* v0, State* a0)
 	}
 	else
 	{
-		frontLeftTire.setSlipRatio(v0->m_f_l_tire *	frontLeftTire.getRadius() * 10000.0);
+		frontLeftTire.setSlipRatio(v0->m_f_l_tire * frontLeftTire.getRadius() * 10000.0);
 		frontRightTire.setSlipRatio(v0->m_f_r_tire * frontRightTire.getRadius() * 10000.0);
 		backLeftTire.setSlipRatio(r_l_tire * backLeftTire.getRadius() * 10000.0);
 		backRightTire.setSlipRatio(r_r_tire * backRightTire.getRadius() * 10000.0);
@@ -132,22 +124,29 @@ void Vehicle::getDerivates(State* p0, State* v0, State* a0)
 	// aerodynamic drag
 	total_force -= velocity * velocity * chassis.dragCoefficient;
 
-	double rear_left_trq = backLeftBrake.getTorque(m_brake_usage,r_l_tire) - backLeftTire.getRadius() * r_l_traction_force;
-	double rear_right_trq = backRightBrake.getTorque(m_brake_usage,r_r_tire) - backRightTire.getRadius() * r_r_traction_force;
+	double rear_left_trq = backLeftBrake.getTorque(r_l_tire) - backLeftTire.getRadius() * r_l_traction_force;
+	double rear_right_trq = backRightBrake.getTorque(r_r_tire) - backRightTire.getRadius() * r_r_traction_force;
 
-	double front_left_trq =	frontLeftBrake.getTorque(m_brake_usage,v0->m_f_l_tire) - frontLeftTire.getRadius() * f_l_traction_force;
-	double front_right_trq = frontRightBrake.getTorque(m_brake_usage,v0->m_f_r_tire) - frontRightTire.getRadius() * f_r_traction_force;
+	double front_left_trq = frontLeftBrake.getTorque(v0->m_f_l_tire) - frontLeftTire.getRadius() * f_l_traction_force;
+	double front_right_trq = frontRightBrake.getTorque(v0->m_f_r_tire) - frontRightTire.getRadius() * f_r_traction_force;
 
 	// + diff_lock(v0.m_planet_gear);
 	double rearaxle_trq = rear_right_trq - rear_left_trq;
 
 	// this model needs to do with transmission loss of energy!
 	gearbox_overall_torque += (rear_left_trq + rear_right_trq) / transmission.getDifferentialRatio();
-
 	
+	// Consider how to get the gear ratio
+	if(!transmission.isOnNeutral())
+	{
+		double torqueFromTransmissionToEngine = clutch.getTorque(v0->gearbox_out * transmission.getRatio(), v0->m_flywheel);
+		
+		gearbox_overall_torque -= torqueFromTransmissionToEngine * transmission.getRatio();
+		// check the sign
+		engineTorque += torqueFromTransmissionToEngine;
+	}
 	
-	
-	a0->m_flywheel = engine_overall_torque / engine.getFlywheelInertia();
+	a0->m_flywheel = engineTorque / engine.getFlywheelInertia();
 	a0->gearbox_out = gearbox_overall_torque /
 		(
 		 	transmission.getDriveshaftInertia() +

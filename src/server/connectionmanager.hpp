@@ -32,7 +32,6 @@ class ConnectionManager
 		GameState& gameState;
 		
 		std::map<ClientSocket*, Connection> connections;
-		
 		std::list<ClientSocket> sockets;
 		
 		SocketSet socketSet;

@@ -221,9 +221,8 @@ int Socket::readImpl(char* data,int size)
 		if(errno!=EWOULDBLOCK)	
 #endif
 		{
-			std::cerr<<"Reading from socket failed: "<<getErrorMessage()<<std::endl;
 			close();
-			throw ConnectionClosedException();
+			throw ConnectionClosedException("Reading failed: " + getErrorMessage());
 		}
 		
 		return 0;
@@ -232,7 +231,7 @@ int Socket::readImpl(char* data,int size)
 	if(res==0)
 	{
 		close();
-		throw ConnectionClosedException();
+		throw ConnectionClosedException("Connection closed gracefully.");
 	}
 	
 	return res;
@@ -367,7 +366,8 @@ void Socket::commitWrite()
 			if(errno!=EWOULDBLOCK)	
 #endif
 			{
-				std::cerr<<"Writing to socket failed: "<<getErrorMessage()<<std::endl;	
+				close();
+				throw ConnectionClosedException("Writing failed: " + getErrorMessage());
 			}
 			
 			return;

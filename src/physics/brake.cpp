@@ -6,7 +6,7 @@
 namespace Physics
 {
 
-float Brake::getTorque(float usage, float discSpeed)
+float Brake::getTorque(float discSpeed)
 {
 	float absoluteTorque = usage * coefficientOfFriction * fabs(discSpeed);
 	
@@ -16,10 +16,16 @@ float Brake::getTorque(float usage, float discSpeed)
 	return absoluteTorque * -sgn(discSpeed);
 }
 
+void Brake::setUsage(float usage)
+{
+	this->usage = usage;
+}
+
 Brake::Brake(float coefficientOfFriction, float maxTorque):
 	coefficientOfFriction(coefficientOfFriction),
-	maxTorque(maxTorque)
-{	
+	maxTorque(maxTorque),
+	usage(0)
+{
 
 }
 

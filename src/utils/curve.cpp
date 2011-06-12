@@ -9,8 +9,6 @@
 void Curve::addPoint(int position, float value)
 {
 	points[position] = value;
-	
-	std::cout << position << "->" << value << std::endl;
 }
 
 float Curve::getValue(float position) const

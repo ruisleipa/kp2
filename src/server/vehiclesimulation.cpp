@@ -24,7 +24,7 @@ float VehicleSimulation::getPosition()
 
 float VehicleSimulation::getSpeed()
 {
-	return 0;
+	return physicsVehicle.getVel().position;
 }
 
 float VehicleSimulation::getEngineTorque()
@@ -39,7 +39,7 @@ float VehicleSimulation::getEngineSpeedInRpm()
 
 float VehicleSimulation::getBoostPressure()
 {
-	return charger.getPressure();
+	return charger.getPressure() / 100000.0;
 }
 
 float VehicleSimulation::getIntakeTemperature()
@@ -74,7 +74,17 @@ void VehicleSimulation::setClutchUsage(float usage)
 
 void VehicleSimulation::setBrakeUsage(float usage)
 {
+	brake.setUsage(usage);
+}
 
+void VehicleSimulation::upperGear()
+{
+	transmission.upperGear();
+}
+
+void VehicleSimulation::lowerGear()
+{
+	transmission.lowerGear();
 }
 
 const Engine& VehicleSimulation::findEngine()
@@ -124,14 +134,20 @@ const Charger* VehicleSimulation::findCharger()
 std::vector<float> VehicleSimulation::getGearRatios()
 {
 	std::vector<float> gearRatios;
+	gearRatios.push_back(-2.86);
 	gearRatios.push_back(0);
+	gearRatios.push_back(3.9);
+	gearRatios.push_back(2.6);
+	gearRatios.push_back(1.9);
+	gearRatios.push_back(1.5);
+	gearRatios.push_back(1.3);
 	
 	return gearRatios;
 }
 
 int VehicleSimulation::getNeutralGearIndex()
 {
-	return 0;
+	return 1;
 }
 
 float VehicleSimulation::getIdleSpeed()
@@ -141,10 +157,10 @@ float VehicleSimulation::getIdleSpeed()
 
 float VehicleSimulation::getSpeedLimit()
 {
-	return 8000;
+	return 6000;
 }
 
-VehicleSimulation::VehicleSimulation(Vehicle& vehicle):
+VehicleSimulation::VehicleSimulation(Vehicle& vehicle, int ticksPerSecond):
 	vehicle(vehicle),
 	enginePart(findEngine()),
 	intakeManifoldPart(findIntakeManifold()),
@@ -154,7 +170,7 @@ VehicleSimulation::VehicleSimulation(Vehicle& vehicle):
 	airFilter(atmosphere, 1000000),
 	charger(airFilter, 0, 0, 0),
 	intakeManifold(airFilter, intakeManifoldPart.getFlow()),
-	engine(enginePart.getTorqueCurve(), 1.0, 4, intakeManifold, getIdleSpeed(), 0.3, getSpeedLimit(), 2000, 0.22),
+	engine(enginePart.getTorqueCurve(), 1.0, 4, intakeManifold, getIdleSpeed(), 0.1, getSpeedLimit(), 2000, 0.22),
 	exhaustManifold(engine, exhaustManifoldPart.getFlow()),
 	transmission(getGearRatios(), getNeutralGearIndex(), 0.8, 4.22, 0.1),
 	clutch(600),
@@ -163,8 +179,8 @@ VehicleSimulation::VehicleSimulation(Vehicle& vehicle):
 	frontRightTire(9, 0.3048, 0.015),
 	backLeftTire(9, 0.3048, 0.015),
 	backRightTire(9, 0.3048, 0.015),
-	brake(0.8, 6000),
-	physicsVehicle(engine, transmission, clutch, chassis, frontLeftTire, frontRightTire, backLeftTire, backRightTire, brake, brake, brake, brake)
+	brake(90, 600000),
+	physicsVehicle(engine, transmission, clutch, chassis, frontLeftTire, frontRightTire, backLeftTire, backRightTire, brake, brake, brake, brake, ticksPerSecond)
 {
 	if(chargerPart)
 	{
@@ -174,8 +190,6 @@ VehicleSimulation::VehicleSimulation(Vehicle& vehicle):
 	
 	float idleSpeed = 1000;
 	float speedLimit = 8000;
-	
-	Physics::Chassis chassis;
 	
 	chassis.totalMass = vehicle.getWeight();
 	chassis.massOnRear = vehicle.getWeight() / 2.0;

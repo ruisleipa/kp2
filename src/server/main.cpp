@@ -73,6 +73,7 @@ void startServer(int argc,char** argv)
 				Connection& connection = connectionManager.getConnectionByIndex(i);
 				
 				connection.sendRaceState();
+				connection.writePackets();
 			}
 			
 			raceUpdateTimer.reset();

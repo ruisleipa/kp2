@@ -9,6 +9,7 @@
 
 #include "protocol/protocol.hpp"
 #include "net/clientsocket.hpp"
+#include "events/eventlistener.hpp"
 
 class Packet;
 
@@ -23,6 +24,7 @@ class Connection
 		void processMessages();
 		
 		void addEventHandler(std::tr1::function<void(Connection&)> handler);
+		void addEventListener(EventListener* listener);
 		
 		Connection();
 		
@@ -49,11 +51,16 @@ class Connection
 		void uninstallPart(int vehiclePartId);
 		
 		void startRace();
+		void sendRaceControlState(const Protocol::RaceControlState& state);
 		
 	private:
+		void propagateEvent(Event* event);
+	
 		void writeToServer(const Packet& packet);
 
 		std::vector<std::tr1::function<void(Connection&)> > eventHandlers;
+		
+		std::vector<EventListener*> listeners;
 		
 		ClientSocket socket;
 		
@@ -69,6 +76,8 @@ class Connection
 		Protocol::PlayerParts playerParts;
 		Protocol::VehicleId activeVehicleId;
 		Protocol::PerformanceData performanceData;
+		
+		bool eventPropagatedInNewWay;
 };
 
 #endif

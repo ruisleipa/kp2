@@ -108,7 +108,9 @@ void GameState::startRace(int firstPlayer, int secondPlayer)
 	Player& player = getPlayer(firstPlayer);
 	Vehicle& vehicle = player.getVehicle(player.getActiveVehicleId());
 	
-	std::tr1::shared_ptr<VehicleSimulation> simulation(new VehicleSimulation(vehicle));
+	const int ticksPerSecond = 5000;
+	
+	std::tr1::shared_ptr<VehicleSimulation> simulation(new VehicleSimulation(vehicle, ticksPerSecond));
 	
 	raceSimulations.push_back(simulation);
 	

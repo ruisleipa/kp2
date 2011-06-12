@@ -36,8 +36,10 @@ class VehicleSimulation: public NonCopyable
 		void setThrottleUsage(float usage);
 		void setClutchUsage(float usage);
 		void setBrakeUsage(float usage);
+		void upperGear();
+		void lowerGear();
 		
-		VehicleSimulation(Vehicle& vehicle);
+		VehicleSimulation(Vehicle& vehicle, int ticksPerSecond = 100);
 		
 	private:
 		const Engine& findEngine();

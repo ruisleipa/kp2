@@ -17,6 +17,7 @@
 #include "gui/menucontainer.hpp"
 #include "gui/tabbedmenu.hpp"
 
+#include "remotegamemenu.hpp"
 #include "newlocalgamemenu.hpp"
 #include "localgamemenu.hpp"
 #include "mainmenu.hpp"
@@ -30,6 +31,10 @@
 #include "installpartsmenu.hpp"
 #include "performancemenu.hpp"
 
+#include "raceview.hpp"
+
+#include "racestartevent.hpp"
+
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
 
@@ -37,6 +42,26 @@
 #include "net/socket.hpp"
 
 #include "sounds/musicplayer.hpp"
+
+class RaceStartListener: public EventListener
+{
+	public:
+		void handleEvent(Event* event)
+		{
+			if(dynamic_cast<RaceStartEvent*>(event))
+				menus.showOnlyWidget("raceview");
+		}
+		
+		RaceStartListener(MenuContainer& menus):
+			menus(menus)
+		{
+		
+		}
+	
+	private:
+		MenuContainer& menus;
+		
+};
 
 void startGame()
 {
@@ -108,18 +133,25 @@ void startGame()
 	SettingsMenu settingsMenu(menuContainer, window, musicPlayer);
 	LocalGameMenu localGameMenu(menuContainer);
 	NewLocalGameMenu newLocalGameMenu(menuContainer, connection);	
+	RemoteGameMenu remoteGameMenu(menuContainer, connection);	
 	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);	
+	RaceView raceView(connection);
+	connection.addEventListener(&raceView);
 	
 	menuContainer.addWidget("mainmenu",mainMenu);
 	menuContainer.addWidget("settingsmenu",settingsMenu);
 	menuContainer.addWidget("localgamemenu",localGameMenu);	
 	menuContainer.addWidget("newlocalgamemenu",newLocalGameMenu);	
+	menuContainer.addWidget("remotegamemenu",remoteGameMenu);	
 	menuContainer.addWidget("careermenu",careerMenu);	
+	menuContainer.addWidget("raceview",raceView);	
 	menuContainer.showOnlyWidget("mainmenu");
-	menuContainer.setSize(Vector2D(1,1));
+	
+	RaceStartListener raceStartListener(menuContainer);
+	connection.addEventListener(&raceStartListener);
 	
 	RootContainer rootContainer(window,events);	
-	rootContainer.addWidget(menuContainer);
+	rootContainer.addWidget(menuContainer, "0px", "0px", "100%", "100%");
 	
 	rootContainer.resize(window);
 	
@@ -191,9 +223,11 @@ int main(int argc,char** argv)
 		
 		crashMessage.showMessage();
 	}
-	catch(std::exception error)
+	catch(std::exception& error)
 	{
 		std::cerr << "Error: " << error.what() << std::endl;
+		
+		std::cerr << typeid(error).name() << std::endl;
 		
 		crashMessage.showMessage();
 	}

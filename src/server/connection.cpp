@@ -25,11 +25,11 @@
 #include <iostream>
 #include <limits>
 
-void Connection::processPackets(ClientSocket& socket)
+void Connection::processPackets()
 {
 	int bytesRead;
 
-	while((bytesRead = socket.read(scrapBuffer, BUFFERSIZE)) > 0)
+	while((bytesRead = socket->read(scrapBuffer, BUFFERSIZE)) > 0)
 	{
 		receiveBuffer.append(scrapBuffer, bytesRead);
 	}
@@ -140,6 +140,8 @@ void Connection::processPackets(ClientSocket& socket)
 			else if(type == Protocol::COMMAND_RACE_START)
 			{			
 				gameState.startRace(playerId, 0);
+				
+				sendRaceStart();
 			}
 			else if(type == Protocol::COMMAND_RACE_CONTROL_STATE)
 			{			
@@ -151,8 +153,21 @@ void Connection::processPackets(ClientSocket& socket)
 					
 					packet >> state;
 					
+					/*std::cout << "throttle:" << state.throttle << std::endl;
+					std::cout << "ignition:" << state.ignition << std::endl;
+					std::cout << "clutch:" << state.clutch << std::endl;
+					std::cout << "gearDown:" << state.gearDown << std::endl;
+					std::cout << "gearUp:" << state.gearUp << std::endl;
+					*/
+					if(state.gearDown)
+						simulation->lowerGear();
+					
+					if(state.gearUp)
+						simulation->upperGear();
+					
 					simulation->setThrottleUsage(state.throttle);
 					simulation->setClutchUsage(state.clutch);
+					simulation->setIgnition(state.ignition);
 				}
 			}
 		}
@@ -181,22 +196,19 @@ void Connection::processPackets(ClientSocket& socket)
 		}
 	}
 	
-	writePackets(socket);
+	writePackets();
 }
 
-void Connection::writePackets(ClientSocket& socket)
+void Connection::writePackets()
 {
 	while(sendQueue.size() > 0)
 	{
 		std::string packetString = sendQueue.front().getString();
 		
-		socket.write(packetString.c_str(), packetString.size());
+		socket->write(packetString.c_str(), packetString.size());
 		
 		sendQueue.pop();
 	}
-	
-	//if(socket.isWritePending())
-	//	socket.commitWrite();
 }
 
 void Connection::sendPlayerInfo()
@@ -337,6 +349,7 @@ void Connection::sendPlayerVehicles()
 		playerVehicle.chassisWeight = vehicle.getModel().getChassisWeight();
 		playerVehicle.totalWeight = vehicle.getWeight();
 		playerVehicle.price = vehicle.getModel().getPrice();
+		playerVehicle.width = vehicle.getModel().getWidth();
 		
 		for(size_t j = 0; j < vehicle.getPartCount(); ++j)
 		{
@@ -479,13 +492,33 @@ void Connection::sendRaceState()
 		
 		sendQueue.push(packet);
 		
-		std::cout << "sending simulation state: " << simulation->getTimeInSeconds() << std::endl;
+		//std::cout << "sending simulation state: " << simulation->getTimeInSeconds() << std::endl;
 	}
 }
 
-Connection::Connection(GameState& gameState,int playerId):
+void Connection::sendRaceStart()
+{
+	Packet packet;
+	
+	packet.setType(Protocol::DATA_RACE_START);
+	
+	Protocol::RaceStart start;
+
+	packet << start;
+	
+	sendQueue.push(packet);
+}
+
+
+ClientSocket* Connection::getSocket()
+{
+	return socket;
+}
+
+Connection::Connection(GameState& gameState, int playerId, ClientSocket& socket):
 	gameState(gameState),
-	playerId(playerId)	
+	playerId(playerId),
+	socket(&socket)
 {
 	sendPlayerInfo();
 	sendPlayers();

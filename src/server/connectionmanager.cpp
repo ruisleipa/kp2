@@ -20,8 +20,8 @@ void ConnectionManager::processConnections(float timeoutInSeconds)
 			{
 				if(activity.canRead)
 					readFromSocket(dynamic_cast<ClientSocket*>(activity.socket));
-				if(activity.canWrite)
-					writeToSocket(dynamic_cast<ClientSocket*>(activity.socket));
+				
+				writeToSocket(dynamic_cast<ClientSocket*>(activity.socket));
 			}
 		}
 	}
@@ -60,10 +60,9 @@ void ConnectionManager::acceptConnection()
 	Player player("pelaaja", 20000);
 	int playerId = gameState.addPlayer(player);
 	
-	Connection connection(gameState, playerId);
-	
 	sockets.push_back(socket);
 	
+	Connection connection(gameState, playerId, sockets.back());
 	connections.insert(std::make_pair(&sockets.back(), connection));
 	socketSet.add(&sockets.back());
 }
@@ -74,10 +73,15 @@ void ConnectionManager::readFromSocket(ClientSocket* socket)
 	
 	try
 	{
-		connection.processPackets(*socket);
+		connection.processPackets();
 	}
-	catch(ConnectionClosedException)
+	catch(ConnectionClosedException& e)
 	{
+		std::cerr << typeid(e).name();
+		std::cerr << ": ";
+		std::cerr << e.getMessage();
+		std::cerr << std::endl;
+		
 		closeConnectionBySocket(socket);
 	}
 }
@@ -88,10 +92,15 @@ void ConnectionManager::writeToSocket(ClientSocket* socket)
 	
 	try
 	{
-		connection.writePackets(*socket);
+		connection.writePackets();
 	}
-	catch(ConnectionClosedException)
+	catch(ConnectionClosedException& e)
 	{
+		std::cerr << typeid(e).name();
+		std::cerr << ": ";
+		std::cerr << e.getMessage();
+		std::cerr << std::endl;
+	
 		closeConnectionBySocket(socket);
 	}
 }

@@ -23,6 +23,7 @@ class Vehicle
 		uint32_t chassisWeight;
 		uint32_t totalWeight;
 		uint32_t price;
+		float width;
 		
 		Protocol::Collection<Protocol::PartId, Protocol::Part> parts;
 		
