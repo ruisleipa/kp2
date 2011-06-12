@@ -84,7 +84,7 @@ float Engine::getTorque()
 			//std::cout << curveValue << std::endl;
 			
 			
-			trq += torqueCurve.getValue(speedInRpm) * intakeRatio * throttle;
+			trq += curveValue * intakeRatio * throttle;
 		}
 	}
 		
