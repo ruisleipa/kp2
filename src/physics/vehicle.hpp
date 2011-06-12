@@ -24,7 +24,7 @@ class Vehicle: public NonCopyable
 			Chassis& chassis, Tire& frontLeftTire, Tire& frontRightTire,
 			Tire& backLeftTire, Tire& backRightTire, Brake& frontLeftBrake,
 			Brake& frontRightBrake, Brake& backLeftBrake,
-			Brake& backRightBrake);
+			Brake& backRightBrake, int ticksPerSecond);
 		
 		class State
 		{
@@ -77,6 +77,8 @@ class Vehicle: public NonCopyable
 		float m_brake_usage;
 		
 		int step;
+		
+		const int TICKS_PER_SECOND;
 };
 
 };

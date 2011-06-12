@@ -39,7 +39,7 @@ class VehicleSimulation: public NonCopyable
 		void upperGear();
 		void lowerGear();
 		
-		VehicleSimulation(Vehicle& vehicle);
+		VehicleSimulation(Vehicle& vehicle, int ticksPerSecond = 100);
 		
 	private:
 		const Engine& findEngine();

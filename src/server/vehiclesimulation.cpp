@@ -160,7 +160,7 @@ float VehicleSimulation::getSpeedLimit()
 	return 6000;
 }
 
-VehicleSimulation::VehicleSimulation(Vehicle& vehicle):
+VehicleSimulation::VehicleSimulation(Vehicle& vehicle, int ticksPerSecond):
 	vehicle(vehicle),
 	enginePart(findEngine()),
 	intakeManifoldPart(findIntakeManifold()),
@@ -180,7 +180,7 @@ VehicleSimulation::VehicleSimulation(Vehicle& vehicle):
 	backLeftTire(9, 0.3048, 0.015),
 	backRightTire(9, 0.3048, 0.015),
 	brake(90, 600000),
-	physicsVehicle(engine, transmission, clutch, chassis, frontLeftTire, frontRightTire, backLeftTire, backRightTire, brake, brake, brake, brake)
+	physicsVehicle(engine, transmission, clutch, chassis, frontLeftTire, frontRightTire, backLeftTire, backRightTire, brake, brake, brake, brake, ticksPerSecond)
 {
 	if(chargerPart)
 	{

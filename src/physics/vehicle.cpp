@@ -6,8 +6,6 @@
 namespace Physics
 {
 
-const int TICKS_PER_SECOND = 60;
-
 const double g = 9.81;	//m/s
 
 Vehicle::State::State():
@@ -34,7 +32,8 @@ void Vehicle::State::add(double factor, State& dx)
 Vehicle::Vehicle(Engine& engine, Transmission& transmission, Clutch& clutch,
 	Chassis& chassis, Tire& frontLeftTire, Tire& frontRightTire,
 	Tire& backLeftTire, Tire& backRightTire, Brake& frontLeftBrake,
-	Brake& frontRightBrake,	Brake& backLeftBrake, Brake& backRightBrake
+	Brake& frontRightBrake, Brake& backLeftBrake, Brake& backRightBrake,
+	int ticksPerSecond
 	):
 	engine(engine),
 	transmission(transmission),
@@ -53,7 +52,8 @@ Vehicle::Vehicle(Engine& engine, Transmission& transmission, Clutch& clutch,
 	m_current_v(),
 	m_current_a(),
 	m_brake_usage(0.0),
-	step(0)
+	step(0),
+	TICKS_PER_SECOND(ticksPerSecond)
 {
 
 }
