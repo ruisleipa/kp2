@@ -6,6 +6,8 @@
 #include "graph.hpp"
 #include "listbox.hpp"
 #include "select.hpp"
+#include "verticalscrollbar.hpp"
+#include "horizontalscrollbar.hpp"
 #include "graphics/texture.hpp"
 #include "columnlayoutcontainer.hpp"
 #include "rowlayoutcontainer.hpp"
@@ -42,6 +44,10 @@ Widget* WidgetFactory::build(WidgetNode& node)
 		widget = new Gauge();
 	else if(node.type == "Spacer")
 		widget = new Widget();
+	else if(node.type == "VerticalScrollBar")
+		widget = new VerticalScrollBar();
+	else if(node.type == "HorizontalScrollBar")
+		widget = new HorizontalScrollBar();
 	
 	if(dynamic_cast<LayoutContainer*>(widget))
 		applyAttributes(dynamic_cast<LayoutContainer*>(widget), node.attributes);

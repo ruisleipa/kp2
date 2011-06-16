@@ -71,6 +71,9 @@ SRC = \
 	src/gui/menucontainer.cpp \
 	src/gui/rootcontainer.cpp \
 	src/gui/rowlayoutcontainer.cpp \
+	src/gui/scrollbar.cpp \
+	src/gui/horizontalscrollbar.cpp \
+	src/gui/verticalscrollbar.cpp \
 	src/gui/select.cpp \
 	src/gui/tabbedmenu.cpp \
 	src/gui/textwidget.cpp \
