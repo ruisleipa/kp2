@@ -1,5 +1,5 @@
-#ifndef WIDGET_HPP
-#define WIDGET_HPP
+#ifndef GUI_WIDGET_HPP
+#define GUI_WIDGET_HPP
 
 #include "graphics/vector2d.hpp"
 #include "graphics/window.hpp"
@@ -29,10 +29,12 @@ class Widget: public EventListener, public NonCopyable
 		void setBackgroundColor(const Color& color);
 		const Color& getBackgroundColor();
 
-		virtual void handleEvent(Event* event);
+		Vector2D getLatestSize();
 		
 		void setToolTip(std::string str);
 		
+		virtual void handleEvent(Event* event);
+
 		Widget();
 		virtual ~Widget();
 		
@@ -47,14 +49,12 @@ class Widget: public EventListener, public NonCopyable
 		
 		Color backgroundColor;
 		
-		friend class Container;
+		Vector2D latestSize;
 		
 		std::string toolTip;		
 		Timer toolTipTimer;
 		Vector2D mousePosition;
 		bool mouseOn;
 };
-
-#include "container.hpp"
 
 #endif

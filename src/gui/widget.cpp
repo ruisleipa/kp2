@@ -56,6 +56,11 @@ const Color& Widget::getBackgroundColor()
 	return backgroundColor;
 }
 
+Vector2D Widget::getLatestSize()
+{
+	return latestSize;
+}
+
 void Widget::setToolTip(std::string str)
 {
 	toolTip = str;
