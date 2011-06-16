@@ -11,6 +11,7 @@
 #include "events/drawevent.hpp"
 
 #include "utils/noncopyable.hpp"
+#include "utils/timer.hpp"
 
 class Container;
 
@@ -30,12 +31,15 @@ class Widget: public EventListener, public NonCopyable
 
 		virtual void handleEvent(Event* event);
 		
+		void setToolTip(std::string str);
 		
 		Widget();
 		virtual ~Widget();
 		
 	private:
 		void handleDrawEvent(DrawEvent* event);
+		void handleMouseMoveEvent(MouseMoveEvent* event);
+		void handleMouseOutEvent(MouseOutEvent* event);
 		
 		std::string name;
 		
@@ -44,8 +48,13 @@ class Widget: public EventListener, public NonCopyable
 		Color backgroundColor;
 		
 		friend class Container;
+		
+		std::string toolTip;		
+		Timer toolTipTimer;
+		Vector2D mousePosition;
+		bool mouseOn;
 };
 
 #include "container.hpp"
 
-#endif // WIDGET_HPP
+#endif

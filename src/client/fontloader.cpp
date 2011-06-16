@@ -28,6 +28,7 @@ FontLoader::FontLoader(Window& window):
 	Font::setFontType("Field", font, NORMAL);
 	Font::setFontType("Listbox", smallFont, NORMAL);
 	Font::setFontType("Graph", tinyFont, NORMAL);
+	Font::setFontType("tooltip", tinyFont, NORMAL);
 }
 
 void FontLoader::freeTextures()

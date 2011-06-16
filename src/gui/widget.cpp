@@ -5,6 +5,10 @@
 #include <GL/glew.h>
 
 #include "graphics/texture.hpp"
+#include "utils/string.hpp"
+#include "font.hpp"
+
+const float TOOLTIP_TIME = 1.5;
 
 const std::string& Widget::getName()
 {
@@ -52,15 +56,25 @@ const Color& Widget::getBackgroundColor()
 	return backgroundColor;
 }
 
+void Widget::setToolTip(std::string str)
+{
+	toolTip = str;
+}
+
 void Widget::handleEvent(Event* event)
 {
 	if(dynamic_cast<DrawEvent*>(event))
 		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
+	if(dynamic_cast<MouseMoveEvent*>(event))
+		handleMouseMoveEvent(dynamic_cast<MouseMoveEvent*>(event));
+	if(dynamic_cast<MouseOutEvent*>(event))
+		handleMouseOutEvent(dynamic_cast<MouseOutEvent*>(event));
 }
 
 Widget::Widget():
 	visible(true),
-	backgroundColor(1,1,1,0)
+	backgroundColor(1,1,1,0),
+	mouseOn(false)
 {
 
 }
@@ -85,4 +99,57 @@ void Widget::handleDrawEvent(DrawEvent* event)
 		glVertex2f(end.getX(), end.getY());
 		glVertex2f(begin.getX(), end.getY());
 	glEnd();
+	
+	if(mouseOn && toolTip != "" && toolTipTimer.getSeconds() > TOOLTIP_TIME)
+	{
+		glDisable(GL_SCISSOR_TEST);
+		
+		Font toolTipFont("tooltip");
+		
+		Vector2D toolTipSize = toolTipFont.getTextSize(convertToWideString(toolTip));
+		
+		const Vector2D margin(3, 3);
+		
+		Vector2D begin = mousePosition;
+		Vector2D textBegin = mousePosition + margin;
+		Vector2D end = begin + toolTipSize + margin * 2;
+		
+		Color(1, 1, 0.8).apply();
+		
+		glBegin(GL_QUADS);
+			glVertex2f(begin.getX(), begin.getY());
+			glVertex2f(end.getX(), begin.getY());
+			glVertex2f(end.getX(), end.getY());
+			glVertex2f(begin.getX(), end.getY());
+		glEnd();
+				
+		Color(0, 0, 0).apply();
+		
+		glBegin(GL_LINE_LOOP);
+			glVertex2f(begin.getX(), begin.getY());
+			glVertex2f(end.getX(), begin.getY());
+			glVertex2f(end.getX(), end.getY());
+			glVertex2f(begin.getX(), end.getY());
+		glEnd();
+		
+		toolTipFont.draw(convertToWideString(toolTip), textBegin);
+		
+		glEnable(GL_SCISSOR_TEST);
+	}
+		
+	latestSize = event->getAreaSize();
+}
+
+void Widget::handleMouseMoveEvent(MouseMoveEvent* event)
+{
+	mouseOn = true;
+	
+	mousePosition = event->getAreaPosition() + event->getMousePosition();
+	
+	toolTipTimer.reset();
+}
+
+void Widget::handleMouseOutEvent(MouseOutEvent* event)
+{
+	mouseOn = false;
 }
