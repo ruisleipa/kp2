@@ -16,7 +16,6 @@ CareerMenu::CareerMenu(TextureCollection& sidebartextures,Container& topLevelGam
 	addWidget(topLevelGameMenus, "20%", "0px", "80%", "100%");
 	
 	dynamic_cast<Image&>(getChildByName("background")).setTexture(sidebartextures.getTexture("background"));
-	dynamic_cast<Image&>(getChildByName("background")).setStretched(true);
 
 	dynamic_cast<Button&>(getChildByName("garageButton")).setClickHandler(std::tr1::bind(&CareerMenu::garageButtonClick,this));
 	dynamic_cast<Button&>(getChildByName("tuningButton")).setClickHandler(std::tr1::bind(&CareerMenu::tuningButtonClick,this));
