@@ -225,6 +225,8 @@ IniFile WidgetLoader::parseAttributes(std::string line)
 			}
 			
 			value.push_back(character);
+			
+			state = VALUE;
 		}
 		else if(state == SKIP_UNTIL_NAME)
 		{				
