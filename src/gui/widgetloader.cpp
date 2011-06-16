@@ -5,6 +5,10 @@
 
 #include "widgetfactory.hpp"
 
+#include "layoutcontainer.hpp"
+#include "freecontainer.hpp"
+#include "scrollbox.hpp"
+
 static bool is_in_string(char c, std::string str)
 {
 	return str.find(c) != std::string::npos;
@@ -244,24 +248,23 @@ Widget* WidgetLoader::createWidgets(WidgetNode& rootNode)
 	
 	widgets.push_back(widget);
 	
-	Container* container = dynamic_cast<Container*>(widget.get());
+	Widget* container = widget.get();
 	
-	if(container)
+	std::vector<WidgetNode>::iterator i;
+
+	for(i = rootNode.children.begin(); i != rootNode.children.end(); ++i)
 	{
-		std::vector<WidgetNode>::iterator i;
+		Widget* widget = createWidgets(*i);
 		
-		for(i = rootNode.children.begin(); i != rootNode.children.end(); ++i)
-		{
-			Widget* widget = createWidgets(*i);
-			
-			if(!widget)
-				continue;
-			
-			if(dynamic_cast<LayoutContainer*>(container))
-				addWidgetToContainer(dynamic_cast<LayoutContainer*>(container), widget, i->attributes);
-			if(dynamic_cast<FreeContainer*>(container))
-				addWidgetToContainer(dynamic_cast<FreeContainer*>(container), widget, i->attributes);
-		}
+		if(!widget)
+			continue;
+		
+		if(dynamic_cast<LayoutContainer*>(container))
+			addWidgetToContainer(dynamic_cast<LayoutContainer*>(container), widget, i->attributes);
+		if(dynamic_cast<FreeContainer*>(container))
+			addWidgetToContainer(dynamic_cast<FreeContainer*>(container), widget, i->attributes);
+		if(dynamic_cast<ScrollBox*>(container))
+			addWidgetToContainer(dynamic_cast<ScrollBox*>(container), widget, i->attributes);
 	}
 	
 	return widget.get();
@@ -283,6 +286,14 @@ void WidgetLoader::addWidgetToContainer(FreeContainer* container, Widget* widget
 	std::string height = attributes.getValueWithDefault("height", "auto");
 	
 	container->addWidget(*widget, left, top, width, height);
+}
+
+void WidgetLoader::addWidgetToContainer(ScrollBox* container, Widget* widget, const IniFile& attributes)
+{
+	std::string width = attributes.getValueWithDefault("width", "auto");
+	std::string height = attributes.getValueWithDefault("height", "auto");
+	
+	container->addWidget(*widget, width, height);
 }
 
 WidgetLoader::WidgetLoader(const std::string& filename)

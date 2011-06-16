@@ -7,8 +7,10 @@
 #include <tr1/memory>
 
 #include "widget.hpp"
-#include "layoutcontainer.hpp"
-#include "freecontainer.hpp"
+
+class ScrollBox;
+class FreeContainer;
+class LayoutContainer;
 
 class WidgetLine
 {
@@ -52,6 +54,7 @@ class WidgetLoader
 		
 		void addWidgetToContainer(LayoutContainer* container, Widget* widget, const IniFile& attributes);
 		void addWidgetToContainer(FreeContainer* container, Widget* widget, const IniFile& attributes);
+		void addWidgetToContainer(ScrollBox* container, Widget* widget, const IniFile& attributes);
 		
 		std::vector<std::tr1::shared_ptr<Widget> > widgets;	
 };

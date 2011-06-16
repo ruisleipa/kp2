@@ -6,11 +6,13 @@
 #include "graph.hpp"
 #include "listbox.hpp"
 #include "select.hpp"
+#include "scrollbox.hpp"
 #include "verticalscrollbar.hpp"
 #include "horizontalscrollbar.hpp"
 #include "graphics/texture.hpp"
 #include "columnlayoutcontainer.hpp"
 #include "rowlayoutcontainer.hpp"
+#include "freecontainer.hpp"
 #include "client/playervehiclewidget.hpp"
 #include "client/gauge.hpp"
 
@@ -44,6 +46,8 @@ Widget* WidgetFactory::build(WidgetNode& node)
 		widget = new Gauge();
 	else if(node.type == "Spacer")
 		widget = new Widget();
+	else if(node.type == "ScrollBox")
+		widget = new ScrollBox();
 	else if(node.type == "VerticalScrollBar")
 		widget = new VerticalScrollBar();
 	else if(node.type == "HorizontalScrollBar")
