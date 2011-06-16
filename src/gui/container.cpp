@@ -147,10 +147,6 @@ void Container::handleDrawEvent(DrawEvent* event)
 {
 	std::vector<Widget*>::iterator i;
 	
-	Scissor scissor(event->getWindow());
-	
-	scissor.reset();
-	
 	for(i=children.begin();i!=children.end();++i)
 	{
 		Widget* widget=(*i);
@@ -161,15 +157,14 @@ void Container::handleDrawEvent(DrawEvent* event)
 		DrawEvent drawEvent=*event;
 		
 		convertAreaEventForChild(&drawEvent,widget);
-	
-		scissor.set(drawEvent.getAreaPosition(),drawEvent.getAreaSize());
-	
-		widget->handleEvent(&drawEvent);
+		
+		{
+			Scissor scissor(event->getWindow(), drawEvent.getAreaPosition(), drawEvent.getAreaSize());
+			widget->handleEvent(&drawEvent);
+		}
 		
 		if(showBounds)
 		{
-			scissor.reset();
-		
 			Vector2D begin=drawEvent.getAreaPosition();
 			Vector2D end=begin+drawEvent.getAreaSize();
 		
@@ -188,8 +183,6 @@ void Container::handleDrawEvent(DrawEvent* event)
 			glEnd();
 		}	
 	}
-	
-	scissor.reset();
 }
 
 void Container::showOnlyWidget(const std::string& name)

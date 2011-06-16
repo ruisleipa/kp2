@@ -75,8 +75,6 @@ void Listbox::handleDrawEvent(DrawEvent* event)
 	*/
 	Vector2D begin=event->getAreaPosition();
 	Vector2D end=begin+event->getAreaSize();
-		
-	Scissor scissor(event->getWindow());
 	
 	/*
 	Draw list.
@@ -92,8 +90,6 @@ void Listbox::handleDrawEvent(DrawEvent* event)
 	glVertex2f(begin.getX(),end.getY());
 				
 	glEnd();	
-	
-	scissor.set(event->getAreaPosition(),event->getAreaSize());
 	
 	Vector2D listbegin=Vector2D(0,scrollOffset)+event->getAreaPosition();
 	
@@ -127,7 +123,6 @@ void Listbox::handleDrawEvent(DrawEvent* event)
 		getFont().draw(items[i].text,listbegin+getFont().getTextSize(L"")*i);
 	}
 	
-	scissor.reset();
 	
 	/*
 	Draw the thumb.
@@ -152,6 +147,8 @@ void Listbox::handleDrawEvent(DrawEvent* event)
 				
 	glEnd();
 	
+	glDisable(GL_SCISSOR_TEST);
+	
 	/*
 	Draw borders.
 	*/
@@ -166,6 +163,8 @@ void Listbox::handleDrawEvent(DrawEvent* event)
 	glVertex2f(begin.getX(),end.getY());
 				
 	glEnd();
+	
+	glEnable(GL_SCISSOR_TEST);
 	
 	/*
 	Draw scroll bar.

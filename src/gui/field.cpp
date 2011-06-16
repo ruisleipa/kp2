@@ -33,11 +33,10 @@ void Field::handleDrawEvent(DrawEvent* event)
 	Vector2D begin=event->getAreaPosition();
 	Vector2D end=begin+event->getAreaSize();
 	
-	Scissor scissor(event->getWindow());
-	scissor.reset();	
-	
 	Color(0,0,0).apply();
 	Texture().bind();
+	
+	glDisable(GL_SCISSOR_TEST);
 	
 	glBegin(GL_LINE_LOOP);
 	glVertex2d(begin.getX(),begin.getY());
@@ -46,6 +45,8 @@ void Field::handleDrawEvent(DrawEvent* event)
 	glVertex2d(begin.getX(),end.getY());
 	glEnd();
 	
+	glEnable(GL_SCISSOR_TEST);
+	
 	if(isFocused && int(blinkTimer.getSeconds()/0.750)%2)
 	{
 		glBegin(GL_LINES);
@@ -53,8 +54,6 @@ void Field::handleDrawEvent(DrawEvent* event)
 		glVertex2d(cursorpos + 1,event->getAreaPosition().getY()+event->getAreaSize().getY());
 		glEnd();
 	}
-	
-	scissor.set(event->getAreaPosition(),event->getAreaSize());
 	//glClear(GL_COLOR_BUFFER_BIT);
 	getFont().draw(getWideText(),event->getAreaPosition()+Vector2D(textoffset + 1, 1));
 }

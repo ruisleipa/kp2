@@ -80,8 +80,6 @@ void ActiveTextWidget::handleDrawEvent(DrawEvent* event)
 	borderFont.draw(getWideText(),position-pixelsize*Vector2D(0,1));
 	borderFont.draw(getWideText(),position+pixelsize*Vector2D(0,1));
 	
-	Scissor scissor(event->getWindow());
-	
 	if(doAnimate)
 	{
 		if(mouseOverFlag==false)
