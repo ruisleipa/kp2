@@ -51,8 +51,8 @@ MenuContainer::MenuContainer(TextureCollection& backgroundtextures):
 {
 	backgroundFront.setTexture(backgroundtextures.getTexture(getRandomTextureIndex()));
 	
-	backgroundBack.setFill(true);
-	backgroundFront.setFill(true);
+	backgroundBack.setScalingMode(Image::PROPORTIONAL_FILL);
+	backgroundFront.setScalingMode(Image::PROPORTIONAL_FILL);
 	
 	FreeContainer::addWidget(backgroundFront, "0px", "0px", "100%", "100%");
 	FreeContainer::addWidget(backgroundBack, "0px", "0px", "100%", "100%");
