@@ -16,6 +16,8 @@
 #include "client/playervehiclewidget.hpp"
 #include "client/gauge.hpp"
 
+#include "utils/string.hpp"
+
 Widget* WidgetFactory::build(WidgetNode& node)
 {
 	Widget* widget = NULL;
@@ -142,6 +144,31 @@ void WidgetFactory::applyAttributes(Widget* widget, const IniFile& attributes)
 {
 	widget->setName(attributes.getValueWithDefault("name", ""));
 	widget->setVisible(attributes.getValueWithDefault("visible", 1));
+	widget->setToolTip(attributes.getValueWithDefault("tooltip", ""));
+	
+	std::string color = attributes.getValueWithDefault("background", "");
+	
+	if(color != "")
+	{
+		std::vector<std::string> tokens = tokenize(color, ",");
+		
+		float r = 0.0;
+		float g = 0.0;
+		float b = 0.0;
+		float a = 1.0;
+		
+		if(tokens.size() >= 3)
+		{
+			r = convertTo<float>(tokens[0]);
+			g = convertTo<float>(tokens[1]);
+			b = convertTo<float>(tokens[2]);
+		}
+		
+		if(tokens.size() == 4)
+			a = convertTo<float>(tokens[3]);
+			
+		widget->setBackgroundColor(Color(r, g, b, a));
+	}
 }
 
 void WidgetFactory::applyAttributes(Gauge* gauge, const IniFile& attributes)
