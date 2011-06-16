@@ -85,6 +85,52 @@ void WidgetFactory::applyAttributes(Image* image, const IniFile& attributes)
 	
 	if(filename != "")
 		image->setTexture(Texture(filename));
+	
+	std::string scalingMode = attributes.getValueWithDefault("scaling", "");
+	
+	if(scalingMode == "none")
+		image->setScalingMode(Image::NONE);
+	else if(scalingMode == "proportional")
+		image->setScalingMode(Image::PROPORTIONAL);
+	else if(scalingMode == "proportionalfill")
+		image->setScalingMode(Image::PROPORTIONAL_FILL);
+	else if(scalingMode == "stretchfill")
+		image->setScalingMode(Image::STRETCH_FILL);
+	else if(scalingMode == "nineslice")
+		image->setScalingMode(Image::NINE_SLICE);
+	
+	int border = attributes.getValueWithDefault("nineScaleBorder", 0);
+	
+	int left = border;
+	int top = border;
+	int right = border;
+	int bottom = border;
+	
+	try
+	{
+		attributes.getValue("nineScaleLeft", left);
+	}
+	catch(...){}
+	
+	try
+	{
+		attributes.getValue("nineScaleTop", top);
+	}
+	catch(...){}
+	
+	try
+	{
+		attributes.getValue("nineScaleRight", right);
+	}
+	catch(...){}
+	
+	try
+	{
+		attributes.getValue("nineScaleBottom", bottom);
+	}
+	catch(...){}
+	
+	image->setNineSliceCorners(Vector2D(left, top), Vector2D(right, bottom));
 }
 
 void WidgetFactory::applyAttributes(Widget* widget, const IniFile& attributes)

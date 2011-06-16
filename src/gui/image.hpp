@@ -12,14 +12,21 @@ class Image : public Widget
 		void setTexture(const Texture& texture);
 		Texture& getTexture();
 		
-		void setStretched(bool stretch);
-		bool getStrecthed();
+		enum ScalingMode
+		{
+			NONE,
+			PROPORTIONAL,
+			PROPORTIONAL_FILL,
+			STRETCH_FILL,
+			NINE_SLICE
+		};
 		
-		void setFill(bool fill);
-		bool getFill();
+		void setScalingMode(ScalingMode mode);
+		
+		void setNineSliceCorners(Vector2D topLeft, Vector2D bottomRight);
 		
 		void setColor(Color color);
-		Color getColor();		
+		Color getColor();
 		
 		virtual void handleEvent(Event* event);
 		
@@ -28,9 +35,10 @@ class Image : public Widget
 	private:
 		void handleDrawEvent(DrawEvent* event);
 	
-		Texture texture;	
-		bool stretched;
-		bool fill;
+		Texture texture;
+		ScalingMode scalingMode;
+		Vector2D nineSliceTopLeft;
+		Vector2D nineSliceBottomRight;
 		Color color;
 
 };
