@@ -52,6 +52,21 @@ const std::string t, const std::string w,const std::string h)
 	dimensions[&widget] = widgetDimensions;
 }
 
+void FreeContainer::setWidgetPosition(Widget& widget, const std::string& l,
+const std::string t)
+{
+	if(dimensions.find(&widget) != dimensions.end())
+	{
+		DimensionValue left(l);
+		DimensionValue top(t);
+		
+		Dimensions widgetDimensions;
+	
+		dimensions[&widget].left = left;
+		dimensions[&widget].top = top;
+	}	
+}
+
 Vector2D FreeContainer::getAutoSize()
 {
 	float width = 0;

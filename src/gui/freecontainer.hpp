@@ -29,6 +29,9 @@ class FreeContainer : public Container
 		const std::string top, const std::string width,
 		const std::string height);
 		
+		void setWidgetPosition(Widget& widget, const std::string& left,
+		const std::string top);
+		
 		virtual Vector2D getAutoSize();
 
 	protected:
