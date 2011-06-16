@@ -83,7 +83,8 @@ void LayoutContainer::handleDrawEvent(DrawEvent* event)
 			visibleWidgetCount++;
 	}
 	
-	spaceAvailable -= PADDING * (visibleWidgetCount - 1);
+	if(applyInnerPadding)
+		spaceAvailable -= PADDING * (visibleWidgetCount - 1);
 	
 	//calculate size occupied by widgets with non fluid dimensions	
 	float totalSizeOfNonFluidWidgets = 0;
@@ -178,7 +179,9 @@ void LayoutContainer::handleDrawEvent(DrawEvent* event)
 		positions[child] = convertDimensionsToVector(position, nonStackedPosition);
 		
 		position += stackedSize;
-		position += PADDING;
+		
+		if(applyInnerPadding)
+			position += PADDING;
 	}
 }
 
@@ -213,7 +216,9 @@ Vector2D LayoutContainer::getAutoSize()
 			nonStackedSize = getNonStackedAxis(child->getAutoSize());
 		
 		totalStackedSize += stackedSize;
-		totalStackedSize += PADDING;
+		
+		if(applyInnerPadding)
+			totalStackedSize += PADDING;
 		
 		totalNonStackedSize = std::max(totalNonStackedSize, nonStackedSize);
 	}
@@ -228,7 +233,8 @@ Vector2D LayoutContainer::getAutoSize()
 }
 
 LayoutContainer::LayoutContainer():
-	applyOuterPadding(true)
+	applyOuterPadding(true),
+	applyInnerPadding(true)
 {
 
 }
@@ -246,4 +252,9 @@ Vector2D LayoutContainer::getWidgetSize(Widget* widget,Vector2D ourSize)
 void LayoutContainer::showOuterPadding(bool padding)
 {
 	applyOuterPadding = padding;
+}
+
+void LayoutContainer::showInnerPadding(bool padding)
+{
+	applyInnerPadding = padding;
 }

@@ -37,6 +37,7 @@ class LayoutContainer : public Container
 		virtual void handleEvent(Event* event);
 		
 		void showOuterPadding(bool padding);
+		void showInnerPadding(bool padding);
 		
 		Vector2D getAutoSize();
 		
@@ -63,6 +64,7 @@ class LayoutContainer : public Container
 		
 	private:
 		bool applyOuterPadding;
+		bool applyInnerPadding;
 		
 		std::map<Widget*, Dimensions> dimensions;
 		

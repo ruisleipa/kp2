@@ -71,6 +71,7 @@ Widget* WidgetFactory::build(WidgetNode& node)
 void WidgetFactory::applyAttributes(LayoutContainer* layoutContainer, const IniFile& attributes)
 {
 	layoutContainer->showOuterPadding(attributes.getValueWithDefault("showOuterPadding", 0));
+	layoutContainer->showInnerPadding(attributes.getValueWithDefault("showInnerPadding", 1));
 }
 
 void WidgetFactory::applyAttributes(TextWidget* textWidget, const IniFile& attributes)
