@@ -13,7 +13,6 @@ class Container : public Widget
 		
 		virtual void handleEvent(Event* event);
 		
-		virtual void resize(Window& window);
 		
 		Container();
 		

@@ -153,8 +153,6 @@ void startGame()
 	RootContainer rootContainer(window,events);	
 	rootContainer.addWidget(menuContainer, "0px", "0px", "100%", "100%");
 	
-	rootContainer.resize(window);
-	
 	bool running = true;
 	
 	while(running)
@@ -200,8 +198,6 @@ void startGame()
 			
 			fontLoader.reload();
 #endif		
-			rootContainer.resize(window);
-			
 			window.clearModeChangeFlag();
 		}
 	}

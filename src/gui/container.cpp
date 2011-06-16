@@ -192,20 +192,6 @@ void Container::handleDrawEvent(DrawEvent* event)
 	scissor.reset();
 }
 
-void Container::resize(Window& window)
-{
-	Widget::resize(window);
-
-	std::vector<Widget*>::iterator i;
-	
-	for(i=children.begin();i!=children.end();++i)
-	{
-		Widget* widget=(*i);
-	
-		widget->resize(window);
-	}	
-}
-
 void Container::showOnlyWidget(const std::string& name)
 {
 	std::vector<Widget*>::iterator i;

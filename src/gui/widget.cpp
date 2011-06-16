@@ -58,16 +58,6 @@ void Widget::handleEvent(Event* event)
 		handleDrawEvent(dynamic_cast<DrawEvent*>(event));
 }
 
-void Widget::resize(Window& window)
-{
-	onResize(window);
-}
-
-void Widget::onResize(Window& window)
-{
-	
-}
-
 Widget::Widget():
 	visible(true),
 	backgroundColor(1,1,1,0)

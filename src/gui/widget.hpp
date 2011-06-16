@@ -30,9 +30,6 @@ class Widget: public EventListener, public NonCopyable
 
 		virtual void handleEvent(Event* event);
 		
-		//legacy functions for size setting
-		virtual void resize(Window& window);
-		virtual void onResize(Window& window);
 		
 		Widget();
 		virtual ~Widget();
