@@ -233,5 +233,7 @@ int main(int argc,char** argv)
 		
 		crashMessage.showMessage();
 	}
+	
+	return 0;
 }
 

@@ -20,9 +20,9 @@ void LoadingScreen::progress()
 }
 
 LoadingScreen::LoadingScreen(Window& window):
+	window(window),
 	totalLoads(0),
-	loads(0),
-	window(window)
+	loads(0)
 {
 
 }
