@@ -13,6 +13,7 @@ class Container : public Widget
 		
 		virtual void handleEvent(Event* event);
 		
+		void removeWidget(Widget& child);
 		
 		Container();
 		

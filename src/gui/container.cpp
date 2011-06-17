@@ -17,6 +17,37 @@
 #include <GL/gl.h>
 #include <SDL/SDL.h>
 
+void Container::removeWidget(Widget& child)
+{
+	std::vector<Widget*>::iterator i;
+	bool found = false;	
+	
+	for(i = children.begin(); i != children.end(); ++i)
+	{
+		if(&child == *i)
+			found = true;
+	}
+	
+	if(!found)
+		return;
+
+	if(mouseOverChild == &child)
+	{
+		MouseOutEvent mouseOutEvent;
+		mouseOverChild->handleEvent(&mouseOutEvent);
+		
+		mouseOverChild = 0;
+	}
+
+	if(focusedChild == &child)
+	{
+		BlurEvent blurEvent;
+		focusedChild->handleEvent(&blurEvent);
+		
+		focusedChild = 0;
+	}
+}
+
 void Container::handleEvent(Event* event)
 {
 	Widget::handleEvent(event);
