@@ -1,0 +1,7 @@
+RowLayout showInnerPadding="0"
+	ColumnLayout width="100%" height="1~" showInnerPadding="0"
+		FreeLayout name="viewPort" height="100%" width="1~"
+		VerticalScrollBar name="verticalScroll" width="16px" height="100%"
+	ColumnLayout width="100%" height="16px" showInnerPadding="0"
+		HorizontalScrollBar name="horizontalScroll" width="1~" height="100%"
+		Spacer name="corner" height="100%" width="16px"

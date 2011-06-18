@@ -1,0 +1,8 @@
+ColumnLayout width="100%" height="100%" showOuterPadding="1"
+	ListBox name="carList" width="50%" height="100%"
+	RowLayout width="50%" height="100%"
+		ColumnLayout width="100%" height="1~"
+			Label name="carName"
+			Image name="carImage"
+		Label name="carInfo"
+		Button name="buyButton" text="Osta"

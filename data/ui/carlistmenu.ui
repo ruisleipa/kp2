@@ -1,0 +1,6 @@
+ColumnLayout width="100%" height="100%" showOuterPadding="1"
+	ListBox name="carList" width="50%" height="100%"
+	RowLayout width="50%" height="100%"
+		PlayerVehicleWidget name="vehicleInfo" height="1~" width="100%"
+		Button name="sellButton" text="Myy"
+		Button name="selectButton" text="Aja tallista"

@@ -1,0 +1,6 @@
+RowLayout width="100%" height="100%" showOuterPadding="1"
+	Label name="title" text="Yksinpeli"
+	Button name="newGameButton" text="Uusi tilanne"
+	Button name="loadGameButton" text="Lataa tilanne"
+	Spacer height="1~"
+	Button name="backButton" text="Takaisin"
