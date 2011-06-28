@@ -106,7 +106,7 @@ void WidgetFactory::applyAttributes(Image* image, const IniFile& attributes)
 	else if(scalingMode == "nineslice")
 		image->setScalingMode(Image::NINE_SLICE);
 	
-	int border = attributes.getValueWithDefault("nineScaleBorder", 0);
+	int border = attributes.getValueWithDefault("nineSliceBorder", 0);
 	
 	int left = border;
 	int top = border;
@@ -115,25 +115,25 @@ void WidgetFactory::applyAttributes(Image* image, const IniFile& attributes)
 	
 	try
 	{
-		attributes.getValue("nineScaleLeft", left);
+		attributes.getValue("nineSliceLeft", left);
 	}
 	catch(...){}
 	
 	try
 	{
-		attributes.getValue("nineScaleTop", top);
+		attributes.getValue("nineSliceTop", top);
 	}
 	catch(...){}
 	
 	try
 	{
-		attributes.getValue("nineScaleRight", right);
+		attributes.getValue("nineSliceRight", right);
 	}
 	catch(...){}
 	
 	try
 	{
-		attributes.getValue("nineScaleBottom", bottom);
+		attributes.getValue("nineSliceBottom", bottom);
 	}
 	catch(...){}
 	
