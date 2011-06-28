@@ -189,6 +189,7 @@ Vector2D LayoutContainer::getAutoSize()
 {
 	float totalStackedSize = 0;
 	float totalNonStackedSize = 0;
+	int visibleWidgetCount = 0;
 	
 	for(int i=0; i < getChildCount(); i++)
 	{
@@ -196,7 +197,9 @@ Vector2D LayoutContainer::getAutoSize()
 		
 		if(!child->getVisible())
 			continue;
-			
+		
+		visibleWidgetCount++;
+		
 		Dimensions childDimensions = dimensions[child];
 		
 		DimensionValue stackedDimension = getStackedDimension(childDimensions);
@@ -217,8 +220,7 @@ Vector2D LayoutContainer::getAutoSize()
 		
 		totalStackedSize += stackedSize;
 		
-		if(applyInnerPadding)
-			totalStackedSize += PADDING;
+		
 		
 		totalNonStackedSize = std::max(totalNonStackedSize, nonStackedSize);
 	}
@@ -228,6 +230,9 @@ Vector2D LayoutContainer::getAutoSize()
 		totalStackedSize += PADDING * 2;
 		totalNonStackedSize += PADDING * 2;
 	}
+	
+	if(applyInnerPadding && visibleWidgetCount > 1)
+		totalStackedSize += PADDING * (visibleWidgetCount - 1);
 	
 	return convertDimensionsToVector(totalStackedSize, totalNonStackedSize);
 }
