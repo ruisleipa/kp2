@@ -37,6 +37,7 @@ class ActiveTextWidget : public TextWidget
 
 		Timer mouseOverTimer;
 		
+		static bool soundsLoaded;
 		static Sound mouseOverSound;
 		static Sound mouseDownSound;
 };

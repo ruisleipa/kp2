@@ -2,6 +2,7 @@
 
 #include "graphics/scissor.hpp"
 
+bool ActiveTextWidget::soundsLoaded = false;
 Sound ActiveTextWidget::mouseOverSound;
 Sound ActiveTextWidget::mouseDownSound;
 
@@ -113,8 +114,13 @@ ActiveTextWidget::ActiveTextWidget():
 	mouseOverFlag(false),
 	doAnimate(false)
 {
-	mouseOverSound.load("data/sounds/mouseover.wav");
-	mouseDownSound.load("data/sounds/click.wav");
+	if(!soundsLoaded)
+	{
+		mouseOverSound.load("data/sounds/mouseover.wav");
+		mouseDownSound.load("data/sounds/click.wav");
+		
+		soundsLoaded = true;
+	}
 	
 	borderFont=Font("Textborder");
 }
