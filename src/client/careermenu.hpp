@@ -3,7 +3,6 @@
 
 #include "gui/menu.hpp"
 #include "gui/container.hpp"
-#include "gui/widgetloader.hpp"
 
 #include "graphics/texturecollection.hpp"
 
@@ -12,21 +11,14 @@
 class CareerMenu : public Menu
 {
 	public:
-		CareerMenu(TextureCollection& sidebartextures,Container& topLevelGameMenus,Connection& connection);
+		CareerMenu(TextureCollection& sidebartextures,Container& gameMenus,Connection& connection);
 
 	private:
 		void onConnectionEvent(Connection& connection);
-	
-		void garageButtonClick();
-		void tuningButtonClick();
-		void financeButtonClick();
-		void raceButtonClick();
 		
 		Connection& connection;
 		
-		Container& topLevelGameMenus;
-		
-		WidgetLoader loader;
+		Container& gameMenus;
 };
 
 #endif // CAREERMENU_HPP

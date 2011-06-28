@@ -13,9 +13,9 @@
 #include "gui/field.hpp"
 #include "gui/listbox.hpp"
 
-const std::string PART_TYPES[] = {"camshaft", "charger", "clutch", "cooler", "cylinderhead", "differential", "engine", "exhaustmanifold", "exhaustpipe", "fuelintake", "fuelpump", "injector", "intakemanifold", "tire"};
+const std::string PART_TYPES[] = {"camshaft", "charger", "clutch", "cooler", "cylinderhead", "differential", "engine", "exhaustmanifold", "exhaustpipe", "fuelintake", "fuelpump", "injector", "intakemanifold", "tire", "transmission"};
 
-PartShopMenu::PartShopMenu(Connection& connection):
+PartShopMenu::PartShopMenu(Connection& connection, Container& parent):
 	connection(connection),
 	loader("data/ui/partshopmenu.ui")
 {
@@ -39,9 +39,11 @@ PartShopMenu::PartShopMenu(Connection& connection):
 	categoryBox.addItem("Suuttimet", 11);
 	categoryBox.addItem("Imusarjat", 12);
 	categoryBox.addItem("Renkaat", 13);
+	categoryBox.addItem("Vaihteistot", 14);
 	
 	dynamic_cast<Button&>(getChildByName("buyButton")).setClickHandler(std::tr1::bind(&PartShopMenu::buyHandler,this));
 	dynamic_cast<Listbox&>(getChildByName("partBox")).setChangeHandler(std::tr1::bind(&PartShopMenu::partChange, this));
+	getChildByName<Button>("backButton").setClickHandler(std::tr1::bind(&Container::showOnlyWidget, &parent, "installpartsmenu"));
 }
 
 void PartShopMenu::categoryChangeHandler()

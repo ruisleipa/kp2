@@ -9,7 +9,7 @@ class Connection;
 class PerformanceMenu : public Menu
 {
 	public:
-		PerformanceMenu(Connection& connection);
+		PerformanceMenu(Connection& connection, Container& parent);
 
 	private:
 		void handleConnectionEvent();

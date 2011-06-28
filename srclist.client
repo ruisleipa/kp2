@@ -4,6 +4,7 @@ SRC = \
 	src/client/fontloader.cpp \
 	src/client/gauge.cpp \
 	src/client/errordialog.cpp \
+	src/client/gamemainmenu.cpp \
 	src/client/main.cpp \
 	src/client/mainmenu.cpp \
 	src/client/newlocalgamemenu.cpp \
@@ -14,6 +15,8 @@ SRC = \
 	src/client/carlistmenu.cpp \
 	src/client/partshopmenu.cpp \
 	src/client/performancemenu.cpp \
+	src/client/playerpartbutton.cpp \
+	src/client/playervehiclebutton.cpp \
 	src/client/playervehiclewidget.cpp \
 	src/client/remotegamemenu.cpp \
 	src/client/installpartsmenu.cpp \

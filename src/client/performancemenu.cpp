@@ -7,7 +7,7 @@
 
 #include <windows.h>
 
-PerformanceMenu::PerformanceMenu(Connection& connection):
+PerformanceMenu::PerformanceMenu(Connection& connection, Container& parent):
 	connection(connection),
 	loader("data/ui/performancemenu.ui")
 {
@@ -15,11 +15,12 @@ PerformanceMenu::PerformanceMenu(Connection& connection):
 	
 	connection.addEventHandler(std::tr1::bind(&PerformanceMenu::handleConnectionEvent,this));
 	
-	dynamic_cast<Button&>(getChildByName("performaceButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "performanceGraph"));
-	dynamic_cast<Button&>(getChildByName("boostCurveButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "boostGraph"));
-	dynamic_cast<Button&>(getChildByName("flowCurveButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "flowGraph"));
-	dynamic_cast<Button&>(getChildByName("fuelButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "fuelGraph"));
-	dynamic_cast<Button&>(getChildByName("temperatureButton")).setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "temperatureGraph"));
+	getChildByName<Button>("performaceButton").setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "performanceGraph"));
+	getChildByName<Button>("boostCurveButton").setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "boostGraph"));
+	getChildByName<Button>("flowCurveButton").setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "flowGraph"));
+	getChildByName<Button>("fuelButton").setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "fuelGraph"));
+	getChildByName<Button>("temperatureButton").setClickHandler(std::tr1::bind(&PerformanceMenu::showGraph, this, "temperatureGraph"));
+	getChildByName<Button>("backButton").setClickHandler(std::tr1::bind(&Container::showOnlyWidget, &parent, "installpartsmenu"));
 }
 
 void PerformanceMenu::handleConnectionEvent()

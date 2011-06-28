@@ -1,31 +1,33 @@
 #ifndef INSTALLPARTSMENU_HPP
 #define INSTALLPARTSMENU_HPP
 
-#include "playervehiclewidget.hpp"
-
 #include "gui/menu.hpp"
 #include "gui/widgetloader.hpp"
+
+#include "playerpartbutton.hpp"
 
 class Connection;
 
 class InstallPartsMenu : public Menu
 {
 	public:
-		InstallPartsMenu(Connection& connection);
+		InstallPartsMenu(Connection& connection, Container& parent);
 
 	private:
-		void handleInstallButtonClick();
-		void handleUninstallButtonClick();
 		void handleConnectionEvent();
+		
+		void handleInstallClick(int id);
+		void handleUninstallClick(int id);
 	
 		void fillVehicleInfo();
 		void fillParts();
 		void fillVehicleParts();
-		void fillPerformanceGraph();
 	
 		Connection& connection;
-	
-		WidgetLoader loader;
+		Container& parent;
+		
+		std::list<std::tr1::shared_ptr<PlayerPartButton> > buttons;
+		std::list<std::tr1::shared_ptr<PlayerPartButton> > vehicleButtons;
 };
 
 #endif // INSTALLPARTSMENU_HPP

@@ -11,7 +11,7 @@
 #include "utils/string.hpp"
 #include "connection.hpp"
 
-CarShopMenu::CarShopMenu(Connection& connection):
+CarShopMenu::CarShopMenu(Connection& connection, Container& parent):
 	connection(connection),
 	loader("data/ui/carshopmenu.ui")
 {
@@ -19,13 +19,14 @@ CarShopMenu::CarShopMenu(Connection& connection):
 	
 	connection.addEventHandler(std::tr1::bind(&CarShopMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
 	
-	dynamic_cast<Listbox&>(getChildByName("carList")).setChangeHandler(std::tr1::bind(&CarShopMenu::carlistChange,this));
-	dynamic_cast<Button&>(getChildByName("buyButton")).setClickHandler(std::tr1::bind(&CarShopMenu::buyClick,this));
+	getChildByName<Listbox>("carList").setChangeHandler(std::tr1::bind(&CarShopMenu::carlistChange,this));
+	getChildByName<Button>("buyButton").setClickHandler(std::tr1::bind(&CarShopMenu::buyClick,this));
+	getChildByName<Button>("backButton").setClickHandler(std::tr1::bind(&Container::showOnlyWidget, &parent, "gamemainmenu"));
 }
 
 void CarShopMenu::onConnectionEvent(Connection& connection)
 {
-	dynamic_cast<Listbox&>(getChildByName("carList")).clearItems();
+	getChildByName<Listbox>("carList").clearItems();
 
 	std::vector<std::string> ids = connection.getShopVehicles().getKeys();
 	
@@ -33,7 +34,7 @@ void CarShopMenu::onConnectionEvent(Connection& connection)
 	{
 		Protocol::ShopVehicle vehicle = connection.getShopVehicles().getItem(ids[i]);
 		
-		dynamic_cast<Listbox&>(getChildByName("carList")).addItem(vehicle.name, i);
+		getChildByName<Listbox>("carList").addItem(vehicle.name, i);
 	}
 }
 
@@ -41,22 +42,30 @@ void CarShopMenu::carlistChange()
 {
 	std::vector<std::string> ids = connection.getShopVehicles().getKeys();
 	
-	Protocol::ShopVehicle vehicle = connection.getShopVehicles().getItem(ids[dynamic_cast<Listbox&>(getChildByName("carList")).getCurrentItemTag()]);
+	Protocol::ShopVehicle vehicle = connection.getShopVehicles().getItem(ids[getChildByName<Listbox>("carList").getCurrentItemTag()]);
 	
-	dynamic_cast<Label&>(getChildByName("carName")).setText(vehicle.name);
-		
+	std::stringstream title;
+	
+	title << vehicle.name << " vm. " << vehicle.year << "\n";
+	title << "Hinta: " << vehicle.price;
+	
+	getChildByName<Label>("carNameLabel").setText(title.str());
+			
 	std::string image = "gamedata/vehicleimages/";
 	image += vehicle.imageName;
-	dynamic_cast<Image&>(getChildByName("carImage")).setTexture(Texture(image));
+	getChildByName<Image>("carImage").setTexture(Texture(image));
 	
 	std::stringstream ss;
 	
-	ss << vehicle.info << "\n" << "\n";
-	ss << "Vuosimalli: " << vehicle.year << std::endl;
-	ss << "Korin paino: " << vehicle.chassisWeight << std::endl;
-	ss << "Hinta: " << vehicle.price << std::endl;
+	ss << "Auton paino: " << vehicle.chassisWeight << "kg" << "\n";
+	ss << "Tekniikka: " << "1.0 L, ruisku, jotain tämmöstä" << "\n";
+	ss << "Voimansiirto: " << "etuveto" << "\n";
+	ss << "Max. teho: " << "25 kW @ 4000 rpm" << "\n";
+	ss << "Max. vääntö: " << "78 Nm @ 3000 rpm" << "\n";
+	ss << "Kiihtyvyys: " << "13.5s 0-100 km/h" << "\n";
+	ss << "\n" << vehicle.info << "\n";	
 	
-	dynamic_cast<Label&>(getChildByName("carInfo")).setText(ss.str());
+	getChildByName<Label>("carInfoLabel").setText(ss.str());
 }
 
 void CarShopMenu::buyClick()

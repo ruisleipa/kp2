@@ -32,6 +32,7 @@
 #include "partshopmenu.hpp"
 #include "installpartsmenu.hpp"
 #include "performancemenu.hpp"
+#include "gamemainmenu.hpp"
 #include "errordialog.hpp"
 
 #include "raceview.hpp"
@@ -190,45 +191,39 @@ void startGame()
 	
 	Connection connection;
 	
-	MenuContainer topLevelGameMenus(backgroundTextures);
+	TextureCollection gameBackgroundTextures;
 	
-	TabbedMenu garageMenu;	
+	MenuContainer gameMenus(gameBackgroundTextures);
 	
-	CarShopMenu carShopMenu(connection);
-	CarListMenu carListMenu(connection);
+	CarShopMenu carShopMenu(connection, gameMenus);
+	CarListMenu carListMenu(connection, gameMenus);
+	PartShopMenu partShopMenu(connection, gameMenus);
+	InstallPartsMenu installPartsMenu(connection, gameMenus);
+	PerformanceMenu performanceMenu(connection, gameMenus);
+	GameMainMenu gameMainMenu(connection, gameMenus);
 	
-	garageMenu.addTab("Autokauppa",carShopMenu);
-	garageMenu.addTab("Autotalli",carListMenu);	
+	gameMenus.addWidget("gamemainmenu", gameMainMenu);
+	gameMenus.addWidget("carshopmenu", carShopMenu);
+	gameMenus.addWidget("carlistmenu", carListMenu);
+	gameMenus.addWidget("partshopmenu", partShopMenu);
+	gameMenus.addWidget("installpartsmenu", installPartsMenu);
+	gameMenus.addWidget("performancemenu", performanceMenu);
 	
-	topLevelGameMenus.addWidget("garage",garageMenu);
+	gameMenus.showOnlyWidget("gamemainmenu");
 	
-	TabbedMenu tuningMenu;	
-	PartShopMenu partShopMenu(connection);
-	InstallPartsMenu installPartsMenu(connection);	
-	PerformanceMenu performanceMenu(connection);	
-	tuningMenu.addTab("Osakauppa", partShopMenu);
-	tuningMenu.addTab("Asenna osia", installPartsMenu);
-	tuningMenu.addTab("Säädöt", performanceMenu);
+	MenuContainer menuContainer(backgroundTextures);
 	
-	topLevelGameMenus.addWidget("tuning",tuningMenu);
-	
-	topLevelGameMenus.showOnlyWidget("");
-	
-	MenuContainer menuContainer(backgroundTextures);	
-	
-	MenuContainer asd(backgroundTextures);
-	
-	MainMenu mainMenu(menuContainer, mainmenuTextures);	
+	MainMenu mainMenu(menuContainer, mainmenuTextures);
 	SettingsMenu settingsMenu(menuContainer, window, musicPlayer);
 	LocalGameMenu localGameMenu(menuContainer);
+	NewLocalGameMenu newLocalGameMenu(menuContainer, connection);
+	RemoteGameMenu remoteGameMenu(menuContainer, connection);
+	CareerMenu careerMenu(careerTextures,gameMenus,connection);
 	
 	ErrorDialog errorDialog;
 	
 	ErrorListener errorListener(errorDialog, menuContainer);
 	connection.addEventListener(&errorListener);
-	NewLocalGameMenu newLocalGameMenu(menuContainer, connection);	
-	RemoteGameMenu remoteGameMenu(menuContainer, connection);	
-	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);	
 	RaceView raceView(connection);
 	connection.addEventListener(&raceView);
 	

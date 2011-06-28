@@ -11,7 +11,7 @@
 class CarShopMenu : public Menu
 {
 	public:
-		CarShopMenu(Connection& connection);
+		CarShopMenu(Connection& connection, Container& parent);
 
 		void onConnectionEvent(Connection& connection);
 		

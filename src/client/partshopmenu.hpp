@@ -9,7 +9,7 @@
 class PartShopMenu : public Menu
 {
 	public:
-		PartShopMenu(Connection& connection);
+		PartShopMenu(Connection& connection, Container& parent);
 		
 	private:
 		void categoryChangeHandler();

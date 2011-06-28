@@ -1,51 +1,55 @@
 #include "carlistmenu.hpp"
 
 #include <iostream>
-#include <sstream>
 
-#include "ui.hpp"
-#include "graphics/texture.hpp"
-#include "utils/string.hpp"
 #include "connection.hpp"
-#include "gui/label.hpp"
 #include "gui/button.hpp"
-#include "gui/listbox.hpp"
-#include "gui/rowlayoutcontainer.hpp"
-#include "gui/columnlayoutcontainer.hpp"
-#include "playervehiclewidget.hpp"
+#include "gui/layoutcontainer.hpp"
 
-CarListMenu::CarListMenu(Connection& connection):
+CarListMenu::CarListMenu(Connection& connection, Container& parent):
+	Menu("data/ui/carlistmenu.ui"),
 	connection(connection),
-	loader("data/ui/carlistmenu.ui")
+	parent(parent)
 {
-	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
-	
 	connection.addEventHandler(std::tr1::bind(&CarListMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
 
-	dynamic_cast<Listbox&>(getChildByName("carList")).setChangeHandler(std::tr1::bind(&CarListMenu::carlistChange,this));
+	getChildByName<Button>("sellButton").setClickHandler(std::tr1::bind(&CarListMenu::sellClick,this));
+	getChildByName<Button>("selectButton").setClickHandler(std::tr1::bind(&CarListMenu::selectClick,this));
+	getChildByName<Button>("backButton").setClickHandler(std::tr1::bind(&Container::showOnlyWidget, &parent, "gamemainmenu"));
 	
-	dynamic_cast<Button&>(getChildByName("sellButton")).setClickHandler(std::tr1::bind(&CarListMenu::sellClick,this));
-	dynamic_cast<Button&>(getChildByName("selectButton")).setClickHandler(std::tr1::bind(&CarListMenu::selectClick,this));
+	for(int i = 0; i < 4; i++)
+		getChildByName<LayoutContainer>("firstColumn").addWidget(buttons[i], "100%", "25%");
+		
+	for(int i = 4; i < 8; i++)
+		getChildByName<LayoutContainer>("secondColumn").addWidget(buttons[i], "100%", "25%");
 }
 
 void CarListMenu::onConnectionEvent(Connection& connection)
 {
-	std::vector<Protocol::VehicleId> ids = connection.getPlayerVehicles().getKeys();	
-	std::vector<Protocol::VehicleId>::iterator i;	
+	std::vector<Protocol::VehicleId> ids = connection.getPlayerVehicles().getKeys();
+	std::vector<Protocol::VehicleId>::iterator i;
 	
-	dynamic_cast<Listbox&>(getChildByName("carList")).clearItems();
+	for(int i = 0; i < 8; i++)
+	{
+		buttons[i].setVisible(false);
+		buttons[i].setClickHandler(0);
+	}
+	
+	int buttonIndex = 0;
 	
 	for(i = ids.begin(); i != ids.end(); ++i)
 	{
 		Protocol::Vehicle vehicle = connection.getPlayerVehicles().getItem(*i);
 		
-		dynamic_cast<Listbox&>(getChildByName("carList")).addItem(vehicle.name, *i);
-	}	
-}
-
-void CarListMenu::carlistChange()
-{
-	dynamic_cast<PlayerVehicleWidget&>(getChildByName("vehicleInfo")).showVehicle(connection, dynamic_cast<Listbox&>(getChildByName("carList")).getCurrentItemTag());
+		buttons[buttonIndex].setVisible(true);
+		buttons[buttonIndex].showVehicle(connection, *i);
+		buttons[buttonIndex].setClickHandler(std::tr1::bind(&CarListMenu::vehicleClick, this, *i));
+		
+		buttonIndex++;
+		
+		if(buttonIndex == 8)
+			return;
+	}
 }
 
 void CarListMenu::sellClick()
@@ -55,6 +59,11 @@ void CarListMenu::sellClick()
 
 void CarListMenu::selectClick()
 {
-	connection.setActiveVehicleId(dynamic_cast<Listbox&>(getChildByName("carList")).getCurrentItemTag());
+
 }
 
+void CarListMenu::vehicleClick(int id)
+{
+	connection.setActiveVehicleId(id);
+	parent.showOnlyWidget("gamemainmenu");
+}
