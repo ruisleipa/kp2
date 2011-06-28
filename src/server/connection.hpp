@@ -6,8 +6,10 @@
 
 #include "net/packet.hpp"
 
+class Player;
 class ClientSocket;
 class GameState;
+class SimulationState;
 
 const int BUFFERSIZE=512;
 
@@ -27,12 +29,13 @@ class Connection
 		void sendInstallError(const std::string& error);
 		void sendPerformanceData();
 		
-		void sendRaceState();
-		void sendRaceStart();
+		void sendPacket(const Packet& packet);
+		
+		Player& getPlayer();
 		
 		ClientSocket* getSocket();
 	
-		Connection(GameState& gameState, int playerId, ClientSocket& socket);
+		Connection(GameState& gameState, int playerId, ClientSocket& socket, SimulationState& simulationState);
 		
 	private:
 		std::string receiveBuffer;
@@ -43,6 +46,8 @@ class Connection
 		GameState& gameState;
 		int playerId;
 		ClientSocket* socket;
+		
+		SimulationState& simulationState;
 };
 
 #endif // CONNECTION_HPP

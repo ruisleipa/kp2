@@ -3,18 +3,25 @@
 #include "utils/inifile.hpp"
 #include "vehicle.hpp"
 
-const std::string& Tire::getName() const
+float Tire::getFrictionCoefficient() const
 {
-	return name;
+	return frictionCoefficient;
 }
 
-int Tire::getPrice() const
+float Tire::getRollingResistanceCoefficient() const
 {
-	return 0;
+	return rollingResistanceCoefficient;
+}
+
+float Tire::getRadius() const
+{
+	return radius;
 }
 
 Tire::Tire(IniFile& iniFile):
 	PartModel(iniFile)
 {
-	iniFile.getValue("name",name);
+	iniFile.getValue("frictionCoefficient", frictionCoefficient);
+	iniFile.getValue("rollingResistanceCoefficient", rollingResistanceCoefficient);
+	iniFile.getValue("radius", radius);
 }

@@ -18,6 +18,8 @@ class Engine: public PartModel
 		const std::string& getCylinderAlignment() const;	
 		int getCylinderCount() const;	
 		const Curve& getTorqueCurve() const;
+		int getIdleSpeed() const;
+		int getSpeedLimit() const;
 		
 		void checkPrerequisiteParts(const Vehicle& vehicle) const;
 		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;

@@ -6,11 +6,12 @@
 namespace Physics
 {
 
-Tire::Tire(float mass, float radius, float rollingResistanceCoefficient):
+Tire::Tire(float mass, float radius, float rollingResistanceCoefficient, float frictionCoefficient):
 	slipRatio(0),
 	radius(radius),
 	inertia(0),
-	rollingResistanceCoefficient(rollingResistanceCoefficient)
+	rollingResistanceCoefficient(rollingResistanceCoefficient),
+	frictionCoefficient(frictionCoefficient)
 {
 	inertia = 0.5f * mass * radius * radius;
 }
@@ -27,14 +28,11 @@ double Tire::getInertia()
 
 double Tire::getFriction(double load)
 {
-	// These are magic constants that produce somewhat nice values
-	const float a = 9.00;
-	const float b = 16.00;
-	const float p = 1.40;
+	float maxForce = load * frictionCoefficient;
 	
-	float coefficient = (slipRatio * b) / (1.0 + pow(fabs(a * slipRatio), p));
+	float normalizedForce = slipRatio * 20.0;
 	
-	return coefficient * load;
+	return normalizedForce * maxForce;
 }
 
 double Tire::getRollingResistance(double load,double speed)

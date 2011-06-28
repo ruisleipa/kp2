@@ -1,13 +1,14 @@
-#include "racestate.hpp"
+#include "simulationvehiclestate.hpp"
 
 #include "net/packet.hpp"
 
 namespace Protocol
 {
 
-Packet& operator<<(Packet& packet,const RaceState& state)
+Packet& operator<<(Packet& packet,const SimulationVehicleState& state)
 {
-	packet << state.time;
+	packet << state.id;
+	//packet << state.time;
 	packet << state.position;
 	packet << state.speed;
 	packet << state.engineSpeedInRpm;
@@ -16,9 +17,10 @@ Packet& operator<<(Packet& packet,const RaceState& state)
 	return packet;
 }
 
-Packet& operator>>(Packet& packet,RaceState& state)
+Packet& operator>>(Packet& packet,SimulationVehicleState& state)
 {
-	packet >> state.time;
+	packet >> state.id;
+	state.time = 0;
 	packet >> state.position;
 	packet >> state.speed;
 	packet >> state.engineSpeedInRpm;

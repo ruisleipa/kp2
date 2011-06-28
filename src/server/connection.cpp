@@ -2,6 +2,8 @@
 
 #include "gamestate.hpp"
 
+#include "simulationstate.hpp"
+
 #include "net/clientsocket.hpp"
 
 #include "protocol/protocol.hpp"
@@ -137,38 +139,17 @@ void Connection::processPackets()
 			{			
 				sendPerformanceData();			
 			}
-			else if(type == Protocol::COMMAND_RACE_START)
+			else if(type == Protocol::COMMAND_TESTRUN_START)
 			{			
-				gameState.startRace(playerId, 0);
-				
-				sendRaceStart();
+				simulationState.startTestRun(*this);
 			}
-			else if(type == Protocol::COMMAND_RACE_CONTROL_STATE)
-			{			
-				VehicleSimulation* simulation = gameState.getRaceSimulationByPlayerId(playerId);
+			else if(type == Protocol::COMMAND_CONTROL_STATE)
+			{
+				Protocol::ControlState state;
 				
-				if(simulation)
-				{
-					Protocol::RaceControlState state;
-					
-					packet >> state;
-					
-					/*std::cout << "throttle:" << state.throttle << std::endl;
-					std::cout << "ignition:" << state.ignition << std::endl;
-					std::cout << "clutch:" << state.clutch << std::endl;
-					std::cout << "gearDown:" << state.gearDown << std::endl;
-					std::cout << "gearUp:" << state.gearUp << std::endl;
-					*/
-					if(state.gearDown)
-						simulation->lowerGear();
-					
-					if(state.gearUp)
-						simulation->upperGear();
-					
-					simulation->setThrottleUsage(state.throttle);
-					simulation->setClutchUsage(state.clutch);
-					simulation->setIgnition(state.ignition);
-				}
+				packet >> state;
+				
+				simulationState.setControlState(*this, state);
 			}
 		}
 		catch(EndOfDataException)
@@ -470,55 +451,26 @@ void Connection::sendPerformanceData()
 	sendQueue.push(packet);
 }
 
-void Connection::sendRaceState()
+void Connection::sendPacket(const Packet& packet)
 {
-	VehicleSimulation* simulation = gameState.getRaceSimulationByPlayerId(playerId);
-
-	if(simulation)
-	{
-		Packet packet;
-	
-		packet.setType(Protocol::DATA_RACE_STATE);
-		
-		Protocol::RaceState state;
-		
-		state.time = simulation->getTimeInSeconds(); 
-		state.position = simulation->getPosition(); 
-		state.speed = simulation->getSpeed(); 
-		state.engineSpeedInRpm = simulation->getEngineSpeedInRpm(); 
-		state.boostPressure = simulation->getBoostPressure(); 
-		
-		packet << state;
-		
-		sendQueue.push(packet);
-		
-		//std::cout << "sending simulation state: " << simulation->getTimeInSeconds() << std::endl;
-	}
-}
-
-void Connection::sendRaceStart()
-{
-	Packet packet;
-	
-	packet.setType(Protocol::DATA_RACE_START);
-	
-	Protocol::RaceStart start;
-
-	packet << start;
-	
 	sendQueue.push(packet);
 }
 
+Player& Connection::getPlayer()
+{
+	return gameState.getPlayer(playerId);
+}
 
 ClientSocket* Connection::getSocket()
 {
 	return socket;
 }
 
-Connection::Connection(GameState& gameState, int playerId, ClientSocket& socket):
+Connection::Connection(GameState& gameState, int playerId, ClientSocket& socket, SimulationState& simulationState):
 	gameState(gameState),
 	playerId(playerId),
-	socket(&socket)
+	socket(&socket),
+	simulationState(simulationState)
 {
 	sendPlayerInfo();
 	sendPlayers();

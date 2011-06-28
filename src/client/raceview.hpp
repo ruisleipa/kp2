@@ -15,12 +15,15 @@ class RaceView : public Menu
 		RaceView(Connection& connection);
 
 	private:
+		void sendControlState();
 		void drawHandler(DrawEvent* event);
 		void onConnectionEvent(Connection& connection);
 	
 		Connection& connection;
 		
 		bool ignition;
+		bool gearUp;
+		bool gearDown;
 		float throttle;
 		float brake;
 		float clutch;
@@ -33,7 +36,19 @@ class RaceView : public Menu
 		Texture track;
 		Texture tree;
 		
-		Texture vehicle1;
+		class Vehicle
+		{
+			public:
+				Texture texture;
+				float width;
+				
+				float position;
+				float speed;
+				float boost;
+				float rpm;
+		};
+		
+		std::map<int, Vehicle> vehicles;
 };
 
 #endif

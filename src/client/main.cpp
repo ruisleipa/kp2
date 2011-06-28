@@ -1,3 +1,5 @@
+#include <tr1/memory>
+
 #include "utils/outputredirector.hpp"
 #include "debug/crashcatcher.hpp"
 #include "debug/crashmessage.hpp"
@@ -33,7 +35,7 @@
 
 #include "raceview.hpp"
 
-#include "racestartevent.hpp"
+#include "simulationstartevent.hpp"
 
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
@@ -48,18 +50,36 @@ class RaceStartListener: public EventListener
 	public:
 		void handleEvent(Event* event)
 		{
-			if(dynamic_cast<RaceStartEvent*>(event))
+			if(dynamic_cast<SimulationStartEvent*>(event))
+			{
+				if(raceView)
+				{
+					connection.addEventListener(raceView.get());
+					menus.removeWidget(*raceView.get());
+				}
+				
+				raceView.reset(new RaceView(connection));
+				
+				menus.addWidget("raceview", *raceView.get());
+				
 				menus.showOnlyWidget("raceview");
+				
+				connection.addEventListener(raceView.get());
+			}
 		}
 		
-		RaceStartListener(MenuContainer& menus):
-			menus(menus)
+		RaceStartListener(MenuContainer& menus, Connection& connection):
+			menus(menus),
+			connection(connection)
 		{
 		
 		}
 	
 	private:
 		MenuContainer& menus;
+		Connection& connection;
+		
+		std::tr1::shared_ptr<RaceView> raceView;
 		
 };
 
@@ -144,10 +164,9 @@ void startGame()
 	menuContainer.addWidget("newlocalgamemenu",newLocalGameMenu);	
 	menuContainer.addWidget("remotegamemenu",remoteGameMenu);	
 	menuContainer.addWidget("careermenu",careerMenu);	
-	menuContainer.addWidget("raceview",raceView);	
 	menuContainer.showOnlyWidget("mainmenu");
 	
-	RaceStartListener raceStartListener(menuContainer);
+	RaceStartListener raceStartListener(menuContainer, connection);
 	connection.addEventListener(&raceStartListener);
 	
 	RootContainer rootContainer(window,events);	

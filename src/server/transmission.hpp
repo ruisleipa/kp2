@@ -4,6 +4,7 @@
 #include "partmodel.hpp"
 
 #include <string>
+#include <vector>
 
 class IniFile;
 class Vehicle;
@@ -11,13 +12,14 @@ class Vehicle;
 class Transmission: public PartModel
 {
 	public:
-		const std::string& getName() const;
-		int getPrice() const;
+		std::vector<float> getGearRatios() const;
+		int getNeutralGearIndex() const;
 		
 		Transmission(IniFile& iniFile);
 		
 	private:
-		std::string name;
+		int neutralGear;
+		std::vector<float> gears;
 		
 };
 

@@ -1,20 +1,36 @@
 #include "transmission.hpp"
 
 #include "utils/inifile.hpp"
-#include "vehicle.hpp"
 
-const std::string& Transmission::getName() const
+std::vector<float> Transmission::getGearRatios() const
 {
-	return name;
+	return gears;
 }
 
-int Transmission::getPrice() const
+int Transmission::getNeutralGearIndex() const
 {
-	return 0;
+	return neutralGear;
 }
 
 Transmission::Transmission(IniFile& iniFile):
 	PartModel(iniFile)
 {
-	iniFile.getValue("name",name);
+	iniFile.getValue("neutralGear", neutralGear);
+	
+	int gearCount;
+	
+	iniFile.getValue("gearCount", gearCount);
+	
+	for(int i = 0; i < gearCount; i++)
+	{
+		float value;
+		
+		std::stringstream key;
+		
+		key << "gear[" << i << "]";
+		
+		iniFile.getValue(key.str(), value);
+		
+		gears.push_back(value);
+	}
 }

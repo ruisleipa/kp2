@@ -11,8 +11,6 @@ class Vehicle;
 class ExhaustManifold: public PartModel
 {
 	public:
-		const std::string& getName() const;
-		int getPrice() const;
 		float getFlow() const;
 		
 		void checkPrerequisiteParts(const Vehicle& vehicle) const;

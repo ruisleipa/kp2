@@ -62,9 +62,11 @@ void ConnectionManager::acceptConnection()
 	
 	sockets.push_back(socket);
 	
-	Connection connection(gameState, playerId, sockets.back());
+	Connection connection(gameState, playerId, sockets.back(), simulationState);
 	connections.insert(std::make_pair(&sockets.back(), connection));
 	socketSet.add(&sockets.back());
+	
+	std::cout << "New connection" << std::endl;
 }
 
 void ConnectionManager::readFromSocket(ClientSocket* socket)
@@ -124,9 +126,10 @@ void ConnectionManager::closeConnectionBySocket(ClientSocket* socket)
 	}
 }
 
-ConnectionManager::ConnectionManager(ServerSocket& serverSocket, GameState& gameState):
+ConnectionManager::ConnectionManager(ServerSocket& serverSocket, GameState& gameState, SimulationState& simulationState):
 	serverSocket(serverSocket),
-	gameState(gameState)
+	gameState(gameState),
+	simulationState(simulationState)
 {
 	socketSet.add(&serverSocket);
 }

@@ -20,7 +20,7 @@ class ConnectionManager
 		int getConnectionCount();
 		Connection& getConnectionByIndex(int index);
 		
-		ConnectionManager(ServerSocket& serverSocket, GameState& gameState);
+		ConnectionManager(ServerSocket& serverSocket, GameState& gameState, SimulationState& simulationState);
 		
 	private:
 		void acceptConnection();
@@ -30,6 +30,7 @@ class ConnectionManager
 	
 		ServerSocket& serverSocket;
 		GameState& gameState;
+		SimulationState& simulationState;
 		
 		std::map<ClientSocket*, Connection> connections;
 		std::list<ClientSocket> sockets;

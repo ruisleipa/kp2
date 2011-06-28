@@ -7,7 +7,7 @@ namespace Physics
 class Tire
 {
 	public:
-		Tire(float mass, float radius, float rollingResistanceCoefficient);
+		Tire(float mass, float radius, float rollingResistanceCoefficient, float frictionCoefficient);
 		
 		double getFriction(double load);
 		double getRadius();
@@ -21,6 +21,7 @@ class Tire
 		double radius;
 		double inertia;
 		double rollingResistanceCoefficient;
+		double frictionCoefficient;
 };
 
 };

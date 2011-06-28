@@ -27,9 +27,11 @@ SRC = src/debug/assert.cpp \
 	src/protocol/performancedata.cpp \
 	src/protocol/playerinfo.cpp \
 	src/protocol/collection.cpp \
-	src/protocol/racecontrolstate.cpp \
-	src/protocol/racestart.cpp \
-	src/protocol/racestate.cpp \
+	src/protocol/controlstate.cpp \
+	src/protocol/simulationstart.cpp \
+	src/protocol/simulationvehicledata.cpp \
+	src/protocol/simulationvehiclestate.cpp \
+	src/protocol/simulationvehicleresult.cpp \
 	src/protocol/setname.cpp \
 	src/protocol/shoppart.cpp \
 	src/protocol/shopvehicle.cpp \
@@ -61,11 +63,13 @@ SRC = src/debug/assert.cpp \
 	src/server/intakemanifold.cpp \
 	src/server/vehiclesimulation.cpp \
 	src/server/dynamometer.cpp \
-	src/server/race.cpp \
 	src/server/tire.cpp \
 	src/server/transmission.cpp \
 	src/server/vehicle.cpp \
 	src/server/vehiclemodel.cpp \
+	src/server/simulationstate.cpp \
+	src/server/driver.cpp \
+	src/server/testrun.cpp \
 	src/utils/commandlineparser.cpp \
 	src/utils/curve.cpp \
 	src/utils/demangle.cpp \

@@ -25,6 +25,7 @@ class Connection
 		
 		void addEventHandler(std::tr1::function<void(Connection&)> handler);
 		void addEventListener(EventListener* listener);
+		void removeEventListener(EventListener* listener);
 		
 		Connection();
 		
@@ -50,8 +51,8 @@ class Connection
 		void installPart(int partId);
 		void uninstallPart(int vehiclePartId);
 		
-		void startRace();
-		void sendRaceControlState(const Protocol::RaceControlState& state);
+		void startTestRun();
+		void sendControlState(const Protocol::ControlState& state);
 		
 	private:
 		void propagateEvent(Event* event);
@@ -60,7 +61,7 @@ class Connection
 
 		std::vector<std::tr1::function<void(Connection&)> > eventHandlers;
 		
-		std::vector<EventListener*> listeners;
+		std::set<EventListener*> listeners;
 		
 		ClientSocket socket;
 		

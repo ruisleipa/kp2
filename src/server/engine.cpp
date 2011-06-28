@@ -33,6 +33,16 @@ const Curve& Engine::getTorqueCurve() const
 	return torqueCurve;
 }
 
+int Engine::getIdleSpeed() const
+{
+	return 1000;
+}
+
+int Engine::getSpeedLimit() const
+{
+	return 8000;
+}
+
 void Engine::checkPrerequisiteParts(const Vehicle& vehicle) const
 {
 	if(vehicle.getModel().getMaxEngineVolume() < volume)

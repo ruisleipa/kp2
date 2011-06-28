@@ -1,11 +1,11 @@
-#include "racecontrolstate.hpp"
+#include "controlstate.hpp"
 
 #include "net/packet.hpp"
 
 namespace Protocol
 {
 
-Packet& operator<<(Packet& packet,const RaceControlState& state)
+Packet& operator<<(Packet& packet, const ControlState& state)
 {
 	packet << uint16_t(state.ignition);
 	packet << state.throttle;
@@ -17,7 +17,7 @@ Packet& operator<<(Packet& packet,const RaceControlState& state)
 	return packet;
 }
 
-Packet& operator>>(Packet& packet,RaceControlState& state)
+Packet& operator>>(Packet& packet, ControlState& state)
 {
 	uint16_t ignition;
 	uint16_t gearUp;

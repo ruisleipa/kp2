@@ -126,8 +126,6 @@ void VehicleModel::load(const std::string& filename)
 		
 		file.getValue(partPrefix + ".model", model);	
 		file.getValue(partPrefix + ".machinings", machinings);
-		
-		std::cout<<model<<" "<<machinings<<std::endl;
 	
 		createPart(model,machinings);
 	}	

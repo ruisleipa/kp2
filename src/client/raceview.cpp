@@ -1,14 +1,17 @@
 #include "raceview.hpp"
 
 #include "gauge.hpp"
-#include "racestateevent.hpp"
-#include "protocol/racecontrolstate.hpp"
+#include "simulationstartevent.hpp"
+#include "simulationvehicledataevent.hpp"
+#include "simulationvehiclestateevent.hpp"
+#include "simulationvehicleresultevent.hpp"
+#include "protocol/controlstate.hpp"
 #include "gui/label.hpp"
 
 void RaceView::handleEvent(Event* event)
 {
-	bool gearUp = false;
-	bool gearDown = false;
+	gearUp = false;
+	gearDown = false;
 
 	if(dynamic_cast<KeyDownEvent*>(event))
 	{
@@ -24,6 +27,8 @@ void RaceView::handleEvent(Event* event)
 			gearDown = true;
 		if(keyDown->getKey() == SDLK_SPACE)
 			clutch = 0.0;
+			
+		sendControlState();
 	}
 	
 	if(dynamic_cast<KeyUpEvent*>(event))
@@ -36,33 +41,76 @@ void RaceView::handleEvent(Event* event)
 			ignition = false;
 		if(keyUp->getKey() == SDLK_SPACE)
 			clutch = 1.0;
+		
+		sendControlState();
 	}
 	
-	if(dynamic_cast<RaceStateEvent*>(event))
+	if(dynamic_cast<SimulationVehicleDataEvent*>(event))
 	{
-		RaceStateEvent* stateEvent = dynamic_cast<RaceStateEvent*>(event);
+		SimulationVehicleDataEvent* dataEvent = dynamic_cast<SimulationVehicleDataEvent*>(event);
 		
-		dynamic_cast<Gauge&>(getChildByName("rpmGauge")).setValue(stateEvent->state.engineSpeedInRpm);
-		dynamic_cast<Gauge&>(getChildByName("boostGauge")).setValue(stateEvent->state.boostPressure);
-		dynamic_cast<Gauge&>(getChildByName("speedGauge")).setValue(stateEvent->state.speed);
+		Vehicle vehicle;
+		
+		vehicle.texture = Texture("gamedata/vehicleimages/" + dataEvent->data.imageName);
+		vehicle.width = dataEvent->data.width;
+		
+		vehicles[dataEvent->data.id] = vehicle;
+	}
+	
+	if(dynamic_cast<SimulationVehicleStateEvent*>(event))
+	{
+		SimulationVehicleStateEvent* stateEvent = dynamic_cast<SimulationVehicleStateEvent*>(event);
+		
+		Vehicle& vehicle = vehicles[stateEvent->state.id];
+		
+		vehicle.position = stateEvent->state.position;
+		vehicle.speed = stateEvent->state.speed;
+		vehicle.rpm = stateEvent->state.engineSpeedInRpm;
+		vehicle.boost = stateEvent->state.boostPressure;
+	}
+	
+	if(dynamic_cast<SimulationVehicleResultEvent*>(event))
+	{
+		SimulationVehicleResultEvent* resultEvent = dynamic_cast<SimulationVehicleResultEvent*>(event);
 		
 		std::stringstream ss;
 		
-		ss << "RPM: " << stateEvent->state.engineSpeedInRpm << "\n";
-		ss << "boostPressure: " << stateEvent->state.boostPressure << "\n";
-		ss << "time: " << stateEvent->state.time << "\n";
-		ss << "position: " << stateEvent->state.position << "\n";
-		ss << "speed: " << stateEvent->state.speed << "\n";
+		ss << "Reaktioaika: " << resultEvent->result.reactionTime << "\n";
+		ss << "Matka-aika: " << resultEvent->result.elapsedTime << "\n";
+		ss << "Kokonaisaika: " << resultEvent->result.totalTime << "\n";
+		ss << "Huippunopeus: " << resultEvent->result.topSpeed * 3.6 << " km/h\n";
 		
 		dynamic_cast<Label&>(getChildByName("debugLabel")).setText(ss.str());
-		
-		position = stateEvent->state.position;
 	}
 	
 	if(dynamic_cast<DrawEvent*>(event))
 		drawHandler(dynamic_cast<DrawEvent*>(event));
 	
-	Protocol::RaceControlState state;
+	Menu::handleEvent(event);
+}
+
+RaceView::RaceView(Connection& connection):
+	connection(connection),
+	ignition(false),
+	gearUp(false),
+	gearDown(false),
+	throttle(0),
+	brake(0),
+	clutch(1),
+	position(0),
+	loader("data/ui/raceview.ui"),
+	trackStart("data/track/start.png"),
+	track("data/track/track.png"),
+	tree("data/track/tree.png")
+{
+	connection.addEventHandler(std::tr1::bind(&RaceView::onConnectionEvent,this,std::tr1::placeholders::_1));
+
+	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
+}
+
+void RaceView::sendControlState()
+{
+	Protocol::ControlState state;
 	
 	state.ignition = ignition;
 	state.throttle = throttle;
@@ -71,27 +119,7 @@ void RaceView::handleEvent(Event* event)
 	state.gearUp = gearUp;
 	state.gearDown = gearDown;
 	
-	connection.sendRaceControlState(state);
-	
-	Menu::handleEvent(event);
-}
-
-RaceView::RaceView(Connection& connection):
-	connection(connection),
-	ignition(false),
-	throttle(0),
-	brake(0),
-	clutch(1),
-	position(0),
-	loader("data/ui/raceview.ui"),
-	trackStart("data/track/start.png"),
-	track("data/track/track.png"),
-	tree("data/track/tree.png"),
-	vehicle1("gamedata/vehicleimages/fiat_uno.png")
-{
-	connection.addEventHandler(std::tr1::bind(&RaceView::onConnectionEvent,this,std::tr1::placeholders::_1));
-	
-	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
+	connection.sendControlState(state);
 }
 
 void RaceView::onConnectionEvent(Connection& connection)
@@ -101,6 +129,10 @@ void RaceView::onConnectionEvent(Connection& connection)
 
 void RaceView::drawHandler(DrawEvent* event)
 {
+	dynamic_cast<Gauge&>(getChildByName("rpmGauge")).setValue(vehicles[0].rpm);
+	dynamic_cast<Gauge&>(getChildByName("boostGauge")).setValue(vehicles[0].boost);
+	dynamic_cast<Gauge&>(getChildByName("speedGauge")).setValue(vehicles[0].speed);
+
 	float viewWidthInMeters = 25.0;
 	float viewHeightInMeters = viewWidthInMeters / event->getAreaSize().getX() * event->getAreaSize().getY();
 	
@@ -123,16 +155,13 @@ void RaceView::drawHandler(DrawEvent* event)
 	
 	Texture().bind();
 	
-	glTranslatef(0, -this->position + 4, 0);
+	float positionValue = vehicles[0].position;
+	
+	glTranslatef(0, -(std::min(positionValue, finishLine) - 4), 0);
 	
 	Color(1, 1, 1, 1).apply();
 	
-	Vector2D position(-trackWidth / 2.0, -5);
-	
-	Vector2D trackStartSize(trackWidth, trackWidth / trackStart.getSize().getX() * trackStart.getSize().getY());
-	
-	trackStart.draw(position, trackStartSize);
-	position += Vector2D(0, trackStartSize.getY());
+	Vector2D position(-trackWidth / 2.0, -10);
 	
 	Vector2D trackSize(trackWidth, trackWidth / track.getSize().getX() * track.getSize().getY());
 	
@@ -146,15 +175,32 @@ void RaceView::drawHandler(DrawEvent* event)
 	
 	glLineWidth(4.0);
 	glBegin(GL_LINES);
+		glVertex2f(-trackWidth / 2.0, startingLine);
+		glVertex2f(trackWidth / 2.0, startingLine);
+	glEnd();
+	
+	glBegin(GL_LINES);
 		glVertex2f(-trackWidth / 2.0, finishLine);
 		glVertex2f(trackWidth / 2.0, finishLine);
 	glEnd();
 	
-	const Protocol::Vehicle& vehicle = connection.getPlayerVehicles().getItem(connection.getActiveVehicleId());
+	int vehicleIndex = 0;
 	
-	float vehiceLength = vehicle.width / vehicle1.getSize().getX() * vehicle1.getSize().getY();
-	
-	vehicle1.draw(Vector2D((trackWidth / 4.0) - (vehicle.width / 2.0), this->position - vehiceLength), Vector2D(vehicle.width, vehiceLength));
+	for(std::map<int, Vehicle>::iterator i = vehicles.begin(); i != vehicles.end(); ++i)
+	{
+		Vehicle& vehicle = i->second;
+		
+		Texture& texture = vehicle.texture;
+		
+		float vehiceLength = vehicle.width / texture.getSize().getX() * texture.getSize().getY();
+		
+		if(vehicleIndex == 0)
+			texture.draw(Vector2D((trackWidth / 4.0) - (vehicle.width / 2.0), vehicle.position - vehiceLength), Vector2D(vehicle.width, vehiceLength));
+		else
+			texture.draw(Vector2D((vehicle.width / 2.0) - (trackWidth / 4.0), vehicle.position - vehiceLength), Vector2D(vehicle.width, vehiceLength));
+			
+		vehicleIndex++;
+	}
 	
 	glPopMatrix();
 	

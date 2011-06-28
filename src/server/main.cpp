@@ -13,6 +13,7 @@
 
 #include "connectionmanager.hpp"
 #include "gamestate.hpp"
+#include "simulationstate.hpp"
 
 void startServer(int argc,char** argv)
 {
@@ -39,6 +40,7 @@ void startServer(int argc,char** argv)
 	config.getValue("connectionLimit",connectionLimit);
 	
 	GameState gameState;
+	SimulationState simulationState;
 	
 	std::string hostName;
 	
@@ -51,28 +53,29 @@ void startServer(int argc,char** argv)
 	
 	serverSocket.open(hostName, port);
 	
-	ConnectionManager connectionManager(serverSocket, gameState);
+	ConnectionManager connectionManager(serverSocket, gameState, simulationState);
 	
 	bool playersHaveJoined = false;
 	bool running = true;
 	
 	Timer raceUpdateTimer;
 	
-	const float raceUpdateInterval = 1.0 / 60.0;
+	const float raceUpdateInterval = 1.0 / 5.0;
 	
 	while(running)
 	{
 		connectionManager.processConnections(0.001);
 		
-		gameState.updateRaces();
+		simulationState.updateSimulations();
 		
 		if(raceUpdateTimer.getSeconds() > raceUpdateInterval)
 		{
+			simulationState.sendStates();
+			
 			for(int i = 0; i < connectionManager.getConnectionCount(); ++i)
 			{
 				Connection& connection = connectionManager.getConnectionByIndex(i);
 				
-				connection.sendRaceState();
 				connection.writePackets();
 			}
 			

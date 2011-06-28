@@ -11,9 +11,11 @@
 #include "vehicle.hpp"
 #include "part.hpp"
 #include "performancedata.hpp"
-#include "racestart.hpp"
-#include "racestate.hpp"
-#include "racecontrolstate.hpp"
+#include "simulationstart.hpp"
+#include "simulationvehicledata.hpp"
+#include "simulationvehiclestate.hpp"
+#include "controlstate.hpp"
+#include "simulationvehicleresult.hpp"
 
 namespace Protocol
 {
@@ -38,8 +40,10 @@ const uint16_t DATA_PERFORMANCE = 62;
 
 const uint16_t DATA_INSTALL_ERROR = 90;
 
-const uint16_t DATA_RACE_START = 5000;
-const uint16_t DATA_RACE_STATE = 5001;
+const uint16_t DATA_SIMULATION_START = 5000;
+const uint16_t DATA_SIMULATION_VEHICLE_DATA = 5001;
+const uint16_t DATA_SIMULATION_VEHICLE_STATE = 5002;
+const uint16_t DATA_SIMULATION_VEHICLE_RESULT = 5003;
 
 const uint16_t COMMAND_SET_NAME = 0;
 const uint16_t COMMAND_SET_ACTIVE_VEHICLE_ID = 1;
@@ -54,7 +58,8 @@ const uint16_t COMMAND_UNINSTALL_PART = 301;
 const uint16_t COMMAND_UPDATE_PERFORMANCE = 302;
 
 const uint16_t COMMAND_RACE_START = 5000;
-const uint16_t COMMAND_RACE_CONTROL_STATE = 5001;
+const uint16_t COMMAND_CONTROL_STATE = 5001;
+const uint16_t COMMAND_TESTRUN_START = 5002;
 
 };
 

@@ -56,6 +56,8 @@ PartModel* PartModelFactory::loadPartModel(const std::string& filename)
 		return new IntakeManifold(partFile);
 	else if(type == "tire")
 		return new Tire(partFile);
+	else if(type == "transmission")
+		return new Transmission(partFile);
 	
 	throw std::runtime_error("Invalid part type \"" + type + "\" in file \"" + filename + "\".");
 }

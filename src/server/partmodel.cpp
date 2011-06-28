@@ -67,5 +67,6 @@ PartModel::PartModel(const IniFile& partFile)
 {
 	partFile.getValue("type",type);
 	partFile.getValue("weight",weight);
-	price = 100;
+	name = partFile.getValueWithDefault("name", "Nimetön osa");
+	price = partFile.getValueWithDefault("price", 0);
 }

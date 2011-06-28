@@ -16,8 +16,13 @@
 #include "protocol/installpart.hpp"
 #include "protocol/uninstallpart.hpp"
 
-#include "racestartevent.hpp"
-#include "racestateevent.hpp"
+#include "simulationstartevent.hpp"
+#include "simulationvehicledataevent.hpp"
+#include "simulationvehiclestateevent.hpp"
+#include "simulationvehicleresultevent.hpp"
+#include "vehicleerrorevent.hpp"
+#include "installerrorevent.hpp"
+#include "connectionlostevent.hpp"
 
 #include "utils/sdl.hpp"
 
@@ -116,20 +121,42 @@ void Connection::processMessages()
 			{
 				message >> performanceData;
 			}
-			else if(message.getType() == Protocol::DATA_RACE_START)
+			else if(message.getType() == Protocol::DATA_SIMULATION_START)
 			{
-				RaceStartEvent event;
+				SimulationStartEvent event;
 				
 				propagateEvent(&event);
 			}
-			else if(message.getType() == Protocol::DATA_RACE_STATE)
+			else if(message.getType() == Protocol::DATA_SIMULATION_VEHICLE_DATA)
 			{
-				Protocol::RaceState state;
+				Protocol::SimulationVehicleData data;
+				
+				message >> data;
+				
+				SimulationVehicleDataEvent event;
+				event.data = data;
+				
+				propagateEvent(&event);
+			}
+			else if(message.getType() == Protocol::DATA_SIMULATION_VEHICLE_STATE)
+			{
+				Protocol::SimulationVehicleState state;
 				
 				message >> state;
 				
-				RaceStateEvent event;
+				SimulationVehicleStateEvent event;
 				event.state = state;
+				
+				propagateEvent(&event);
+			}
+			else if(message.getType() == Protocol::DATA_SIMULATION_VEHICLE_RESULT)
+			{
+				Protocol::SimulationVehicleResult result;
+				
+				message >> result;
+				
+				SimulationVehicleResultEvent event;
+				event.result = result;
 				
 				propagateEvent(&event);
 			}
@@ -292,20 +319,20 @@ void Connection::updatePerformanceData()
 	writeToServer(packet);
 }
 
-void Connection::startRace()
+void Connection::startTestRun()
 {
 	Packet packet;
 	
-	packet.setType(Protocol::COMMAND_RACE_START);
+	packet.setType(Protocol::COMMAND_TESTRUN_START);
 	
 	writeToServer(packet);
 }
 
-void Connection::sendRaceControlState(const Protocol::RaceControlState& state)
+void Connection::sendControlState(const Protocol::ControlState& state)
 {
 	Packet packet;
 	
-	packet.setType(Protocol::COMMAND_RACE_CONTROL_STATE);
+	packet.setType(Protocol::COMMAND_CONTROL_STATE);
 	
 	packet << state;
 	

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <tr1/memory>
 
 class VehicleModel;
 class PartModel;
@@ -10,6 +11,7 @@ class PartModel;
 #include "part.hpp"
 #include "vehicle.hpp"
 #include "exceptions.hpp"
+#include "driver.hpp"
 
 class Player
 {
@@ -33,6 +35,9 @@ class Player
 		void setActiveVehicleId(int id);
 		int getActiveVehicleId();
 		
+		std::tr1::shared_ptr<Driver> getDriver();
+		void setDriver(std::tr1::weak_ptr<Driver> driver);
+		
 		Player(const std::string& name,int money);
 		
 	private:
@@ -43,6 +48,8 @@ class Player
 	
 		std::map<int,Vehicle> vehicles;
 		std::map<int,Part> parts;
+		
+		std::tr1::weak_ptr<Driver> driver;
 		
 };
 

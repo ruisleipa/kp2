@@ -4,16 +4,6 @@
 #include "vehicle.hpp"
 #include "cylinderhead.hpp"
 
-const std::string& ExhaustManifold::getName() const
-{
-	return name;
-}
-
-int ExhaustManifold::getPrice() const
-{
-	return 0;
-}
-
 float ExhaustManifold::getFlow() const
 {
 	return flow;
@@ -53,15 +43,4 @@ ExhaustManifold::ExhaustManifold(IniFile& iniFile):
 	iniFile.getValue("cylinders",cylinders);
 	iniFile.getValue("cylinderAlignment",cylinderAlignment);
 	iniFile.getValue("flow", flow);
-		
-	std::stringstream ss;
-	
-	ss << cylinderAlignment;
-	ss << cylinders;
-	ss << " ";
-	
-	ss << " -pakosarja ";
-	ss << flow;
-	
-	name = ss.str();
 }

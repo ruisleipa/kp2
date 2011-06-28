@@ -7,6 +7,8 @@
 #include "engine.hpp"
 #include "intakemanifold.hpp"
 #include "exhaustmanifold.hpp"
+#include "transmission.hpp"
+#include "tire.hpp"
 #include "charger.hpp"
 
 #include "physics/vehicle.hpp"
@@ -15,6 +17,10 @@
 #include "physics/pipe.hpp"
 #include "physics/atmosphere.hpp"
 #include "physics/charger.hpp"
+
+#include <tr1/memory>
+
+using std::tr1::shared_ptr;
 
 class VehicleSimulation: public NonCopyable
 {
@@ -45,34 +51,34 @@ class VehicleSimulation: public NonCopyable
 		const Engine& findEngine();
 		const IntakeManifold& findIntakeManifold();
 		const ExhaustManifold& findExhaustManifold();
+		const Transmission& findTransmission();
+		const Tire& findTire();
 		const Charger* findCharger();
-		std::vector<float> getGearRatios();
-		int getNeutralGearIndex();
-		float getIdleSpeed();
-		float getSpeedLimit();
 	
 		Vehicle& vehicle;
 		
 		const Engine& enginePart;
 		const IntakeManifold& intakeManifoldPart;
 		const ExhaustManifold& exhaustManifoldPart;
+		const Transmission& transmissionPart;
+		const Tire& tirePart;
 		const Charger* chargerPart;
 		
-		Physics::Atmosphere atmosphere;
-		Physics::Pipe airFilter;
-		Physics::Charger charger;
-		Physics::Pipe intakeManifold;
-		Physics::Engine engine;
-		Physics::Pipe exhaustManifold;
-		Physics::Transmission transmission;
-		Physics::Clutch clutch;
-		Physics::Chassis chassis;
-		Physics::Tire frontLeftTire;
-		Physics::Tire frontRightTire;
-		Physics::Tire backLeftTire;
-		Physics::Tire backRightTire;
-		Physics::Brake brake;
-		Physics::Vehicle physicsVehicle;
+		shared_ptr<Physics::Atmosphere> atmosphere;
+		shared_ptr<Physics::Pipe> airFilter;
+		shared_ptr<Physics::Charger> charger;
+		shared_ptr<Physics::Pipe> intakeManifold;
+		shared_ptr<Physics::Engine> engine;
+		shared_ptr<Physics::Pipe> exhaustManifold;
+		shared_ptr<Physics::Transmission> transmission;
+		shared_ptr<Physics::Clutch> clutch;
+		shared_ptr<Physics::Chassis> chassis;
+		shared_ptr<Physics::Tire> frontLeftTire;
+		shared_ptr<Physics::Tire> frontRightTire;
+		shared_ptr<Physics::Tire> backLeftTire;
+		shared_ptr<Physics::Tire> backRightTire;
+		shared_ptr<Physics::Brake> brake;
+		shared_ptr<Physics::Vehicle> physicsVehicle;
 
 };
 

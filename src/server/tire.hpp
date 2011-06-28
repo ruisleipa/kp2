@@ -11,13 +11,16 @@ class Vehicle;
 class Tire: public PartModel
 {
 	public:
-		const std::string& getName() const;
-		int getPrice() const;
+		float getFrictionCoefficient() const;
+		float getRollingResistanceCoefficient() const;
+		float getRadius() const;
 		
 		Tire(IniFile& iniFile);
 		
 	private:
-		std::string name;
+		float frictionCoefficient;
+		float rollingResistanceCoefficient;
+		float radius;
 		
 };
 
