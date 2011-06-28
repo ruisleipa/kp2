@@ -4,7 +4,9 @@
 #include "widget.hpp"
 #include "widgetloader.hpp"
 
-class ScrollBox : public Widget
+#include "container.hpp"
+
+class ScrollBox : public Container
 {
 	public:
 		void addWidget(Widget& widget, const std::string width,
@@ -13,6 +15,10 @@ class ScrollBox : public Widget
 		virtual void handleEvent(Event* event);
 		
 		ScrollBox();
+
+	protected:
+		virtual Vector2D getWidgetPosition(Widget* widget,Vector2D ourSize);
+		virtual Vector2D getWidgetSize(Widget* widget,Vector2D ourSize);
 		
 	private:
 		void updateViewPosition();

@@ -39,6 +39,16 @@ void ScrollBox::handleEvent(Event* event)
 	container.handleEvent(event);
 }
 
+Vector2D ScrollBox::getWidgetPosition(Widget* widget, Vector2D ourSize)
+{
+	return Vector2D(0, 0);
+}
+
+Vector2D ScrollBox::getWidgetSize(Widget* widget, Vector2D ourSize)
+{
+	return ourSize;
+}
+
 void ScrollBox::updateViewPosition()
 {
 	Container& container = dynamic_cast<Container&>(loader.getRootWidget());
@@ -61,8 +71,6 @@ void ScrollBox::updateViewPosition()
 		viewPort.setWidgetPosition(*currentWidget, left.str(), top.str());
 	}
 	
-	
-		
 	vertical.setRange(0, size.getY());
 	horizontal.setRange(0, size.getX());
 	
@@ -85,5 +93,5 @@ ScrollBox::ScrollBox():
 	loader("data/widgets/scrollbox.txt"),
 	currentWidget(0)
 {
-
+	Container::addWidget(&loader.getRootWidget());
 }
