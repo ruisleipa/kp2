@@ -68,10 +68,6 @@ void WidgetLoader::load(const std::string& filename)
 		
 	std::vector<WidgetLine>::iterator i;
 		
-	for(i = lines.begin(); i != lines.end(); ++i)
-	{
-		std::cout << i->type << " " << i->level << std::endl;
-	}
 	
 	rootNode.type = lines[0].type;
 	rootNode.attributes = lines[0].attributes;	
@@ -79,8 +75,6 @@ void WidgetLoader::load(const std::string& filename)
 	lines.erase(lines.begin());
 	
 	convertWidgetLines(rootNode, lines);
-	
-	printNodes(rootNode);
 	
 	createWidgets(rootNode);
 }
@@ -197,8 +191,6 @@ IniFile WidgetLoader::parseAttributes(std::string line)
 			else if(is_in_string(c, "\""))
 			{
 				attributes.setValue(key, value);
-				
-				std::cout<< "'" << key << "'->'" << value << "'" << std::endl;
 				
 				key = "";
 				value = "";
