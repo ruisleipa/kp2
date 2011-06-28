@@ -26,6 +26,7 @@ typedef Collection<Protocol::PartModelId, Protocol::ShopPart> ShopParts;
 typedef Collection<Protocol::VehicleId, Protocol::Vehicle> PlayerVehicles;
 typedef Collection<Protocol::PartId, Protocol::Part> PlayerParts;
 typedef std::string InstallError;
+typedef std::string VehicleError;
 
 const uint16_t DATA_PLAYER_INFO = 0;
 const uint16_t DATA_PLAYERS = 1;
@@ -39,6 +40,7 @@ const uint16_t DATA_PLAYER_PARTS = 61;
 const uint16_t DATA_PERFORMANCE = 62;
 
 const uint16_t DATA_INSTALL_ERROR = 90;
+const uint16_t DATA_VEHICLE_ERROR = 91;
 
 const uint16_t DATA_SIMULATION_START = 5000;
 const uint16_t DATA_SIMULATION_VEHICLE_DATA = 5001;

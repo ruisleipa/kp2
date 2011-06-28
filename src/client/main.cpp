@@ -32,10 +32,14 @@
 #include "partshopmenu.hpp"
 #include "installpartsmenu.hpp"
 #include "performancemenu.hpp"
+#include "errordialog.hpp"
 
 #include "raceview.hpp"
 
 #include "simulationstartevent.hpp"
+#include "installerrorevent.hpp"
+#include "vehicleerrorevent.hpp"
+#include "connectionlostevent.hpp"
 
 #include "loadingscreen.hpp"
 #include "fontloader.hpp"
@@ -81,6 +85,71 @@ class RaceStartListener: public EventListener
 		
 		std::tr1::shared_ptr<RaceView> raceView;
 		
+};
+
+class ErrorListener: public EventListener
+{
+	public:
+		void handleEvent(Event* event)
+		{
+			if(dynamic_cast<InstallErrorEvent*>(event))
+			{
+				InstallErrorEvent* installError = dynamic_cast<InstallErrorEvent*>(event);
+				
+				dialog.showMessage("Osa autoon mene ei!", installErrors[installError->error]);
+			}
+			else if(dynamic_cast<VehicleErrorEvent*>(event))
+			{
+				VehicleErrorEvent* vehicleError = dynamic_cast<VehicleErrorEvent*>(event);
+				
+				dialog.showMessage("Auto ei toimi!", vehicleErrors[vehicleError->error]);
+			}
+			else if(dynamic_cast<ConnectionLostEvent*>(event))
+			{
+				menus.showOnlyWidget("mainmenu");
+				dialog.showMessage("", "Yhteys palvelimeen katkesi.");
+			}
+		}
+		
+		ErrorListener(ErrorDialog& dialog, MenuContainer& menus):
+			dialog(dialog),
+			menus(menus)
+		{
+			installErrors["CYLINDERCOUNT_DOES_NOT_MATCH"] = "Nokka-akseli ei sovi yhteen sylinterikannen kanssa.";
+			installErrors["CAMSHAFT_POSITION_DOES_NOT_MATCH"] = "Nokka-akseli ei sovi yhteen sylinterikannen kanssa.";
+			installErrors["NO_CYLINDERHEAD_FOR_CAMSHAFT"] = "Asenna ensin sylinterikansi.";
+			installErrors["NO_ROOM_FOR_EXTRA_CAMSHAFT"] = "Nokka-akseleita ei voi asentaa enempää.";
+			
+			installErrors["CYLINDERHEAD_CYLINDERCOUNT_DOES_NOT_MATCH"] = "Sylinterikansi ei sovi yhteen moottorin kanssa.";
+			installErrors["CYLINDERHEAD_CAMSHAFTPOSITION_DOES_NOT_MATCH"] = "Sylinterikansi ei sovi yhteen moottorin kanssa.";
+			installErrors["CYLINDERHEAD_CYLINDERALIGNMENT_DOES_NOT_MATCH"] = "Sylinterikansi ei sovi yhteen moottorin kanssa.";
+			installErrors["NO_ENGINE_FOR_CYLINDERHEAD"] = "Asenna ensin moottori.";
+			installErrors["NO_ROOM_FOR_EXTRA_CYLINDERHEAD"] = "Sylinterikansia ei voi asentaa enempää.";
+			
+			installErrors["ENGINE_TOO_LARGE_FOR_CHASSIS"] = "Moottori on liian iso koriin.";
+			installErrors["NO_ROOM_FOR_EXTRA_ENGINE"] = "Moottoreita ei voi asentaa enempää.";
+			
+			installErrors["EXHAUSTMANIFOLD_CYLINDERCOUNT_DOES_NOT_MATCH"] = "Pakosarja ei sovi yhteen sylinterikannen kanssa.";
+			installErrors["EXHAUSTMANIFOLD_CYLINDERALIGNMENT_DOES_NOT_MATCH"] = "Pakosarja ei sovi yhteen sylinterikannen kanssa.";
+			installErrors["NO_ROOM_FOR_EXTRA_EXHAUSTMANIFOLD"] = "Pakosarjoja ei voi asentaa enempää.";
+			
+			installErrors["INTAKEMANIFOLD_CYLINDERCOUNT_DOES_NOT_MATCH"] = "Imusarja ei sovi yhteen sylinterikannen kanssa.";
+			installErrors["INTAKEMANIFOLD_CYLINDERALIGNMENT_DOES_NOT_MATCH"] = "Imusarja ei sovi yhteen sylinterikannen kanssa.";
+			installErrors["NO_ROOM_FOR_EXTRA_INTAKEMANIFOLD"] = "Imusarjoja ei voi asentaa enempää.";
+			
+			vehicleErrors["ENGINE_MISSING"] = "Asenna moottori.";
+			vehicleErrors["INTAKEMANIFOLD_MISSING"] = "Asenna imusarja.";
+			vehicleErrors["EXHAUSTMANIFOLD_MISSING"] = "Asenna pakosarja.";
+			vehicleErrors["TRANSMISSION_MISSING"] = "Asenna vaihteisto.";
+			vehicleErrors["TIRE_MISSING"] = "Asenna vaihteisto.";
+		}
+	
+	private:
+		ErrorDialog& dialog;
+		MenuContainer& menus;
+		
+		std::map<std::string, std::string> installErrors;
+		std::map<std::string, std::string> vehicleErrors;
 };
 
 void startGame()
@@ -152,6 +221,11 @@ void startGame()
 	MainMenu mainMenu(menuContainer, mainmenuTextures);	
 	SettingsMenu settingsMenu(menuContainer, window, musicPlayer);
 	LocalGameMenu localGameMenu(menuContainer);
+	
+	ErrorDialog errorDialog;
+	
+	ErrorListener errorListener(errorDialog, menuContainer);
+	connection.addEventListener(&errorListener);
 	NewLocalGameMenu newLocalGameMenu(menuContainer, connection);	
 	RemoteGameMenu remoteGameMenu(menuContainer, connection);	
 	CareerMenu careerMenu(careerTextures,topLevelGameMenus,connection);	
@@ -164,6 +238,7 @@ void startGame()
 	menuContainer.addWidget("newlocalgamemenu",newLocalGameMenu);	
 	menuContainer.addWidget("remotegamemenu",remoteGameMenu);	
 	menuContainer.addWidget("careermenu",careerMenu);	
+	menuContainer.addWidget("errordialog",errorDialog);
 	menuContainer.showOnlyWidget("mainmenu");
 	
 	RaceStartListener raceStartListener(menuContainer, connection);

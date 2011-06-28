@@ -42,14 +42,21 @@ void Connection::processMessages()
 {	
 	int read,written;
 
-	while((read=socket.read(scrapBuffer,BUFFERSIZE))>0)
+	try
 	{
-		receiveBuffer.append(scrapBuffer,read);
+		while((read=socket.read(scrapBuffer,BUFFERSIZE))>0)
+			receiveBuffer.append(scrapBuffer,read);
+				
+		while((written=socket.write(sendBuffer.c_str(),sendBuffer.size()))>0)
+			sendBuffer.erase(0,written);
 	}
-			
-	while((written=socket.write(sendBuffer.c_str(),sendBuffer.size()))>0)
+	catch(ConnectionClosedException)
 	{
-		sendBuffer.erase(0,written);
+		ConnectionLostEvent event;
+				
+		propagateEvent(&event);
+		
+		return;
 	}
 	
 	while(1)
@@ -104,18 +111,25 @@ void Connection::processMessages()
 			}
 			else if(message.getType() == Protocol::DATA_INSTALL_ERROR)
 			{
-				std::string error;
-			
+				Protocol::InstallError error;
+				
 				message >> error;
-#ifdef WIN32
-				std::wstring errorMessage = convertToWideString(error);
 				
-				const WCHAR* errorCaption=L"Kiihdytyspeli 2";
+				InstallErrorEvent event;
+				event.error = error;
 				
-				MessageBoxW(NULL, (const WCHAR*)errorMessage.c_str(), errorCaption, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL);
-#else			
-				std::cout << error;
-#endif			
+				propagateEvent(&event);
+			}
+			else if(message.getType() == Protocol::DATA_VEHICLE_ERROR)
+			{
+				Protocol::VehicleError error;
+				
+				message >> error;
+				
+				VehicleErrorEvent event;
+				event.error = error;
+				
+				propagateEvent(&event);
 			}
 			else if(message.getType() == Protocol::DATA_PERFORMANCE)
 			{
@@ -341,7 +355,7 @@ void Connection::sendControlState(const Protocol::ControlState& state)
 
 void Connection::propagateEvent(Event* event)
 {
-	std::vector<EventListener*>::iterator i;
+	std::set<EventListener*>::iterator i;
 
 	for(i = listeners.begin(); i != listeners.end(); ++i)
 	{
@@ -367,7 +381,12 @@ void Connection::addEventHandler(std::tr1::function<void(Connection&)> handler)
 
 void Connection::addEventListener(EventListener* listener)
 {
-	listeners.push_back(listener);
+	listeners.insert(listener);
+}
+
+void Connection::removeEventListener(EventListener* listener)
+{
+	listeners.erase(listener);
 }
 
 bool Connection::startLocalServer()

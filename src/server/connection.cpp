@@ -22,6 +22,8 @@
 
 #include "dynamometer.hpp"
 
+#include "exceptions.hpp"
+
 #include <sstream>
 #include <algorithm>
 #include <iostream>
@@ -174,6 +176,12 @@ void Connection::processPackets()
 			std::cerr << "Part does not fit: " << e.reason << std::endl;
 			
 			sendInstallError(e.reason);
+		}
+		catch(VehicleDoesNotWorkException e)
+		{
+			std::cerr << "Vehicle does not work: " << e.reason << std::endl;
+			
+			sendVehicleError(e.reason);
 		}
 	}
 	
@@ -414,6 +422,22 @@ void Connection::sendInstallError(const std::string& error)
 	
 	sendQueue.push(packet);
 }
+
+void Connection::sendVehicleError(const std::string& error)
+{
+	Packet packet;
+	
+	packet.setType(Protocol::DATA_VEHICLE_ERROR);
+	
+	Protocol::VehicleError vehicleError;
+	
+	vehicleError = error;
+	
+	packet << vehicleError;
+	
+	sendQueue.push(packet);
+}
+
 
 void Connection::sendPerformanceData()
 {

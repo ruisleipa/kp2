@@ -27,6 +27,7 @@ class Connection
 		void sendPlayerParts();
 		void sendActiveVehicleId();
 		void sendInstallError(const std::string& error);
+		void sendVehicleError(const std::string& error);
 		void sendPerformanceData();
 		
 		void sendPacket(const Packet& packet);
