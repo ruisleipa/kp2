@@ -52,7 +52,14 @@ MusicPlayer::MusicPlayer():
 	currentSong(0),
 	volume(100)
 {
-	loadSettings();
+	try
+	{
+		loadSettings();
+	}
+	catch(...)
+	{
+	
+	}
 
 	files = readDirectory(MUSIC_DIRECTORY);
 	
@@ -100,7 +107,7 @@ void MusicPlayer::loadSettings()
 {
 	settings.load(MUSIC_SETTINGS);
 	
-	settings.getValue("volume", volume);
+	volume = settings.getValueWithDefault("volume", 1.0f);
 }
 
 void MusicPlayer::saveSettings()
