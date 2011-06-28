@@ -2,6 +2,7 @@
 #define TEXTURE_HPP
 
 #include <string>
+#include <map>
 #include <iostream>
 #include <cstdlib>
 #include <set>
@@ -18,8 +19,8 @@ class Texture
 		void bind();
 		
 		void draw(Vector2D position,Vector2D size);
-		void drawClipped(Vector2D position,Vector2D size,Vector2D clip_position,Vector2D clip_size);		
-		void drawNineSliceScaled(Vector2D position,Vector2D size,Vector2D topleft, Vector2D bottomright);		
+		void drawClipped(Vector2D position,Vector2D size,Vector2D clip_position,Vector2D clip_size);
+		void drawNineSliceScaled(Vector2D position,Vector2D size,Vector2D topleft, Vector2D bottomright);
 		
 		void setFilter(TextureFilter filter);
 		TextureFilter getFilter();
@@ -38,6 +39,8 @@ class Texture
 		void loadFromSurface(SDL_Surface* surface);
 
 		std::tr1::shared_ptr<PreparedTexture> preparedTexture;
+		
+		static std::map<std::string, std::tr1::shared_ptr<PreparedTexture> > cache;
 };
 
 #endif // TEXTURE_HPP

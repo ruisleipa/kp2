@@ -62,8 +62,6 @@ SettingsMenu::SettingsMenu(MenuContainer& menuContainer, Window& window, MusicPl
 	musicVolumeSelect.addItem("90 %");
 	musicVolumeSelect.addItem("100 %");
 	
-	musicVolumeSelect.setChangeHandler(std::tr1::bind(&SettingsMenu::handleDisplayOptionChange, this));
-	
 	dynamic_cast<Button&>(getChildByName("backButton")).setClickHandler(std::tr1::bind(&SettingsMenu::backClick,this));
 	dynamic_cast<Button&>(getChildByName("applyButton")).setClickHandler(std::tr1::bind(&SettingsMenu::applyClick,this));
 }
@@ -125,8 +123,8 @@ void SettingsMenu::applyClick()
 		bool fullscreen=dynamic_cast<Select&>(getChildByName("fullscreenSelect")).getIndex();
 		bool vsync=dynamic_cast<Select&>(getChildByName("vsyncSelect")).getIndex();
 		
-		window.setVideoMode(size,32,fullscreen);
 		window.setVsyncPreference(vsync);
+		window.setVideoMode(size,32,fullscreen);
 		
 		updateDisplayOptions();
 	}

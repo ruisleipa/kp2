@@ -10,6 +10,8 @@
 #include <SDL/SDL_image.h>
 #include <GL/glew.h>
 
+std::map<std::string, std::tr1::shared_ptr<PreparedTexture> > Texture::cache;
+
 Texture::Texture()
 {
 	
@@ -161,7 +163,13 @@ void Texture::free()
 
 void Texture::loadFromFile(const std::string& filename)
 {
-	SDL_Surface* image=IMG_Load(filename.c_str());
+	if(cache.find(filename) != cache.end())
+	{
+		preparedTexture = cache[filename];
+		return;
+	}
+	
+	SDL_Surface* image = IMG_Load(filename.c_str());
 	
 	if(!image)
 	{
@@ -174,7 +182,9 @@ void Texture::loadFromFile(const std::string& filename)
 		throw std::runtime_error(error);
 	}
 	
-	loadFromSurface(image);	
+	loadFromSurface(image);
+	
+	cache[filename] = preparedTexture;
 	
 	SDL_FreeSurface(image);
 }
