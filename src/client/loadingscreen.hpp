@@ -3,6 +3,8 @@
 
 class Window;
 
+#include "gui/widgetloader.hpp"
+
 class LoadingScreen
 {
 	public:
@@ -13,7 +15,9 @@ class LoadingScreen
 		
 	private:
 		Window& window;
-	
+		
+		WidgetLoader loader;
+		
 		void draw();
 		
 		void drawFrame();

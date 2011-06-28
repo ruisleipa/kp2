@@ -5,6 +5,10 @@
 #include "graphics/color.hpp"
 #include "graphics/window.hpp"
 
+#include "gui/container.hpp"
+#include "gui/freecontainer.hpp"
+#include "gui/widget.hpp"
+
 #include <GL/gl.h>
 
 void LoadingScreen::setTotalLoadCount(int totalLoads)
@@ -16,11 +20,22 @@ void LoadingScreen::progress()
 {
 	loads++;
 	
+	Container& root = dynamic_cast<Container&>(loader.getRootWidget());
+	Widget& bar = root.getChildByName("bar");
+	FreeContainer& container = root.getChildByName<FreeContainer>("barContainer");
+	
+	std::stringstream width;
+	
+	width << float(loads) / float(totalLoads) * 100.0 << "%";
+	
+	container.setWidgetSize(bar, width.str(), "100%");
+	
 	draw();
 }
 
 LoadingScreen::LoadingScreen(Window& window):
 	window(window),
+	loader("data/ui/loadingscreen.ui"),
 	totalLoads(0),
 	loads(0)
 {
@@ -29,41 +44,13 @@ LoadingScreen::LoadingScreen(Window& window):
 
 void LoadingScreen::draw()
 {
-	glClearColor(0,0,0,0);
+	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	Texture().bind();
+	EventArea eventArea(window, Vector2D(0,0), window.getSize());
+	DrawEvent drawEvent(eventArea);
 	
-	drawBar();
-	drawFrame();
+	loader.getRootWidget().handleEvent(&drawEvent);
 	
 	SDL_GL_SwapBuffers();
-}
-
-void LoadingScreen::drawFrame()
-{
-	Color(1,1,1).apply();
-
-	Vector2D size = window.getSize();
-	
-	glBegin(GL_LINE_LOOP);	
-		glVertex2d(size.getX() * 0.2, size.getY() * 0.45);
-		glVertex2d(size.getX() * (0.2 + 0.6), size.getY() * 0.45);	
-		glVertex2d(size.getX() * (0.2 + 0.6), size.getY() * 0.55);			
-		glVertex2d(size.getX() * 0.2, size.getY() * 0.55);	
-	glEnd();
-}
-
-void LoadingScreen::drawBar()
-{
-	Color(1,1,1).apply();
-
-	Vector2D size = window.getSize();
-	
-	glBegin(GL_QUADS);	
-		glVertex2d(size.getX() * 0.2, size.getY() * 0.45);
-		glVertex2d(size.getX() * (0.2 + 0.6 * (float(loads) / float(totalLoads))), size.getY() * 0.45);	
-		glVertex2d(size.getX() * (0.2 + 0.6 * (float(loads) / float(totalLoads))), size.getY() * 0.55);			
-		glVertex2d(size.getX() * 0.2, size.getY() * 0.55);	
-	glEnd();
 }
