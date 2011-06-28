@@ -2,6 +2,7 @@
 #define CONTAINER_HPP
 
 #include <vector>
+#include <list>
 #include "widget.hpp"
 
 class Container : public Widget
@@ -10,6 +11,51 @@ class Container : public Widget
 		virtual void showOnlyWidget(const std::string& tag);
 		
 		Widget& getChildByName(const std::string& name);
+		
+		template<class T>
+		T& getChildByName(const std::string& name)
+		{
+			Widget& widget = getChildByName(name);
+			
+			try
+			{
+				T& casted = dynamic_cast<T&>(widget);
+				
+				return casted;
+			}
+			catch(std::bad_cast)
+			{
+				std::stringstream ss;
+				
+				ss << "Widget named \"" << name;
+				ss << "\" is of type \"";
+				ss << demangleName(typeid(widget).name()) << "\", ";
+				ss << "type \"" << demangleName(typeid(T).name()) << "\" expected.";
+				
+				throw std::runtime_error(ss.str());
+			}
+		}
+		
+		std::list<Widget*> getChildrenByName(const std::string& name);
+		
+		template<class T>
+		std::list<T*> getChildrenByName(const std::string& name)
+		{
+			std::list<Widget*> list = getChildrenByName(name);
+			std::list<T*> castedList;
+			
+			std::list<Widget*>::iterator i;
+			
+			for(i = list.begin(); i != list.end(); ++i)
+			{
+				T* casted = dynamic_cast<T*>(*i);
+				
+				if(casted)
+					castedList.push_back(casted);
+			}
+			
+			return castedList;
+		}
 		
 		virtual void handleEvent(Event* event);
 		

@@ -274,6 +274,30 @@ Widget& Container::getChildByName(const std::string& name)
 	throw std::runtime_error(ss.str());
 }
 
+std::list<Widget*> Container::getChildrenByName(const std::string& name)
+{
+	std::list<Widget*> list;
+
+	for(int i = 0; i != getChildCount(); ++i)
+	{
+		Widget* child = getChild(i);
+		
+		if(child->getName() == name)
+			list.push_back(child);
+			
+		Container* container = dynamic_cast<Container*>(child);
+		
+		if(container)
+		{
+			std::list<Widget*> childsList = container->getChildrenByName(name);
+			
+			list.splice(list.end(), childsList);
+		}
+	}
+	
+	return list;
+}
+
 int Container::getChildCount()
 {
 	return children.size();
