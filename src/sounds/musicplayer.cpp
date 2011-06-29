@@ -12,7 +12,7 @@ void MusicPlayer::update()
 	if(volume == 0 || (sound && sound->isPlaying()))
 		return;
 
-	play(pick());
+	playRandomSong();
 }
 
 void MusicPlayer::playRandomSong()
@@ -84,6 +84,9 @@ MusicPlayer::~MusicPlayer()
 
 std::string MusicPlayer::pick()
 {
+	if(files.size() == 0)
+		return "";
+	
 	currentSong = currentSong % files.size();
 	
 	if(currentSong >= files.size())
@@ -94,6 +97,9 @@ std::string MusicPlayer::pick()
 
 void MusicPlayer::play(const std::string& file)
 {
+	if(file == "")
+		return;
+	
 	if(!device)
 		return;
 
