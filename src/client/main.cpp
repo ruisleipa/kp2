@@ -142,7 +142,7 @@ class ErrorListener: public EventListener
 			vehicleErrors["INTAKEMANIFOLD_MISSING"] = "Asenna imusarja.";
 			vehicleErrors["EXHAUSTMANIFOLD_MISSING"] = "Asenna pakosarja.";
 			vehicleErrors["TRANSMISSION_MISSING"] = "Asenna vaihteisto.";
-			vehicleErrors["TIRE_MISSING"] = "Asenna vaihteisto.";
+			vehicleErrors["TIRE_MISSING"] = "Asenna renkaat.";
 		}
 	
 	private:
