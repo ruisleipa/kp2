@@ -1,14 +1,14 @@
 #ifndef CAMSHAFT_HPP
 #define CAMSHAFT_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Camshaft: public PartModel
+class Camshaft: public Part
 {
 	public:
 		const std::string& getName() const;
@@ -16,7 +16,9 @@ class Camshaft: public PartModel
 		
 		void checkPrerequisiteParts(const Vehicle& vehicle) const;
 		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
-	
+		
+		virtual Camshaft* clone() const;
+		
 		Camshaft(IniFile& iniFile);
 		
 	private:

@@ -3,6 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <tr1/memory>
+
+using std::tr1::shared_ptr;
 
 #include "part.hpp"
 #include "exceptions.hpp"
@@ -35,7 +38,7 @@ class Vehicle
 		const VehicleModel* vehicleModel;
 		Player* player;
 		
-		std::vector<Part> parts;
+		std::vector<shared_ptr<Part> > parts;
 		
 };
 

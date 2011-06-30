@@ -13,8 +13,13 @@ int Cooler::getPrice() const
 	return 0;
 }
 
+Cooler* Cooler::clone() const
+{
+	return new Cooler(*this);
+}
+
 Cooler::Cooler(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("name",name);
 }

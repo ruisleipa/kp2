@@ -1,18 +1,20 @@
 #ifndef FUELPUMP_HPP
 #define FUELPUMP_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class FuelPump: public PartModel
+class FuelPump: public Part
 {
 	public:
 		const std::string& getName() const;
 		int getPrice() const;
+		
+		virtual FuelPump* clone() const;
 		
 		FuelPump(IniFile& iniFile);
 		

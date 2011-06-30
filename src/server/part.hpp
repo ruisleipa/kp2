@@ -1,41 +1,46 @@
-#ifndef PART_HPP
-#define PART_HPP
+#ifndef SERVER_PART_HPP
+#define SERVER_PART_HPP
 
 #include <string>
 #include <set>
 
-#include "partmodel.hpp"
+#include "utils/inifile.hpp"
 
-class GameState;
 class Vehicle;
 class Machining;
 
 class Part
 {
 	public:
-		const std::string& getName() const;
-		int getPrice() const;
+		virtual const std::string& getName() const;
+		virtual int getPrice() const;
 		const std::string& getType() const;
 		float getWeight() const;
 		
-		template<typename T>
-		const T& getModel() const
-		{
-			return dynamic_cast<const T&>(*partModel);
-		}
-		
 		void checkInstallationConstraints(const Vehicle& vehicle) const;
 		void checkKeepingConstraints(const Vehicle& vehicle) const;
-
+		
 		void addMachining(const Machining& machining);
 		
-		Part(const PartModel& partModel);
+		virtual Part* clone() const = 0;
+		
+		Part(const IniFile& partFile);
+		
+	protected:
+		virtual void checkPrerequisiteParts(const Vehicle& vehicle) const;
+		virtual void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
+		
+		Part(const Part&);
+		Part& operator=(const Part&);
 		
 	private:
-		const PartModel* partModel;
-		
 		std::set<const Machining*> machinings;
+		
+		std::string type;
+		std::string name;
+		int price;
+		float weight;
 };
 
-#endif // PART_HPP
+#endif
 

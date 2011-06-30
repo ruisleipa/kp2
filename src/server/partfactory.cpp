@@ -1,4 +1,4 @@
-#include "partmodelfactory.hpp"
+#include "partfactory.hpp"
 
 #include "utils/inifile.hpp"
 
@@ -20,7 +20,7 @@
 #include "tire.hpp"
 #include "transmission.hpp"
 
-PartModel* PartModelFactory::loadPartModel(const std::string& filename)
+Part* PartFactory::loadPart(const std::string& filename)
 {
 	IniFile partFile(filename);
 	

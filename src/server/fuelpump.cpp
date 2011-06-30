@@ -13,8 +13,13 @@ int FuelPump::getPrice() const
 	return 0;
 }
 
+FuelPump* FuelPump::clone() const
+{
+	return new FuelPump(*this);
+}
+
 FuelPump::FuelPump(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("name",name);
 }

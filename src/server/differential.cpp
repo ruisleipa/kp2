@@ -13,8 +13,13 @@ int Differential::getPrice() const
 	return 0;
 }
 
+Differential* Differential::clone() const
+{
+	return new Differential(*this);
+}
+
 Differential::Differential(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("name",name);
 }

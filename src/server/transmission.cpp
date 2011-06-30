@@ -12,8 +12,13 @@ int Transmission::getNeutralGearIndex() const
 	return neutralGear;
 }
 
+Transmission* Transmission::clone() const
+{
+	return new Transmission(*this);
+}
+
 Transmission::Transmission(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("neutralGear", neutralGear);
 	

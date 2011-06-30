@@ -1,14 +1,14 @@
 #ifndef CHARGER_HPP
 #define CHARGER_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Charger: public PartModel
+class Charger: public Part
 {
 	public:
 		const std::string& getName() const;
@@ -16,6 +16,8 @@ class Charger: public PartModel
 		float getAirPerRevolution() const;
 		float getGearRatio() const;
 		int getPrice() const;
+		
+		virtual Charger* clone() const;
 		
 		Charger(IniFile& iniFile);
 		

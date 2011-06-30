@@ -3,6 +3,9 @@
 
 #include <vector>
 #include <string>
+#include <tr1/memory>
+
+using std::tr1::shared_ptr;
 
 #include "part.hpp"
 
@@ -50,7 +53,7 @@ class VehicleModel
 		int maxEngineVolume;
 		int maxEngineCylinderCount;
 		
-		std::vector<Part> parts;
+		std::vector<shared_ptr<Part> > parts;
 		
 };
 

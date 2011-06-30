@@ -10,7 +10,7 @@ namespace Protocol
 typedef uint32_t PlayerId;
 typedef uint32_t VehicleId;
 typedef uint32_t PartId;
-typedef std::string PartModelId;
+typedef std::string ShopPartId;
 typedef std::string VehicleModelId;
 
 };

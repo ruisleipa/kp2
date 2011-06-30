@@ -18,8 +18,13 @@ float Tire::getRadius() const
 	return radius;
 }
 
+Tire* Tire::clone() const
+{
+	return new Tire(*this);
+}
+
 Tire::Tire(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("frictionCoefficient", frictionCoefficient);
 	iniFile.getValue("rollingResistanceCoefficient", rollingResistanceCoefficient);

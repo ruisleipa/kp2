@@ -2,13 +2,13 @@
 
 #include "utils/directory.hpp"
 
-#include "partmodelfactory.hpp"
+#include "partfactory.hpp"
 
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
 
-const char* PARTMODEL_DIRECTORY = "gamedata/partmodels/";
+const char* PART_DIRECTORY = "gamedata/parts/";
 const char* VEHICLEMODEL_DIRECTORY = "gamedata/vehiclemodels/";
 const char* MACHINING_DIRECTORY = "gamedata/machinings/";
 
@@ -40,17 +40,17 @@ const VehicleModel& GameState::getVehicleModel(const std::string& id)
 		throw std::invalid_argument("Vehicle model \"" + id + "\" not found.");
 }
 
-std::vector<std::string> GameState::getPartModelIds()
+std::vector<std::string> GameState::getShopPartIds()
 {
-	return getKeysFromMap(partModels);
+	return getKeysFromMap(shopParts);
 }
 
-const PartModel& GameState::getPartModel(const std::string& id)
+const Part& GameState::getShopPart(const std::string& id)
 {
-	if(partModels.find(id) != partModels.end())
-		return *partModels[id];
+	if(shopParts.find(id) != shopParts.end())
+		return *shopParts[id];
 	else
-		throw std::runtime_error("Part model \"" + id + "\" not found.");
+		throw std::runtime_error("Shop part \"" + id + "\" not found.");
 }
 
 std::vector<int> GameState::getPlayerIds()
@@ -106,22 +106,22 @@ const Machining& GameState::getMachining(const std::string& id)
 GameState::GameState()
 {
 	loadMachinings();
-	loadPartModels();
+	loadShopParts();
 	loadVehicleModels();
 }
 
-void GameState::loadPartModels()
+void GameState::loadShopParts()
 {
-	std::vector<std::string> files = readDirectory(PARTMODEL_DIRECTORY);	
+	std::vector<std::string> files = readDirectory(PART_DIRECTORY);	
 	std::vector<std::string>::iterator i;
 	
-	PartModelFactory factory;
+	PartFactory factory;
 	
 	for(i = files.begin(); i != files.end(); ++i)
 	{
 		try
 		{
-			partModels[(*i)] = std::tr1::shared_ptr<PartModel>(factory.loadPartModel(PARTMODEL_DIRECTORY + (*i)));
+			shopParts[(*i)] = std::tr1::shared_ptr<Part>(factory.loadPart(PART_DIRECTORY + (*i)));
 		}
 		catch(std::runtime_error e)
 		{

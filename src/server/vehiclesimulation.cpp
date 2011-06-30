@@ -91,8 +91,10 @@ const Engine& VehicleSimulation::findEngine()
 {
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
 	{
-		if(vehicle.getPart(i).getType() == "engine")
-			return vehicle.getPart(i).getModel<Engine>();
+		const Part& part = vehicle.getPart(i);
+		
+		if(part.getType() == "engine")
+			return dynamic_cast<const Engine&>(part);
 	}
 	
 	throw VehicleDoesNotWorkException("ENGINE_MISSING");
@@ -103,7 +105,7 @@ const IntakeManifold& VehicleSimulation::findIntakeManifold()
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
 	{
 		if(vehicle.getPart(i).getType() == "intakemanifold")
-			return vehicle.getPart(i).getModel<IntakeManifold>();
+			return dynamic_cast<const IntakeManifold&>(vehicle.getPart(i));
 	}
 	
 	throw VehicleDoesNotWorkException("INTAKEMANIFOLD_MISSING");
@@ -114,7 +116,7 @@ const ExhaustManifold& VehicleSimulation::findExhaustManifold()
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
 	{
 		if(vehicle.getPart(i).getType() == "exhaustmanifold")
-			return vehicle.getPart(i).getModel<ExhaustManifold>();
+			return dynamic_cast<const ExhaustManifold&>(vehicle.getPart(i));
 	}
 	
 	throw VehicleDoesNotWorkException("EXHAUSTMANIFOLD_MISSING");
@@ -125,7 +127,7 @@ const Transmission& VehicleSimulation::findTransmission()
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
 	{
 		if(vehicle.getPart(i).getType() == "transmission")
-			return vehicle.getPart(i).getModel<Transmission>();
+			return dynamic_cast<const Transmission&>(vehicle.getPart(i));
 	}
 	
 	throw VehicleDoesNotWorkException("TRANSMISSION_MISSING");
@@ -136,7 +138,7 @@ const Tire& VehicleSimulation::findTire()
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
 	{
 		if(vehicle.getPart(i).getType() == "tire")
-			return vehicle.getPart(i).getModel<Tire>();
+			return dynamic_cast<const Tire&>(vehicle.getPart(i));
 	}
 	
 	throw VehicleDoesNotWorkException("TIRE_MISSING");
@@ -147,7 +149,7 @@ const Charger* VehicleSimulation::findCharger()
 	for(size_t i = 0; i < vehicle.getPartCount(); ++i)
 	{
 		if(vehicle.getPart(i).getType() == "charger")
-			return &(vehicle.getPart(i).getModel<Charger>());
+			return &(dynamic_cast<const Charger&>(vehicle.getPart(i)));
 	}
 	
 	return 0;

@@ -13,8 +13,13 @@ int Injector::getPrice() const
 	return 0;
 }
 
+Injector* Injector::clone() const
+{
+	return new Injector(*this);
+}
+
 Injector::Injector(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("name",name);
 }

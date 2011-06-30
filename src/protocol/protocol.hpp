@@ -22,7 +22,7 @@ namespace Protocol
 
 typedef Collection<Protocol::PlayerId, Protocol::PlayerInfo> Players;
 typedef Collection<Protocol::VehicleModelId, Protocol::ShopVehicle> ShopVehicles;
-typedef Collection<Protocol::PartModelId, Protocol::ShopPart> ShopParts;
+typedef Collection<Protocol::ShopPartId, Protocol::ShopPart> ShopParts;
 typedef Collection<Protocol::VehicleId, Protocol::Vehicle> PlayerVehicles;
 typedef Collection<Protocol::PartId, Protocol::Part> PlayerParts;
 typedef std::string InstallError;

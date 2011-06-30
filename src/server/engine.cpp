@@ -61,8 +61,13 @@ void Engine::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
 	}
 }
 
+Engine* Engine::clone() const
+{
+	return new Engine(*this);
+}
+
 Engine::Engine(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("cylinders",cylinders);
 	iniFile.getValue("camshaftPosition",camshaftPosition);

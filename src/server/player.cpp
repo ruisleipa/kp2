@@ -34,14 +34,12 @@ void Player::buyVehicle(const VehicleModel& vehicleModel)
 	vehicles.insert(std::make_pair(newId,vehicle));
 }
 
-void Player::buyPart(const PartModel& partModel)
+void Player::buyPart(const Part& part)
 {
-	if(money < partModel.getPrice())
+	if(money < part.getPrice())
 		throw InsufficientMoneyException();
 		
-	money -= partModel.getPrice();
-	
-	Part part(partModel);
+	money -= part.getPrice();
 	
 	addPart(part);
 }
@@ -76,7 +74,7 @@ const Part& Player::getPart(int id) const
 	if(parts.find(id) == parts.end())
 		throw NoSuchPartException();
 		
-	return parts.find(id)->second;
+	return *(parts.find(id)->second);
 }
 
 Vehicle& Player::getVehicle(int id)
@@ -94,7 +92,7 @@ void Player::addPart(const Part& part)
 	if(parts.rbegin() != parts.rend())
 		newId = parts.rbegin()->first + 1;
 		
-	parts.insert(std::make_pair(newId, part));
+	parts.insert(std::make_pair(newId, shared_ptr<Part>(part.clone())));
 }
 
 void Player::removePart(int id)

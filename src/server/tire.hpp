@@ -1,19 +1,21 @@
 #ifndef TIRE_HPP
 #define TIRE_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class Tire: public PartModel
+class Tire: public Part
 {
 	public:
 		float getFrictionCoefficient() const;
 		float getRollingResistanceCoefficient() const;
 		float getRadius() const;
+		
+		virtual Tire* clone() const;
 		
 		Tire(IniFile& iniFile);
 		

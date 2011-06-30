@@ -3,11 +3,11 @@
 
 #include <string>
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include "net/packet.hpp"
 
-class Accessory: public PartModel
+class Accessory: public Part
 {
 	public:
 

@@ -1,38 +1,48 @@
 #include "part.hpp"
 
 #include "machining.hpp"
-#include "partmodel.hpp"
 
 #include <stdexcept>
 
 const std::string& Part::getName() const
 {
-	return partModel->getName();
+	return name;
 }
 
 int Part::getPrice() const
 {
-	return partModel->getPrice();
+	return price;
 }
 
 const std::string& Part::getType() const
 {
-	return partModel->getType();
+	return type;
 }
 
 float Part::getWeight() const
 {
-	return partModel->getWeight();
+	return weight;
 }
 
 void Part::checkInstallationConstraints(const Vehicle& vehicle) const
 {
-	partModel->checkInstallationConstraints(vehicle);
+	checkPrerequisiteParts(vehicle);
+	checkForExtraPartsOfThisType(vehicle);
 }
 
 void Part::checkKeepingConstraints(const Vehicle& vehicle) const
 {
-	partModel->checkKeepingConstraints(vehicle);
+	checkPrerequisiteParts(vehicle);
+}
+
+void Part::checkPrerequisiteParts(const Vehicle& vehicle) const
+{
+
+}
+
+void Part::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
+{
+
 }
 
 void Part::addMachining(const Machining& machining)
@@ -43,8 +53,27 @@ void Part::addMachining(const Machining& machining)
 		throw std::runtime_error("Machining \"\" does not fit for part model \"\"");
 }
 
-Part::Part(const PartModel& partModel):
-	partModel(&partModel)	
+Part::Part(const IniFile& partFile)
+{
+	partFile.getValue("type",type);
+	partFile.getValue("weight",weight);
+	name = partFile.getValueWithDefault("name", "Nimetön osa");
+	price = partFile.getValueWithDefault("price", 0);
+}
+
+Part::Part(const Part& b):
+	type(b.type),
+	name(b.name),
+	price(b.price),
+	weight(b.weight)
 {
 
+}
+
+Part& Part::operator=(const Part& b)
+{
+	type = b.type;
+	name = b.name;
+	price = b.price;
+	weight = b.weight;
 }

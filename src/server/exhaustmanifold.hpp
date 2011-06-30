@@ -1,20 +1,22 @@
 #ifndef EXHAUSTMANIFOLD_HPP
 #define EXHAUSTMANIFOLD_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class ExhaustManifold: public PartModel
+class ExhaustManifold: public Part
 {
 	public:
 		float getFlow() const;
 		
 		void checkPrerequisiteParts(const Vehicle& vehicle) const;
 		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
+		
+		virtual ExhaustManifold* clone() const;
 		
 		ExhaustManifold(IniFile& iniFile);
 		

@@ -13,8 +13,13 @@ int Clutch::getPrice() const
 	return 0;
 }
 
+Clutch* Clutch::clone() const
+{
+	return new Clutch(*this);
+}
+
 Clutch::Clutch(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("name",name);
 }

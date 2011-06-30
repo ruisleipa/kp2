@@ -1,7 +1,7 @@
 #ifndef TRANSMISSION_HPP
 #define TRANSMISSION_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include <string>
 #include <vector>
@@ -9,11 +9,13 @@
 class IniFile;
 class Vehicle;
 
-class Transmission: public PartModel
+class Transmission: public Part
 {
 	public:
 		std::vector<float> getGearRatios() const;
 		int getNeutralGearIndex() const;
+		
+		virtual Transmission* clone() const;
 		
 		Transmission(IniFile& iniFile);
 		

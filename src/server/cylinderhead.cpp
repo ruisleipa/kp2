@@ -46,7 +46,7 @@ void CylinderHead::checkPrerequisiteParts(const Vehicle& vehicle) const
 		{
 			engineInstalled = true;
 		
-			const Engine& engine = part.getModel<Engine>();
+			const Engine& engine = dynamic_cast<const Engine&>(part);
 			
 			if(engine.getCylinderCount() != cylinders)
 				throw PartDoesNotFitException("CYLINDERHEAD_CYLINDERCOUNT_DOES_NOT_MATCH");
@@ -89,8 +89,13 @@ void CylinderHead::checkForExtraPartsOfThisType(const Vehicle& vehicle) const
 		throw PartDoesNotFitException("NO_ROOM_FOR_EXTRA_CYLINDERHEAD");
 }
 
+CylinderHead* CylinderHead::clone() const
+{
+	return new CylinderHead(*this);
+}
+
 CylinderHead::CylinderHead(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("cylinders",cylinders);
 	iniFile.getValue("camshaftPosition",camshaftPosition);

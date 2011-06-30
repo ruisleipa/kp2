@@ -1,14 +1,14 @@
 #ifndef CYLINDERHEAD_HPP
 #define CYLINDERHEAD_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class CylinderHead: public PartModel
+class CylinderHead: public Part
 {
 	public:
 		const std::string& getName() const;
@@ -20,6 +20,8 @@ class CylinderHead: public PartModel
 		
 		void checkPrerequisiteParts(const Vehicle& vehicle) const;
 		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
+		
+		virtual CylinderHead* clone() const;
 		
 		CylinderHead(IniFile& iniFile);
 		

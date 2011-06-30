@@ -1,7 +1,7 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 #include "utils/curve.hpp"
 
 #include <string>
@@ -9,7 +9,7 @@
 class IniFile;
 class Vehicle;
 
-class Engine: public PartModel
+class Engine: public Part
 {
 	public:	
 		const std::string& getName() const;
@@ -23,6 +23,8 @@ class Engine: public PartModel
 		
 		void checkPrerequisiteParts(const Vehicle& vehicle) const;
 		void checkForExtraPartsOfThisType(const Vehicle& vehicle) const;
+		
+		virtual Engine* clone() const;
 		
 		Engine(IniFile& partFile);
 		

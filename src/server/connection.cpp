@@ -100,9 +100,9 @@ void Connection::processPackets()
 
 				packet >> buyPart;
 				
-				const PartModel& model = gameState.getPartModel(buyPart.id);
+				const Part& part = gameState.getShopPart(buyPart.id);
 				
-				gameState.getPlayer(playerId).buyPart(model);
+				gameState.getPlayer(playerId).buyPart(part);
 								
 				sendPlayerInfo();
 				sendPlayerParts();				
@@ -291,19 +291,19 @@ void Connection::sendShopParts()
 	
 	Protocol::ShopParts shopParts;
 	
-	std::vector<std::string> PartModelIds = gameState.getPartModelIds();
+	std::vector<std::string> shopPartIds = gameState.getShopPartIds();
 	std::vector<std::string>::iterator i;
 	
-	for(i = PartModelIds.begin(); i != PartModelIds.end(); ++i)
+	for(i = shopPartIds.begin(); i != shopPartIds.end(); ++i)
 	{
 		Protocol::ShopPart shopPart;
 			
-		const PartModel& PartModel = gameState.getPartModel((*i));
+		const Part& part = gameState.getShopPart((*i));
 		
-		shopPart.name = PartModel.getName();
-		shopPart.type = PartModel.getType();
-		shopPart.price = PartModel.getPrice();
-		shopPart.weight = PartModel.getWeight();
+		shopPart.name = part.getName();
+		shopPart.type = part.getType();
+		shopPart.price = part.getPrice();
+		shopPart.weight = part.getWeight();
 				
 		shopParts.addItem(*i, shopPart);
 	}

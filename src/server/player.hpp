@@ -1,12 +1,13 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#ifndef SERVER_PLAYER_HPP
+#define SERVER_PLAYER_HPP
 
 #include <map>
 #include <string>
 #include <tr1/memory>
 
+using std::tr1::shared_ptr;
+
 class VehicleModel;
-class PartModel;
 
 #include "part.hpp"
 #include "vehicle.hpp"
@@ -22,7 +23,7 @@ class Player
 		int getMoney() const;
 		
 		void buyVehicle(const VehicleModel& model);
-		void buyPart(const PartModel& model);
+		void buyPart(const Part& part);
 
 		std::vector<int> getVehicleIds() const;
 		Vehicle& getVehicle(int id);
@@ -46,12 +47,11 @@ class Player
 		
 		int activeVehicleId;
 	
-		std::map<int,Vehicle> vehicles;
-		std::map<int,Part> parts;
+		std::map<int, Vehicle> vehicles;
+		std::map<int, shared_ptr<Part> > parts;
 		
 		std::tr1::weak_ptr<Driver> driver;
 		
 };
 
-#endif // PLAYER_HPP
-
+#endif

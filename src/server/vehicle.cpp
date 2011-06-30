@@ -81,14 +81,14 @@ const Part& Vehicle::getPartFromVector(size_t id) const
 	if(id >= parts.size())
 		throw NoSuchPartException();
 		
-	return parts[id];
+	return *(parts[id]);
 }
 
 void Vehicle::addPart(const Part& part)
 {
 	part.checkInstallationConstraints(*this);
 
-	parts.push_back(part);
+	parts.push_back(shared_ptr<Part>(part.clone()));
 }
 
 void Vehicle::removePart(size_t id)

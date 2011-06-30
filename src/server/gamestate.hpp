@@ -7,8 +7,10 @@
 #include <list>
 #include <tr1/memory>
 
+using std::tr1::shared_ptr;
+
 #include "vehiclemodel.hpp"
-#include "partmodel.hpp"
+#include "part.hpp"
 #include "player.hpp"
 #include "machining.hpp"
 
@@ -18,8 +20,8 @@ class GameState
 		std::vector<std::string> getVehicleModelIds();
 		const VehicleModel& getVehicleModel(const std::string& id);
 
-		std::vector<std::string> getPartModelIds();
-		const PartModel& getPartModel(const std::string& id);
+		std::vector<std::string> getShopPartIds();
+		const Part& getShopPart(const std::string& id);
 
 		std::vector<int> getPlayerIds();
 		Player& getPlayer(int id);
@@ -35,13 +37,13 @@ class GameState
 		
 	private:
 		void loadVehicleModels();
-		void loadPartModels();
+		void loadShopParts();
 		void loadMachinings();
 		
 		std::map<int, Player> players;
 		
 		std::map<std::string, VehicleModel> vehicleModels;
-		std::map<std::string, std::tr1::shared_ptr<PartModel> > partModels;
+		std::map<std::string, shared_ptr<Part> > shopParts;
 		std::map<std::string, Machining> machinings;
 };
 

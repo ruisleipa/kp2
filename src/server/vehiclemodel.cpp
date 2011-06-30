@@ -79,7 +79,7 @@ size_t VehicleModel::getPartCount() const
 const Part& VehicleModel::getPart(size_t id) const
 {
 	if(id < parts.size())
-		return parts[id];
+		return *(parts[id]);
 	else
 		throw NoSuchPartException();
 }
@@ -131,9 +131,9 @@ void VehicleModel::load(const std::string& filename)
 	}	
 }
 
-void VehicleModel::createPart(const std::string& modelName,const std::string& machinings)
+void VehicleModel::createPart(const std::string& partId,const std::string& machinings)
 {
-	Part part(gameState.getPartModel(modelName));
+	shared_ptr<Part> part(gameState.getShopPart(partId).clone());
 	
 	std::vector<std::string> machiningList = tokenize(machinings,",");
 	
@@ -143,7 +143,7 @@ void VehicleModel::createPart(const std::string& modelName,const std::string& ma
 	{
 		const Machining& machining = gameState.getMachining(*i);
 	
-		part.addMachining(machining);
+		part->addMachining(machining);
 	}
 	
 	parts.push_back(part);

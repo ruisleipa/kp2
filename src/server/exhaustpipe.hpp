@@ -1,18 +1,20 @@
 #ifndef EXHAUSTPIPE_HPP
 #define EXHAUSTPIPE_HPP
 
-#include "partmodel.hpp"
+#include "part.hpp"
 
 #include <string>
 
 class IniFile;
 class Vehicle;
 
-class ExhaustPipe: public PartModel
+class ExhaustPipe: public Part
 {
 	public:
 		const std::string& getName() const;
 		int getPrice() const;
+		
+		virtual ExhaustPipe* clone() const;
 		
 		ExhaustPipe(IniFile& iniFile);
 		

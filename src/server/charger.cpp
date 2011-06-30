@@ -28,8 +28,13 @@ int Charger::getPrice() const
 	return airPerRevolution * 10.0 + maxSpeed / 10.0;
 }
 
+Charger* Charger::clone() const
+{
+	return new Charger(*this);
+}
+
 Charger::Charger(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("maxSpeed", maxSpeed);
 	iniFile.getValue("airPerRevolution", airPerRevolution);

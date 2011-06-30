@@ -13,8 +13,13 @@ int ExhaustPipe::getPrice() const
 	return 0;
 }
 
+ExhaustPipe* ExhaustPipe::clone() const
+{
+	return new ExhaustPipe(*this);
+}
+
 ExhaustPipe::ExhaustPipe(IniFile& iniFile):
-	PartModel(iniFile)
+	Part(iniFile)
 {
 	iniFile.getValue("pipeCount",pipeCount);
 	iniFile.getValue("diameter",diameter);
