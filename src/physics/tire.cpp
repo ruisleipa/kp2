@@ -30,7 +30,7 @@ double Tire::getFriction(double load)
 {
 	float maxForce = load * frictionCoefficient;
 	
-	float normalizedForce = slipRatio * 20.0;
+	float normalizedForce = std::min(slipRatio * 20.0, 1.0);
 	
 	return normalizedForce * maxForce;
 }
