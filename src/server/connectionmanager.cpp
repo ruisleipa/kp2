@@ -18,10 +18,23 @@ void ConnectionManager::processConnections(float timeoutInSeconds)
 			}
 			else
 			{
-				if(activity.canRead)
-					readFromSocket(dynamic_cast<ClientSocket*>(activity.socket));
+				ClientSocket* socket = dynamic_cast<ClientSocket*>(activity.socket);
 				
-				writeToSocket(dynamic_cast<ClientSocket*>(activity.socket));
+				try
+				{
+					if(activity.canRead)
+						readFromSocket(socket);
+					
+					writeToSocket(socket);
+				}
+				catch(ConnectionClosedException& e)
+				{
+					std::cerr << "Connection closed: ";
+					std::cerr << e.getMessage();
+					std::cerr << std::endl;
+				
+					closeConnectionBySocket(socket);
+				}
 			}
 		}
 	}
@@ -73,38 +86,14 @@ void ConnectionManager::readFromSocket(ClientSocket* socket)
 {
 	Connection& connection = connections.at(socket);
 	
-	try
-	{
-		connection.processPackets();
-	}
-	catch(ConnectionClosedException& e)
-	{
-		std::cerr << typeid(e).name();
-		std::cerr << ": ";
-		std::cerr << e.getMessage();
-		std::cerr << std::endl;
-		
-		closeConnectionBySocket(socket);
-	}
+	connection.processPackets();
 }
 
 void ConnectionManager::writeToSocket(ClientSocket* socket)
 {
 	Connection& connection = connections.at(socket);
 	
-	try
-	{
-		connection.writePackets();
-	}
-	catch(ConnectionClosedException& e)
-	{
-		std::cerr << typeid(e).name();
-		std::cerr << ": ";
-		std::cerr << e.getMessage();
-		std::cerr << std::endl;
-	
-		closeConnectionBySocket(socket);
-	}
+	connection.writePackets();
 }
 
 void ConnectionManager::closeConnectionBySocket(ClientSocket* socket)
