@@ -165,7 +165,7 @@ VehicleSimulation::VehicleSimulation(Vehicle& vehicle, int ticksPerSecond):
 	chargerPart(findCharger())
 {
 	atmosphere.reset(new Physics::Atmosphere());
-	airFilter.reset(new Physics::Pipe(*atmosphere));
+	airFilter.reset(new Physics::Pipe(*atmosphere,10000));
 	
 	if(chargerPart)
 	{
