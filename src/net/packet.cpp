@@ -13,38 +13,52 @@
 #include <arpa/inet.h>
 #endif
 
+const Packet& Packet::operator<<(uint8_t value)
+{
+	payload.write((char*)&value, sizeof(value));
+	
+	return *this;
+}
+
 const Packet& Packet::operator<<(uint16_t value)
 {
-	uint16_t v=htons(value);
+	uint16_t v = htons(value);
 
-	payload.write((char*)&v,sizeof(v));
+	payload.write((char*)&v, sizeof(v));
 	
 	return *this;
 }
 
 const Packet& Packet::operator<<(uint32_t value)
 {
-	uint32_t v=htonl(value);
+	uint32_t v = htonl(value);
 
-	payload.write((char*)&v,sizeof(v));
+	payload.write((char*)&v, sizeof(v));
+	
+	return *this;
+}
+
+const Packet& Packet::operator<<(int8_t value)
+{
+	payload.write((char*)&value, sizeof(value));
 	
 	return *this;
 }
 
 const Packet& Packet::operator<<(int16_t value)
 {
-	int16_t v=htons(value);
+	int16_t v = htons(value);
 
-	payload.write((char*)&v,sizeof(v));
+	payload.write((char*)&v, sizeof(v));
 	
 	return *this;
 }
 
 const Packet& Packet::operator<<(int32_t value)
 {
-	int32_t v=htonl(value);
+	int32_t v = htonl(value);
 
-	payload.write((char*)&v,sizeof(v));
+	payload.write((char*)&v, sizeof(v));
 	
 	return *this;
 }
@@ -54,8 +68,8 @@ const Packet& Packet::operator<<(float value)
 	int32_t whole;
 	uint32_t fract;
 	
-	whole=int32_t(value);
-	fract=(fabs(value)-fabs(whole))*1000000000.0;	
+	whole = int32_t(value);
+	fract = (fabs(value) - fabs(whole)) * 1000000000.0;
 	
 	operator<<(whole);
 	operator<<(fract);
@@ -70,6 +84,16 @@ const Packet& Packet::operator<<(const std::string& value)
 
 	operator<<(uint16_t(value.size()));
 	payload.write(value.c_str(), value.size());
+	
+	return *this;
+}
+
+const Packet& Packet::operator>>(uint8_t& value)
+{
+	payload.read((char*)&value, sizeof(value));
+	
+	if(payload.eof())
+		throw EndOfDataException();
 	
 	return *this;
 }
@@ -94,6 +118,16 @@ const Packet& Packet::operator>>(uint32_t& value)
 		throw EndOfDataException();
 	
 	value = ntohl(value);
+	
+	return *this;
+}
+
+const Packet& Packet::operator>>(int8_t& value)
+{
+	payload.read((char*)&value, sizeof(value));
+	
+	if(payload.eof())
+		throw EndOfDataException();
 	
 	return *this;
 }
