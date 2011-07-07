@@ -12,14 +12,15 @@ class RaceView : public Menu
 	public:
 		void handleEvent(Event* event);
 		
-		RaceView(Connection& connection);
+		RaceView(Connection& connection, Container& parent);
 
 	private:
 		void sendControlState();
 		void drawHandler(DrawEvent* event);
-		void onConnectionEvent(Connection& connection);
+		void quit();
 	
 		Connection& connection;
+		Container& parent;
 		
 		bool ignition;
 		bool gearUp;

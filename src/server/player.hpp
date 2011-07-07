@@ -36,9 +36,6 @@ class Player
 		void setActiveVehicleId(int id);
 		int getActiveVehicleId();
 		
-		std::tr1::shared_ptr<Driver> getDriver();
-		void setDriver(std::tr1::weak_ptr<Driver> driver);
-		
 		Player(const std::string& name,int money);
 		
 	private:

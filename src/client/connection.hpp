@@ -53,6 +53,7 @@ class Connection
 		
 		void startTestRun();
 		void sendControlState(const Protocol::ControlState& state);
+		void quitSimulation();
 		
 	private:
 		void propagateEvent(Event* event);

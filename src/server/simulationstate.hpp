@@ -13,15 +13,18 @@ class SimulationState
 {
 	public:
 		void sendStates();
-		
-		void setControlState(Connection& connection, Protocol::ControlState& state);
 		void updateSimulations();
 		
 		void startTestRun(Connection& connection);
 		
+		void setControlState(Connection& connection, Protocol::ControlState& state);
+		void quitSimulation(Connection& connection);
+		
 	private:
+		void deleteUnusedTestRuns();
+		
 		std::list<std::tr1::shared_ptr<TestRun> > testRuns;
-		std::list<std::tr1::weak_ptr<Driver> > raceSimulations;
+		std::map<Connection*, std::tr1::shared_ptr<Driver> > drivers;
 		
 };
 

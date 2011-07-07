@@ -6,6 +6,9 @@
 
 #include <tr1/memory>
 
+using std::tr1::shared_ptr;
+using std::tr1::weak_ptr;
+
 class TestRun
 {
 	public:
@@ -13,14 +16,15 @@ class TestRun
 		
 		void update();
 		
-		//This class claims ownership on the driver objects.
-		TestRun(std::tr1::shared_ptr<Driver> driver);
+		bool canDelete();
+		
+		TestRun(weak_ptr<Driver> driver);
 		
 	private:
 		void sendStart();
 		void sendVehicleData();
 		
-		std::tr1::shared_ptr<Driver> driver;
+		weak_ptr<Driver> driver;
 		
 		Timer realTime;
 };

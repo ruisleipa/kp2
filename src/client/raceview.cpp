@@ -7,6 +7,7 @@
 #include "simulationvehicleresultevent.hpp"
 #include "protocol/controlstate.hpp"
 #include "gui/label.hpp"
+#include "gui/button.hpp"
 
 void RaceView::handleEvent(Event* event)
 {
@@ -80,7 +81,8 @@ void RaceView::handleEvent(Event* event)
 		ss << "Kokonaisaika: " << resultEvent->result.totalTime << "\n";
 		ss << "Huippunopeus: " << resultEvent->result.topSpeed * 3.6 << " km/h\n";
 		
-		dynamic_cast<Label&>(getChildByName("debugLabel")).setText(ss.str());
+		getChildByName<Label>("resultsLabel").setText(ss.str());
+		getChildByName("results").setVisible(true);
 	}
 	
 	if(dynamic_cast<DrawEvent*>(event))
@@ -89,8 +91,9 @@ void RaceView::handleEvent(Event* event)
 	Menu::handleEvent(event);
 }
 
-RaceView::RaceView(Connection& connection):
+RaceView::RaceView(Connection& connection, Container& parent):
 	connection(connection),
+	parent(parent),
 	ignition(false),
 	gearUp(false),
 	gearDown(false),
@@ -103,9 +106,9 @@ RaceView::RaceView(Connection& connection):
 	track("data/track/track.png"),
 	tree("data/track/tree.png")
 {
-	connection.addEventHandler(std::tr1::bind(&RaceView::onConnectionEvent,this,std::tr1::placeholders::_1));
-
 	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
+	
+	getChildByName<Button>("quitButton").setClickHandler(std::tr1::bind(&RaceView::quit, this));
 }
 
 void RaceView::sendControlState()
@@ -122,9 +125,11 @@ void RaceView::sendControlState()
 	connection.sendControlState(state);
 }
 
-void RaceView::onConnectionEvent(Connection& connection)
+void RaceView::quit()
 {
-
+	connection.quitSimulation();
+	
+	parent.showOnlyWidget("careermenu");
 }
 
 void RaceView::drawHandler(DrawEvent* event)

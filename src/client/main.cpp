@@ -63,7 +63,7 @@ class RaceStartListener: public EventListener
 					menus.removeWidget(*raceView.get());
 				}
 				
-				raceView.reset(new RaceView(connection));
+				raceView.reset(new RaceView(connection, menus));
 				
 				menus.addWidget("raceview", *raceView.get());
 				

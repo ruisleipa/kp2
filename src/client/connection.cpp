@@ -353,6 +353,15 @@ void Connection::sendControlState(const Protocol::ControlState& state)
 	writeToServer(packet);
 }
 
+void Connection::quitSimulation()
+{
+	Packet packet;
+	
+	packet.setType(Protocol::COMMAND_QUIT_SIMULATION);
+
+	writeToServer(packet);
+}
+
 void Connection::propagateEvent(Event* event)
 {
 	std::set<EventListener*>::iterator i;

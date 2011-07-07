@@ -6,6 +6,8 @@
 
 void TestRun::sendState()
 {
+	shared_ptr<Driver> driver = this->driver.lock();
+	
 	VehicleSimulation& simulation = driver->getSimulation();
 	
 	Protocol::SimulationVehicleState state;
@@ -27,6 +29,8 @@ void TestRun::sendState()
 
 void TestRun::update()
 {
+	shared_ptr<Driver> driver = this->driver.lock();
+	
 	driver->updateSimulation(realTime.getSeconds());
 	
 	if(driver->hasFinished())
@@ -48,7 +52,15 @@ void TestRun::update()
 	}
 }
 
-TestRun::TestRun(std::tr1::shared_ptr<Driver> driver):
+bool TestRun::canDelete()
+{
+	if(driver.lock())
+		return false;
+	
+	return true;
+}
+
+TestRun::TestRun(std::tr1::weak_ptr<Driver> driver):
 	driver(driver)
 {
 	sendStart();
@@ -57,6 +69,8 @@ TestRun::TestRun(std::tr1::shared_ptr<Driver> driver):
 
 void TestRun::sendStart()
 {
+	shared_ptr<Driver> driver = this->driver.lock();
+	
 	Connection& connection = driver->getConnection();
 	
 	Packet packet;
@@ -67,6 +81,8 @@ void TestRun::sendStart()
 
 void TestRun::sendVehicleData()
 {
+	shared_ptr<Driver> driver = this->driver.lock();
+	
 	Connection& connection = driver->getConnection();
 	
 	Protocol::SimulationVehicleData vehicleData;

@@ -115,16 +115,6 @@ int Player::getActiveVehicleId()
 	return activeVehicleId;
 }
 
-std::tr1::shared_ptr<Driver> Player::getDriver()
-{
-	return driver.lock();
-}
-
-void Player::setDriver(std::tr1::weak_ptr<Driver> driver)
-{
-	this->driver = driver;
-}
-
 Player::Player(const std::string& name, int money):
 	name(name),
 	money(money),

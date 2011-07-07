@@ -153,6 +153,10 @@ void Connection::processPackets()
 				
 				simulationState.setControlState(*this, state);
 			}
+			else if(type == Protocol::COMMAND_QUIT_SIMULATION)
+			{
+				simulationState.quitSimulation(*this);
+			}
 		}
 		catch(EndOfDataException)
 		{
