@@ -43,6 +43,13 @@ int Sound::load(std::string fname)
 
 	m_buffer = alutCreateBufferFromFile(fname.c_str());
    
+	errflag = alutGetError();
+	if (errflag != ALUT_ERROR_NO_ERROR)
+	{
+		std::cerr << "ALUT error: " << alutGetErrorString (errflag) << "\n";
+		return -1;
+	}
+
 	// Bind buffer with a source.
 	alGenSources(1,&m_source);
 	
