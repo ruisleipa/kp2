@@ -143,6 +143,7 @@ int Sound::play()
 	if (m_source && m_buffer)
 	{
 		alSourcePlay(m_source);
+		m_playing = true;
 	}
 
 }
@@ -171,6 +172,11 @@ int Sound::stop()
 	else
 		return -1;
 	return 0;
+}
+
+bool Sound::isPlaying()
+{
+	return m_playing;
 }
 
 void Sound::initSounds()

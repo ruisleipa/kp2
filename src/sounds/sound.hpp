@@ -23,6 +23,8 @@ class Sound
 		void setVolume(float);
 		void setPitch(float);
 		void setLooping(bool);
+		
+		bool isPlaying();
 
 	private:
 		void initSounds();
