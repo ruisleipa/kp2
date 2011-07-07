@@ -57,6 +57,16 @@ float VehicleSimulation::getExhaustFlow()
 	return 0;
 }
 
+float VehicleSimulation::getLeftTireSlipRatio()
+{
+	return frontLeftTire->getSlipRatio();
+}
+
+float VehicleSimulation::getRightTireSlipRatio()
+{
+	return frontRightTire->getSlipRatio();
+}
+
 void VehicleSimulation::setIgnition(bool ignition)
 {
 	engine->setIgnition(ignition);

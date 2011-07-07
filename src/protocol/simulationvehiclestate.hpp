@@ -17,6 +17,8 @@ class SimulationVehicleState
 		float speed;
 		float engineSpeedInRpm;
 		float boostPressure;
+		float leftTireSlipRatio;
+		float rightTireSlipRatio;
 	
 		friend Packet& operator<<(Packet& packet,const SimulationVehicleState& state);
 		friend Packet& operator>>(Packet& packet,SimulationVehicleState& state);

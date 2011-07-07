@@ -13,6 +13,8 @@ Packet& operator<<(Packet& packet,const SimulationVehicleState& state)
 	packet << state.speed;
 	packet << state.engineSpeedInRpm;
 	packet << state.boostPressure;
+	packet << state.leftTireSlipRatio;
+	packet << state.rightTireSlipRatio;
 	
 	return packet;
 }
@@ -25,6 +27,8 @@ Packet& operator>>(Packet& packet,SimulationVehicleState& state)
 	packet >> state.speed;
 	packet >> state.engineSpeedInRpm;
 	packet >> state.boostPressure;
+	packet >> state.leftTireSlipRatio;
+	packet >> state.rightTireSlipRatio;
 	
 	return packet;
 }

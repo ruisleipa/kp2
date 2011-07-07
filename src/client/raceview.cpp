@@ -55,7 +55,11 @@ void RaceView::handleEvent(Event* event)
 		vehicle.texture = Texture("gamedata/vehicleimages/" + dataEvent->data.imageName);
 		vehicle.width = dataEvent->data.width;
 		
+		
 		vehicles[dataEvent->data.id] = vehicle;
+		
+		vehicles[dataEvent->data.id].tireSound.load("data/sounds/simulation/burnout.wav");
+		vehicles[dataEvent->data.id].tireSound.setLooping(true);
 	}
 	
 	if(dynamic_cast<SimulationVehicleStateEvent*>(event))
@@ -68,6 +72,47 @@ void RaceView::handleEvent(Event* event)
 		vehicle.speed = stateEvent->state.speed;
 		vehicle.rpm = stateEvent->state.engineSpeedInRpm;
 		vehicle.boost = stateEvent->state.boostPressure;
+		
+		if(vehicle.leftSlipRatio < 0.05 && stateEvent->state.leftTireSlipRatio > 0.05)
+		{
+			Vehicle::SkidMark skid;
+			skid.begin = vehicle.position;
+			skid.end = vehicle.position;
+			
+			vehicle.leftSkid.push_back(skid);
+		}
+		
+		if(vehicle.leftSlipRatio > 0.05)
+			vehicle.leftSkid.back().end = vehicle.position;
+			
+		if(vehicle.rightSlipRatio < 0.05 && stateEvent->state.rightTireSlipRatio > 0.05)
+		{
+			Vehicle::SkidMark skid;
+			skid.begin = vehicle.position;
+			skid.end = vehicle.position;
+			
+			vehicle.rightSkid.push_back(skid);
+		}
+		
+		if(vehicle.rightSlipRatio > 0.05)
+			vehicle.rightSkid.back().end = vehicle.position;
+		
+		vehicle.leftSlipRatio = stateEvent->state.leftTireSlipRatio;
+		vehicle.rightSlipRatio = stateEvent->state.rightTireSlipRatio;
+		
+		std::cout << vehicle.leftSlipRatio << " " << vehicle.rightSlipRatio << std::endl;
+		
+		if(vehicle.leftSlipRatio > 0.05 || vehicle.rightSlipRatio > 0.05)
+		{
+			if(!vehicle.tireSound.isPlaying())
+				vehicle.tireSound.play();
+		}
+		else
+		{
+			vehicle.tireSound.stop();
+		}
+		
+		
 	}
 	
 	if(dynamic_cast<SimulationVehicleResultEvent*>(event))
@@ -162,7 +207,7 @@ void RaceView::drawHandler(DrawEvent* event)
 	
 	float positionValue = vehicles[0].position;
 	
-	glTranslatef(0, -(std::min(positionValue, finishLine) - 4), 0);
+	glTranslatef(0, -(std::min(positionValue, finishLine) - viewHeightInMeters / 2.0), 0);
 	
 	Color(1, 1, 1, 1).apply();
 	
@@ -197,13 +242,45 @@ void RaceView::drawHandler(DrawEvent* event)
 		
 		Texture& texture = vehicle.texture;
 		
-		float vehiceLength = vehicle.width / texture.getSize().getX() * texture.getSize().getY();
+		float vehicleLength = vehicle.width / texture.getSize().getX() * texture.getSize().getY();
+		
+		float vehicleX;
 		
 		if(vehicleIndex == 0)
-			texture.draw(Vector2D((trackWidth / 4.0) - (vehicle.width / 2.0), vehicle.position - vehiceLength), Vector2D(vehicle.width, vehiceLength));
+			vehicleX = (trackWidth / 4.0);
 		else
-			texture.draw(Vector2D((vehicle.width / 2.0) - (trackWidth / 4.0), vehicle.position - vehiceLength), Vector2D(vehicle.width, vehiceLength));
+			vehicleX = -(trackWidth / 4.0);
+		
+		Color(0, 0, 0, 1).apply();
+		
+		float leftTirePosition = vehicleX + (vehicle.width / 2.0) - (vehicle.width / 10.0);
+		
+		for(std::list<Vehicle::SkidMark>::iterator j = vehicle.leftSkid.begin(); j != vehicle.leftSkid.end(); ++j)
+		{
+			glBegin(GL_LINES);
 			
+			glVertex2f(leftTirePosition, j->begin);
+			glVertex2f(leftTirePosition, j->end);
+			
+			glEnd();
+		}
+		
+		float rightTirePosition = vehicleX - (vehicle.width / 2.0) + (vehicle.width / 10.0);
+		
+		for(std::list<Vehicle::SkidMark>::iterator j = vehicle.rightSkid.begin(); j != vehicle.rightSkid.end(); ++j)
+		{
+			glBegin(GL_LINES);
+			
+			glVertex2f(rightTirePosition, j->begin);
+			glVertex2f(rightTirePosition, j->end);
+			
+			glEnd();
+		}
+		
+		Color(1, 1, 1, 1).apply();
+		
+		texture.draw(Vector2D(vehicleX - (vehicle.width / 2.0), vehicle.position - vehicleLength), Vector2D(vehicle.width, vehicleLength));
+		
 		vehicleIndex++;
 	}
 	

@@ -15,6 +15,7 @@ class Tire
 		double getRollingResistance(double load,double speed);
 	
 		double setSlipRatio(double slipRatio);
+		double getSlipRatio();
 		
 	private:
 		double slipRatio;

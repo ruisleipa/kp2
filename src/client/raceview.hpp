@@ -3,7 +3,10 @@
 
 #include "gui/menu.hpp"
 #include "gui/widgetloader.hpp"
+
 #include "graphics/texture.hpp"
+
+#include "sounds/sound.hpp"
 
 #include "connection.hpp"
 
@@ -42,11 +45,25 @@ class RaceView : public Menu
 			public:
 				Texture texture;
 				float width;
+				Sound tireSound;
 				
 				float position;
 				float speed;
 				float boost;
 				float rpm;
+				
+				class SkidMark
+				{
+					public:
+						float begin;
+						float end;
+				};
+				
+				std::list<SkidMark> leftSkid;
+				std::list<SkidMark> rightSkid;
+				
+				float leftSlipRatio;
+				float rightSlipRatio;
 		};
 		
 		std::map<int, Vehicle> vehicles;

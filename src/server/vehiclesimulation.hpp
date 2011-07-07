@@ -37,6 +37,8 @@ class VehicleSimulation: public NonCopyable
 		float getIntakeTemperature();
 		float getIntakeFlow();
 		float getExhaustFlow();
+		float getLeftTireSlipRatio();
+		float getRightTireSlipRatio();
 		
 		void setIgnition(bool ignition);
 		void setThrottleUsage(float usage);

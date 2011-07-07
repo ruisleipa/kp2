@@ -45,4 +45,9 @@ double Tire::setSlipRatio(double slipRatio)
 	this->slipRatio = slipRatio;
 }
 
+double Tire::getSlipRatio()
+{
+	return slipRatio;
+}
+
 };
