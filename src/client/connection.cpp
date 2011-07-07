@@ -79,8 +79,6 @@ void Connection::processMessages()
 		
 		try
 		{
-			std::cout << "RECEIVING" << std::endl << message << std::endl;
-		
 			if(message.getType() == Protocol::DATA_PLAYER_INFO)
 			{
 				message >> playerInfo;
@@ -376,8 +374,6 @@ void Connection::propagateEvent(Event* event)
 
 void Connection::writeToServer(const Packet& packet)
 {
-	std::cout << "SENDING" << std::endl << packet << std::endl;
-
 	std::string str=packet.getString();
 
 	sendBuffer.append(str.c_str(),str.size());
