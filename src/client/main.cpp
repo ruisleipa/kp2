@@ -59,7 +59,7 @@ class RaceStartListener: public EventListener
 			{
 				if(raceView)
 				{
-					connection.addEventListener(raceView.get());
+					connection.removeEventListener(raceView.get());
 					menus.removeWidget(*raceView.get());
 				}
 				
@@ -224,8 +224,6 @@ void startGame()
 	
 	ErrorListener errorListener(errorDialog, menuContainer);
 	connection.addEventListener(&errorListener);
-	RaceView raceView(connection);
-	connection.addEventListener(&raceView);
 	
 	menuContainer.addWidget("mainmenu",mainMenu);
 	menuContainer.addWidget("settingsmenu",settingsMenu);
