@@ -1,8 +1,0 @@
-include srclist.physicstest
-
-LIBS = -lrt -lSDL -lSDL_ttf -lGL -lGLEW -lSDL_image
-BIN = kp2_phystest
-
-include Makefile.common
-
-

@@ -1,5 +1,5 @@
-#ifndef SOCKETSET_HPP
-#define SOCKETSET_HPP
+#ifndef NET_SOCKETSET_HPP
+#define NET_SOCKETSET_HPP
 
 #ifdef WIN32
 
@@ -18,6 +18,9 @@
 
 #include "socket.hpp"
 #include "socketactivity.hpp"
+
+namespace Net
+{
 
 class SocketSet
 {
@@ -44,5 +47,7 @@ class SocketSet
 		friend class Socket;
 };
 
-#endif // SOCKETSET_HPP
+};
+
+#endif
 

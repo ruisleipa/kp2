@@ -5,8 +5,6 @@
 #include <string>
 #include <audiere.h>
 
-#include "utils/inifile.hpp"
-
 const std::string MUSIC_DIRECTORY = "data/music/";
 const std::string MUSIC_SETTINGS = "cfg/music.cfg";
 
@@ -28,8 +26,6 @@ class MusicPlayer
 		audiere::OutputStreamPtr sound;
 		size_t currentSong;
 		float volume;
-		
-		IniFile settings;
 		
 		std::string pick();
 		void play(const std::string& file);

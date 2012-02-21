@@ -1,5 +1,8 @@
-#ifndef SOCKETACTIVITY_HPP
-#define SOCKETACTIVITY_HPP
+#ifndef NET_SOCKETACTIVITY_HPP
+#define NET_SOCKETACTIVITY_HPP
+
+namespace Net
+{
 
 class Socket;
 
@@ -12,5 +15,6 @@ class SocketActivity
 		bool timeoutExpired;
 };
 
-#endif // SOCKETACTIVITY_HPP
+};
 
+#endif

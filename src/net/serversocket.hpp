@@ -1,10 +1,13 @@
-#ifndef SERVERSOCKET_HPP
-#define SERVERSOCKET_HPP
+#ifndef NET_SERVERSOCKET_HPP
+#define NET_SERVERSOCKET_HPP
 
 #include "socket.hpp"
 #include "clientsocket.hpp"
 
 #include <string>
+
+namespace Net
+{
 
 class ServerSocket: public Socket
 {
@@ -14,4 +17,6 @@ class ServerSocket: public Socket
 		bool accept(ClientSocket& socket);
 };
 
-#endif // SERVERSOCKET_HPP
+};
+
+#endif

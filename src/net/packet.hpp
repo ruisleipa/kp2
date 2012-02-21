@@ -1,9 +1,12 @@
-#ifndef PACKET_HPP
-#define PACKET_HPP
+#ifndef NET_PACKET_HPP
+#define NET_PACKET_HPP
 
 #include <sstream>
 #include <string>
 #include <stdint.h>
+
+namespace Net
+{
 
 class EndOfDataException
 {
@@ -48,5 +51,7 @@ class Packet
 		std::stringstream payload;
 };
 
-#endif // PACKET_HPP
+};
+
+#endif
 

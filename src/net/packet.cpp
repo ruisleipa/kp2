@@ -13,6 +13,9 @@
 #include <arpa/inet.h>
 #endif
 
+namespace Net
+{
+
 const Packet& Packet::operator<<(uint8_t value)
 {
 	payload.write((char*)&value, sizeof(value));
@@ -317,4 +320,4 @@ std::ostream& operator<<(std::ostream& stream,const Packet& packet)
 	return stream;
 }
 
-
+};

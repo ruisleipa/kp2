@@ -1,9 +1,0 @@
-include srclist.server
-
-WINDOWS_LIBS = -lmingw32 -mwindows
-LIBS =  $(WINDOWS_LIBS) -lws2_32 -lbfd -liberty -lpsapi -limagehlp
-BIN = kp2_server.exe
-
-include Makefile.common
-
-

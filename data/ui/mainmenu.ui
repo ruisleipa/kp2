@@ -1,7 +1,0 @@
-RowLayout left="0px" top="0px" width="100%" height="100%" showOuterPadding="1"
-	Image name="title" width="100%" height="12.5%"
-	Button name="localgameButton" text="Yksinpeli" 
-	Button name="remoteGameButton" text="Verkkopeli"
-	Button name="settingsButton" text="Asetukset"
-	Spacer height="1~"
-	Button name="quitButton" text="Lopeta"

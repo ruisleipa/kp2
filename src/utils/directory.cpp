@@ -13,25 +13,25 @@ std::vector<std::string> readDirectory(std::string path,std::string ext)
 	DIR* dir;
 	struct dirent* ent;
 
-	dir=opendir(path.c_str());
+	dir = opendir(path.c_str());
 	
-	if(dir!=NULL)
+	if(dir)
 	{
-		while(ent=readdir(dir))
+		while((ent = readdir(dir)))
 		{
-			std::string str=ent->d_name;
+			std::string str = ent->d_name;
 			
 			if(!str.compare(".") || !str.compare(".."))
 			{
 				continue;
 			}
 			
-			if(ext!="" && ext.size()>str.size())
+			if(ext != "" && ext.size() > str.size())
 			{
 				continue;
 			}
 			
-			if(ext!="" && ext.compare(str.substr(str.size()-ext.size())))
+			if(ext != "" && ext.compare(str.substr(str.size() - ext.size())))
 			{
 				continue;
 			}
@@ -44,7 +44,7 @@ std::vector<std::string> readDirectory(std::string path,std::string ext)
 		return list;
 	}
 	
-	std::cout<<"Cannot open the directory \""<<path<<"\""<<std::endl;
+	std::cout << "Cannot open the directory \"" << path << "\"" << std::endl;
 
 	return list;
 

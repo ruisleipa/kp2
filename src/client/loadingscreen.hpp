@@ -1,30 +1,26 @@
-#ifndef LOADINGSCREEN_HPP
-#define LOADINGSCREEN_HPP
+#ifndef LOADINGSCREEN_H
+#define LOADINGSCREEN_H
 
-class Window;
+#include <QWidget>
 
-#include "gui/widgetloader.hpp"
+namespace Ui {
+	class LoadingScreen;
+}
 
-class LoadingScreen
+class LoadingScreen : public QWidget
 {
+	Q_OBJECT
+
 	public:
-		void setTotalLoadCount(int totalLoads);		
-		void progress();		
-		
-		LoadingScreen(Window& window);
-		
+	explicit LoadingScreen(QWidget *parent = 0);
+	~LoadingScreen();
+
+	void setMaximumProgress(int progress);
+	void progress();
+
+
 	private:
-		Window& window;
-		
-		WidgetLoader loader;
-		
-		void draw();
-		
-		void drawFrame();
-		void drawBar();
-		
-		int totalLoads;		
-		int loads;
+	Ui::LoadingScreen *ui;
 };
 
-#endif
+#endif // LOADINGSCREEN_H

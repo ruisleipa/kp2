@@ -3,7 +3,7 @@
 
 #include <map>
 
-class Packet;
+#include "net/packet.hpp"
 
 class Curve
 {
@@ -15,8 +15,8 @@ class Curve
 	private:
 		std::map<int, float> points;
 		
-		friend Packet& operator<<(Packet& packet,const Curve& curve);
-		friend Packet& operator>>(Packet& packet,Curve& curve);
+		friend Net::Packet& operator<<(Net::Packet& packet,const Curve& curve);
+		friend Net::Packet& operator>>(Net::Packet& packet,Curve& curve);
 	
 };
 

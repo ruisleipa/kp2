@@ -1,52 +1,64 @@
 #include "gamemainmenu.hpp"
+#include "ui_gamemainmenu.h"
 
-#include <sstream>
-
-#include "gui/button.hpp"
-#include "gui/image.hpp"
-#include "gui/label.hpp"
-
-GameMainMenu::GameMainMenu(Connection& connection, Container& parent):
-	Menu("data/ui/gamemainmenu.ui"),
-	connection(connection)
+GameMainMenu::GameMainMenu(QWidget *parent) :
+	GameMenu(parent),
+	ui(new Ui::GameMainMenu)
 {
-	connection.addEventHandler(std::tr1::bind(&GameMainMenu::onConnectionEvent,this,std::tr1::placeholders::_1));
-
-	getChildByName<Button>("carShopButton").setClickHandler(std::tr1::bind(&Container::showOnlyWidget, &parent, "carshopmenu"));
-	getChildByName<Button>("carListButton").setClickHandler(std::tr1::bind(&Container::showOnlyWidget, &parent, "carlistmenu"));
-	getChildByName<Button>("installPartsButton").setClickHandler(std::tr1::bind(&Container::showOnlyWidget, &parent, "installpartsmenu"));
-	getChildByName<Button>("testButton").setClickHandler(std::tr1::bind(&Connection::startTestRun, &connection));
+	ui->setupUi(this);
 }
 
-void GameMainMenu::onConnectionEvent(Connection& connection)
+GameMainMenu::~GameMainMenu()
 {
-	int vehicleId = connection.getActiveVehicleId();
+	delete ui;
+}
 
-	if(vehicleId == 0)
-	{
-		getChildByName<Image>("vehicleImage").setTexture(Texture());
-		getChildByName<Label>("vehicleName").setText("Ei käyttöautoa");
-		getChildByName<Label>("vehicleInfo").setText("");
-		
-		return;
-	}
-	
-	const Protocol::Vehicle& vehicle = connection.getPlayerVehicles().getItem(vehicleId);
+void GameMainMenu::on_carShopButton_clicked()
+{
+	navigateTo("CarShopMenu");
+}
 
-	std::string file = "gamedata/vehicleimages/" + vehicle.imageName;
-	getChildByName<Image>("vehicleImage").setTexture(Texture(file));
-	
-	std::stringstream name;
-	
-	name << vehicle.name << " vm. " << vehicle.year << "\n";
-	
-	getChildByName<Label>("vehicleName").setText(name.str());
-	
-	std::stringstream info;
-	
-	info << "Tekniikka: jotain tekniikasta" << "\n";
-	info << "Paino: " << vehicle.totalWeight << " kg\n";
-	info << "Jotain: jotain" << "\n";
-	
-	getChildByName<Label>("vehicleInfo").setText(info.str());
+void GameMainMenu::on_garageButton_clicked()
+{
+	navigateTo("GarageMenu");
+}
+
+void GameMainMenu::on_technicsButton_clicked()
+{
+	navigateTo("TechnicsMenu");
+}
+
+void GameMainMenu::on_loansButton_clicked()
+{
+	navigateTo("LoansMenu");
+}
+
+void GameMainMenu::on_sponsorsButton_clicked()
+{
+	navigateTo("SponsorsMenu");
+}
+
+void GameMainMenu::on_contractsButton_clicked()
+{
+	navigateTo("ContractsMenu");
+}
+
+void GameMainMenu::on_scoresButton_clicked()
+{
+	navigateTo("RankingsMenu");
+}
+
+void GameMainMenu::on_tournamentsButton_clicked()
+{
+	navigateTo("TournamentsMenu");
+}
+
+void GameMainMenu::on_quarterMileButton_clicked()
+{
+	navigateTo("QuarterMileMenu");
+}
+
+void GameMainMenu::on_longRaceButton_clicked()
+{
+	navigateTo("LongRaceMenu");
 }

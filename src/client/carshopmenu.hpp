@@ -1,27 +1,35 @@
-#ifndef GUI_CARSHOPMENU_HPP
-#define GUI_CARSHOPMENU_HPP
+#ifndef CLIENT_CARSHOPMENU_HPP
+#define CLIENT_CARSHOPMENU_HPP
 
-#include "gui/menu.hpp"
-#include "gui/widgetloader.hpp"
+#include <memory>
 
-#include "graphics/texture.hpp"
+#include "gamemenu.hpp"
+#include "ui_carshopmenu.h"
+#include "game/vehicle.hpp"
+#include "objecttablemodel.hpp"
 
-#include "connection.hpp"
+class CarShopMenu : public GameMenu
+{	
+	Q_OBJECT
 
-class CarShopMenu : public Menu
-{
 	public:
-		CarShopMenu(Connection& connection, Container& parent);
+		explicit CarShopMenu(QWidget *parent = 0);
 
-		void onConnectionEvent(Connection& connection);
+	public slots:
+		virtual void gameStateLoaded(Client::State*);
 		
 	private:
-		void carlistChange();
-		void buyClick();
+		std::unique_ptr<Ui::CarShopMenu> ui;
+		std::unique_ptr<ObjectTableModel<Game::Vehicle*>> model;
+
+		Game::Player* player;
+		Game::Vehicle* vehicle;
 	
-		Connection& connection;
-		
-		WidgetLoader loader;
+	private slots:
+		void on_carList_clicked(const QModelIndex&);
+		void on_cancelButton_clicked();
+		void on_buyButton_clicked();
+	
 };
 
 #endif

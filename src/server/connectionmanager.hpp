@@ -4,7 +4,7 @@
 #include <map>
 #include <list>
 
-#include "gamestate.hpp"
+#include "game/state.hpp"
 #include "connection.hpp"
 
 #include "net/socketset.hpp"
@@ -15,27 +15,26 @@
 class ConnectionManager
 {
 	public:
-		void processConnections(float timeoutInSeconds);
+		void processConnections();
 		
 		int getConnectionCount();
 		Connection& getConnectionByIndex(int index);
 		
-		ConnectionManager(ServerSocket& serverSocket, GameState& gameState, SimulationState& simulationState);
+		ConnectionManager(Net::ServerSocket&, Game::State&);
 		
 	private:
 		void acceptConnection();
-		void readFromSocket(ClientSocket* socket);
-		void writeToSocket(ClientSocket* socket);
-		void closeConnectionBySocket(ClientSocket* socket);
+		void readFromSocket(Net::ClientSocket* socket);
+		void writeToSocket(Net::ClientSocket* socket);
+		void closeConnectionBySocket(Net::ClientSocket* socket);
 	
-		ServerSocket& serverSocket;
-		GameState& gameState;
-		SimulationState& simulationState;
+		Net::ServerSocket& serverSocket;
+		Game::State& gameState;
 		
-		std::map<ClientSocket*, Connection> connections;
-		std::list<ClientSocket> sockets;
+		std::map<Net::ClientSocket*, Connection> connections;
+		std::list<Net::ClientSocket> sockets;
 		
-		SocketSet socketSet;
+		Net::SocketSet socketSet;
 		
 };
 

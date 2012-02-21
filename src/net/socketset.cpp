@@ -23,16 +23,19 @@ static std::string getErrorMessage()
 	std::string msg;
 
 #ifdef WIN32	
-	LPSTR err=NULL;
+/*	LPSTR err=NULL;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,0,WSAGetLastError(),0,(LPSTR)&err,0,0);	
 	msg=err;	
-	LocalFree(err);
+	LocalFree(err);*/
 #else
 	msg=strerror(errno);
 #endif
 
 	return msg;   
 }
+
+namespace Net
+{
 
 void SocketSet::add(Socket* socket)
 {
@@ -97,10 +100,10 @@ SocketActivity SocketSet::waitForActivity(unsigned int timeOutInMilliseconds)
 
 	while(writableSockets.size() > 0)
 	{
-		Socket* socket=writableSockets.back();
+		Net::Socket* socket=writableSockets.back();
 		writableSockets.pop_back();
 		
-		SocketActivity activity;
+		Net::SocketActivity activity;
 		
 		activity.socket = socket;
 		activity.canRead = false;
@@ -112,10 +115,10 @@ SocketActivity SocketSet::waitForActivity(unsigned int timeOutInMilliseconds)
 	
 	if(readableSockets.size() > 0)
 	{
-		Socket* socket=readableSockets.back();
+		Net::Socket* socket=readableSockets.back();
 		readableSockets.pop_back();
 		
-		SocketActivity activity;
+		Net::SocketActivity activity;
 		
 		activity.socket = socket;
 		activity.canRead = true;
@@ -224,3 +227,4 @@ void SocketSet::updateActivity(unsigned int timeOutInMilliseconds)
 	}
 }
 
+};

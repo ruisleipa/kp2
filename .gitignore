@@ -1,10 +1,7 @@
-*.d
-*.o
+cfg
+data
+gamedata
+Makefile
+build/
+build/*
 *.dll
-stderr.txt
-stdout.txt
-*.log
-*.bak
-*.cfg
-*.res
-*.exe

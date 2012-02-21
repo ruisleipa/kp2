@@ -1,36 +1,29 @@
-#ifndef GUI_SETTINGSMENU_HPP
-#define GUI_SETTINGSMENU_HPP
+#ifndef SETTINGSMENU_H
+#define SETTINGSMENU_H
 
-#include "gui/menucontainer.hpp"
-#include "gui/menu.hpp"
-#include "gui/widgetloader.hpp"
+#include "sounds/musicplayer.hpp"
+#include "menu.hpp"
 
-class Window;
-class MusicPlayer;
+namespace Ui {
+	class SettingsMenu;
+}
 
 class SettingsMenu : public Menu
 {
-	public:
-		SettingsMenu(MenuContainer& menuContainer, Window& window, MusicPlayer& musicPlayer);
+	Q_OBJECT
 
-		virtual void handleEvent(Event* event);
-	
-	private:
-		void handleDisplayOptionChange();
-	
-		void updateDisplayOptions();
-		void updateMusicOptions();
+public:
+	explicit SettingsMenu(MusicPlayer& musicPlayer, QWidget *parent = 0);
+	~SettingsMenu();
 
-		void backClick();
-		void applyClick();
-		
-		MenuContainer& menuContainer;
-		Window& window;
-		MusicPlayer& musicPlayer;
-		
-		bool windowOptionsChanged;
-		
-		WidgetLoader loader;
+private:
+	Ui::SettingsMenu *ui;
+	
+	MusicPlayer& musicPlayer;
+
+private slots:
+	void on_pushButton_clicked();
+	void on_musicVolumeSlider_valueChanged(int);
 };
 
-#endif
+#endif // SETTINGSMENU_H

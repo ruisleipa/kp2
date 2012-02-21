@@ -1,85 +1,58 @@
-#ifndef CONNECTION_HPP
-#define CONNECTION_HPP
+#ifndef CLIENT_CONNECTION_HPP
+#define CLIENT_CONNECTION_HPP
 
+#include <QObject>
 #include <string>
-#include <vector>
-#include <map>
-#include <tr1/memory>
-#include <tr1/functional>
+#include <QProcess>
+#include <QTcpSocket>
 
-#include "protocol/protocol.hpp"
-#include "net/clientsocket.hpp"
-#include "events/eventlistener.hpp"
+#include "net/packet.hpp"
+#include "utils/map.hpp"
+#include "state.hpp"
 
 class Packet;
 
 const int BUFFERSIZE=512;
 
-class Connection
+class Connection : public QObject
 {
+	Q_OBJECT
+
 	public:				
-		bool connect(std::string hostname,int port);
-		bool startLocalServer();		
+		void connect(std::string hostname,int port);
+		void startLocalServer();
 		
-		void processMessages();
-		
-		void addEventHandler(std::tr1::function<void(Connection&)> handler);
-		void addEventListener(EventListener* listener);
-		void removeEventListener(EventListener* listener);
+		void processPackets();
 		
 		Connection();
+		~Connection();
 		
-		const Protocol::PlayerInfo& getPlayerInfo();
-		const Protocol::Players& getPlayers();
-		const Protocol::ShopVehicles& getShopVehicles();
-		const Protocol::ShopParts& getShopParts();
-		const Protocol::PlayerVehicles& getPlayerVehicles();
-		const Protocol::PlayerParts& getPlayerParts();
-		const Protocol::PerformanceData& getPerformanceData();
-		
-		void setName(const std::string& name);
-		
-		void buyVehicle(const std::string& id);
-		void buyPart(const std::string& id);		
-		
-		void setActiveVehicleId(int vehiceId);
-		int getActiveVehicleId();
-
-		void updatePerformanceData();
-		
-		void addMachining(int vehiclePartId,const std::string& machiningId);
-		void installPart(int partId);
-		void uninstallPart(int vehiclePartId);
-		
-		void startTestRun();
-		void sendControlState(const Protocol::ControlState& state);
-		void quitSimulation();
+	public slots:
+		void close();
+	
+	signals:
+		void startingLocalServer();
+		void connectingToRemote();
+		void connectingToLocal();
+		void connected();
+		void receivingGameState();
+		void ready(Client::State* state);
+		void error(const std::string& error);
 		
 	private:
-		void propagateEvent(Event* event);
-	
-		void writeToServer(const Packet& packet);
-
-		std::vector<std::tr1::function<void(Connection&)> > eventHandlers;
+		void writeToServer(const Net::Packet& packet);
 		
-		std::set<EventListener*> listeners;
-		
-		ClientSocket socket;
+		QTcpSocket socket;
 		
 		std::string receiveBuffer;
-		std::string sendBuffer;						
 		char scrapBuffer[BUFFERSIZE];
 		
-		Protocol::PlayerInfo playerInfo;
-		Protocol::Players players;
-		Protocol::ShopVehicles shopVehicles;
-		Protocol::ShopParts shopParts;
-		Protocol::PlayerVehicles playerVehicles;
-		Protocol::PlayerParts playerParts;
-		Protocol::VehicleId activeVehicleId;
-		Protocol::PerformanceData performanceData;
+		QProcess serverProcess;
 		
-		bool eventPropagatedInNewWay;
+	private slots:
+		void onServerError(QProcess::ProcessError);
+		void onServerStarted();
+		void onConnected();
 };
 
 #endif

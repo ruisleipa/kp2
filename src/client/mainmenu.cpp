@@ -1,45 +1,34 @@
 #include "mainmenu.hpp"
+#include "ui_mainmenu.h"
 
-#include "gui/image.hpp"
-#include "gui/button.hpp"
-
-MainMenu::MainMenu(MenuContainer& menuContainer, TextureCollection& textureCollection):
-	menuContainer(menuContainer),
-	loader("data/ui/mainmenu.ui")
+MainMenu::MainMenu(QWidget *parent) :
+	Menu(parent),
+	ui(new Ui::MainMenu)
 {
-	addWidget(loader.getRootWidget(), "0px", "0px", "100%", "100%");
-	
-	getChildByName<Image>("title").setTexture(textureCollection.getTexture("title"));
-	
-	getChildByName<Button>("remoteGameButton").setClickHandler(std::tr1::bind(&MainMenu::remotegameClickHandler,this));	
-	getChildByName<Button>("localgameButton").setClickHandler(std::tr1::bind(&MainMenu::localgameClickHandler,this));
-	getChildByName<Button>("settingsButton").setClickHandler(std::tr1::bind(&MainMenu::settingsClickHandler,this));	
-	getChildByName<Button>("quitButton").setClickHandler(std::tr1::bind(&MainMenu::quitClickHandler,this));
+	ui->setupUi(this);	
 }
 
-void MainMenu::remotegameClickHandler()
+MainMenu::~MainMenu()
 {
-	menuContainer.showOnlyWidget("remotegamemenu");
+	delete ui;
 }
 
-void MainMenu::localgameClickHandler()
+void MainMenu::on_quitButton_clicked()
 {
-	menuContainer.showOnlyWidget("localgamemenu");
+	QApplication::quit();
 }
 
-void MainMenu::aboutClickHandler()
+void MainMenu::on_multiPlayerButton_clicked()
 {
-
+	navigateTo("MultiPlayerMenu");
 }
 
-void MainMenu::settingsClickHandler()
+void MainMenu::on_settingsButton_clicked()
 {
-	menuContainer.showOnlyWidget("settingsmenu");
+	navigateTo("SettingsMenu");
 }
 
-void MainMenu::quitClickHandler()
+void MainMenu::on_singlePlayerButton_clicked()
 {
-	//throw ExitException();
+	navigateTo("SinglePlayerMenu");
 }
-
-

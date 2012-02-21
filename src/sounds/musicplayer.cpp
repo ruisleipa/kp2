@@ -1,11 +1,12 @@
 #include "musicplayer.hpp"
 
-#include <cstdlib>
-#include <ctime>
+#include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 #include "utils/directory.hpp"
+#include "json/json.h"
 
 void MusicPlayer::update()
 {
@@ -25,18 +26,19 @@ void MusicPlayer::setVolume(int volume)
 	if(volume > 100)
 		volume = 100;
 	
-	if(this->volume == 0 && volume > 0)
+	/*if(this->volume == 0 && volume > 0)
 	{
 		playRandomSong();		
 	}
+	*/
 	
-	if(volume == 0)
+	float coeff = volume / 100.0;
+		
+	if(sound)
 	{
-		sound = 0;
+		sound->setVolume(coeff * coeff);
 	}
 	
-	if(sound)
-		sound->setVolume(volume / 100.0);
 		
 	this->volume = volume;
 }
@@ -62,10 +64,11 @@ MusicPlayer::MusicPlayer():
 	}
 
 	files = readDirectory(MUSIC_DIRECTORY);
-	
-	srand(time(NULL));
-	
-	std::random_shuffle(files.begin(), files.end());
+
+	/*std::random_device rd;
+	std::mt19937 g(rd());
+
+	std::shuffle(files.begin(), files.end(), g);*/
 	
 	device = audiere::OpenDevice();
 }
@@ -97,28 +100,32 @@ std::string MusicPlayer::pick()
 
 void MusicPlayer::play(const std::string& file)
 {
-	if(file == "")
-		return;
-	
 	if(!device)
 		return;
 
 	sound = audiere::OpenSound(device, (MUSIC_DIRECTORY + file).c_str());
 
-	sound->setVolume(volume / 100.0);
+	if(!sound)
+		return;
+
+	setVolume(volume);
 	sound->play();
 }
 
 void MusicPlayer::loadSettings()
 {
-	settings.load(MUSIC_SETTINGS);
-	
-	volume = settings.getValueWithDefault("volume", 1.0f);
+	Json::Value settings;
+
+	std::ifstream(MUSIC_SETTINGS) >> settings;
+
+	volume = settings["volume"].asDouble();
 }
 
 void MusicPlayer::saveSettings()
 {
-	settings.setValue("volume", volume);
-	
-	settings.save(MUSIC_SETTINGS);
+	Json::Value settings;
+
+	settings["volume"] = volume;
+
+	std::ofstream(MUSIC_SETTINGS) << settings;
 }

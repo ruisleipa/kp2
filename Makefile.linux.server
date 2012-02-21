@@ -1,7 +1,0 @@
-include srclist.server
-
-LIBS = -lrt -ldl
-BIN = kp2_server
-
-include Makefile.common
-

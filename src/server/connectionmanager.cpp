@@ -1,41 +1,36 @@
 #include "connectionmanager.hpp"
 
-#include "utils/timer.hpp"
+#include "game/player.hpp"
 
-void ConnectionManager::processConnections(float timeoutInSeconds)
+#include <stdexcept>
+#include <iostream>
+
+void ConnectionManager::processConnections()
 {
-	Timer timer;
+	Net::SocketActivity activity = socketSet.waitForActivity();
 
-	while(timer.getSeconds() <= timeoutInSeconds)
+	if(activity.socket == &serverSocket)
 	{
-		SocketActivity activity = socketSet.waitForActivity(timeoutInSeconds * 1000.0);
-
-		if(activity.timeoutExpired == false && activity.socket != 0)
+		acceptConnection();
+	}
+	else
+	{
+		Net::ClientSocket* socket = dynamic_cast<Net::ClientSocket*>(activity.socket);
+		
+		try
 		{
-			if(activity.socket == &serverSocket)
-			{
-				acceptConnection();
-			}
-			else
-			{
-				ClientSocket* socket = dynamic_cast<ClientSocket*>(activity.socket);
-				
-				try
-				{
-					if(activity.canRead)
-						readFromSocket(socket);
-					
-					writeToSocket(socket);
-				}
-				catch(ConnectionClosedException& e)
-				{
-					std::cerr << "Connection closed: ";
-					std::cerr << e.getMessage();
-					std::cerr << std::endl;
-				
-					closeConnectionBySocket(socket);
-				}
-			}
+			if(activity.canRead)
+				readFromSocket(socket);
+			
+			writeToSocket(socket);
+		}
+		catch(Net::ConnectionClosedException& e)
+		{
+			std::cerr << "Connection closed: ";
+			std::cerr << e.getMessage();
+			std::cerr << std::endl;
+		
+			closeConnectionBySocket(socket);
 		}
 	}
 }
@@ -47,7 +42,7 @@ int ConnectionManager::getConnectionCount()
 
 Connection& ConnectionManager::getConnectionByIndex(int index)
 {
-	std::map<ClientSocket*, Connection>::iterator i;
+	std::map<Net::ClientSocket*, Connection>::iterator i;
 	
 	i = connections.begin();
 	
@@ -66,46 +61,47 @@ Connection& ConnectionManager::getConnectionByIndex(int index)
 
 void ConnectionManager::acceptConnection()
 {
-	ClientSocket socket;
+	Net::ClientSocket socket;
 
 	serverSocket.accept(socket);
 
-	Player player("pelaaja", 20000);
-	int playerId = gameState.addPlayer(player);
+	Game::Player* player = new Game::Player("!!!", 1000);
+	
+	gameState.addPlayer(player);
 	
 	sockets.push_back(socket);
 	
-	Connection connection(gameState, playerId, sockets.back(), simulationState);
+	Connection connection(gameState, player, sockets.back());
 	connections.insert(std::make_pair(&sockets.back(), connection));
 	socketSet.add(&sockets.back());
 	
 	std::cout << "New connection" << std::endl;
 }
 
-void ConnectionManager::readFromSocket(ClientSocket* socket)
+void ConnectionManager::readFromSocket(Net::ClientSocket* socket)
 {
 	Connection& connection = connections.at(socket);
 	
-	connection.processPackets();
+	connection.processReceivedData();
 }
 
-void ConnectionManager::writeToSocket(ClientSocket* socket)
+void ConnectionManager::writeToSocket(Net::ClientSocket* socket)
 {
 	Connection& connection = connections.at(socket);
 	
-	connection.writePackets();
+	connection.writeBufferedData();
 }
 
-void ConnectionManager::closeConnectionBySocket(ClientSocket* socket)
+void ConnectionManager::closeConnectionBySocket(Net::ClientSocket* socket)
 {
 	socketSet.remove(socket);
 	connections.erase(socket);
 	
-	std::list<ClientSocket>::iterator i;
+	std::list<Net::ClientSocket>::iterator i;
 	
 	for(i = sockets.begin(); i != sockets.end(); ++i)
 	{
-		ClientSocket* s = &(*i);
+		Net::ClientSocket* s = &(*i);
 	
 		if(socket == s)
 		{
@@ -115,10 +111,10 @@ void ConnectionManager::closeConnectionBySocket(ClientSocket* socket)
 	}
 }
 
-ConnectionManager::ConnectionManager(ServerSocket& serverSocket, GameState& gameState, SimulationState& simulationState):
+ConnectionManager::ConnectionManager(Net::ServerSocket& serverSocket, Game::State& gameState):
 	serverSocket(serverSocket),
-	gameState(gameState),
-	simulationState(simulationState)
+	gameState(gameState)
 {
 	socketSet.add(&serverSocket);
 }
+

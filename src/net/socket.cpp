@@ -9,7 +9,7 @@
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <wspiapi.h>
+#include <ws2spi.h>
 
 #else
 
@@ -32,12 +32,10 @@
 #define SOCKET_ERROR -1
 #endif
 
-#ifdef WIN32
-int Socket::m_winsock_ref_count=0;
-#endif
-
 static addrinfo* getAddrInfo(const char* host,int port,bool passive)
 {
+	(void)passive;
+	
 	std::string portstring=convertToString(port);
 	
 	addrinfo hints;
@@ -68,6 +66,13 @@ static void freeAddrInfo(addrinfo* p)
 	if(p)
 		freeaddrinfo(p);
 }
+
+namespace Net
+{
+
+#ifdef WIN32
+int Socket::m_winsock_ref_count=0;
+#endif
 
 bool Socket::connectImpl(const std::string& hostname,const int port)
 {
@@ -397,10 +402,10 @@ std::string Socket::getErrorMessage()
 	std::string msg;
 
 #ifdef WIN32	
-	LPSTR err=NULL;
-	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,0,WSAGetLastError(),0,(LPSTR)&err,0,0);	
+	/*LPSTR err=NULL;
+	/FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,0,WSAGetLastError(),0,(LPSTR)&err,0,0);	
 	msg=err;	
-	LocalFree(err);
+	LocalFree(err);*/
 #else
 	msg=strerror(errno);
 #endif
@@ -408,5 +413,4 @@ std::string Socket::getErrorMessage()
 	return msg;   
 }
 
-
-
+};

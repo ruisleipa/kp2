@@ -62,7 +62,7 @@ float Curve::getMax() const
 	return value;
 }
 
-Packet& operator<<(Packet& packet, const Curve& curve)
+Net::Packet& operator<<(Net::Packet& packet, const Curve& curve)
 {
 	packet << uint32_t(curve.points.size());
 	
@@ -75,7 +75,7 @@ Packet& operator<<(Packet& packet, const Curve& curve)
 	return packet;
 }
 
-Packet& operator>>(Packet& packet, Curve& curve)
+Net::Packet& operator>>(Net::Packet& packet, Curve& curve)
 {
 	curve.points.clear();
 	

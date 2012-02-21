@@ -12,8 +12,7 @@
 #include "debug/crashcatcher.hpp"
 
 #include "connectionmanager.hpp"
-#include "gamestate.hpp"
-#include "simulationstate.hpp"
+#include "game/state.hpp"
 
 void startServer(int argc,char** argv)
 {
@@ -27,21 +26,25 @@ void startServer(int argc,char** argv)
 	
 	std::cout<<"Reading config from \""<<configPath<<"\"."<<std::endl;
 	
-	IniFile config(configPath);
+	Json::Value config;
 	
-	int port;
-	int connectionLimit;
-	int quitWhenEmpty;
-	int isLocal;
+	std::ifstream configStream(configPath);
 	
-	config.getValue("port",port);
-	config.getValue("isLocal",isLocal);
-	config.getValue("quitWhenEmpty",quitWhenEmpty);
-	config.getValue("connectionLimit",connectionLimit);
+	configStream >> config;	
 	
-	GameState gameState;
-	SimulationState simulationState;
+	unsigned int port = config["port"].asUInt();
+	unsigned int connectionLimit = config["connectionLimit"].asUInt();
+	bool quitWhenEmpty = config["quitWhenEmpty"].asBool();
+	bool isLocal = config["isLocal"].asBool();
+		
+	std::cout<<"Reading game state from \"gamedata/beginstate.cfg\"."<<std::endl;
 	
+	Json::Value state;	
+	std::ifstream stateStream("gamedata/beginstate.cfg");
+	stateStream >> state;	
+	
+	Game::State gameState(state);
+		
 	std::string hostName;
 	
 	if(isLocal)
@@ -49,45 +52,29 @@ void startServer(int argc,char** argv)
 	else
 		hostName = "0.0.0.0";
 	
-	ServerSocket serverSocket;
+	Net::ServerSocket serverSocket;
 	
 	serverSocket.open(hostName, port);
 	
-	ConnectionManager connectionManager(serverSocket, gameState, simulationState);
+	ConnectionManager connectionManager(serverSocket, gameState);
 	
 	bool playersHaveJoined = false;
 	bool running = true;
-	
-	Timer raceUpdateTimer;
-	
-	const float raceUpdateInterval = 1.0 / 5.0;
-	
+
 	while(running)
 	{
-		connectionManager.processConnections(0.001);
-		
-		simulationState.updateSimulations();
-		
-		if(raceUpdateTimer.getSeconds() > raceUpdateInterval)
-		{
-			simulationState.sendStates();
-			
-			for(int i = 0; i < connectionManager.getConnectionCount(); ++i)
-			{
-				Connection& connection = connectionManager.getConnectionByIndex(i);
-				
-				connection.writePackets();
-			}
-			
-			raceUpdateTimer.reset();
-		}
-		
+		connectionManager.processConnections();
+					
 		if(connectionManager.getConnectionCount() > 0)
 			playersHaveJoined = true;
 		
 		if(quitWhenEmpty && connectionManager.getConnectionCount() == 0 && playersHaveJoined)
 			running = false;
-	}	
+	}
+	
+	Json::Value savedState;
+	gameState.save(savedState);
+	std::ofstream("autosave.txt") << savedState;
 }
 
 int main(int argc,char** argv)

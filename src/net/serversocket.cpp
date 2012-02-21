@@ -1,5 +1,8 @@
 #include "serversocket.hpp"
 
+namespace Net
+{
+
 bool ServerSocket::open(const std::string& hostname,int port)
 {
 	return bindImpl(hostname,port);
@@ -17,3 +20,4 @@ bool ServerSocket::accept(ClientSocket& socket)
 	return true;
 }
 
+};

@@ -1,9 +1,12 @@
-#ifndef CLIENTSOCKET_HPP
-#define CLIENTSOCKET_HPP
+#ifndef NET_CLIENTSOCKET_HPP
+#define NET_CLIENTSOCKET_HPP
 
 #include "socket.hpp"
 
 #include <string>
+
+namespace Net
+{
 
 class ClientSocket: public Socket
 {
@@ -20,5 +23,6 @@ class ClientSocket: public Socket
 		friend class ServerSocket;
 };
 
-#endif // CLIENTSOCKET_HPP
+};
 
+#endif

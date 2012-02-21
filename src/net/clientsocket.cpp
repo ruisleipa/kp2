@@ -1,5 +1,8 @@
 #include "clientsocket.hpp"
 
+namespace Net
+{
+
 bool ClientSocket::connect(const std::string& hostname,int port)
 {
 	return connectImpl(hostname,port);
@@ -19,9 +22,5 @@ ClientSocket::ClientSocket()
 {
 
 }
-/*
-const int& ClientSocket::getSocket()
-{
-	return m_socket;
-}
-*/
+
+};

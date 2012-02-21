@@ -1,326 +1,125 @@
-#include <tr1/memory>
-
-#include "utils/outputredirector.hpp"
-#include "debug/crashcatcher.hpp"
-#include "debug/crashmessage.hpp"
-#include "debug/stacktrace.hpp"
-
-#include "utils/sdl.hpp"
-#include "graphics/window.hpp"
-#include "graphics/color.hpp"
-#include "graphics/fontface.hpp"
-#include "graphics/texture.hpp"
-#include "graphics/texturecollection.hpp"
-#include "utils/timer.hpp"
-#include "utils/directory.hpp"
-#include "events/events.hpp"
-
-#include "gui/rootcontainer.hpp"
-#include "gui/menucontainer.hpp"
-#include "gui/tabbedmenu.hpp"
-
-#include "remotegamemenu.hpp"
-#include "newlocalgamemenu.hpp"
-#include "localgamemenu.hpp"
-#include "mainmenu.hpp"
-#include "settingsmenu.hpp"
-#include "careermenu.hpp"
-
-#include "carshopmenu.hpp"
-#include "carlistmenu.hpp"
-
-#include "partshopmenu.hpp"
-#include "installpartsmenu.hpp"
-#include "performancemenu.hpp"
-#include "gamemainmenu.hpp"
-#include "errordialog.hpp"
-
-#include "raceview.hpp"
-
-#include "simulationstartevent.hpp"
-#include "installerrorevent.hpp"
-#include "vehicleerrorevent.hpp"
-#include "connectionlostevent.hpp"
-
-#include "loadingscreen.hpp"
-#include "fontloader.hpp"
-
-#include "connection.hpp"
-#include "net/socket.hpp"
+#include <memory>
+#include <QtGui/QApplication>
+#include <QtGui/QStackedLayout>
+#include <QString>
+#include <QTextStream>
+#include <QFile>
+#include <QWindowsStyle>
+#include <QTimer>
+#include "mainwindow.hpp"
+#include "menu.hpp"
+#include "updater.hpp"
 
 #include "sounds/musicplayer.hpp"
+#include "utils/outputredirector.hpp"
 
-class RaceStartListener: public EventListener
-{
-	public:
-		void handleEvent(Event* event)
-		{
-			if(dynamic_cast<SimulationStartEvent*>(event))
-			{
-				if(raceView)
-				{
-					connection.removeEventListener(raceView.get());
-					menus.removeWidget(*raceView.get());
-				}
-				
-				raceView.reset(new RaceView(connection, menus));
-				
-				menus.addWidget("raceview", *raceView.get());
-				
-				menus.showOnlyWidget("raceview");
-				
-				connection.addEventListener(raceView.get());
-			}
-		}
-		
-		RaceStartListener(MenuContainer& menus, Connection& connection):
-			menus(menus),
-			connection(connection)
-		{
-		
-		}
-	
-	private:
-		MenuContainer& menus;
-		Connection& connection;
-		
-		std::tr1::shared_ptr<RaceView> raceView;
-		
-};
+#include "mainmenu.hpp"
+#include "settingsmenu.hpp"
+#include "singleplayermenu.hpp"
+#include "multiplayermenu.hpp"
+#include "gameloadingscreen.hpp"
+#include "gameview.hpp"
+#include "connection.hpp"
 
-class ErrorListener: public EventListener
-{
-	public:
-		void handleEvent(Event* event)
-		{
-			if(dynamic_cast<InstallErrorEvent*>(event))
-			{
-				InstallErrorEvent* installError = dynamic_cast<InstallErrorEvent*>(event);
-				
-				dialog.showMessage("Osa autoon mene ei!", installErrors[installError->error]);
-			}
-			else if(dynamic_cast<VehicleErrorEvent*>(event))
-			{
-				VehicleErrorEvent* vehicleError = dynamic_cast<VehicleErrorEvent*>(event);
-				
-				dialog.showMessage("Auto ei toimi!", vehicleErrors[vehicleError->error]);
-			}
-			else if(dynamic_cast<ConnectionLostEvent*>(event))
-			{
-				menus.showOnlyWidget("mainmenu");
-				dialog.showMessage("", "Yhteys palvelimeen katkesi.");
-			}
-		}
-		
-		ErrorListener(ErrorDialog& dialog, MenuContainer& menus):
-			dialog(dialog),
-			menus(menus)
-		{
-			installErrors["CYLINDERCOUNT_DOES_NOT_MATCH"] = "Nokka-akseli ei sovi yhteen sylinterikannen kanssa.";
-			installErrors["CAMSHAFT_POSITION_DOES_NOT_MATCH"] = "Nokka-akseli ei sovi yhteen sylinterikannen kanssa.";
-			installErrors["NO_CYLINDERHEAD_FOR_CAMSHAFT"] = "Asenna ensin sylinterikansi.";
-			installErrors["NO_ROOM_FOR_EXTRA_CAMSHAFT"] = "Nokka-akseleita ei voi asentaa enempää.";
-			
-			installErrors["CYLINDERHEAD_CYLINDERCOUNT_DOES_NOT_MATCH"] = "Sylinterikansi ei sovi yhteen moottorin kanssa.";
-			installErrors["CYLINDERHEAD_CAMSHAFTPOSITION_DOES_NOT_MATCH"] = "Sylinterikansi ei sovi yhteen moottorin kanssa.";
-			installErrors["CYLINDERHEAD_CYLINDERALIGNMENT_DOES_NOT_MATCH"] = "Sylinterikansi ei sovi yhteen moottorin kanssa.";
-			installErrors["NO_ENGINE_FOR_CYLINDERHEAD"] = "Asenna ensin moottori.";
-			installErrors["NO_ROOM_FOR_EXTRA_CYLINDERHEAD"] = "Sylinterikansia ei voi asentaa enempää.";
-			
-			installErrors["ENGINE_TOO_LARGE_FOR_CHASSIS"] = "Moottori on liian iso koriin.";
-			installErrors["NO_ROOM_FOR_EXTRA_ENGINE"] = "Moottoreita ei voi asentaa enempää.";
-			
-			installErrors["EXHAUSTMANIFOLD_CYLINDERCOUNT_DOES_NOT_MATCH"] = "Pakosarja ei sovi yhteen sylinterikannen kanssa.";
-			installErrors["EXHAUSTMANIFOLD_CYLINDERALIGNMENT_DOES_NOT_MATCH"] = "Pakosarja ei sovi yhteen sylinterikannen kanssa.";
-			installErrors["NO_ROOM_FOR_EXTRA_EXHAUSTMANIFOLD"] = "Pakosarjoja ei voi asentaa enempää.";
-			
-			installErrors["INTAKEMANIFOLD_CYLINDERCOUNT_DOES_NOT_MATCH"] = "Imusarja ei sovi yhteen sylinterikannen kanssa.";
-			installErrors["INTAKEMANIFOLD_CYLINDERALIGNMENT_DOES_NOT_MATCH"] = "Imusarja ei sovi yhteen sylinterikannen kanssa.";
-			installErrors["NO_ROOM_FOR_EXTRA_INTAKEMANIFOLD"] = "Imusarjoja ei voi asentaa enempää.";
-			
-			vehicleErrors["ENGINE_MISSING"] = "Asenna moottori.";
-			vehicleErrors["INTAKEMANIFOLD_MISSING"] = "Asenna imusarja.";
-			vehicleErrors["EXHAUSTMANIFOLD_MISSING"] = "Asenna pakosarja.";
-			vehicleErrors["TRANSMISSION_MISSING"] = "Asenna vaihteisto.";
-			vehicleErrors["TIRE_MISSING"] = "Asenna renkaat.";
-		}
-	
-	private:
-		ErrorDialog& dialog;
-		MenuContainer& menus;
-		
-		std::map<std::string, std::string> installErrors;
-		std::map<std::string, std::string> vehicleErrors;
-};
+#include "gamemainmenu.hpp"
+#include "technicsmenu.hpp"
+#include "carshopmenu.hpp"
+#include "garagemenu.hpp"
 
-void startGame()
+void loadStyleSheet(QApplication& app)
 {
-	Sdl sdl;
-	Window window(sdl);
-	Events events(window);
-	
-	MusicPlayer musicPlayer;
-	
-	LoadingScreen loadingScreen(window);
-	
-	FontLoader fontLoader(window);	
-	
-	TextureCollection backgroundTextures;
-	
-	const std::string BACKGROUND_DIR = "data/images/backgrounds/";
-	
-	std::vector<std::string> backgroundFiles = readDirectory("data/images/backgrounds/");
-	
-	loadingScreen.setTotalLoadCount(backgroundFiles.size());
-	
-	for(std::vector<std::string>::size_type i = 0; i < backgroundFiles.size(); ++i)
+	QFile file("data/style/stylesheet.qss");
+	file.open(QIODevice::ReadOnly);
+	QString styleSheet = QTextStream(&file).readAll();
+	file.close();
+
+	app.setStyleSheet(styleSheet);
+}
+
+void customMessageHandler(QtMsgType type, const char *msg)
+{
+	QString txt;
+	switch (type)
 	{
-		std::stringstream ss;
-		
-		ss << "image" << i;
-	
-		backgroundTextures.addTexture(ss.str(), Texture(BACKGROUND_DIR + backgroundFiles[i]));
-		loadingScreen.progress();
-	}	
-	
-	TextureCollection mainmenuTextures;
-	mainmenuTextures.addTexture("title",Texture("data/images/kp2_txt.png"));
+		case QtDebugMsg:
+			txt = QString("Debug: %1").arg(msg);
+			break;
+		case QtWarningMsg:
+			txt = QString("Warning: %1").arg(msg);
+			break;
+		case QtCriticalMsg:
+			txt = QString("Critical: %1").arg(msg);
+			break;
+		case QtFatalMsg:
+			txt = QString("Fatal: %1").arg(msg);
+			abort();
+	}
 
-	TextureCollection careerTextures;
-	careerTextures.addTexture("background",Texture("data/images/careermenu.png"));	
+	std::cout << txt.toStdString() << std::endl;
+}
+
+int main(int argc, char *argv[])
+{
+	OutputRedirector redirect("client.log");
+
+	QApplication::setStyle(new QWindowsStyle);
+
+	QApplication a(argc, argv);
+
+	MainWindow w;
 	
+		
+	MusicPlayer musicPlayer;
 	Connection connection;
 	
-	TextureCollection gameBackgroundTextures;
+	MainMenu* mainMenu = new MainMenu();
+	SettingsMenu* settingsMenu = new SettingsMenu(musicPlayer);
+	SinglePlayerMenu* singlePlayerMenu = new SinglePlayerMenu(connection);
+	MultiPlayerMenu* multiPlayerMenu = new MultiPlayerMenu(connection);
+	GameLoadingScreen* gameLoadingScreen = new GameLoadingScreen();
+	GameView* gameView = new GameView();
 	
-	MenuContainer gameMenus(gameBackgroundTextures);
+	QObject::connect(gameLoadingScreen, SIGNAL(cancelled()), &connection, SLOT(close()));		
+	QObject::connect(&connection, SIGNAL(startingLocalServer()), gameLoadingScreen, SLOT(onStartingLocalServer()));
+	QObject::connect(&connection, SIGNAL(connectingToRemote()), gameLoadingScreen, SLOT(onConnectingToRemote()));
+	QObject::connect(&connection, SIGNAL(connectingToLocal()), gameLoadingScreen, SLOT(onConnectingToLocal()));
+	QObject::connect(&connection, SIGNAL(connected()), gameLoadingScreen, SLOT(onConnected()));
+	QObject::connect(&connection, SIGNAL(receivingGameState()), gameLoadingScreen, SLOT(onReceivingGameState()));
+	QObject::connect(&connection, SIGNAL(error(const std::string&)), gameLoadingScreen, SLOT(onError(const std::string&)));		
 	
-	CarShopMenu carShopMenu(connection, gameMenus);
-	CarListMenu carListMenu(connection, gameMenus);
-	PartShopMenu partShopMenu(connection, gameMenus);
-	InstallPartsMenu installPartsMenu(connection, gameMenus);
-	PerformanceMenu performanceMenu(connection, gameMenus);
-	GameMainMenu gameMainMenu(connection, gameMenus);
-	
-	gameMenus.addWidget("gamemainmenu", gameMainMenu);
-	gameMenus.addWidget("carshopmenu", carShopMenu);
-	gameMenus.addWidget("carlistmenu", carListMenu);
-	gameMenus.addWidget("partshopmenu", partShopMenu);
-	gameMenus.addWidget("installpartsmenu", installPartsMenu);
-	gameMenus.addWidget("performancemenu", performanceMenu);
-	
-	gameMenus.showOnlyWidget("gamemainmenu");
-	
-	MenuContainer menuContainer(backgroundTextures);
-	
-	MainMenu mainMenu(menuContainer, mainmenuTextures);
-	SettingsMenu settingsMenu(menuContainer, window, musicPlayer);
-	LocalGameMenu localGameMenu(menuContainer);
-	NewLocalGameMenu newLocalGameMenu(menuContainer, connection);
-	RemoteGameMenu remoteGameMenu(menuContainer, connection);
-	CareerMenu careerMenu(careerTextures,gameMenus,connection);
-	
-	ErrorDialog errorDialog;
-	
-	ErrorListener errorListener(errorDialog, menuContainer);
-	connection.addEventListener(&errorListener);
-	
-	menuContainer.addWidget("mainmenu",mainMenu);
-	menuContainer.addWidget("settingsmenu",settingsMenu);
-	menuContainer.addWidget("localgamemenu",localGameMenu);	
-	menuContainer.addWidget("newlocalgamemenu",newLocalGameMenu);	
-	menuContainer.addWidget("remotegamemenu",remoteGameMenu);	
-	menuContainer.addWidget("careermenu",careerMenu);	
-	menuContainer.addWidget("errordialog",errorDialog);
-	menuContainer.showOnlyWidget("mainmenu");
-	
-	RaceStartListener raceStartListener(menuContainer, connection);
-	connection.addEventListener(&raceStartListener);
-	
-	RootContainer rootContainer(window,events);	
-	rootContainer.addWidget(menuContainer, "0px", "0px", "100%", "100%");
-	
-	bool running = true;
-	
-	while(running)
-	{
-	
-		glClear(GL_COLOR_BUFFER_BIT);
-		
-		EventArea eventArea(window, Vector2D(0,0), window.getSize());
-		DrawEvent drawEvent(eventArea);
-		
-		rootContainer.handleEvent(&drawEvent);
-		
-		Color(1,1,1).apply();
-		SDL_GL_SwapBuffers();		
-		
-		try
-		{
-			connection.processMessages();		
-		}
-		catch(ConnectionClosedException)
-		{
-			menuContainer.showOnlyWidget("mainmenu");
-		}
-		
-		try
-		{
-			events.processEvents();
-		}
-		catch(ExitException)
-		{
-			running = false;
-		}
-		
-		musicPlayer.update();
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameLoadingScreen, SLOT(onCompletion(Client::State*)));
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameView, SLOT(gameStateLoaded(Client::State*)));
 
-		if(window.hasModeChanged())
-		{
-#ifdef WIN32
-			fontLoader.freeTextures();			
-			backgroundTextures.freeTextures();
-			mainmenuTextures.freeTextures();
-			careerTextures.freeTextures();
-			
-			fontLoader.reload();
-#endif		
-			window.clearModeChangeFlag();
-		}
-	}
+	w.getContainer()->addMenu(mainMenu);
+	w.getContainer()->addMenu(settingsMenu);
+	w.getContainer()->addMenu(singlePlayerMenu);
+	w.getContainer()->addMenu(multiPlayerMenu);
+	w.getContainer()->addMenu(gameLoadingScreen);
+	w.getContainer()->addMenu(gameView);
+	
+	GameMainMenu* gameMainMenu = new GameMainMenu();
+	TechnicsMenu* technicsMenu = new TechnicsMenu();
+	CarShopMenu* carShopMenu = new CarShopMenu();
+	GarageMenu* garageMenu = new GarageMenu();
+
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameMainMenu, SLOT(gameStateLoaded(Client::State*)), Qt::DirectConnection);
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), technicsMenu, SLOT(gameStateLoaded(Client::State*)), Qt::DirectConnection);
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), carShopMenu, SLOT(gameStateLoaded(Client::State*)), Qt::DirectConnection);
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), garageMenu, SLOT(gameStateLoaded(Client::State*)), Qt::DirectConnection);
+
+	gameView->getContainer()->addMenu(gameMainMenu);
+	gameView->getContainer()->addMenu(carShopMenu);
+	gameView->getContainer()->addMenu(technicsMenu);
+	gameView->getContainer()->addMenu(garageMenu);
+
+	Updater updater(musicPlayer, connection);
+	loadStyleSheet(a);
+	
+	QTimer updateTimer;
+	QObject::connect(&updateTimer, SIGNAL(timeout()), &updater, SLOT(update()));
+	updateTimer.start(500); 
+	qInstallMsgHandler(customMessageHandler);
+	w.show();
+w.dumpObjectTree();
+	return a.exec();
 }
-
-int main(int argc,char** argv)
-{
-	CrashMessage crashMessage;	
-	CrashCatcher crashCatcher(crashMessage);    
-	OutputRedirector outputRedirector("client.log");
-
-	try
-	{
-		startGame();
-	}
-	catch(std::runtime_error error)
-	{
-		std::cerr << "Runtime error: " << error.what() << std::endl;
-		
-		crashMessage.showMessage();
-	}
-	catch(std::exception& error)
-	{
-		std::cerr << "Error: " << error.what() << std::endl;
-		
-		std::cerr << typeid(error).name() << std::endl;
-		
-		crashMessage.showMessage();
-	}
-	catch(...)
-	{
-		std::cerr << "Unknown error" << std::endl;
-		
-		crashMessage.showMessage();
-	}
-	
-	return 0;
-}
-

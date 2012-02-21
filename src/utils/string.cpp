@@ -7,7 +7,7 @@ std::string convertToString(std::wstring str)
 	std::string a;
 	uint16_t val;
 
-	for(int i=0;i<str.size();i++)
+	for(std::wstring::size_type i=0;i<str.size();i++)
 	{
 		val=str[i];
 
@@ -24,7 +24,7 @@ std::string convertToString(std::wstring str)
 			a.push_back(c1);
 			a.push_back(c2);
 		}
-		else if(val<0x10000)
+		else
 		{
 			uint8_t c3=(val&0x3f)|0x80;
 			val>>=6;

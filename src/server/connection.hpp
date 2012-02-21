@@ -1,54 +1,32 @@
 #ifndef CONNECTION_HPP
 #define CONNECTION_HPP
 
-#include <string>
-#include <queue>
-
 #include "net/packet.hpp"
-
-class Player;
-class ClientSocket;
-class GameState;
-class SimulationState;
+#include "net/clientsocket.hpp"
+#include "utils/map.hpp"
+#include "game/state.hpp"
+#include <string>
 
 const int BUFFERSIZE=512;
 
 class Connection
 {
 	public:
-		void processPackets();
-		void writePackets();
+		void processReceivedData();
+		void writeBufferedData();
+
+		void writePacket(const Net::Packet& packet);
 		
-		void sendPlayerInfo();
-		void sendPlayers();
-		void sendShopVehicles();
-		void sendShopParts();
-		void sendPlayerVehicles();
-		void sendPlayerParts();
-		void sendActiveVehicleId();
-		void sendInstallError(const std::string& error);
-		void sendVehicleError(const std::string& error);
-		void sendPerformanceData();
-		
-		void sendPacket(const Packet& packet);
-		
-		Player& getPlayer();
-		
-		ClientSocket* getSocket();
-	
-		Connection(GameState& gameState, int playerId, ClientSocket& socket, SimulationState& simulationState);
+		Connection(Game::State& gameState, Game::Player* player, Net::ClientSocket& socket);
 		
 	private:
 		std::string receiveBuffer;
+		std::string sendBuffer;
 		char scrapBuffer[BUFFERSIZE];
 		
-		std::queue<Packet> sendQueue;
-		
-		GameState& gameState;
-		int playerId;
-		ClientSocket* socket;
-		
-		SimulationState& simulationState;
+		Game::State& gameState;
+		Game::Player* player;
+		Net::ClientSocket* socket;
 };
 
 #endif // CONNECTION_HPP

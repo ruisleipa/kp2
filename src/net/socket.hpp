@@ -1,10 +1,13 @@
-#ifndef SOCKET_HPP
-#define SOCKET_HPP
+#ifndef NET_SOCKET_HPP
+#define NET_SOCKET_HPP
 
 #include <string>
 #include <set>
 
 #include "exception/exception.hpp"
+
+namespace Net
+{
 
 class SocketSet;
 
@@ -23,6 +26,8 @@ class Socket
 	public:		
 		void captureSocket(int socket);
 		int releaseSocket();
+		
+		void close();
 		
 		Socket();
 		Socket(const Socket&);
@@ -46,8 +51,6 @@ class Socket
 		void commitWrite();
 		
 		bool setNonBlock(int socket);	
-
-		void close();
 	
 		std::string getErrorMessage();		
 		
@@ -63,5 +66,7 @@ class Socket
 		
 };
 
-#endif // SOCKET_HPP
+};
+
+#endif
 
