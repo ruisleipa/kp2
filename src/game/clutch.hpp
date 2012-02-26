@@ -13,8 +13,6 @@ class Clutch: public Part
 	public:
 		int getPrice() const;
 		
-		virtual Clutch* clone() const;		
-		
 		Clutch(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		

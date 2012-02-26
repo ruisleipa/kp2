@@ -9,10 +9,10 @@
 namespace Game
 {
 
-Object* Object::clone() const
+Object::Object(const Json::Value& value):
+	Serializable(value)
 {
-	return new Object(*this);
-}
 
+}
 
 };

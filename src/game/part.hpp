@@ -16,15 +16,9 @@ class Part : public Object
 		virtual int getPrice() const;
 
 		float getMass() const;
-		float calculateTotalMass() const;
-
-		bool addPartToTree(Part* part);
 		
 		Part(const Json::Value& value);
-		virtual void save(Json::Value& value);
-		
-	protected:
-		virtual bool canAddChild(Object*);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		std::string name;

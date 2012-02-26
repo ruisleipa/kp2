@@ -18,8 +18,6 @@ class ExhaustManifold: public Part
 		const std::string& getCylinderAlignment() const;	
 		int getCylinderCount() const;
 		
-		virtual ExhaustManifold* clone() const;
-		
 		ExhaustManifold(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		

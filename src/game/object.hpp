@@ -25,7 +25,7 @@ class ObjectSignals : public QObject
 class ObjectSignals
 {
 	protected:
-		void changed();
+		void changed(){};
 };
 
 #endif
@@ -34,7 +34,7 @@ class Object : public ObjectSignals, public Serializable
 {
 	public:
 		template<class T>
-		static T* clone(T* t)
+		static T* clone(const T* t)
 		{
 			Json::Value v;
 			
@@ -42,8 +42,9 @@ class Object : public ObjectSignals, public Serializable
 			
 			return new T(v);
 		};
-				
-		Object(const Object&);
+		
+		Object() = default;
+		Object(const Object&) = default;
 		Object(const Json::Value&);
 
 };

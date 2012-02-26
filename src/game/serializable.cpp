@@ -1,11 +1,16 @@
 #include "serializable.hpp"
 
-virtual void Serializable::save(Json::Value&)
+namespace Game
+{
+
+void Serializable::save(Json::Value&) const
 {
 
 }
 
 Serializable::Serializable(const Json::Value&)
 {
+
+}
 
 }

@@ -35,7 +35,6 @@ void CarShopMenu::on_carList_clicked(const QModelIndex& current)
 	ui->carImage->setPixmap(QPixmap(QString("gamedata/vehicleimages/") + QString(vehicle->getImageName().c_str())));
 	ui->price->setText(QString::number(vehicle->getPrice()) + trUtf8(" e"));
 	ui->chassisMass->setText(QString::number(vehicle->getMass()) + QString(" kg"));
-	ui->totalMass->setText(QString::number(vehicle->calculateTotalMass()) + QString(" kg"));
 	ui->engine->setText("1.0L S4 OVH\nTurbo");
 	ui->fuelintake->setText("2x30mm Kaasutin");
 }

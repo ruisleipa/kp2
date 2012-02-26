@@ -16,6 +16,7 @@ set(game_SRCS
 	../game/objectfactory.cpp
 	../game/part.cpp
 	../game/player.cpp
+	../game/serializable.cpp
 	../game/state.cpp
 	../game/stateactionlistener.cpp
 	../game/tire.cpp

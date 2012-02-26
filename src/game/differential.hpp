@@ -12,9 +12,7 @@ class Differential: public Part
 {
 	public:
 		int getPrice() const;
-		
-		virtual Differential* clone() const;
-		
+
 		Differential(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		

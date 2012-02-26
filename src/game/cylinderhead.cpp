@@ -38,11 +38,6 @@ bool CylinderHead::isDoubleCam() const
 	return doubleCam;
 }
 
-CylinderHead* CylinderHead::clone() const
-{
-	return new CylinderHead(*this);
-}
-
 CylinderHead::CylinderHead(const Json::Value& value):
 	Part(value)
 {

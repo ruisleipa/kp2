@@ -13,8 +13,6 @@ class Cooler: public Part
 	public:
 		int getPrice() const;
 		
-		virtual Cooler* clone() const;
-		
 		Cooler(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		

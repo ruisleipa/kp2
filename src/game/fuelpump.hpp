@@ -9,8 +9,6 @@ namespace Game
 class FuelPump: public Part
 {
 	public:
-		virtual FuelPump* clone() const;
-		
 		FuelPump(const Json::Value& value);
 		void save(Json::Value& value);
 		

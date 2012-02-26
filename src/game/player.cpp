@@ -28,7 +28,7 @@ void Player::buyPart(const Part* part)
 		money -= part->getPrice();
 		changed();
 		
-		parts.add(part->clone());
+		parts.add(Object::clone(part));
 	}
 }
 
@@ -39,7 +39,7 @@ void Player::buyVehicle(const Vehicle* vehicle)
 		money -= vehicle->getPrice();
 		changed();
 		
-		vehicles.add(vehicle->clone());
+		vehicles.add(Object::clone(vehicle));
 	}
 }
 
@@ -48,20 +48,19 @@ void Player::attachPart(Part* part)
 	if(!getActiveVehicle())
 		return;
 		
-	auto it = std::find(parts->begin(), parts->end(), part);
+	auto it = std::find(parts.begin(), parts.end(), part);
 	
-	if(it == parts->end())
+	if(it == parts.end())
 		return;
 
 }
 
 void Player::detachPart(Part* part)
 {
+	(void)part;
+
 	if(!getActiveVehicle())
 		return;
-	
-/*	if(getActiveVehicle()->detachPart(part))
-		parts.insert(part);*/
 }
 		
 void Player::upgradePart(Part* part, const Upgrade* upgrade)
@@ -80,14 +79,14 @@ int Player::getMoney() const
 	return money;
 }
 
-Object& Player::getVehicles() const
+const Container<Vehicle>& Player::getVehicles() const
 {
-	return *vehicles;
+	return vehicles;
 }
 
-Object& Player::getParts() const
+const Container<Part>& Player::getParts() const
 {
-	return *parts;
+	return parts;
 }
 
 Vehicle* Player::getActiveVehicle() const
@@ -100,26 +99,18 @@ Player::Player(const std::string& name, int money):
 	money(money),
 	activeVehicle(nullptr)
 {
-	vehicles = new Object();
-	vehicles->setName("vehicles");
-	
-	parts = new Object();
-	parts->setName("parts");
-	
-	addChild(vehicles);
-	addChild(parts);
+
 }
 
 Player::Player(const Json::Value& value):
-	Object(value)
+	Object(value),
+	parts(value["parts"]),
+	vehicles(value["vehicles"])
 {
 	name = value["name"].asString();
 	money = value["money"].asUInt();
 	
-	Object* activeVehicle = resolveId(value["activeVehicle"]);
-	
-	vehicles = findChild("vehicles");
-	parts = findChild("parts");
+	activeVehicle = vehicles.getByIndex(value["activeVehicle"].asInt());
 }
 
 void Player::save(Json::Value& value)
@@ -129,7 +120,10 @@ void Player::save(Json::Value& value)
 	value["type"] = "player";
 	value["name"] = name;
 	value["money"] = money;
-	value["activeVehicle"] = getId(activeVehicle);
+	value["activeVehicle"] = vehicles.getIndexOf(activeVehicle);
+	
+	vehicles.save(value["vehicles"]);
+	parts.save(value["parts"]);
 }
 
 };

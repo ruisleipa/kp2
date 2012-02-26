@@ -30,7 +30,7 @@ Part::Part(const Json::Value& value):
 	mass = value["mass"].asDouble();
 }
 
-void Part::save(Json::Value& value)
+void Part::save(Json::Value& value) const
 {
 	Object::save(value);
 

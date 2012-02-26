@@ -16,10 +16,8 @@ class Vehicle : public Part
 
 		virtual bool canAttachPart(const Part& part) const;
 
-		virtual Vehicle* clone() const;
-
 		Vehicle(const Json::Value&);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 
 	private:
 		std::string info;

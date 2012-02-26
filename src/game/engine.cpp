@@ -74,11 +74,6 @@ bool Engine::canAttachCylinderHead(const CylinderHead& c) const
 	return true;
 }
 
-Engine* Engine::clone() const
-{
-	return new Engine(*this);
-}
-
 Engine::Engine(const Json::Value& value):
 	Part(value)
 {

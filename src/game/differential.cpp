@@ -8,11 +8,6 @@ int Differential::getPrice() const
 	return 0;
 }
 
-Differential* Differential::clone() const
-{
-	return new Differential(*this);
-}
-
 Differential::Differential(const Json::Value& value):
 	Part(value)
 {

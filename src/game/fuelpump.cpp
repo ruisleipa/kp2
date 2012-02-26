@@ -3,11 +3,6 @@
 namespace Game 
 {
 
-FuelPump* FuelPump::clone() const
-{
-	return new FuelPump(*this);
-}
-
 FuelPump::FuelPump(const Json::Value& value):
 	Part(value)
 {

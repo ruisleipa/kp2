@@ -9,8 +9,6 @@ namespace Game
 class Injector: public Part
 {
 	public:
-		virtual Injector* clone() const;
-		
 		Injector(const Json::Value& value);
 		void save(Json::Value& value);
 		

@@ -14,27 +14,27 @@ void State::addPlayer(Player* player)
 	players.add(player);
 }
 	
-const Container<Player>& State::getPlayers()
+const Container<Player>& State::getPlayers() const
 {
-	return *players;
+	return players;
 }
 
-const Container<Player>& State::getShopVehicles()
+const Container<Vehicle>& State::getShopVehicles() const
 {
-	return *vehicles;
+	return vehicles;
 }
 
-const Container<Player>& State::getShopParts()
+const Container<Part>& State::getShopParts() const
 {
-	return *parts;
+	return parts;
 }
 
-const Container<Player>& State::getUpgrades()
+const Container<Upgrade>& State::getUpgrades() const
 {
-	return *upgrades;
+	return upgrades;
 }
 
-void State::save(Json::Value&) const
+void State::save(Json::Value& value) const
 {
 	players.save(value["players"]);
 	vehicles.save(value["vehicles"]);

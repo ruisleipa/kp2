@@ -26,11 +26,6 @@ const std::string& Camshaft::getCamshaftPosition() const
 	return camshaftPosition;
 }
 
-Camshaft* Camshaft::clone() const
-{
-	return new Camshaft(*this);
-}
-
 Camshaft::Camshaft(const Json::Value& value):
 	Part(value)
 {

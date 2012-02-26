@@ -6,8 +6,10 @@
 #endif
 
 #include <vector>
+#include <algorithm>
 
 #include "json/json.h" 
+#include "objectfactory.hpp" 
 
 namespace Game
 {
@@ -42,30 +44,111 @@ class Container : public ContainerSignals
 	public:
 		typedef std::vector<T*> ContainerType;
 	
-		typename ContainerType::iterator begin();
-		typename ContainerType::const_iterator begin() const;
-		typename ContainerType::iterator end();
-		typename ContainerType::const_iterator end() const;
+		typename ContainerType::iterator begin()
+		{
+			return items.begin();
+		};
 		
-		int getIndexOf(T*) const;
-		T* getByIndex(int index) const;
+		typename ContainerType::const_iterator begin() const
+		{
+			return items.begin();
+		};
 		
-		bool add(T*);
-		void remove(T*);
+		typename ContainerType::iterator end()
+		{
+			return items.end();
+		};
 		
-		virtual Container* clone() const;
+		typename ContainerType::const_iterator end() const
+		{
+			return items.end();
+		};
 		
-		virtual void save(Json::Value&) const;
+		int getIndexOf(T* item) const
+		{
+			auto it = std::find(items.begin(), items.end(), item);
+
+			if(it == items.end())
+				return -1;
+
+			return std::distance(items.begin(), it);
+		};
 		
-		Container(const Json::Value&);
-		Container();
+		T* getByIndex(int index) const
+		{
+			if(index < 0)
+				return nullptr;
+			
+			auto it = items.begin();
+			
+			std::advance(it, index);
+
+			if(it == items.end())
+				return nullptr;
+
+			return *it;
+		};
+		
+		void add(T* item)
+		{
+			items.push_back(item);
+		};
+
+		void remove(T* item)
+		{
+			auto it = std::find(items.begin(), items.end(), item);
+
+			if(it == items.end())
+				return;
+
+			items.erase(it);
+		};
+		
+		virtual void save(Json::Value& value) const
+		{
+			for(T* item : items)
+			{
+				Json::Value i;
+				
+				item->save(i);
+				
+				value.append(i);
+			}
+		};
+		
+		Container(const Json::Value& value)
+		{
+			ObjectFactory factory;
+		
+			for(auto item : value)
+			{
+				Object* object = factory.create(item);
+				
+				T* item = dynamic_cast<T*>(object);
+				
+				if(item)
+					items.push_back(new T(item));
+			}
+		};
+		
+		Container() = default;
 	
 	protected:
-		Container(const Container&);
-		Container& operator=(const Container&);
+		Container(const Container& b)
+		{
+			*this = b;
+		};
+		
+		Container& operator=(const Container& b)
+		{
+			for(T* item: b)
+			{
+				items.push_back(Object::clone(item));
+			}
+		};
 	
 	private:
-		ContainerType children;
+		ContainerType items;
 };
 
 };

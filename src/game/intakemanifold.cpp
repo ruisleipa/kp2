@@ -22,11 +22,6 @@ int IntakeManifold::getCylinderCount() const
 	return cylinderCount;
 }
 
-IntakeManifold* IntakeManifold::clone() const
-{
-	return new IntakeManifold(*this);
-}
-
 IntakeManifold::IntakeManifold(const Json::Value& value):
 	Part(value)
 {

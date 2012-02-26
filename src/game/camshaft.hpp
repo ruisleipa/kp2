@@ -16,8 +16,6 @@ class Camshaft: public Part
 		
 		int getCylinderCount() const;
 		const std::string& getCamshaftPosition() const;
-				
-		virtual Camshaft* clone() const;
 		
 		Camshaft(const Json::Value& value);
 		virtual void save(Json::Value& value);

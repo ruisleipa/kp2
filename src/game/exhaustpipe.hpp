@@ -14,8 +14,6 @@ class ExhaustPipe: public Part
 		const std::string& getName() const;
 		int getPrice() const;
 		
-		virtual ExhaustPipe* clone() const;
-		
 		ExhaustPipe(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		

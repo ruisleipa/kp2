@@ -44,11 +44,6 @@ bool Vehicle::canAttachPart(const Part& p) const
 	return false;
 }
 
-Vehicle* Vehicle::clone() const
-{
-	return new Vehicle(*this);
-}
-
 Vehicle::Vehicle(const Json::Value& value):
 	Part(value)
 {
@@ -63,7 +58,7 @@ Vehicle::Vehicle(const Json::Value& value):
 	maxEngineCylinderCount = value["maxEngineCylinderCount"].asInt();
 }
 
-void Vehicle::save(Json::Value& value)
+void Vehicle::save(Json::Value& value) const
 {
 	Part::save(value);
 

@@ -15,8 +15,6 @@ class Transmission: public Part
 		std::vector<float> getGearRatios() const;
 		int getNeutralGearIndex() const;
 		
-		virtual Transmission* clone() const;
-		
 		Transmission(const Json::Value&);
 		void save(Json::Value&);	
 	

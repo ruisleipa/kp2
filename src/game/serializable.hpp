@@ -9,8 +9,9 @@ namespace Game
 class Serializable
 {
 	public:
-		virtual void save(Json::Value&);
+		virtual void save(Json::Value&) const;
 		
+		Serializable() = default;
 		Serializable(const Json::Value&);
 };
 

@@ -11,11 +11,6 @@ int Charger::getPrice() const
 	return airPerRevolution * 10.0 + maxSpeed / 10.0;
 }
 
-Charger* Charger::clone() const
-{
-	return new Charger(*this);
-}
-
 Charger::Charger(const Json::Value& value):
 	Part(value)
 {

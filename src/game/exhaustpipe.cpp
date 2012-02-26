@@ -16,11 +16,6 @@ int ExhaustPipe::getPrice() const
 	return 0;
 }
 
-ExhaustPipe* ExhaustPipe::clone() const
-{
-	return new ExhaustPipe(*this);
-}
-
 ExhaustPipe::ExhaustPipe(const Json::Value& value):
 	Part(value)
 {

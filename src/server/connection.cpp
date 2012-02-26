@@ -58,7 +58,7 @@ Connection::Connection(Game::State& gameState, Game::Player* player, Net::Client
 	Json::Value state;
 	gameState.save(state);
 	
-	state["client"]["playerId"] = gameState.getId(player);
+	state["client"]["playerId"] = gameState.getPlayers().getIndexOf(player);
 	
 	Json::FastWriter fw;
 	

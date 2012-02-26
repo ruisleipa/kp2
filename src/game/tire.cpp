@@ -18,11 +18,6 @@ float Tire::getRadius() const
 	return radius;
 }
 
-Tire* Tire::clone() const
-{
-	return new Tire(*this);
-}
-
 Tire::Tire(const Json::Value& value):
 	Part(value)
 {

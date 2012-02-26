@@ -13,11 +13,6 @@ int Transmission::getNeutralGearIndex() const
 	return neutralGear;
 }
 
-Transmission* Transmission::clone() const
-{
-	return new Transmission(*this);
-}
-
 Transmission::Transmission(const Json::Value& value):
 	Part(value)
 {

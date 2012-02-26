@@ -22,8 +22,6 @@ class CylinderHead: public Part
 		int getCylinderCount() const;
 		bool isDoubleCam() const;
 		
-		virtual CylinderHead* clone() const;
-		
 		CylinderHead(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		

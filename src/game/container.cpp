@@ -71,11 +71,6 @@ void Object::remove(T* item)
 	items.erase(it);
 }
 
-Object* Object::clone() const
-{
-	return new Object(*this);
-}
-
 Object::Object(const Object&)
 {
 

@@ -3,11 +3,6 @@
 namespace Game
 {
 
-FuelIntake* FuelIntake::clone() const
-{
-	return new FuelIntake(*this);
-}
-
 FuelIntake::FuelIntake(const Json::Value& value):
 	Part(value)
 {

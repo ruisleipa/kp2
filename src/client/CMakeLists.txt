@@ -73,6 +73,7 @@ set(game_SRCS
 	../game/objectfactory.cpp
 	../game/part.cpp
 	../game/player.cpp
+	../game/serializable.cpp
 	../game/state.cpp
 	../game/stateactionlistener.cpp
 	../game/tire.cpp
@@ -98,6 +99,7 @@ set(client_MOC_HDRS
 	./menucontainer.hpp
 	./multiplayermenu.hpp
 	../game/object.hpp
+	../game/container.hpp
 	./settingsmenu.hpp
 	./singleplayermenu.hpp
 	./technicsmenu.hpp

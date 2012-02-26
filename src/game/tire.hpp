@@ -15,8 +15,6 @@ class Tire: public Part
 		float getRollingResistanceCoefficient() const;
 		float getRadius() const;
 		
-		virtual Tire* clone() const;
-		
 		Tire(const Json::Value&);
 		void save(Json::Value&);
 		

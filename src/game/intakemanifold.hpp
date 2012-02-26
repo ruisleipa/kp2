@@ -15,8 +15,6 @@ class IntakeManifold: public Part
 		const std::string& getCylinderAlignment() const;	
 		int getCylinderCount() const;
 		
-		virtual IntakeManifold* clone() const;
-		
 		IntakeManifold(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		

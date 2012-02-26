@@ -20,12 +20,6 @@ int ExhaustManifold::getCylinderCount() const
 	return cylinderCount;
 }
 
-
-ExhaustManifold* ExhaustManifold::clone() const
-{
-	return new ExhaustManifold(*this);
-}
-
 ExhaustManifold::ExhaustManifold(const Json::Value& value):
 	Part(value)
 {

@@ -8,11 +8,6 @@ int Cooler::getPrice() const
 	return 0;
 }
 
-Cooler* Cooler::clone() const
-{
-	return new Cooler(*this);
-}
-
 Cooler::Cooler(const Json::Value& value):
 	Part(value)
 {

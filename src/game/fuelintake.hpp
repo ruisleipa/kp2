@@ -8,9 +8,7 @@ namespace Game
 
 class FuelIntake: public Part
 {
-	public:
-		virtual FuelIntake* clone() const;
-		
+	public:		
 		FuelIntake(const Json::Value& value);
 		void save(Json::Value& value);
 		

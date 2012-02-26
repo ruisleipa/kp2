@@ -26,8 +26,6 @@ class Engine: public Part
 
 		virtual bool canAttachPart(const Part&) const;
 		
-		virtual Engine* clone() const;
-		
 		Engine(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		
