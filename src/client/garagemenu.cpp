@@ -9,8 +9,7 @@ GarageMenu::GarageMenu(QWidget *parent) :
 
 void GarageMenu::gameStateLoaded(Client::State* state)
 {
-	Game::Object& v = state->getPlayer()->getVehicles();
-	model.reset(new ObjectTableModel<Game::Vehicle*>(v));
+	model.reset(new ObjectTableModel<Game::Vehicle>(state->getPlayer()->getVehicles()));
 
 	TableView* view = ui->carList;
 

@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "id.hpp"
-
 namespace Game
 {
 

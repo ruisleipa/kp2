@@ -7,7 +7,6 @@
 #include <QTcpSocket>
 
 #include "net/packet.hpp"
-#include "utils/map.hpp"
 #include "state.hpp"
 
 class Packet;

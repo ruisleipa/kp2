@@ -17,21 +17,8 @@ void Player::setName(const std::string& name)
 
 void Player::setActiveVehicle(Vehicle* vehicle)
 {
-	bool found = false;
-
-	for(Vehicle* v : vehicles->getChildren<Vehicle>())
-		if(v == vehicle)
-			found = true;
-	
-	if(!found)
-		return;
-		
-	activeVehicle = vehicle;
-	
-	for(PlayerActionListener* l : listeners)
-		l->setActiveVehicle(vehicle);
-		
-	changed();
+	if(vehicles.getIndexOf(vehicle) != -1)
+		activeVehicle = vehicle;
 }
 
 void Player::buyPart(const Part* part)
@@ -41,7 +28,7 @@ void Player::buyPart(const Part* part)
 		money -= part->getPrice();
 		changed();
 		
-		parts->addChild(part->clone());
+		parts.add(part->clone());
 	}
 }
 
@@ -52,7 +39,7 @@ void Player::buyVehicle(const Vehicle* vehicle)
 		money -= vehicle->getPrice();
 		changed();
 		
-		vehicles->addChild(vehicle->clone());
+		vehicles.add(vehicle->clone());
 	}
 }
 
@@ -65,8 +52,7 @@ void Player::attachPart(Part* part)
 	
 	if(it == parts->end())
 		return;
-	
-	getActiveVehicle()->addPartToTree(part);
+
 }
 
 void Player::detachPart(Part* part)

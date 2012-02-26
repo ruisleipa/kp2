@@ -26,21 +26,6 @@ ExhaustManifold* ExhaustManifold::clone() const
 	return new ExhaustManifold(*this);
 }
 
-
-bool ExhaustManifold::canAttachPart(const Part& part) const
-{	
-	for(Object* p : *this)
-		if(dynamic_cast<const ExhaustPipe*>(p))
-			return false;	
-	
-	const ExhaustPipe* c = dynamic_cast<const ExhaustPipe*>(&part);
-	
-	if(c)
-		return true;
-
-	return false;
-}
-
 ExhaustManifold::ExhaustManifold(const Json::Value& value):
 	Part(value)
 {

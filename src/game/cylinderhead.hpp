@@ -22,21 +22,12 @@ class CylinderHead: public Part
 		int getCylinderCount() const;
 		bool isDoubleCam() const;
 		
-		virtual bool canAttachPart(const Part& part) const;
-		
 		virtual CylinderHead* clone() const;
 		
 		CylinderHead(const Json::Value& value);
 		virtual void save(Json::Value& value);
 		
 	private:
-		bool canAttachCamshaft(const Camshaft& c) const;
-		bool canAttachIntakeManifold(const IntakeManifold& c) const;
-		bool canAttachExhaustManifold(const ExhaustManifold& c) const;
-		bool checkCamshaftCount() const;
-		bool checkIntakeManifoldCount() const;
-		bool checkExhaustManifoldCount() const;
-	
 		std::string name;
 		bool doubleCam;
 		std::string camshaftPosition;

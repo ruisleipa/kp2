@@ -10,13 +10,13 @@ template <class Object>
 class ObjectModel
 {
 	public:
-		QVariant getData(Object object, int col) const;
+		QVariant getData(Object* object, int col) const;
 		int getColumnCount() const;
 		std::string getHeader(int col) const;
 };
 
 template <>
-class ObjectModel<Game::Vehicle*>
+class ObjectModel<Game::Vehicle>
 {
 	public:
 		static const int NAME = 0;
@@ -49,6 +49,6 @@ class ObjectModel<Game::Vehicle*>
 		}
 };
 
-typedef ObjectModel<Game::Vehicle*> VehicleModel;
+typedef ObjectModel<Game::Vehicle> VehicleModel;
 
 #endif

@@ -20,7 +20,7 @@ class GarageMenu : public GameMenu
 		
 	private:
 		std::unique_ptr<Ui::GarageMenu> ui;
-		std::unique_ptr<ObjectTableModel<Game::Vehicle*>> model;
+		std::unique_ptr<ObjectTableModel<Game::Vehicle>> model;
 		
 	private slots:
 		void on_carList_clicked(const QModelIndex&);

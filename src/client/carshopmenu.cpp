@@ -11,8 +11,7 @@ CarShopMenu::CarShopMenu(QWidget *parent) :
 
 void CarShopMenu::gameStateLoaded(Client::State* state)
 {
-	Game::Object& v = state->getShopVehicles();
-	model.reset(new ObjectTableModel<Game::Vehicle*>(v));
+	model.reset(new ObjectTableModel<Game::Vehicle>(state->getShopVehicles()));
 
 	TableView* view = ui->carList;
 

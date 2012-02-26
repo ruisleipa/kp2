@@ -7,7 +7,7 @@
 #include <algorithm>
 #include "abstractobjecttablemodel.hpp"
 #include "objecttomodel.hpp"
-#include "game/object.hpp"
+#include "game/container.hpp"
 
 template<class T> 
 class ObjectTableModel : public AbstractObjectTableModel
@@ -18,20 +18,17 @@ class ObjectTableModel : public AbstractObjectTableModel
 			return rows.size();
 		}
 	
-		T getObject(int row) const
+		T* getObject(int row) const
 		{
 			return rows[row];
 		}
 	
-		ObjectTableModel(Game::Object& dataSource):
+		ObjectTableModel(const Game::Container<T>& dataSource):
 			dataSource(dataSource)
 		{
-			for(Game::Object* o : dataSource)
+			for(T* t : dataSource)
 			{
-				T t = dynamic_cast<T>(o);
-			
-				if(t)
-					rows.push_back(t);
+				rows.push_back(t);
 			}
 		
 			connect(&dataSource, SIGNAL(childAdded(int)), this, SLOT(onAdd(int)));
@@ -62,53 +59,41 @@ class ObjectTableModel : public AbstractObjectTableModel
 
 		void onAdd(int index)
 		{
-			Game::Object* object = dataSource.getChild(index);
+			T* t = dataSource.getByIndex(index);
 			
-			T t = dynamic_cast<T>(object);
-			
-			if(t)
-			{			
-				beginInsertRows(QModelIndex(), rows.size(), rows.size());
+			beginInsertRows(QModelIndex(), rows.size(), rows.size());
 				
-				rows.push_back(t);
+			rows.push_back(t);
 				
-				endInsertRows();
-			}
+			endInsertRows();
 		}
 		
 		void onRemove(int index)
 		{
-			Game::Object* object = dataSource.getChild(index);
+			auto it = rows.begin();
 			
-			T t = dynamic_cast<T>(object);
+			advance(it, index);
+				
+			// item must exist because it cannot be removed unless it was added earlier
+			assert(it != rows.end());
 			
-			if(t)
-			{			
-				auto it = std::find(rows.begin(), rows.end(), t);
-				
-				// item must exist because it cannot be removed unless it was added earlier
-				assert(it != rows.end());
-				
-				int index = std::distance(rows.begin(), it);
-				
-				beginRemoveRows(QModelIndex(), index, index);
-				
-				rows.erase(it);
-				
-				endRemoveRows();
-			}
+			beginRemoveRows(QModelIndex(), index, index);
+			
+			rows.erase(it);
+			
+			endRemoveRows();
 		}
 		
 		void onChange(int index)
 		{
-		
+			(void)index;
 		}
 	
 	private:
-		Game::Object& dataSource;
+		const Game::Container<T>& dataSource;
 	
 		ObjectModel<T> converter;
-		std::vector<T> rows;
+		std::vector<T*> rows;
 		
 };
 

@@ -8,9 +8,9 @@
 #include "part.hpp"
 #include "player.hpp"
 #include "upgrade.hpp"
-#include "id.hpp"
 #include "stateactionlistener.hpp"
 #include "object.hpp"
+#include "container.hpp"
 #include <stdint.h>
 
 namespace Game
@@ -21,18 +21,20 @@ class State : public Object
 	public:
 		void addPlayer(Player*);
 				
-		Object& getPlayers();
-		Object& getShopVehicles();
-		Object& getShopParts();
-		Object& getUpgrades();
+		const Container<Player>& getPlayers() const;
+		const Container<Vehicle>& getShopVehicles() const;
+		const Container<Part>& getShopParts() const;
+		const Container<Upgrade>& getUpgrades() const;
 
+		virtual void save(Json::Value&) const;
+		
 		State(const Json::Value&);
 	
 	private:
-		Object* players;
-		Object* vehicles;
-		Object* parts;
-		Object* upgrades;
+		Container<Player> players;
+		Container<Vehicle> vehicles;
+		Container<Part> parts;
+		Container<Upgrade> upgrades;
 
 };
 

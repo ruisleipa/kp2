@@ -10,6 +10,7 @@
 #include "playeractions.hpp"
 #include "playeractionlistener.hpp"
 #include "object.hpp"
+#include "container.hpp"
 
 namespace Game
 {
@@ -31,8 +32,8 @@ class Player : public PlayerActions, public Object
 		
 		int getMoney() const;
 		
-		Object& getVehicles() const; 
-		Object& getParts() const; 
+		const Container<Vehicle>& getVehicles() const; 
+		const Container<Part>& getParts() const; 
 		
 		Vehicle* getActiveVehicle() const;
 		
@@ -46,8 +47,8 @@ class Player : public PlayerActions, public Object
 		int money;		
 		Vehicle* activeVehicle;
 		
-		Object* parts;
-		Object* vehicles;
+		Container<Part> parts;
+		Container<Vehicle> vehicles;
 		
 		std::set<PlayerActionListener*> listeners;
 };

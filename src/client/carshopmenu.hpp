@@ -20,7 +20,7 @@ class CarShopMenu : public GameMenu
 		
 	private:
 		std::unique_ptr<Ui::CarShopMenu> ui;
-		std::unique_ptr<ObjectTableModel<Game::Vehicle*>> model;
+		std::unique_ptr<ObjectTableModel<Game::Vehicle>> model;
 
 		Game::Player* player;
 		Game::Vehicle* vehicle;

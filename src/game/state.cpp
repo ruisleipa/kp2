@@ -11,36 +11,45 @@ namespace Game
 
 void State::addPlayer(Player* player)
 {
-	addChild(player);
+	players.add(player);
 }
 	
-Object& State::getPlayers()
+const Container<Player>& State::getPlayers()
 {
 	return *players;
 }
 
-Object& State::getShopVehicles()
+const Container<Player>& State::getShopVehicles()
 {
 	return *vehicles;
 }
 
-Object& State::getShopParts()
+const Container<Player>& State::getShopParts()
 {
 	return *parts;
 }
 
-Object& State::getUpgrades()
+const Container<Player>& State::getUpgrades()
 {
 	return *upgrades;
 }
 
-State::State(const Json::Value& value):
-	Object(value)
+void State::save(Json::Value&) const
 {
-	players = findChild("players");
-	vehicles = findChild("vehicles");
-	parts = findChild("parts");
-	upgrades = findChild("upgrades");
+	players.save(value["players"]);
+	vehicles.save(value["vehicles"]);
+	parts.save(value["parts"]);
+	upgrades.save(value["upgrades"]);
+}
+
+State::State(const Json::Value& value):
+	Object(value),
+	players(value["players"]),
+	vehicles(value["vehicles"]),
+	parts(value["parts"]),
+	upgrades(value["upgrades"])
+{
+	
 }
 
 };
