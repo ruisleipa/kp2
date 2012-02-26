@@ -109,6 +109,8 @@ find_package(Qt4 REQUIRED)
 
 set(QT_USE_QTNETWORK 1)
 
+add_definitions( -DKP2_CLIENT )
+
 include( ${QT_USE_FILE} )
 
 qt4_wrap_ui( client_UI_HDRS ${client_UIS} )
@@ -121,14 +123,13 @@ include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/..)
 
-add_definitions( -DKP2_CLIENT -mwindows )
-
 add_executable(kp2_client  ${client_SRCS} ${client_MOC_SRCS} ${game_SRCS} ${client_UI_HDRS} )
 
 target_link_libraries(kp2_client ${QT_LIBRARIES} audiere) 
 
 IF(WIN32)
 	target_link_libraries(kp2_client ws2_32)	
+	add_definitions( -mwindows )
 ENDIF(WIN32)
 
 
