@@ -31,9 +31,20 @@ class ContainerSignals : public QObject
 class ContainerSignals
 {
 	protected:
-		void childAdded(int index){};
-		void childRemoved(int index){};
-		void childChanged(int index){};
+		void childAdded(int index)
+		{
+			(void)index;
+		};
+
+		void childRemoved(int index)
+		{
+			(void)index;
+		};
+
+		void childChanged(int index)
+		{
+			(void)index;
+		};
 };
 
 #endif
@@ -106,6 +117,8 @@ class Container : public ContainerSignals
 		
 		virtual void save(Json::Value& value) const
 		{
+			value.resize(0);
+
 			for(T* item : items)
 			{
 				Json::Value i;
@@ -124,9 +137,9 @@ class Container : public ContainerSignals
 			{
 				Object* object = factory.create(item);
 				
-				T* item = dynamic_cast<T*>(object);
+				T* ptr = dynamic_cast<T*>(object);
 				
-				if(item)
+				if(ptr)
 					items.push_back(new T(item));
 			}
 		};
