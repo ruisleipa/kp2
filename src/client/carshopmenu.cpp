@@ -51,7 +51,7 @@ void CarShopMenu::on_buyButton_clicked()
 
 	player->buyVehicle(vehicle);
 
-	//navigateToPrevious();
-	//navigateTo("GarageMenu");
+	navigateToPrevious();
+	navigateTo("GarageMenu");
 }
 
