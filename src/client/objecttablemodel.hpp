@@ -31,9 +31,9 @@ class ObjectTableModel : public AbstractObjectTableModel
 				rows.push_back(t);
 			}
 		
-			connect(&dataSource, SIGNAL(childAdded(int)), this, SLOT(onAdd(int)));
-			connect(&dataSource, SIGNAL(childRemoved(int)), this, SLOT(onRemove(int)));
-			connect(&dataSource, SIGNAL(childChanged(int)), this, SLOT(onChange(int)));
+			connect(&dataSource, SIGNAL(added(int)), this, SLOT(onAdd(int)));
+			connect(&dataSource, SIGNAL(removed(int)), this, SLOT(onRemove(int)));
+			connect(&dataSource, SIGNAL(changed(int)), this, SLOT(onChange(int)));
 		}
 
 	protected:

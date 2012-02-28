@@ -16,41 +16,49 @@ namespace Game
 
 #ifdef KP2_CLIENT
 
-class ContainerSignals : public QObject
+class ContainerSignalsAndSlots : public QObject
 {
 	Q_OBJECT
 	
 	signals:
-		void childAdded(int index);
-		void childRemoved(int index);
-		void childChanged(int index);
+		void added(int index);
+		void removed(int index);
+		void changed(int index);
+
+	protected slots:
+		virtual void onChange() = 0;
 };
 
 #else
 
-class ContainerSignals
+class ContainerSignalsAndSlots
 {
 	protected:
-		void childAdded(int index)
+		void added(int index)
 		{
 			(void)index;
 		};
 
-		void childRemoved(int index)
+		void removed(int index)
 		{
 			(void)index;
 		};
 
-		void childChanged(int index)
+		void changed(int index)
 		{
 			(void)index;
+		};
+
+		virtual void onChange()
+		{
+
 		};
 };
 
 #endif
 
 template<class T>
-class Container : public ContainerSignals
+class Container : public ContainerSignalsAndSlots
 {
 	public:
 		typedef std::vector<T*> ContainerType;
@@ -103,6 +111,12 @@ class Container : public ContainerSignals
 		void add(T* item)
 		{
 			items.push_back(item);
+
+			added(items.size() - 1);
+
+#ifdef KP2_CLIENT
+			connect(item, SIGNAL(changed()), this, SLOT(onChange()));
+#endif
 		};
 
 		void remove(T* item)
@@ -112,7 +126,15 @@ class Container : public ContainerSignals
 			if(it == items.end())
 				return;
 
+			int index = std::distance(items.begin(), it);
+
+#ifdef KP2_CLIENT
+			item->disconnect(SIGNAL(changed()), this, SLOT(onChange()));
+#endif
+
 			items.erase(it);
+
+			removed(index);
 		};
 		
 		virtual void save(Json::Value& value) const
@@ -159,6 +181,25 @@ class Container : public ContainerSignals
 				items.push_back(Object::clone(item));
 			}
 		};
+
+#ifdef KP2_CLIENT
+		virtual void onChange()
+		{
+			// This cast is safe because the objects connected
+			// to this slot by the add-method are always of the
+			// correct type.
+			T* item = static_cast<T*>(sender());
+
+			auto it = std::find(items.begin(), items.end(), item);
+
+			if(it == items.end())
+				return;
+
+			int index = std::distance(items.begin(), it);
+
+			changed(index);
+		};
+#endif
 	
 	private:
 		ContainerType items;
