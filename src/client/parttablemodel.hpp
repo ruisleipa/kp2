@@ -17,6 +17,21 @@ class PartTableModel : public ObjectTableModel<Game::Part>
 		{
 
 		}
+	
+	protected:
+		virtual QVariant getToolTip(int row) const
+		{
+			Game::Part* part = getObject(row);
+			
+			QString tooltip;
+
+			tooltip += QString("<img src=\"data/images/parts/%1\" style=\"float:left;\">").arg("charger.jpg");
+			tooltip += QString("<b>%1</b>").arg(part->getName().c_str());
+			tooltip += QString("<div style=\"clear:both;\">");
+			tooltip += QString("<b>Massa:</b> %1 kg").arg(part->getMass());
+			
+			return QVariant(tooltip);
+		};
 };
 
 #endif
