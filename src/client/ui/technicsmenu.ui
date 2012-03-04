@@ -131,58 +131,31 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>TextLabel</string>
+        <widget class="TableView" name="shopView">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolBox" name="toolBox">
-         <property name="currentIndex">
-          <number>0</number>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
          </property>
-         <property name="tabSpacing">
-          <number>-1</number>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
          </property>
-         <widget class="QWidget" name="page">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>148</width>
-            <height>189</height>
-           </rect>
-          </property>
-          <attribute name="label">
-           <string>Moottori</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="page_4">
-          <attribute name="label">
-           <string>Polttoaineensyöttö</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="page_6">
-          <attribute name="label">
-           <string>Imusarjat</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="page_7">
-          <attribute name="label">
-           <string>Pakosarjat</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="page_8">
-          <attribute name="label">
-           <string>Voimansiirto</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="page_3">
-          <attribute name="label">
-           <string>Renkaat</string>
-          </attribute>
-         </widget>
+         <property name="showGrid">
+          <bool>false</bool>
+         </property>
+         <property name="cornerButtonEnabled">
+          <bool>false</bool>
+         </property>
+         <attribute name="horizontalHeaderHighlightSections">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="verticalHeaderHighlightSections">
+          <bool>false</bool>
+         </attribute>
         </widget>
        </item>
       </layout>
@@ -225,6 +198,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TableView</class>
+   <extends>QTableView</extends>
+   <header>tableview.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

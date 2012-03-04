@@ -1,25 +1,29 @@
 #ifndef TECHNICSMENU_H
 #define TECHNICSMENU_H
 
-#include "gamemenu.hpp"
+#include <memory>
 
-namespace Ui {
-	class TechnicsMenu;
-}
+#include "gamemenu.hpp"
+#include "ui_technicsmenu.h"
+#include "parttablemodel.hpp"
 
 class TechnicsMenu : public GameMenu
-{	Q_OBJECT
+{	
+	Q_OBJECT
 
-public:
-	explicit TechnicsMenu(QWidget *parent = 0);
-	~TechnicsMenu();
+	public:
+		explicit TechnicsMenu(QWidget *parent = 0);
 
-private:
-	Ui::TechnicsMenu *ui;
-	
-private slots:
-	void on_okButton_clicked();
-	void on_cancelButton_clicked();
+	public slots:
+		virtual void gameStateLoaded(Client::State*);
+		
+	private:
+		std::unique_ptr<Ui::TechnicsMenu> ui;
+		std::unique_ptr<PartTableModel> model;
+		
+	private slots:
+		void on_okButton_clicked();
+		void on_cancelButton_clicked();
 
 	
 };

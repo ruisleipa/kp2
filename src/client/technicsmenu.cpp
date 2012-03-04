@@ -1,5 +1,4 @@
 #include "technicsmenu.hpp"
-#include "ui_technicsmenu.h"
 
 #include <QMessageBox>
 
@@ -10,9 +9,17 @@ TechnicsMenu::TechnicsMenu(QWidget *parent) :
 	ui->setupUi(this);
 }
 
-TechnicsMenu::~TechnicsMenu()
+void TechnicsMenu::gameStateLoaded(Client::State* state)
 {
-	delete ui;
+	model.reset(new PartTableModel(state->getShopParts()));
+
+	TableView* view = ui->shopView;
+
+	view->setModel(model.get());
+	view->showColumn(model->name.getIndex());
+	view->showColumn(model->price.getIndex());
+
+	view->horizontalHeader()->setResizeMode(model->name.getIndex(), QHeaderView::Stretch);
 }
 
 void TechnicsMenu::on_okButton_clicked()
