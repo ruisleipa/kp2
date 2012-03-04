@@ -4,9 +4,6 @@
 #include <QAbstractTableModel>
 #include <string>
 
-#include "state.hpp"
-#include "abstracttablemodel.hpp"
-
 class AbstractObjectTableModel: public QAbstractTableModel
 {
 	Q_OBJECT

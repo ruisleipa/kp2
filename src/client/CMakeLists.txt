@@ -83,7 +83,6 @@ set(game_SRCS
 )
 
 set(client_MOC_HDRS
-	./abstracttablemodel.hpp
 	./carshopmenu.hpp
 	./abstractobjecttablemodel.hpp
 	./connection.hpp

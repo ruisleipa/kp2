@@ -2,27 +2,34 @@
 
 #include <QHeaderView>
 
-void TableView::setVisibleColumns(std::vector<int> ids)
-{
+void TableView::hideAllColumns()
+{	
 	for(int i = 0; i < horizontalHeader()->count(); i++)
 		horizontalHeader()->hideSection(i);
-
-	int to = 0;
-
-	for(int id : ids)
-	{
-		horizontalHeader()->showSection(id);
 		
-		int from = horizontalHeader()->visualIndex(id);
+	nextVisualIndex = 0;
+}
 
-		horizontalHeader()->moveSection(from, to);
+void TableView::showColumn(int id)
+{
+	horizontalHeader()->showSection(id);
+		
+	int from = horizontalHeader()->visualIndex(id);
 
-		to++;
-	}
+	horizontalHeader()->moveSection(from, nextVisualIndex);
+
+	nextVisualIndex++;
+}
+
+TableView::TableView():
+	nextVisualIndex(0)
+{
+
 }
 
 TableView::TableView(QWidget* parent):
-	QTableView(parent)
+	QTableView(parent),
+	nextVisualIndex(0)
 {
 	QHeaderView* h = horizontalHeader();
 

@@ -8,9 +8,14 @@ class TableView: public QTableView
 	Q_OBJECT
 
 	public:
-		void setVisibleColumns(std::vector<int> ids);
+		void hideAllColumns();
+		void showColumn(int id);
 
+		TableView();
 		explicit TableView(QWidget* parent);
+	
+	private:
+		int nextVisualIndex;
 };
 
 #endif

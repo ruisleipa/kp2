@@ -8,8 +8,8 @@
 #include <vector>
 #include <algorithm>
 
-#include "json/json.h" 
-#include "objectfactory.hpp" 
+#include "json/json.h"
+#include "objectfactory.hpp"
 
 namespace Game
 {
@@ -19,7 +19,7 @@ namespace Game
 class ContainerSignalsAndSlots : public QObject
 {
 	Q_OBJECT
-	
+
 	signals:
 		void added(int index);
 		void removed(int index);
@@ -62,27 +62,27 @@ class Container : public ContainerSignalsAndSlots
 {
 	public:
 		typedef std::vector<T*> ContainerType;
-	
+
 		typename ContainerType::iterator begin()
 		{
 			return items.begin();
 		};
-		
+
 		typename ContainerType::const_iterator begin() const
 		{
 			return items.begin();
 		};
-		
+
 		typename ContainerType::iterator end()
 		{
 			return items.end();
 		};
-		
+
 		typename ContainerType::const_iterator end() const
 		{
 			return items.end();
 		};
-		
+
 		int getIndexOf(T* item) const
 		{
 			auto it = std::find(items.begin(), items.end(), item);
@@ -92,14 +92,14 @@ class Container : public ContainerSignalsAndSlots
 
 			return std::distance(items.begin(), it);
 		};
-		
+
 		T* getByIndex(int index) const
 		{
 			if(index < 0)
 				return nullptr;
-			
+
 			auto it = items.begin();
-			
+
 			std::advance(it, index);
 
 			if(it == items.end())
@@ -107,7 +107,12 @@ class Container : public ContainerSignalsAndSlots
 
 			return *it;
 		};
-		
+
+		int getItemCount() const
+		{
+			return items.size();
+		}
+
 		void add(T* item)
 		{
 			items.push_back(item);
@@ -136,7 +141,7 @@ class Container : public ContainerSignalsAndSlots
 
 			removed(index);
 		};
-		
+
 		virtual void save(Json::Value& value) const
 		{
 			value.resize(0);
@@ -144,36 +149,36 @@ class Container : public ContainerSignalsAndSlots
 			for(T* item : items)
 			{
 				Json::Value i;
-				
+
 				item->save(i);
-				
+
 				value.append(i);
 			}
 		};
-		
+
 		Container(const Json::Value& value)
 		{
 			ObjectFactory factory;
-		
+
 			for(auto item : value)
 			{
 				Object* object = factory.create(item);
-				
+
 				T* ptr = dynamic_cast<T*>(object);
-				
+
 				if(ptr)
 					items.push_back(new T(item));
 			}
 		};
-		
+
 		Container() = default;
-	
+
 	protected:
 		Container(const Container& b)
 		{
 			*this = b;
 		};
-		
+
 		Container& operator=(const Container& b)
 		{
 			for(T* item: b)
@@ -200,7 +205,7 @@ class Container : public ContainerSignalsAndSlots
 			changed(index);
 		};
 #endif
-	
+
 	private:
 		ContainerType items;
 };
