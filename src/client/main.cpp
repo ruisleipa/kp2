@@ -102,10 +102,10 @@ int main(int argc, char *argv[])
 	CarShopMenu* carShopMenu = new CarShopMenu();
 	GarageMenu* garageMenu = new GarageMenu();
 
-	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameMainMenu, SLOT(gameStateLoaded(Client::State*)), Qt::DirectConnection);
-	QObject::connect(&connection, SIGNAL(ready(Client::State*)), technicsMenu, SLOT(gameStateLoaded(Client::State*)), Qt::DirectConnection);
-	QObject::connect(&connection, SIGNAL(ready(Client::State*)), carShopMenu, SLOT(gameStateLoaded(Client::State*)), Qt::DirectConnection);
-	QObject::connect(&connection, SIGNAL(ready(Client::State*)), garageMenu, SLOT(gameStateLoaded(Client::State*)), Qt::DirectConnection);
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameMainMenu, SLOT(gameStateLoaded(Client::State*)));
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), technicsMenu, SLOT(gameStateLoaded(Client::State*)));
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), carShopMenu, SLOT(gameStateLoaded(Client::State*)));
+	QObject::connect(&connection, SIGNAL(ready(Client::State*)), garageMenu, SLOT(gameStateLoaded(Client::State*)));
 
 	gameView->getContainer()->addMenu(gameMainMenu);
 	gameView->getContainer()->addMenu(carShopMenu);
