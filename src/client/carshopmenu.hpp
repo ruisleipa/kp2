@@ -6,7 +6,7 @@
 #include "gamemenu.hpp"
 #include "ui_carshopmenu.h"
 #include "game/vehicle.hpp"
-#include "objecttablemodel.hpp"
+#include "vehicletablemodel.hpp"
 
 class CarShopMenu : public GameMenu
 {	
@@ -20,7 +20,7 @@ class CarShopMenu : public GameMenu
 		
 	private:
 		std::unique_ptr<Ui::CarShopMenu> ui;
-		std::unique_ptr<ObjectTableModel<Game::Vehicle>> model;
+		std::unique_ptr<VehicleTableModel> model;
 
 		Game::Player* player;
 		Game::Vehicle* vehicle;

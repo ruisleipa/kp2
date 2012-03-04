@@ -9,14 +9,15 @@ GarageMenu::GarageMenu(QWidget *parent) :
 
 void GarageMenu::gameStateLoaded(Client::State* state)
 {
-	model.reset(new ObjectTableModel<Game::Vehicle>(state->getPlayer()->getVehicles()));
+	model.reset(new VehicleTableModel(state->getPlayer()->getVehicles()));
 
 	TableView* view = ui->carList;
 
 	view->setModel(model.get());
-	view->setVisibleColumns({VehicleModel::NAME, VehicleModel::PRICE});
+	view->showColumn(model->name.getIndex());
+	view->showColumn(model->price.getIndex());
 
-	view->horizontalHeader()->setResizeMode(VehicleModel::NAME, QHeaderView::Stretch);
+	view->horizontalHeader()->setResizeMode(model->name.getIndex(), QHeaderView::Stretch);
 }
 
 void GarageMenu::on_carList_clicked(const QModelIndex& current)

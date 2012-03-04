@@ -11,14 +11,15 @@ CarShopMenu::CarShopMenu(QWidget *parent) :
 
 void CarShopMenu::gameStateLoaded(Client::State* state)
 {
-	model.reset(new ObjectTableModel<Game::Vehicle>(state->getShopVehicles()));
+	model.reset(new VehicleTableModel(state->getShopVehicles()));
 
 	TableView* view = ui->carList;
 
 	view->setModel(model.get());
-	view->setVisibleColumns({VehicleModel::NAME, VehicleModel::PRICE});
+	view->showColumn(model->name.getIndex());
+	view->showColumn(model->price.getIndex());
 
-	view->horizontalHeader()->setResizeMode(VehicleModel::NAME, QHeaderView::Stretch);
+	view->horizontalHeader()->setResizeMode(model->name.getIndex(), QHeaderView::Stretch);
 
 	player = state->getPlayer();
 	vehicle = nullptr;
@@ -27,10 +28,10 @@ void CarShopMenu::gameStateLoaded(Client::State* state)
 void CarShopMenu::on_carList_clicked(const QModelIndex& current)
 {
 	vehicle = model->getObject(current.row());
-	
+
 	if(!vehicle)
 		return;
-	
+
 	ui->carNameLabel->setText(vehicle->getName().c_str());
 	ui->carImage->setPixmap(QPixmap(QString("gamedata/vehicleimages/") + QString(vehicle->getImageName().c_str())));
 	ui->price->setText(QString::number(vehicle->getPrice()) + trUtf8(" e"));
