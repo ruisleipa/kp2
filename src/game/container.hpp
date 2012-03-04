@@ -167,7 +167,9 @@ class Container : public ContainerSignalsAndSlots
 				T* ptr = dynamic_cast<T*>(object);
 
 				if(ptr)
-					items.push_back(new T(item));
+					items.push_back(ptr);
+				else
+					std::cerr << "Invalid item in container" << std::endl << item << std::endl;
 			}
 		};
 
