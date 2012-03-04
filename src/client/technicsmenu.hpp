@@ -19,7 +19,9 @@ class TechnicsMenu : public GameMenu
 		
 	private:
 		std::unique_ptr<Ui::TechnicsMenu> ui;
-		std::unique_ptr<PartTableModel> model;
+		std::unique_ptr<PartTableModel> shopModel;
+		std::unique_ptr<PartTableModel> playerModel;
+		std::unique_ptr<PartTableModel> vehicleModel;
 		
 	private slots:
 		void on_okButton_clicked();

@@ -11,15 +11,22 @@ TechnicsMenu::TechnicsMenu(QWidget *parent) :
 
 void TechnicsMenu::gameStateLoaded(Client::State* state)
 {
-	model.reset(new PartTableModel(state->getShopParts()));
+	shopModel.reset(new PartTableModel(state->getShopParts()));
+	TableView* shopView = ui->shopView;
 
-	TableView* view = ui->shopView;
+	shopView->setModel(shopModel.get());	
+	shopView->hideAllColumns();
+	shopView->showColumn(shopModel->name.getIndex());
+	shopView->showColumn(shopModel->price.getIndex());
+	shopView->horizontalHeader()->setResizeMode(shopModel->name.getIndex(), QHeaderView::Stretch);
+	
+	playerModel.reset(new PartTableModel(state->getPlayer()->getParts()));
+	TableView* playerView = ui->playerView;
 
-	view->setModel(model.get());
-	view->showColumn(model->name.getIndex());
-	view->showColumn(model->price.getIndex());
-
-	view->horizontalHeader()->setResizeMode(model->name.getIndex(), QHeaderView::Stretch);
+	playerView->setModel(playerModel.get());
+	playerView->hideAllColumns();
+	playerView->showColumn(playerModel->name.getIndex());
+	playerView->horizontalHeader()->setResizeMode(playerModel->name.getIndex(), QHeaderView::Stretch);
 }
 
 void TechnicsMenu::on_okButton_clicked()
