@@ -27,7 +27,7 @@ class Engine: public Part
 		virtual bool canAttachPart(const Part&) const;
 		
 		Engine(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		bool canAttachCylinderHead(const CylinderHead&) const;

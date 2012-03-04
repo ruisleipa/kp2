@@ -102,7 +102,7 @@ Engine::Engine(const Json::Value& value):
 	name = ss.str();
 }
 
-void Engine::save(Json::Value& value)
+void Engine::save(Json::Value& value) const
 {
 	Part::save(value);
 
