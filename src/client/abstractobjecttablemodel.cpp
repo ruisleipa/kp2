@@ -15,10 +15,18 @@ int AbstractObjectTableModel::rowCount(const QModelIndex& parent) const
 
 QVariant AbstractObjectTableModel::data(const QModelIndex& index, int role) const
 {
-	if(role != Qt::DisplayRole)
-		return QVariant();
-	
-	return getData(index.row(), index.column());
+	switch(role)
+	{
+		case Qt::DisplayRole:
+			return getData(index.row(), index.column());
+
+		case Qt::ToolTipRole:
+			return getToolTip(index.row());
+
+		default:
+			return QVariant();
+
+	}
 }
 
 QVariant AbstractObjectTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -38,3 +46,7 @@ AbstractObjectTableModel::AbstractObjectTableModel(QObject *parent):
 
 }
 
+QVariant AbstractObjectTableModel::getToolTip(int row) const
+{
+	return QVariant();
+}
