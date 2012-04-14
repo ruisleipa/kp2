@@ -377,7 +377,10 @@ namespace
 
     #else
         // GNU, but neither x86 or PPC
-        #error "Sorry but dbg::stack is not supported on this architecture"
+        void fill_frames(std::list<dbg::stack_frame> &frames, dbg::stack::depth_type limit)
+        {
+
+        }
     #endif
 #else
     // Unsupported compiler
