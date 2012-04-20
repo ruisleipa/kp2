@@ -63,6 +63,7 @@ Connection::Connection(Game::State& gameState, Game::Player* player, Net::Client
 	Json::FastWriter fw;
 	
 	Net::Packet packet;
+	packet.setType(Protocol::GAME_STATE);
 	
 	packet << fw.write(state);
 	

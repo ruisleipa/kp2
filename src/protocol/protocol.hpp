@@ -6,8 +6,7 @@
 namespace Protocol
 {
 
-const uint16_t REMOTE_CALL = 0;
-const uint16_t ERROR = 1;
+const uint16_t GAME_STATE = 0;
 
 };
 

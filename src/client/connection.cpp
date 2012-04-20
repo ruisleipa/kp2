@@ -11,6 +11,7 @@
 #include "utils/string.hpp"
 #include "net/packet.hpp"
 #include "net/clientsocket.hpp"
+#include "protocol/protocol.hpp"
 
 void Connection::connect(std::string hostname,int port)
 {
@@ -47,7 +48,7 @@ void Connection::processPackets()
 		{			
 			packet.readFromBuffer(receiveBuffer);
 			
-			if(packet.getType() == 0)
+			if(packet.getType() == Protocol::GAME_STATE)
 			{
 				emit receivingGameState();
 			
