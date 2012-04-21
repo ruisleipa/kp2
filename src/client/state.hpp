@@ -11,7 +11,7 @@ class State : public Game::State
 	public:
 		Game::Player* getPlayer();
 	
-		State(const Json::Value& value);
+		State(const Json::Value& value, Game::ObjectFactory&);
 		
 		void save(Json::Value& value);
 		

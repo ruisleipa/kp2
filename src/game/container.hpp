@@ -156,10 +156,8 @@ class Container : public ContainerSignalsAndSlots
 			}
 		};
 
-		Container(const Json::Value& value)
+		Container(const Json::Value& value, ObjectFactory& factory)
 		{
-			ObjectFactory factory;
-
 			for(auto item : value)
 			{
 				Object* object = factory.create(item);

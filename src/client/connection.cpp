@@ -66,9 +66,9 @@ void Connection::processPackets()
 
 				try
 				{
-					Client::State* state = new Client::State(v);
+					state.reset(new Client::State(v, objectFactory));
 
-					emit ready(state);
+					emit ready(state.get());
 				}
 				catch(std::runtime_error& e)
 				{
@@ -85,6 +85,11 @@ void Connection::processPackets()
 		}
 
 	}
+}
+
+Game::State& Connection::getGameState()
+{
+	return *(state.get());
 }
 
 //TODO: implement correct sending (remote call api)
@@ -132,7 +137,8 @@ void Connection::onConnected()
 	emit connected();
 }	
 
-Connection::Connection()
+Connection::Connection():
+	objectFactory(*this)
 {
 	QObject::connect(&serverProcess, SIGNAL(started()), this, SLOT(onServerStarted()));
 	QObject::connect(&serverProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onServerError(QProcess::ProcessError)));

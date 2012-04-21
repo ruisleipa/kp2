@@ -35,10 +35,10 @@ class Player : public Object
 		const Container<Part>& getParts() const; 
 		
 		Vehicle* getActiveVehicle() const;
-		
-		Player(const std::string& name,int money);		
-		Player(const Json::Value& value);
-		
+
+		Player(ObjectFactory& factory);
+		Player(const Json::Value& value, ObjectFactory& factory);
+
 		virtual void save(Json::Value& value);
 		
 	private:
@@ -48,6 +48,8 @@ class Player : public Object
 		
 		Container<Part> parts;
 		Container<Vehicle> vehicles;
+
+		ObjectFactory& factory;
 };
 
 };

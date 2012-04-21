@@ -9,9 +9,13 @@
 namespace Game
 {
 
-void State::addPlayer(Player* player)
+Player* State::createPlayer()
 {
+	Player* player = new Game::Player(objectFactory);
+
 	players.add(player);
+	
+	return player;
 }
 	
 const Container<Player>& State::getPlayers() const
@@ -42,12 +46,13 @@ void State::save(Json::Value& value) const
 	upgrades.save(value["upgrades"]);
 }
 
-State::State(const Json::Value& value):
+State::State(const Json::Value& value, ObjectFactory& objectFactory):
 	Object(value),
-	players(value["players"]),
-	vehicles(value["vehicles"]),
-	parts(value["parts"]),
-	upgrades(value["upgrades"])
+	objectFactory(objectFactory),
+	players(value["players"], objectFactory),
+	vehicles(value["vehicles"], objectFactory),
+	parts(value["parts"], objectFactory),
+	upgrades(value["upgrades"], objectFactory)
 {
 	
 }

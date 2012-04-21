@@ -91,18 +91,18 @@ Vehicle* Player::getActiveVehicle() const
 	return activeVehicle;
 }
 
-Player::Player(const std::string& name, int money):
-	name(name),
-	money(money),
-	activeVehicle(nullptr)
+Player::Player(ObjectFactory& factory):
+	money(0),
+	factory(factory)
 {
 
 }
 
-Player::Player(const Json::Value& value):
+Player::Player(const Json::Value& value, ObjectFactory& factory):
 	Object(value),
-	parts(value["parts"]),
-	vehicles(value["vehicles"])
+	parts(value["parts"], factory),
+	vehicles(value["vehicles"], factory),
+	factory(factory)
 {
 	name = value["name"].asString();
 	money = value["money"].asUInt();

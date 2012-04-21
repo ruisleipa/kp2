@@ -11,6 +11,9 @@ class ObjectFactory
 {
 	public:
 		Object* create(const Json::Value&);
+
+	protected:
+		virtual Object* allocate(const Json::Value&) = 0;
 };
 
 };

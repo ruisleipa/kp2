@@ -10,8 +10,8 @@ Game::Player* State::getPlayer()
 	return player;
 }
 
-State::State(const Json::Value& value):
-	Game::State(value)
+State::State(const Json::Value& value, Game::ObjectFactory& objectFactory):
+	Game::State(value, objectFactory)
 {
 	player = getPlayers().getByIndex(value["client"]["playerId"].asInt());
 }

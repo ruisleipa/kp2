@@ -8,6 +8,7 @@
 
 #include "net/packet.hpp"
 #include "state.hpp"
+#include "clientobjectfactory.hpp"
 
 class Packet;
 
@@ -23,6 +24,10 @@ class Connection : public QObject
 		
 		void processPackets();
 		
+		Game::State& getGameState();
+
+		void writeToServer(const Net::Packet& packet);
+
 		Connection();
 		~Connection();
 		
@@ -39,8 +44,6 @@ class Connection : public QObject
 		void error(const std::string& error);
 		
 	private:
-		void writeToServer(const Net::Packet& packet);
-		
 		QTcpSocket socket;
 		
 		std::string receiveBuffer;
@@ -48,6 +51,10 @@ class Connection : public QObject
 		
 		QProcess serverProcess;
 		
+		ClientObjectFactory objectFactory;
+
+		std::unique_ptr<Client::State> state;
+
 	private slots:
 		void onServerError(QProcess::ProcessError);
 		void onServerStarted();

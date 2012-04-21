@@ -10,6 +10,7 @@
 #include "upgrade.hpp"
 #include "object.hpp"
 #include "container.hpp"
+#include "objectfactory.hpp"
 #include <stdint.h>
 
 namespace Game
@@ -18,18 +19,20 @@ namespace Game
 class State : public Object
 {
 	public:
-		void addPlayer(Player*);
-				
+		Player* createPlayer();
+
 		const Container<Player>& getPlayers() const;
 		const Container<Vehicle>& getShopVehicles() const;
 		const Container<Part>& getShopParts() const;
 		const Container<Upgrade>& getUpgrades() const;
 
 		virtual void save(Json::Value&) const;
-		
-		State(const Json::Value&);
-	
+
+		State(const Json::Value&, ObjectFactory&);
+
 	private:
+		ObjectFactory& objectFactory;
+
 		Container<Player> players;
 		Container<Vehicle> vehicles;
 		Container<Part> parts;

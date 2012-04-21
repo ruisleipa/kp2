@@ -25,6 +25,66 @@ void Connection::processReceivedData()
 		try
 		{
 			packet.readFromBuffer(receiveBuffer);
+
+			if(packet.getType() == Protocol::REMOTE_INVOCATION)
+			{
+				std::string s;
+				packet >> s;
+				std::stringstream ss(s);
+				Json::Value call;
+				ss >> call;
+				std::cout << "Remote invocation:" << call << std::endl;
+
+				std::string type = call["objectType"].asString();
+				int objectIndex = call["objectIndex"].asInt();
+
+				if(type == "player")
+				{
+					Game::Player* player = gameState.getPlayers().getByIndex(objectIndex);
+
+					if(player != this->player)
+					{
+						std::cout << "Connection invoked method on non-owned player." << std::endl;
+					}
+
+					std::string method = call["method"].asString();
+
+					if(method == "setName")
+					{
+						std::string name = call["arguments"]["name"].asString();
+
+						player->setName(name);
+					}
+					else if(method == "setActiveVehicle")
+					{
+						int vehicleIndex = call["arguments"]["vehicle"].asInt();
+
+						Game::Vehicle* vehicle = player->getVehicles().getByIndex(vehicleIndex);
+
+						player->setActiveVehicle(vehicle);
+					}
+					else if(method == "buyPart")
+					{
+						int partIndex = call["arguments"]["part"].asInt();
+
+						Game::Part* part = gameState.getShopParts().getByIndex(partIndex);
+
+						player->buyPart(part);
+					}
+					else if(method == "buyVehicle")
+					{
+						int vehicleIndex = call["arguments"]["vehicle"].asInt();
+
+						Game::Vehicle* vehicle = gameState.getShopVehicles().getByIndex(vehicleIndex);
+
+						player->buyVehicle(vehicle);
+					}
+					else
+					{
+						std::cout << "Unimplemented method of class " << type << ": " << method << std::endl;
+					}
+				}
+			}
 		}
 		catch(Net::EndOfDataException)
 		{

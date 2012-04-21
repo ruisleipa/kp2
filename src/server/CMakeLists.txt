@@ -28,6 +28,7 @@ set(server_SRCS
 	./connection.cpp
 	./connectionmanager.cpp
 	./main.cpp
+	./serverobjectfactory.cpp
 	../json/json_reader.cpp
 	../json/json_value.cpp
 	../json/json_writer.cpp

@@ -18,6 +18,7 @@ set(client_UIS
 
 set(client_SRCS
 	./carshopmenu.cpp
+	./clientobjectfactory.cpp
 	./connection.cpp
 	./gamemainmenu.cpp
 	./gamemenu.cpp
@@ -32,6 +33,7 @@ set(client_SRCS
 	./menu.cpp
 	./abstractobjecttablemodel.cpp
 	./tableview.cpp
+	./playerproxy.cpp
 	./multiplayermenu.cpp
 	./settingsmenu.cpp
 	./singleplayermenu.cpp

@@ -65,9 +65,7 @@ void ConnectionManager::acceptConnection()
 
 	serverSocket.accept(socket);
 
-	Game::Player* player = new Game::Player("!!!", 1000);
-	
-	gameState.addPlayer(player);
+	Game::Player* player = gameState.createPlayer();
 	
 	sockets.push_back(socket);
 	
