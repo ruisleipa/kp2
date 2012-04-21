@@ -83,7 +83,7 @@ class Container : public ContainerSignalsAndSlots
 			return items.end();
 		};
 
-		int getIndexOf(T* item) const
+		int getIndexOf(const T* item) const
 		{
 			auto it = std::find(items.begin(), items.end(), item);
 
