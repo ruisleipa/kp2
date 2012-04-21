@@ -7,15 +7,14 @@
 
 #include "part.hpp"
 #include "vehicle.hpp"
-#include "playeractions.hpp"
-#include "playeractionlistener.hpp"
+#include "upgrade.hpp"
 #include "object.hpp"
 #include "container.hpp"
 
 namespace Game
 {
 
-class Player : public PlayerActions, public Object
+class Player : public Object
 {
 	public:		
 		virtual void setName(const std::string& name);
@@ -49,8 +48,6 @@ class Player : public PlayerActions, public Object
 		
 		Container<Part> parts;
 		Container<Vehicle> vehicles;
-		
-		std::set<PlayerActionListener*> listeners;
 };
 
 };

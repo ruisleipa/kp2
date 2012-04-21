@@ -8,10 +8,7 @@ namespace Game
 void Player::setName(const std::string& name)
 {
 	this->name = name;
-	
-	for(PlayerActionListener* l : listeners)
-		l->setName(name);
-	
+
 	changed();
 }
 

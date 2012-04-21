@@ -18,7 +18,6 @@ set(game_SRCS
 	../game/player.cpp
 	../game/serializable.cpp
 	../game/state.cpp
-	../game/stateactionlistener.cpp
 	../game/tire.cpp
 	../game/transmission.cpp
 	../game/upgrade.cpp
