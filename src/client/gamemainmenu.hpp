@@ -8,27 +8,27 @@ namespace Ui {
 }
 
 class GameMainMenu : public GameMenu
-{	
+{
 	Q_OBJECT
 
-public:
-	explicit GameMainMenu(QWidget *parent = 0);
-	~GameMainMenu();
+	public:
+		explicit GameMainMenu(QWidget *parent = 0);
+		~GameMainMenu();
 
-private:
-	Ui::GameMainMenu *ui;
-	
-private slots:
-	void on_carShopButton_clicked();
-	void on_garageButton_clicked();
-	void on_technicsButton_clicked();
-	void on_loansButton_clicked();
-	void on_sponsorsButton_clicked();
-	void on_contractsButton_clicked();
-	void on_scoresButton_clicked();
-	void on_tournamentsButton_clicked();
-	void on_quarterMileButton_clicked();
-	void on_longRaceButton_clicked();
+	private:
+		Ui::GameMainMenu *ui;
+
+	private slots:
+		void on_carShopButton_clicked();
+		void on_garageButton_clicked();
+		void on_technicsButton_clicked();
+		void on_loansButton_clicked();
+		void on_sponsorsButton_clicked();
+		void on_contractsButton_clicked();
+		void on_scoresButton_clicked();
+		void on_tournamentsButton_clicked();
+		void on_quarterMileButton_clicked();
+		void on_longRaceButton_clicked();
 
 };
 
