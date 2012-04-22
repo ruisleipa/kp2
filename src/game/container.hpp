@@ -108,6 +108,16 @@ class Container : public ContainerSignalsAndSlots
 			return *it;
 		};
 
+		bool contains(const T* item) const
+		{
+			auto it = std::find(items.begin(), items.end(), item);
+
+			if(it == items.end())
+				return false;
+
+			return true;
+		};
+
 		int getItemCount() const
 		{
 			return items.size();

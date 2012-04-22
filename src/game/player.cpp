@@ -14,8 +14,10 @@ void Player::setName(const std::string& name)
 
 void Player::setActiveVehicle(Vehicle* vehicle)
 {
-	if(vehicles.getIndexOf(vehicle) != -1)
+	if(vehicles.contains(vehicle))
 		activeVehicle = vehicle;
+	else
+		activeVehicle = 0;
 }
 
 void Player::buyPart(const Part* part)
