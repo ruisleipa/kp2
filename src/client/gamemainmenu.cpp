@@ -1,7 +1,8 @@
 #include "gamemainmenu.hpp"
 
-GameMainMenu::GameMainMenu(QWidget *parent) :
+GameMainMenu::GameMainMenu(Connection& connection, QWidget *parent) :
 	GameMenu(parent),
+	connection(connection),
 	ui(new Ui::GameMainMenu)
 {
 	ui->setupUi(this);
@@ -49,7 +50,7 @@ void GameMainMenu::on_tournamentsButton_clicked()
 
 void GameMainMenu::on_quarterMileButton_clicked()
 {
-	navigateTo("QuarterMileMenu");
+	connection.startRace();
 }
 
 void GameMainMenu::on_longRaceButton_clicked()

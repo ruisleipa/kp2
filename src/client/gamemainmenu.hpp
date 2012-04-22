@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "gamemenu.hpp"
+#include "connection.hpp"
 #include "ui_gamemainmenu.h"
 
 class GameMainMenu : public GameMenu
@@ -11,9 +12,10 @@ class GameMainMenu : public GameMenu
 	Q_OBJECT
 
 	public:
-		explicit GameMainMenu(QWidget *parent = 0);
+		explicit GameMainMenu(Connection& connection, QWidget *parent = 0);
 
 	private:
+		Connection& connection;
 		std::unique_ptr<Ui::GameMainMenu> ui;
 
 	private slots:

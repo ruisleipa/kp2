@@ -26,6 +26,7 @@ class Connection : public QObject
 
 		Game::State& getGameState();
 
+		void startRace();
 		void writeToServer(const Net::Packet& packet);
 
 		Connection();

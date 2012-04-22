@@ -90,6 +90,15 @@ Game::State& Connection::getGameState()
 	return *(state.get());
 }
 
+void Connection::startRace()
+{
+	Net::Packet packet;
+
+	packet.setType(Protocol::PLAYER_WANTS_RACE);
+
+	writeToServer(packet);
+}
+
 //TODO: implement correct sending (remote call api)
 void Connection::writeToServer(const Net::Packet& packet)
 {

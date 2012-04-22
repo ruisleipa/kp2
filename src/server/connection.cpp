@@ -85,6 +85,11 @@ void Connection::processReceivedData()
 					}
 				}
 			}
+			else if(packet.getType() == Protocol::PLAYER_WANTS_RACE)
+			{
+				system("start kp2_race.exe");
+			}
+
 		}
 		catch(Net::EndOfDataException)
 		{

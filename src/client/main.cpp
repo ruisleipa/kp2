@@ -95,8 +95,8 @@ int main(int argc, char *argv[])
 	w.getContainer()->addMenu(multiPlayerMenu);
 	w.getContainer()->addMenu(gameLoadingScreen);
 	w.getContainer()->addMenu(gameView);
-	
-	GameMainMenu* gameMainMenu = new GameMainMenu();
+
+	GameMainMenu* gameMainMenu = new GameMainMenu(connection);
 	TechnicsMenu* technicsMenu = new TechnicsMenu();
 	CarShopMenu* carShopMenu = new CarShopMenu();
 	GarageMenu* garageMenu = new GarageMenu();
