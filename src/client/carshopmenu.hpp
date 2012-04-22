@@ -26,7 +26,7 @@ class CarShopMenu : public GameMenu
 		Game::Vehicle* vehicle;
 	
 	private slots:
-		void on_carList_clicked(const QModelIndex&);
+		void onCurrentChanged(const QModelIndex&, const QModelIndex&);
 		void on_cancelButton_clicked();
 		void on_buyButton_clicked();
 	

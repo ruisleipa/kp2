@@ -18,6 +18,8 @@ void CarShopMenu::gameStateLoaded(Client::State* state)
 	TableView* view = ui->carList;
 
 	view->setModel(model.get());
+	connect(ui->carList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(onCurrentChanged(QModelIndex, QModelIndex)));
+
 	view->showColumn(model->name.getIndex());
 	view->showColumn(model->price.getIndex());
 
@@ -27,7 +29,7 @@ void CarShopMenu::gameStateLoaded(Client::State* state)
 	vehicle = nullptr;
 }
 
-void CarShopMenu::on_carList_clicked(const QModelIndex& current)
+void CarShopMenu::onCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
 	vehicle = model->getObject(current.row());
 

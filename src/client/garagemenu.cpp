@@ -14,13 +14,15 @@ void GarageMenu::gameStateLoaded(Client::State* state)
 	TableView* view = ui->carList;
 
 	view->setModel(model.get());
+	connect(ui->carList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(onCurrentChanged(QModelIndex, QModelIndex)));
+
 	view->showColumn(model->name.getIndex());
 	view->showColumn(model->price.getIndex());
 
 	view->horizontalHeader()->setResizeMode(model->name.getIndex(), QHeaderView::Stretch);
 }
 
-void GarageMenu::on_carList_clicked(const QModelIndex& current)
+void GarageMenu::onCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
 	Game::Vehicle* vehicle = model->getObject(current.row());
 	
