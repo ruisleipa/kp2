@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <ctime>
 #include <cmath>
 
 #include "utils/directory.hpp"
@@ -65,10 +66,11 @@ MusicPlayer::MusicPlayer():
 
 	files = readDirectory(MUSIC_DIRECTORY);
 
-	/*std::random_device rd;
-	std::mt19937 g(rd());
+	std::mt19937 rng;
 
-	std::shuffle(files.begin(), files.end(), g);*/
+	rng.seed(std::time(nullptr));
+
+	std::shuffle(files.begin(), files.end(), rng);
 	
 	device = audiere::OpenDevice();
 }
