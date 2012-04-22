@@ -66,6 +66,8 @@ void ConnectionManager::acceptConnection()
 	serverSocket.accept(socket);
 
 	Game::Player* player = gameState.createPlayer();
+
+	player->setMoney(5000);
 	
 	sockets.push_back(socket);
 	

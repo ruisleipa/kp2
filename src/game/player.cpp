@@ -20,6 +20,11 @@ void Player::setActiveVehicle(Vehicle* vehicle)
 		activeVehicle = 0;
 }
 
+void Player::setMoney(int money)
+{
+	this->money = money;
+}
+
 void Player::buyPart(const Part* part)
 {
 	if(money < part->getPrice())

@@ -34,6 +34,7 @@ class Player : public Object
 	public:
 		virtual void setName(const std::string& name);
 		virtual void setActiveVehicle(Vehicle* vehicle);
+		virtual void setMoney(int money);
 
 		virtual void buyPart(const Part* part);
 		virtual void buyVehicle(const Vehicle* vehicle);
