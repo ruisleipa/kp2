@@ -2,13 +2,17 @@
 
 GarageMenu::GarageMenu(QWidget *parent) :
 	GameMenu(parent),
-	ui(new Ui::GarageMenu)
+	ui(new Ui::GarageMenu),
+	vehicle(nullptr),
+	state(nullptr)
 {
 	ui->setupUi(this);
 }
 
 void GarageMenu::gameStateLoaded(Client::State* state)
 {
+	this->state = state;
+
 	model.reset(new VehicleTableModel(state->getPlayer()->getVehicles()));
 
 	TableView* view = ui->carList;
@@ -24,7 +28,7 @@ void GarageMenu::gameStateLoaded(Client::State* state)
 
 void GarageMenu::onCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
-	Game::Vehicle* vehicle = model->getObject(current.row());
+	vehicle = model->getObject(current.row());
 	
 	if(!vehicle)
 		return;
@@ -35,6 +39,11 @@ void GarageMenu::onCurrentChanged(const QModelIndex& current, const QModelIndex&
 	ui->chassisMass->setText(QString::number(vehicle->getMass()) + QString(" kg"));
 	ui->engine->setText("1.0L S4 OVH\nTurbo");
 	ui->fuelintake->setText("2x30mm Kaasutin");
+}
+
+void GarageMenu::on_selectButton_clicked()
+{
+	state->getPlayer()->setActiveVehicle(vehicle);
 }
 
 void GarageMenu::on_cancelButton_clicked()

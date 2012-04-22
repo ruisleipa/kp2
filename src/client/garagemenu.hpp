@@ -21,8 +21,12 @@ class GarageMenu : public GameMenu
 		std::unique_ptr<Ui::GarageMenu> ui;
 		std::unique_ptr<VehicleTableModel> model;
 		
+		Game::Vehicle* vehicle;
+		Client::State* state;
+
 	private slots:
 		void onCurrentChanged(const QModelIndex&, const QModelIndex&);
+		void on_selectButton_clicked();
 		void on_cancelButton_clicked();
 };
 
