@@ -8,7 +8,7 @@
 #include "vehicletablemodel.hpp"
 
 class GarageMenu : public GameMenu
-{	
+{
 	Q_OBJECT
 
 	public:
@@ -16,11 +16,11 @@ class GarageMenu : public GameMenu
 
 	public slots:
 		virtual void gameStateLoaded(Client::State*);
-		
+
 	private:
 		std::unique_ptr<Ui::GarageMenu> ui;
 		std::unique_ptr<VehicleTableModel> model;
-		
+
 		Game::Vehicle* vehicle;
 		Client::State* state;
 

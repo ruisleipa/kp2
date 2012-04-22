@@ -46,7 +46,6 @@ class Object : public ObjectSignals, public Serializable
 		Object() = default;
 		Object(const Object&) = default;
 		Object(const Json::Value&);
-
 };
 
 };

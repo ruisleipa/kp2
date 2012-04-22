@@ -67,26 +67,25 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 
 	MainWindow w;
-	
-		
+
 	MusicPlayer musicPlayer;
 	Connection connection;
-	
+
 	MainMenu* mainMenu = new MainMenu();
 	SettingsMenu* settingsMenu = new SettingsMenu(musicPlayer);
 	SinglePlayerMenu* singlePlayerMenu = new SinglePlayerMenu(connection);
 	MultiPlayerMenu* multiPlayerMenu = new MultiPlayerMenu(connection);
 	GameLoadingScreen* gameLoadingScreen = new GameLoadingScreen();
 	GameView* gameView = new GameView();
-	
-	QObject::connect(gameLoadingScreen, SIGNAL(cancelled()), &connection, SLOT(close()));		
+
+	QObject::connect(gameLoadingScreen, SIGNAL(cancelled()), &connection, SLOT(close()));
 	QObject::connect(&connection, SIGNAL(startingLocalServer()), gameLoadingScreen, SLOT(onStartingLocalServer()));
 	QObject::connect(&connection, SIGNAL(connectingToRemote()), gameLoadingScreen, SLOT(onConnectingToRemote()));
 	QObject::connect(&connection, SIGNAL(connectingToLocal()), gameLoadingScreen, SLOT(onConnectingToLocal()));
 	QObject::connect(&connection, SIGNAL(connected()), gameLoadingScreen, SLOT(onConnected()));
 	QObject::connect(&connection, SIGNAL(receivingGameState()), gameLoadingScreen, SLOT(onReceivingGameState()));
-	QObject::connect(&connection, SIGNAL(error(const std::string&)), gameLoadingScreen, SLOT(onError(const std::string&)));		
-	
+	QObject::connect(&connection, SIGNAL(error(const std::string&)), gameLoadingScreen, SLOT(onError(const std::string&)));
+
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameLoadingScreen, SLOT(onCompletion(Client::State*)));
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameView, SLOT(gameStateLoaded(Client::State*)));
 
@@ -114,12 +113,16 @@ int main(int argc, char *argv[])
 
 	Updater updater(musicPlayer, connection);
 	loadStyleSheet(a);
-	
+
 	QTimer updateTimer;
 	QObject::connect(&updateTimer, SIGNAL(timeout()), &updater, SLOT(update()));
-	updateTimer.start(500); 
+
+	updateTimer.start(500);
+
 	qInstallMsgHandler(customMessageHandler);
+
 	w.show();
-w.dumpObjectTree();
+	w.dumpObjectTree();
+
 	return a.exec();
 }

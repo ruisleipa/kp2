@@ -29,10 +29,10 @@ void GarageMenu::gameStateLoaded(Client::State* state)
 void GarageMenu::onCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
 	vehicle = model->getObject(current.row());
-	
+
 	if(!vehicle)
 		return;
-	
+
 	ui->carNameLabel->setText(vehicle->getName().c_str());
 	ui->carImage->setPixmap(QPixmap(QString("gamedata/vehicleimages/") + QString(vehicle->getImageName().c_str())));
 	ui->value->setText(QString::number(vehicle->getPrice()) + trUtf8(" €"));

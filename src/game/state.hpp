@@ -37,7 +37,6 @@ class State : public Object
 		Container<Vehicle> vehicles;
 		Container<Part> parts;
 		Container<Upgrade> upgrades;
-
 };
 
 };

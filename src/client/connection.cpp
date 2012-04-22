@@ -23,15 +23,13 @@ void Connection::close()
 	socket.close();
 
 	serverProcess.waitForFinished();
-
-
 }
 
 void Connection::processPackets()
-{	
+{
 	if(socket.state() != QTcpSocket::ConnectedState)
 		return;
-	
+
 	int read;
 
 	while((read = socket.read(scrapBuffer, BUFFERSIZE)) > 0)
@@ -39,21 +37,21 @@ void Connection::processPackets()
 
 	if(read == -1)
 		close();
-	
+
 	while(1)
 	{
 		Net::Packet packet;
-	
+
 		try
-		{			
+		{
 			packet.readFromBuffer(receiveBuffer);
-			
+
 			if(packet.getType() == Protocol::GAME_STATE)
 			{
 				emit receivingGameState();
-			
+
 				std::string s;
-				
+
 				packet >> s;
 
 				std::stringstream ss(s);
@@ -103,20 +101,20 @@ void Connection::writeToServer(const Net::Packet& packet)
 void Connection::startLocalServer()
 {
 	emit startingLocalServer();
-	
+
 	Json::Value settings;
-	
+
 	settings["port"] = 31000;
 	settings["isLocal"] = true;
 	settings["quitWhenEmpty"] = true;
 	settings["connectionLimit"] = 1;
-	
+
 	std::ofstream("cfg/singleplayer.cfg") << settings;
 
 	QString name = "kp2_server";
 	QStringList args;
 	args << "-config" << "cfg/singleplayer.cfg";
-	
+
 	serverProcess.start("./kp2_server", args);
 }
 
@@ -128,14 +126,14 @@ void Connection::onServerError(QProcess::ProcessError error)
 void Connection::onServerStarted()
 {
 	emit connectingToLocal();
-		
+
 	socket.connectToHost("localhost",31000);
 }
 
 void Connection::onConnected()
 {
 	emit connected();
-}	
+}
 
 Connection::Connection():
 	objectFactory(*this)
@@ -148,6 +146,6 @@ Connection::Connection():
 Connection::~Connection()
 {
 	socket.close();
-	
+
 	serverProcess.waitForFinished();
-}		
+}

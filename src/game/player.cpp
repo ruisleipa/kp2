@@ -48,12 +48,11 @@ void Player::attachPart(Part* part)
 {
 	if(!getActiveVehicle())
 		return;
-		
+
 	auto it = std::find(parts.begin(), parts.end(), part);
-	
+
 	if(it == parts.end())
 		return;
-
 }
 
 void Player::detachPart(Part* part)
@@ -63,7 +62,7 @@ void Player::detachPart(Part* part)
 	if(!getActiveVehicle())
 		return;
 }
-		
+
 void Player::upgradePart(Part* part, const Upgrade* upgrade)
 {
 	(void)part;
@@ -110,7 +109,7 @@ Player::Player(const Json::Value& value, ObjectFactory& factory):
 {
 	name = value["name"].asString();
 	money = value["money"].asUInt();
-	
+
 	activeVehicle = vehicles.getByIndex(value["activeVehicle"].asInt());
 }
 
@@ -122,7 +121,7 @@ void Player::save(Json::Value& value)
 	value["name"] = name;
 	value["money"] = money;
 	value["activeVehicle"] = vehicles.getIndexOf(activeVehicle);
-	
+
 	vehicles.save(value["vehicles"]);
 	parts.save(value["parts"]);
 }

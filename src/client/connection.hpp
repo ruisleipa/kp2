@@ -18,22 +18,22 @@ class Connection : public QObject
 {
 	Q_OBJECT
 
-	public:				
+	public:
 		void connect(std::string hostname,int port);
 		void startLocalServer();
-		
+
 		void processPackets();
-		
+
 		Game::State& getGameState();
 
 		void writeToServer(const Net::Packet& packet);
 
 		Connection();
 		~Connection();
-		
+
 	public slots:
 		void close();
-	
+
 	signals:
 		void startingLocalServer();
 		void connectingToRemote();
@@ -42,15 +42,15 @@ class Connection : public QObject
 		void receivingGameState();
 		void ready(Client::State* state);
 		void error(const std::string& error);
-		
+
 	private:
 		QTcpSocket socket;
-		
+
 		std::string receiveBuffer;
 		char scrapBuffer[BUFFERSIZE];
-		
+
 		QProcess serverProcess;
-		
+
 		ClientObjectFactory objectFactory;
 
 		std::unique_ptr<Client::State> state;

@@ -14,14 +14,14 @@ void Connection::processReceivedData()
 
 	while((bytesRead = socket->read(scrapBuffer, BUFFERSIZE)) > 0)
 		receiveBuffer.append(scrapBuffer, bytesRead);
-	
+
 	if(bytesRead == -1)
 		return;
-	
+
 	while(1)
 	{
 		Net::Packet packet;
-	
+
 		try
 		{
 			packet.readFromBuffer(receiveBuffer);
@@ -88,10 +88,10 @@ void Connection::processReceivedData()
 		}
 		catch(Net::EndOfDataException)
 		{
-			break;		
+			break;
 		}
 	}
-	
+
 	writeBufferedData();
 }
 
@@ -117,16 +117,16 @@ Connection::Connection(Game::State& gameState, Game::Player* player, Net::Client
 {
 	Json::Value state;
 	gameState.save(state);
-	
+
 	state["client"]["playerId"] = gameState.getPlayers().getIndexOf(player);
-	
+
 	Json::FastWriter fw;
-	
+
 	Net::Packet packet;
 	packet.setType(Protocol::GAME_STATE);
-	
+
 	packet << fw.write(state);
-	
+
 	writePacket(packet);
 	writeBufferedData();
 }
