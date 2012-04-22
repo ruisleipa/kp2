@@ -14,6 +14,11 @@
 namespace Game
 {
 
+class InsufficientFundsException
+{
+
+};
+
 class Player : public Object
 {
 	public:		

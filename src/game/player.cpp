@@ -20,24 +20,26 @@ void Player::setActiveVehicle(Vehicle* vehicle)
 
 void Player::buyPart(const Part* part)
 {
-	if(money >= part->getPrice())
-	{
-		money -= part->getPrice();
-		changed();
-		
-		parts.add(Object::clone(part));
-	}
+	if(money < part->getPrice())
+		throw InsufficientFundsException();
+
+	money -= part->getPrice();
+
+	parts.add(Object::clone(part));
+
+	changed();
 }
 
 void Player::buyVehicle(const Vehicle* vehicle)
 {
-	if(money >= vehicle->getPrice())
-	{
-		money -= vehicle->getPrice();
-		changed();
-		
-		vehicles.add(Object::clone(vehicle));
-	}
+	if(money < vehicle->getPrice())
+		throw InsufficientFundsException();
+
+	money -= vehicle->getPrice();
+
+	vehicles.add(Object::clone(vehicle));
+
+	changed();
 }
 
 void Player::attachPart(Part* part)

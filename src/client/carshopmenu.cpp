@@ -1,5 +1,7 @@
 #include "carshopmenu.hpp"
 
+#include <QMessageBox>
+
 CarShopMenu::CarShopMenu(QWidget *parent) :
 	GameMenu(parent),
 	ui(new Ui::CarShopMenu),
@@ -50,9 +52,19 @@ void CarShopMenu::on_buyButton_clicked()
 	if(!vehicle)
 		return;
 
-	player->buyVehicle(vehicle);
+	try
+	{
+		player->buyVehicle(vehicle);
 
-	navigateToPrevious();
-	navigateTo("GarageMenu");
+		navigateToPrevious();
+		navigateTo("GarageMenu");
+	}
+	catch(Game::InsufficientFundsException)
+	{
+		QMessageBox msgBox;
+		msgBox.setText("Rahasi eivät riitä autoon.");
+		msgBox.exec();
+	}
+
 }
 
