@@ -1,11 +1,10 @@
 #ifndef GAMEMAINMENU_H
 #define GAMEMAINMENU_H
 
-#include "gamemenu.hpp"
+#include <memory>
 
-namespace Ui {
-	class GameMainMenu;
-}
+#include "gamemenu.hpp"
+#include "ui_gamemainmenu.h"
 
 class GameMainMenu : public GameMenu
 {
@@ -13,10 +12,9 @@ class GameMainMenu : public GameMenu
 
 	public:
 		explicit GameMainMenu(QWidget *parent = 0);
-		~GameMainMenu();
 
 	private:
-		Ui::GameMainMenu *ui;
+		std::unique_ptr<Ui::GameMainMenu> ui;
 
 	private slots:
 		void on_carShopButton_clicked();

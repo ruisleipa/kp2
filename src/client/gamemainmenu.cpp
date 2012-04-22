@@ -1,16 +1,10 @@
 #include "gamemainmenu.hpp"
-#include "ui_gamemainmenu.h"
 
 GameMainMenu::GameMainMenu(QWidget *parent) :
 	GameMenu(parent),
 	ui(new Ui::GameMainMenu)
 {
 	ui->setupUi(this);
-}
-
-GameMainMenu::~GameMainMenu()
-{
-	delete ui;
 }
 
 void GameMainMenu::on_carShopButton_clicked()
