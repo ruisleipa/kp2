@@ -1,6 +1,7 @@
 #include "connectionmanager.hpp"
 
 #include "game/player.hpp"
+#include "utils/demangle.hpp"
 
 #include <stdexcept>
 #include <iostream>
@@ -81,8 +82,15 @@ void ConnectionManager::acceptConnection()
 void ConnectionManager::readFromSocket(Net::ClientSocket* socket)
 {
 	Connection& connection = connections.at(socket);
-	
-	connection.processReceivedData();
+
+	try
+	{
+		connection.processReceivedData();
+	}
+	catch(Game::Exception& e)
+	{
+		std::cerr << "Exception when processing received data: " << demangleName(typeid(e).name()) << std::endl;
+	}
 }
 
 void ConnectionManager::writeToSocket(Net::ClientSocket* socket)
