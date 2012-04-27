@@ -57,7 +57,7 @@ Game::Object* ServerObjectFactory::allocate(const Json::Value& value)
 	else if(type == "transmission")
 		return new Game::Transmission(value);
 	else if(type == "vehicle")
-		return new Game::Vehicle(value);
+		return new Game::Vehicle(value, *this);
 	else if(type == "player")
 		return new Game::Player(value, *this);
 	else if(type == "")

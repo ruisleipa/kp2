@@ -51,21 +51,25 @@ void Player::buyVehicle(const Vehicle* vehicle)
 
 void Player::attachPart(Part* part)
 {
+	if(!parts.contains(part))
+		throw NoSuchPartException();
+
 	if(!getActiveVehicle())
 		return;
 
-	auto it = std::find(parts.begin(), parts.end(), part);
+	getActiveVehicle()->attachPart(part);
 
-	if(it == parts.end())
-		return;
+	parts.remove(part);
 }
 
 void Player::detachPart(Part* part)
 {
-	(void)part;
-
 	if(!getActiveVehicle())
 		return;
+
+	getActiveVehicle()->detachPart(part);
+
+	parts.add(part);
 }
 
 void Player::upgradePart(Part* part, const Upgrade* upgrade)

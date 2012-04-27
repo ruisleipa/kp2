@@ -79,6 +79,25 @@ void Connection::processReceivedData()
 
 						player->buyVehicle(vehicle);
 					}
+					else if(method == "attachPart")
+					{
+						int partIndex = call["arguments"]["part"].asInt();
+
+						Game::Part* part = player->getParts().getByIndex(partIndex);
+
+						player->attachPart(part);
+					}
+					else if(method == "detachPart")
+					{
+						int partIndex = call["arguments"]["part"].asInt();
+
+						if(player->getActiveVehicle())
+						{
+							Game::Part* part = player->getActiveVehicle()->getParts().getByIndex(partIndex);
+
+							player->detachPart(part);
+						}
+					}
 					else
 					{
 						std::cout << "Unimplemented method of class " << type << ": " << method << std::endl;

@@ -2,6 +2,7 @@
 #define VEHICLE_HPP
 
 #include "part.hpp"
+#include "container.hpp"
 
 #include <string>
 
@@ -14,9 +15,14 @@ class Vehicle : public Part
 		virtual int getPrice() const;
 		const std::string& getImageName() const;
 
-		virtual bool canAttachPart(const Part& part) const;
+		const Container<Part>& getParts() const;
 
-		Vehicle(const Json::Value&);
+		void attachPart(Part* part);
+		void detachPart(Part* part);
+
+		virtual bool canAttachPart(const Part* part) const;
+
+		Vehicle(const Json::Value&, ObjectFactory&);
 		virtual void save(Json::Value& value) const;
 
 	private:
@@ -29,6 +35,8 @@ class Vehicle : public Part
 		float wheelbase;
 		int maxEngineVolume;
 		int maxEngineCylinderCount;
+
+		Container<Part> parts;
 };
 
 };

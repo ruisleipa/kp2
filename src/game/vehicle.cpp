@@ -11,7 +11,7 @@ namespace Game
 
 int Vehicle::getPrice() const
 {
-	return 1000;
+	return Part::getPrice();
 }
 
 const std::string& Vehicle::getImageName() const
@@ -19,10 +19,13 @@ const std::string& Vehicle::getImageName() const
 	return imageName;
 }
 
-bool Vehicle::canAttachPart(const Part& p) const
+const Container<Part>& Vehicle::getParts() const
 {
-	const Part* part = &p;
+	return parts;
+}
 
+bool Vehicle::canAttachPart(const Part* part) const
+{
 	const Tire* tire = dynamic_cast<const Tire*>(part);
 
 	if(tire)
@@ -44,8 +47,19 @@ bool Vehicle::canAttachPart(const Part& p) const
 	return false;
 }
 
-Vehicle::Vehicle(const Json::Value& value):
-	Part(value)
+void Vehicle::attachPart(Part* part)
+{
+	parts.add(part);
+}
+
+void Vehicle::detachPart(Part* part)
+{
+	parts.remove(part);
+}
+
+Vehicle::Vehicle(const Json::Value& value, ObjectFactory& factory):
+	Part(value),
+	parts(value["parts"], factory)
 {
 	info = value["info"].asString();
 	imageName = value["imageName"].asString();	
@@ -72,6 +86,8 @@ void Vehicle::save(Json::Value& value) const
 	value["wheelbase"] = wheelbase;
 	value["maxEngineVolume"] = maxEngineVolume;
 	value["maxEngineCylinderCount"] = maxEngineCylinderCount;
+
+	parts.save(value["parts"]);
 }
 
 }

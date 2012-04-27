@@ -17,6 +17,8 @@ class Part : public Object
 
 		float getMass() const;
 		
+		virtual bool canAttachPart(const Part* part) const;
+
 		Part(const Json::Value& value);
 		virtual void save(Json::Value& value) const;
 		

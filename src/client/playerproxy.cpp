@@ -58,11 +58,11 @@ void PlayerProxy::attachPart(Game::Part* part)
 {
 	std::cout << "PlayerProxy::attachPart: " << part << std::endl;
 
-	Player::attachPart(part);
-
 	Json::Value arguments;
 
 	arguments["part"] = this->getParts().getIndexOf(part);
+
+	Player::attachPart(part);
 
 	makeCall("attachPart", arguments);
 }
@@ -71,11 +71,11 @@ void PlayerProxy::detachPart(Game::Part* part)
 {
 	std::cout << "PlayerProxy::detachPart: " << part << std::endl;
 
-	Player::detachPart(part);
-
 	Json::Value arguments;
 
-	//arguments["part"] = this->getActiveVehicle().getParts().getIndexOf(part);
+	arguments["part"] = this->getActiveVehicle()->getParts().getIndexOf(part);
+
+	Player::detachPart(part);
 
 	makeCall("detachPart", arguments);
 }

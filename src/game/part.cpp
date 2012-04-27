@@ -22,6 +22,11 @@ float Part::getMass() const
 	return mass;
 }
 
+bool Part::canAttachPart(const Part* part) const
+{
+	return false;
+}
+
 Part::Part(const Json::Value& value):
 	Object(value)
 {
