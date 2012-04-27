@@ -18,11 +18,15 @@ void Player::setActiveVehicle(Vehicle* vehicle)
 		activeVehicle = vehicle;
 	else
 		activeVehicle = 0;
+
+	changed();
 }
 
 void Player::setMoney(int money)
 {
 	this->money = money;
+
+	changed();
 }
 
 void Player::buyPart(const Part* part)
