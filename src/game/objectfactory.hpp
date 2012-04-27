@@ -12,6 +12,16 @@ class ObjectFactory
 	public:
 		Object* create(const Json::Value&);
 
+		template<class T>
+		T* clone(const T* t)
+		{
+			Json::Value v;
+
+			t->save(v);
+
+			return dynamic_cast<T*>(create(v));
+		};
+
 	protected:
 		virtual Object* allocate(const Json::Value&) = 0;
 };

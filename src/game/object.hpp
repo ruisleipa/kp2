@@ -33,16 +33,6 @@ class ObjectSignals
 class Object : public ObjectSignals, public Serializable
 {
 	public:
-		template<class T>
-		static T* clone(const T* t)
-		{
-			Json::Value v;
-			
-			t->save(v);
-			
-			return new T(v);
-		};
-		
 		Object() = default;
 		Object(const Object&) = default;
 		Object(const Json::Value&);

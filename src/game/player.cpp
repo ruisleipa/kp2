@@ -32,7 +32,7 @@ void Player::buyPart(const Part* part)
 
 	money -= part->getPrice();
 
-	parts.add(Object::clone(part));
+	parts.add(factory.clone(part));
 
 	changed();
 }
@@ -44,7 +44,7 @@ void Player::buyVehicle(const Vehicle* vehicle)
 
 	money -= vehicle->getPrice();
 
-	vehicles.add(Object::clone(vehicle));
+	vehicles.add(factory.clone(vehicle));
 
 	changed();
 }

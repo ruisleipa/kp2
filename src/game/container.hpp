@@ -189,14 +189,6 @@ class Container : public ContainerSignalsAndSlots
 			*this = b;
 		};
 
-		Container& operator=(const Container& b)
-		{
-			for(T* item: b)
-			{
-				items.push_back(Object::clone(item));
-			}
-		};
-
 #ifdef KP2_CLIENT
 		virtual void onChange()
 		{
