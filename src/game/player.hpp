@@ -10,28 +10,29 @@
 #include "upgrade.hpp"
 #include "object.hpp"
 #include "container.hpp"
+#include "exception.hpp"
 
 namespace Game
 {
 
-class InsufficientFundsException
-{
-
-};
-
-class NoSuchVehicleException
-{
-
-};
-
-class NoSuchPartException
-{
-
-};
-
 class Player : public Object
 {
 	public:
+		class InsufficientFundsException : public Game::Exception
+		{
+
+		};
+
+		class NoSuchVehicleException : public Game::Exception
+		{
+
+		};
+
+		class NoSuchPartException : public Game::Exception
+		{
+
+		};
+
 		virtual void setName(const std::string& name);
 		virtual void setActiveVehicle(Vehicle* vehicle);
 		virtual void setMoney(int money);

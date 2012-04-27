@@ -61,7 +61,7 @@ void CarShopMenu::on_buyButton_clicked()
 		navigateToPrevious();
 		navigateTo("GarageMenu");
 	}
-	catch(Game::InsufficientFundsException)
+	catch(Game::Player::InsufficientFundsException)
 	{
 		QMessageBox msgBox;
 		msgBox.setText("Rahasi eivät riitä autoon.");
