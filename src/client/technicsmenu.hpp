@@ -23,11 +23,16 @@ class TechnicsMenu : public GameMenu
 		std::unique_ptr<PartTableModel> playerModel;
 		std::unique_ptr<PartTableModel> vehicleModel;
 		
+		Client::State* state;
+
 	private slots:
 		void on_okButton_clicked();
 		void on_cancelButton_clicked();
+		void playerChanged();
 
-	
+		void on_shopView_doubleClicked(const QModelIndex&);
+		void on_playerView_doubleClicked(const QModelIndex&);
+		void on_vehicleView_doubleClicked(const QModelIndex&);
 };
 
 #endif // TECHNICSMENU_H
