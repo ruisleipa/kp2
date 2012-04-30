@@ -22,6 +22,7 @@ class AbstractObjectTableModel: public QAbstractTableModel
 		virtual std::string getHeader(int col) const = 0;
 		virtual int getColumnCount() const = 0;
 		virtual QVariant getData(int row, int col) const = 0;
+		virtual QVariant getDecoration(int row, int col) const = 0;
 		virtual QVariant getToolTip(int row) const;
 	
 	protected slots:

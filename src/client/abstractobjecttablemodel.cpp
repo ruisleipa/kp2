@@ -20,6 +20,9 @@ QVariant AbstractObjectTableModel::data(const QModelIndex& index, int role) cons
 		case Qt::DisplayRole:
 			return getData(index.row(), index.column());
 
+		case Qt::DecorationRole:
+			return getDecoration(index.row(), index.column());
+
 		case Qt::ToolTipRole:
 			return getToolTip(index.row());
 

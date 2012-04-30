@@ -12,6 +12,19 @@ QVariant PartTableModel::NameField::getData(Game::Part* v) const
 	return QVariant(v->getName().c_str());
 }
 
+QVariant PartTableModel::NameField::getDecoration(Game::Part* part) const
+{
+	Json::Value value;
+
+	part->save(value);
+
+	std::string imageName = "data/images/parts/";
+	imageName += value["type"].asString();
+	imageName += ".jpg";
+
+	return QPixmap(imageName.c_str()).scaled(QSize(75, 50));
+}
+
 PartTableModel::NameField::NameField(ObjectTableModel* parent):
 	Field(parent)
 {
@@ -26,6 +39,11 @@ std::string PartTableModel::PriceField::getHeader() const
 QVariant PartTableModel::PriceField::getData(Game::Part* v) const
 {
 	return QVariant(QString::number(v->getPrice()));
+}
+
+QVariant PartTableModel::PriceField::getDecoration(Game::Part*) const
+{
+	return QVariant();
 }
 
 PartTableModel::PriceField::PriceField(ObjectTableModel* parent):

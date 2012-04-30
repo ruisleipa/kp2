@@ -34,6 +34,7 @@ class ObjectTableModel : public AbstractObjectTableModel
 			public:
 				virtual std::string getHeader() const = 0;
 				virtual QVariant getData(T* t) const = 0;
+				virtual QVariant getDecoration(T* t) const = 0;
 
 				int getIndex() const
 				{
@@ -94,6 +95,15 @@ class ObjectTableModel : public AbstractObjectTableModel
 
 			return fields[col]->getData(*it);
 		}	
+
+		virtual QVariant getDecoration(int row, int col) const
+		{
+			auto it = dataSource.begin();
+
+			std::advance(it, row);
+
+			return fields[col]->getDecoration(*it);
+		}
 
 		void onAdd(int index)
 		{

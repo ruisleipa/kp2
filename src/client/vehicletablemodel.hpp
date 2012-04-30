@@ -12,6 +12,7 @@ class VehicleTableModel : public ObjectTableModel<Game::Vehicle>
 			public:
 				virtual std::string getHeader() const;
 				virtual QVariant getData(Game::Vehicle* v) const;
+				virtual QVariant getDecoration(Game::Vehicle*) const;
 				NameField(ObjectTableModel* parent);
 
 		} name;
@@ -21,6 +22,7 @@ class VehicleTableModel : public ObjectTableModel<Game::Vehicle>
 			public:
 				virtual std::string getHeader() const;
 				virtual QVariant getData(Game::Vehicle* v) const;
+				virtual QVariant getDecoration(Game::Vehicle*) const;
 				PriceField(ObjectTableModel* parent);
 
 		} price;

@@ -12,6 +12,7 @@ class PartTableModel : public ObjectTableModel<Game::Part>
 			public:
 				virtual std::string getHeader() const;
 				virtual QVariant getData(Game::Part* v) const;
+				virtual QVariant getDecoration(Game::Part* part) const;
 				NameField(ObjectTableModel* parent);
 
 		} name;
@@ -21,6 +22,7 @@ class PartTableModel : public ObjectTableModel<Game::Part>
 			public:
 				virtual std::string getHeader() const;
 				virtual QVariant getData(Game::Part* v) const;
+				virtual QVariant getDecoration(Game::Part*) const;
 				PriceField(ObjectTableModel* parent);
 
 		} price;
@@ -29,6 +31,9 @@ class PartTableModel : public ObjectTableModel<Game::Part>
 
 	protected:
 		virtual QVariant getToolTip(int row) const;
+
+	private:
+		QString getImagePath(Game::Part* part) const;
 };
 
 #endif
