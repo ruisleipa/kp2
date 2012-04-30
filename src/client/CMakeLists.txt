@@ -34,12 +34,14 @@ set(client_SRCS
 	./abstractobjecttablemodel.cpp
 	./tableview.cpp
 	./playerproxy.cpp
+	./parttablemodel.cpp
 	./multiplayermenu.cpp
 	./settingsmenu.cpp
 	./singleplayermenu.cpp
 	./state.cpp
 	./technicsmenu.cpp
 	./updater.cpp
+	./vehicletablemodel.cpp
 	../json/json_reader.cpp
 	../json/json_value.cpp
 	../json/json_writer.cpp

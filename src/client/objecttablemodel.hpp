@@ -32,25 +32,16 @@ class ObjectTableModel : public AbstractObjectTableModel
 		class Field
 		{
 			public:
-				const std::string& getHeader() const
-				{
-					return header;
-				};
-				
-				QVariant getData(T* t) const
-				{
-					return func(t);
-				}
-				
+				virtual std::string getHeader() const = 0;
+				virtual QVariant getData(T* t) const = 0;
+
 				int getIndex() const
 				{
 					return parent->getFieldIndex(this);
 				}
-				
-				Field(ObjectTableModel* parent, QString header, std::function<QVariant(T*)> func):
-					parent(parent),
-					header(header.toStdString()),
-					func(func)
+
+				Field(ObjectTableModel* parent):
+					parent(parent)
 				{
 					parent->addField(this);
 				};

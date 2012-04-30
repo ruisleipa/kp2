@@ -7,16 +7,25 @@
 class VehicleTableModel : public ObjectTableModel<Game::Vehicle>
 {
 	public:
-		ObjectTableModel<Game::Vehicle>::Field name;
-		ObjectTableModel<Game::Vehicle>::Field price;
-
-		VehicleTableModel(const Game::Container<Game::Vehicle>& dataSource):
-			ObjectTableModel(dataSource),
-			name(this, QObject::trUtf8("Nimi"), [](Game::Vehicle* v){return QVariant(v->getName().c_str());}),
-			price(this, QObject::trUtf8("Hinta"), [](Game::Vehicle* v){return QVariant(QString::number(v->getPrice()));})
+		class NameField : public ObjectTableModel<Game::Vehicle>::Field
 		{
+			public:
+				virtual std::string getHeader() const;
+				virtual QVariant getData(Game::Vehicle* v) const;
+				NameField(ObjectTableModel* parent);
 
-		}
+		} name;
+
+		class PriceField : public ObjectTableModel<Game::Vehicle>::Field
+		{
+			public:
+				virtual std::string getHeader() const;
+				virtual QVariant getData(Game::Vehicle* v) const;
+				PriceField(ObjectTableModel* parent);
+
+		} price;
+
+		VehicleTableModel(const Game::Container<Game::Vehicle>& dataSource);
 };
 
 #endif
