@@ -26,7 +26,7 @@ Tire::Tire(const Json::Value& value):
 	radius = value["radius"].asDouble();
 }
 
-void Tire::save(Json::Value& value)
+void Tire::save(Json::Value& value) const
 {
 	Part::save(value);
 

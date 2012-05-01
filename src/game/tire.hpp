@@ -16,7 +16,7 @@ class Tire: public Part
 		float getRadius() const;
 		
 		Tire(const Json::Value&);
-		void save(Json::Value&);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		float frictionCoefficient;
