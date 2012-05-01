@@ -11,6 +11,8 @@ namespace Game
 class Tire: public Part
 {
 	public:
+		virtual const std::string& getName() const;
+
 		float getFrictionCoefficient() const;
 		float getRollingResistanceCoefficient() const;
 		float getRadius() const;
@@ -22,7 +24,9 @@ class Tire: public Part
 		float frictionCoefficient;
 		float rollingResistanceCoefficient;
 		float radius;
-		
+
+		std::string name;
+
 };
 
 };
