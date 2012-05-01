@@ -123,7 +123,7 @@ class Container : public ContainerSignalsAndSlots
 			return items.size();
 		}
 
-		void add(T* item)
+		virtual void add(T* item)
 		{
 			items.push_back(item);
 
@@ -134,7 +134,7 @@ class Container : public ContainerSignalsAndSlots
 #endif
 		};
 
-		void remove(T* item)
+		virtual void remove(T* item)
 		{
 			auto it = std::find(items.begin(), items.end(), item);
 
@@ -154,7 +154,7 @@ class Container : public ContainerSignalsAndSlots
 
 		virtual void save(Json::Value& value) const
 		{
-			value.resize(0);
+			value["items"].resize(0);
 
 			for(T* item : items)
 			{
@@ -162,13 +162,13 @@ class Container : public ContainerSignalsAndSlots
 
 				item->save(i);
 
-				value.append(i);
+				value["items"].append(i);
 			}
 		};
 
 		Container(const Json::Value& value, ObjectFactory& factory)
 		{
-			for(auto item : value)
+			for(auto item : value["items"])
 			{
 				Object* object = factory.create(item);
 

@@ -3,7 +3,7 @@
 
 #include "object.hpp"
 #include "part.hpp"
-#include "container.hpp"
+#include "partcontainer.hpp"
 
 #include <string>
 
@@ -21,7 +21,7 @@ class Vehicle : public Object
 		const Container<Part>& getParts() const;
 
 		void attachPart(Part* part);
-		void detachPart(Part* part);
+		PartContainer::Parts detachPart(Part* part);
 
 		Vehicle(const Json::Value&, ObjectFactory&);
 		virtual void save(Json::Value& value) const;
@@ -32,7 +32,7 @@ class Vehicle : public Object
 		std::string info;
 		std::string imageName;
 
-		Container<Part> parts;
+		PartContainer parts;
 };
 
 };

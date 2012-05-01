@@ -77,6 +77,7 @@ set(game_SRCS
 	../game/object.cpp
 	../game/objectfactory.cpp
 	../game/part.cpp
+	../game/partcontainer.cpp
 	../game/player.cpp
 	../game/serializable.cpp
 	../game/state.cpp

@@ -33,9 +33,22 @@ void Vehicle::attachPart(Part* part)
 	parts.add(part);
 }
 
-void Vehicle::detachPart(Part* part)
+PartContainer::Parts Vehicle::detachPart(Part* part)
 {
-	parts.remove(part);
+	auto detachedParts = parts.getAllAttachedParts(part);
+
+	detachedParts.push_back(part);
+
+	for(Part* p : detachedParts)
+		parts.remove(p);
+
+	Json::Value v;
+
+	save(v);
+
+	std::cout << v << std::endl;
+
+	return detachedParts;
 }
 
 Vehicle::Vehicle(const Json::Value& value, ObjectFactory& factory):

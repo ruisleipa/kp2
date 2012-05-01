@@ -71,9 +71,12 @@ void Player::detachPart(Part* part)
 	if(!getActiveVehicle())
 		return;
 
-	getActiveVehicle()->detachPart(part);
+	PartContainer::Parts detachedParts;
+	
+	detachedParts = getActiveVehicle()->detachPart(part);
 
-	parts.add(part);
+	for(Part* p : detachedParts)
+		parts.add(p);
 }
 
 void Player::upgradePart(Part* part, const Upgrade* upgrade)

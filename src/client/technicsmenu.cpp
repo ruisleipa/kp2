@@ -72,7 +72,22 @@ void TechnicsMenu::on_playerView_doubleClicked(const QModelIndex& index)
 {
 	Game::Part* part = playerModel->getObject(index.row());
 
-	state->getPlayer()->attachPart(part);
+	try
+	{
+		state->getPlayer()->attachPart(part);
+	}
+	catch(Game::PartContainer::IncompatiblePartException)
+	{
+		QMessageBox msgBox;
+		msgBox.setText(trUtf8("Osa ei sovi."));
+		msgBox.exec();
+	}
+	catch(Game::PartContainer::ExtraPartException)
+	{
+		QMessageBox msgBox;
+		msgBox.setText(trUtf8("Osa on ylimääräinen."));
+		msgBox.exec();
+	}
 }
 
 void TechnicsMenu::on_vehicleView_doubleClicked(const QModelIndex& index)
