@@ -27,6 +27,11 @@ bool Part::canAttachPart(const Part* part) const
 	return false;
 }
 
+int Part::getAttachmentLimitOfType(const Part* part) const
+{
+	return 0;
+}
+
 Part::Part(const Json::Value& value):
 	Object(value)
 {
