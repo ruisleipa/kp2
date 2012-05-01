@@ -5,6 +5,7 @@
 //#include "game/accessory.hpp"
 #include "game/camshaft.hpp"
 #include "game/charger.hpp"
+#include "game/chassis.hpp"
 #include "game/clutch.hpp"
 #include "game/cooler.hpp"
 #include "game/cylinderhead.hpp"
@@ -30,6 +31,8 @@ Game::Object* ServerObjectFactory::allocate(const Json::Value& value)
 		return new Game::Camshaft(value);
 	else if(type == "charger")
 		return new Game::Charger(value);
+	else if(type == "chassis")
+		return new Game::Chassis(value);
 	else if(type == "clutch")
 		return new Game::Clutch(value);
 	else if(type == "cooler")

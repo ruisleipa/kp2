@@ -1,6 +1,7 @@
-#ifndef VEHICLE_HPP
-#define VEHICLE_HPP
+#ifndef GAME_VEHICLE_HPP
+#define GAME_VEHICLE_HPP
 
+#include "object.hpp"
 #include "part.hpp"
 #include "container.hpp"
 
@@ -9,9 +10,11 @@
 namespace Game
 {
 
-class Vehicle : public Part
+class Vehicle : public Object
 {
 	public:
+		virtual const std::string& getName() const;
+		float getMass() const;
 		virtual int getPrice() const;
 		const std::string& getImageName() const;
 
@@ -20,21 +23,14 @@ class Vehicle : public Part
 		void attachPart(Part* part);
 		void detachPart(Part* part);
 
-		virtual bool canAttachPart(const Part* part) const;
-
 		Vehicle(const Json::Value&, ObjectFactory&);
 		virtual void save(Json::Value& value) const;
 
 	private:
+		std::string name;
+		int price;
 		std::string info;
 		std::string imageName;
-		float dragCoefficient;
-		float length;
-		float width;
-		float height;
-		float wheelbase;
-		int maxEngineVolume;
-		int maxEngineCylinderCount;
 
 		Container<Part> parts;
 };

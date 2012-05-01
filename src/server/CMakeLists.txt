@@ -1,6 +1,7 @@
 set(game_SRCS
 	../game/camshaft.cpp
 	../game/charger.cpp
+	../game/chassis.cpp
 	../game/clutch.cpp
 	../game/cooler.cpp
 	../game/cylinderhead.cpp
