@@ -1,61 +1,15 @@
 #ifndef GAME_CONTAINER_HPP
 #define GAME_CONTAINER_HPP
 
-#ifdef KP2_CLIENT
-#include <QObject>
-#endif
-
 #include <vector>
 #include <algorithm>
 
 #include "json/json.h"
 #include "objectfactory.hpp"
+#include "containersignalsandslots.hpp"
 
 namespace Game
 {
-
-#ifdef KP2_CLIENT
-
-class ContainerSignalsAndSlots : public QObject
-{
-	Q_OBJECT
-
-	signals:
-		void added(int index);
-		void removed(int index);
-		void changed(int index);
-
-	protected slots:
-		virtual void onChange() = 0;
-};
-
-#else
-
-class ContainerSignalsAndSlots
-{
-	protected:
-		void added(int index)
-		{
-			(void)index;
-		};
-
-		void removed(int index)
-		{
-			(void)index;
-		};
-
-		void changed(int index)
-		{
-			(void)index;
-		};
-
-		virtual void onChange()
-		{
-
-		};
-};
-
-#endif
 
 template<class T>
 class Container : public ContainerSignalsAndSlots
