@@ -18,7 +18,7 @@ class Camshaft: public Part
 		const std::string& getCamshaftPosition() const;
 		
 		Camshaft(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		std::string name;

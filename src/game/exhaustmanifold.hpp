@@ -19,7 +19,7 @@ class ExhaustManifold: public Part
 		int getCylinderCount() const;
 		
 		ExhaustManifold(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		std::string cylinderAlignment;

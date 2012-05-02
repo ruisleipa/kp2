@@ -14,7 +14,7 @@ class Cooler: public Part
 		int getPrice() const;
 		
 		Cooler(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		

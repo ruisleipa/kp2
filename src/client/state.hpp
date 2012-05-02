@@ -13,7 +13,7 @@ class State : public Game::State
 	
 		State(const Json::Value& value, Game::ObjectFactory&);
 		
-		void save(Json::Value& value);
+		void save(Json::Value& value) const;
 		
 	private:
 		Game::Player* player;

@@ -16,7 +16,7 @@ class IntakeManifold: public Part
 		int getCylinderCount() const;
 		
 		IntakeManifold(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		std::string name;

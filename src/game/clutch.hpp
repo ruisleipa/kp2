@@ -14,7 +14,7 @@ class Clutch: public Part
 		int getPrice() const;
 		
 		Clutch(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		

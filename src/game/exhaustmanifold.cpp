@@ -28,7 +28,7 @@ ExhaustManifold::ExhaustManifold(const Json::Value& value):
 	flow = value["flow"].asDouble();
 }
 
-void ExhaustManifold::save(Json::Value& value)
+void ExhaustManifold::save(Json::Value& value) const
 {
 	Part::save(value);
 

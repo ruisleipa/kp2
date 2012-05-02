@@ -9,7 +9,7 @@ FuelIntake::FuelIntake(const Json::Value& value):
 
 }
 
-void FuelIntake::save(Json::Value& value)
+void FuelIntake::save(Json::Value& value) const
 {
 	Part::save(value);
 

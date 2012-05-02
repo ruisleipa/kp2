@@ -47,7 +47,7 @@ Camshaft::Camshaft(const Json::Value& value):
 	name = ss.str();
 }
 
-void Camshaft::save(Json::Value& value)
+void Camshaft::save(Json::Value& value) const
 {
 	Part::save(value);
 

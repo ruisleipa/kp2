@@ -129,7 +129,7 @@ Player::Player(const Json::Value& value, ObjectFactory& factory):
 	activeVehicle = vehicles.getByIndex(value["activeVehicle"].asInt());
 }
 
-void Player::save(Json::Value& value)
+void Player::save(Json::Value& value) const
 {
 	Object::save(value);
 

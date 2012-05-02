@@ -8,7 +8,7 @@ Injector::Injector(const Json::Value& value):
 
 }
 
-void Injector::save(Json::Value& value)
+void Injector::save(Json::Value& value) const
 {
 	Part::save(value);
 

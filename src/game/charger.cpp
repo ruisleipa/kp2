@@ -19,7 +19,7 @@ Charger::Charger(const Json::Value& value):
 	gearRatio = value["gearRatio"].asDouble();
 }
 
-void Charger::save(Json::Value& value)
+void Charger::save(Json::Value& value) const
 {
 	Part::save(value);
 

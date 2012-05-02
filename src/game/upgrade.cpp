@@ -28,7 +28,7 @@ Upgrade::Upgrade(const Json::Value& value):
 	price = value["price"].asUInt();
 }
 
-void Upgrade::save(Json::Value& value)
+void Upgrade::save(Json::Value& value) const
 {
 	value["name"] = name;
 	value["price"] = price;

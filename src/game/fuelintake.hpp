@@ -10,7 +10,7 @@ class FuelIntake: public Part
 {
 	public:		
 		FuelIntake(const Json::Value& value);
-		void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		

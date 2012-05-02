@@ -37,7 +37,7 @@ ExhaustPipe::ExhaustPipe(const Json::Value& value):
 	name = ss.str();
 }
 
-void ExhaustPipe::save(Json::Value& value)
+void ExhaustPipe::save(Json::Value& value) const
 {
 	Part::save(value);
 

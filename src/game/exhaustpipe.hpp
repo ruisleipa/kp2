@@ -15,7 +15,7 @@ class ExhaustPipe: public Part
 		int getPrice() const;
 		
 		ExhaustPipe(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		std::string name;

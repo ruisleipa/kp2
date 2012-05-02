@@ -62,7 +62,7 @@ CylinderHead::CylinderHead(const Json::Value& value):
 	name = ss.str();
 }
 
-void CylinderHead::save(Json::Value& value)
+void CylinderHead::save(Json::Value& value) const
 {
 	Part::save(value);
 

@@ -16,7 +16,7 @@ class Transmission: public Part
 		int getNeutralGearIndex() const;
 		
 		Transmission(const Json::Value&);
-		void save(Json::Value&);	
+		virtual void save(Json::Value&) const;
 	
 	private:
 		int neutralGear;

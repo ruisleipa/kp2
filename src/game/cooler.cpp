@@ -14,7 +14,7 @@ Cooler::Cooler(const Json::Value& value):
 	
 }
 
-void Cooler::save(Json::Value& value)
+void Cooler::save(Json::Value& value) const
 {
 	Part::save(value);
 

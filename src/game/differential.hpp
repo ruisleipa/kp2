@@ -14,7 +14,7 @@ class Differential: public Part
 		int getPrice() const;
 
 		Differential(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		

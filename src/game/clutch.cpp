@@ -14,7 +14,7 @@ Clutch::Clutch(const Json::Value& value):
 
 }
 
-void Clutch::save(Json::Value& value)
+void Clutch::save(Json::Value& value) const
 {
 	Part::save(value);
 

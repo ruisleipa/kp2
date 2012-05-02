@@ -9,7 +9,7 @@ FuelPump::FuelPump(const Json::Value& value):
 
 }
 
-void FuelPump::save(Json::Value& value)
+void FuelPump::save(Json::Value& value) const
 {
 	Part::save(value);
 

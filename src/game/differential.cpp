@@ -14,7 +14,7 @@ Differential::Differential(const Json::Value& value):
 	
 }
 
-void Differential::save(Json::Value& value)
+void Differential::save(Json::Value& value) const
 {
 	Part::save(value);
 

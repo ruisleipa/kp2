@@ -56,7 +56,7 @@ class Player : public Object
 		Player(ObjectFactory& factory);
 		Player(const Json::Value& value, ObjectFactory& factory);
 
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 
 	private:
 		std::string name;

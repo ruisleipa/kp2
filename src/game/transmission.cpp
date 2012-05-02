@@ -22,7 +22,7 @@ Transmission::Transmission(const Json::Value& value):
 		gears.push_back(i.asDouble());
 }
 
-void Transmission::save(Json::Value& value)
+void Transmission::save(Json::Value& value) const
 {
 	Part::save(value);	
 

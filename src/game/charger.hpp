@@ -16,7 +16,7 @@ class Charger: public Part
 		int getPrice() const;
 		
 		Charger(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		std::string name;		

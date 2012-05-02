@@ -16,7 +16,7 @@ State::State(const Json::Value& value, Game::ObjectFactory& objectFactory):
 	player = getPlayers().getByIndex(value["client"]["playerId"].asInt());
 }
 
-void State::save(Json::Value& value)
+void State::save(Json::Value& value) const
 {	
 	Game::State::save(value);
 

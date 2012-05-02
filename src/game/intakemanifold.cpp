@@ -41,7 +41,7 @@ IntakeManifold::IntakeManifold(const Json::Value& value):
 	name = ss.str();
 }
 
-void IntakeManifold::save(Json::Value& value)
+void IntakeManifold::save(Json::Value& value) const
 {
 	Part::save(value);
 

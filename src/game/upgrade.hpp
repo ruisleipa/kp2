@@ -18,7 +18,7 @@ class Upgrade : public Object
 		bool fitsForPart(Game::Part& part) const;
 	
 		Upgrade(const Json::Value& value);
-		virtual void save(Json::Value& value);
+		virtual void save(Json::Value& value) const;
 		
 	private:
 		std::string name;
