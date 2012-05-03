@@ -24,7 +24,8 @@ class Engine: public Part
 		int getIdleSpeed() const;
 		int getSpeedLimit() const;
 
-		virtual bool canAttachPart(const Part&) const;
+		virtual bool canAttachPart(const Part* part) const;
+		virtual int getAttachmentLimitOfType(const Part* part) const;
 		
 		Engine(const Json::Value& value);
 		virtual void save(Json::Value& value) const;

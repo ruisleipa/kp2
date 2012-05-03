@@ -50,14 +50,22 @@ int Engine::getSpeedLimit() const
 	return 8000;
 }
 
-bool Engine::canAttachPart(const Part& part) const
+bool Engine::canAttachPart(const Part* part) const
 {
-	const CylinderHead* c = dynamic_cast<const CylinderHead*>(&part);
+	const CylinderHead* c = dynamic_cast<const CylinderHead*>(part);
 
 	if(c)
 		return canAttachCylinderHead(*c);
 
 	return false;
+}
+
+int Engine::getAttachmentLimitOfType(const Part* part) const
+{
+	if(dynamic_cast<const CylinderHead*>(part))
+		return 1;
+
+	return 0;
 }
 
 bool Engine::canAttachCylinderHead(const CylinderHead& c) const
