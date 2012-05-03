@@ -38,6 +38,64 @@ bool CylinderHead::isDoubleCam() const
 	return doubleCam;
 }
 
+bool CylinderHead::canAttachPart(const Part* part) const
+{
+	const IntakeManifold* intakeManifold = dynamic_cast<const IntakeManifold*>(part);
+
+	if(intakeManifold)
+	{
+		if(intakeManifold->getCylinderCount() != cylinderCount)
+			return false;
+
+		if(intakeManifold->getCylinderAlignment() != cylinderAlignment)
+			return false;
+
+		return true;
+	}
+
+	const ExhaustManifold* exhaustManifold = dynamic_cast<const ExhaustManifold*>(part);
+
+	if(exhaustManifold)
+	{
+		if(exhaustManifold->getCylinderCount() != cylinderCount)
+			return false;
+
+		if(exhaustManifold->getCylinderAlignment() != cylinderAlignment)
+			return false;
+
+		return true;
+	}
+
+	const Camshaft* camshaft = dynamic_cast<const Camshaft*>(part);
+
+	if(camshaft)
+	{
+		if(camshaft->getCylinderCount() != cylinderCount)
+			return false;
+
+		if(camshaft->getCamshaftPosition() != camshaftPosition)
+			return false;
+
+		return true;
+	}
+
+	return false;
+}
+
+int CylinderHead::getAttachmentLimitOfType(const Part* part) const
+{
+	if(dynamic_cast<const IntakeManifold*>(part))
+		return 1;
+
+	if(dynamic_cast<const ExhaustManifold*>(part))
+		return 1;
+
+	if(dynamic_cast<const Camshaft*>(part))
+		return 1;
+
+	return 0;
+}
+
 CylinderHead::CylinderHead(const Json::Value& value):
 	Part(value)
 {

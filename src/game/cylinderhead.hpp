@@ -22,6 +22,9 @@ class CylinderHead: public Part
 		int getCylinderCount() const;
 		bool isDoubleCam() const;
 		
+		virtual bool canAttachPart(const Part* part) const;
+		virtual int getAttachmentLimitOfType(const Part* part) const;
+
 		CylinderHead(const Json::Value& value);
 		virtual void save(Json::Value& value) const;
 		
