@@ -1,5 +1,7 @@
 #include "engine.hpp"
 
+#include <sstream>
+
 #include "cylinderhead.hpp"
 
 namespace Game
