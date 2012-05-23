@@ -62,37 +62,28 @@ float Curve::getMax() const
 	return value;
 }
 
-Net::Packet& operator<<(Net::Packet& packet, const Curve& curve)
+Curve::Curve(const Json::Value& value)
 {
-	packet << uint32_t(curve.points.size());
-	
-	for(std::map<int, float>::const_iterator i = curve.points.begin(); i != curve.points.end(); ++i)
-	{		
-		packet << int32_t(i->first);
-		packet << float(i->second);
+	for(auto point : value)
+	{
+		int position = point["position"].asInt();
+		float value = point["value"].asDouble();
+
+		addPoint(position, value);
 	}
-	
-	return packet;
 }
 
-Net::Packet& operator>>(Net::Packet& packet, Curve& curve)
+void Curve::save(Json::Value& value) const
 {
-	curve.points.clear();
-	
-	uint32_t count;
-	
-	packet >> count;
-	
-	for(int i = 0; i < count; i++)
-	{		
-		int32_t position;
-		float value;
-		
-		packet >> position;
-		packet >> value;
-		
-		curve.addPoint(position, value);
+	value.resize(0);
+
+	for(std::pair<int, float> point : points)
+	{
+		Json::Value saved;
+
+		saved["position"] = point.first;
+		saved["value"] = point.second;
+
+		value.append(saved);
 	}
-	
-	return packet;
 }
