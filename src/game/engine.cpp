@@ -92,6 +92,8 @@ Engine::Engine(const Json::Value& value):
 	cylinderAlignment = value["cylinderAlignment"].asString();
 	compression = value["compression"].asDouble();
 	volume = value["volume"].asUInt();
+	torqueCurve = Curve(value["torqueCurve"]);
+
 		
 	std::stringstream ss;
 	
@@ -122,6 +124,8 @@ void Engine::save(Json::Value& value) const
 	value["cylinderAlignment"] = cylinderAlignment;
 	value["compression"] = compression;
 	value["volume"] = volume;
+
+	torqueCurve.save(value["torqueCurve"]);
 }
 
 }

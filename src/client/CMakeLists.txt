@@ -52,6 +52,7 @@ set(client_SRCS
 	../net/socketactivity.cpp
 	../net/socketset.cpp
 	../sounds/musicplayer.cpp
+	../utils/curve.cpp
 	../utils/inifile.cpp
 	../utils/demangle.cpp
 	../utils/directory.cpp
