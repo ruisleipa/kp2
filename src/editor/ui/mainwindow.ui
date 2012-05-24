@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>651</width>
+    <height>501</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Kiihdytyspeli 2 SE -editori</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QSplitter" name="splitter_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="childrenCollapsible">
+           <bool>false</bool>
+          </property>
+          <widget class="QTableView" name="tableView_3"/>
+          <widget class="QTableView" name="tableView_2"/>
+          <widget class="QTableView" name="tableView"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QMdiArea" name="mdiArea"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>651</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>Tiedosto</string>
+    </property>
+    <addaction name="newAction"/>
+    <addaction name="openAction"/>
+    <addaction name="saveAction"/>
+    <addaction name="saveAsAction"/>
+    <addaction name="closeAction"/>
+    <addaction name="separator"/>
+    <addaction name="quitAction"/>
+   </widget>
+   <widget class="QMenu" name="menuLis">
+    <property name="title">
+     <string>Lisää</string>
+    </property>
+    <addaction name="newPartAction"/>
+    <addaction name="newVehicleAction"/>
+    <addaction name="newUpgradeAction"/>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="menuLis"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="newAction">
+   <property name="text">
+    <string>Uusi</string>
+   </property>
+  </action>
+  <action name="openAction">
+   <property name="text">
+    <string>Avaa...</string>
+   </property>
+  </action>
+  <action name="saveAction">
+   <property name="text">
+    <string>Tallenna</string>
+   </property>
+  </action>
+  <action name="saveAsAction">
+   <property name="text">
+    <string>Tallenna nimellä...</string>
+   </property>
+  </action>
+  <action name="closeAction">
+   <property name="text">
+    <string>Sulje</string>
+   </property>
+  </action>
+  <action name="quitAction">
+   <property name="text">
+    <string>Lopeta</string>
+   </property>
+  </action>
+  <action name="newPartAction">
+   <property name="text">
+    <string>Osa</string>
+   </property>
+  </action>
+  <action name="newVehicleAction">
+   <property name="text">
+    <string>Auto</string>
+   </property>
+  </action>
+  <action name="newUpgradeAction">
+   <property name="text">
+    <string>Työstö</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

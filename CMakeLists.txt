@@ -8,6 +8,7 @@ IF(WIN32)
 	add_definitions( -DWINVER=0x0501 )	
 ENDIF(WIN32)
 
+add_subdirectory(src/editor)
 add_subdirectory(src/client)
 add_subdirectory(src/server)
 add_subdirectory(src/phystest)
