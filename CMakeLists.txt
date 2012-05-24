@@ -10,3 +10,4 @@ ENDIF(WIN32)
 
 add_subdirectory(src/client)
 add_subdirectory(src/server)
+add_subdirectory(src/phystest)
