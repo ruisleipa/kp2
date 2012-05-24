@@ -23,7 +23,7 @@ class ObjectFactory
 		};
 
 	protected:
-		virtual Object* allocate(const Json::Value&) = 0;
+		virtual Object* allocate(const Json::Value&);
 };
 
 };

@@ -11,8 +11,8 @@
 #include "debug/crashmessage.hpp"
 #include "debug/crashcatcher.hpp"
 
-#include "serverobjectfactory.hpp"
 #include "connectionmanager.hpp"
+#include "game/objectfactory.hpp"
 #include "game/state.hpp"
 
 void startServer(int argc,char** argv)
@@ -44,8 +44,8 @@ void startServer(int argc,char** argv)
 	std::ifstream stateStream("gamedata/beginstate.cfg");
 	stateStream >> state;	
 	
-	ServerObjectFactory serverObjectFactory;
-	Game::State gameState(state, serverObjectFactory);
+	Game::ObjectFactory objectFactory;
+	Game::State gameState(state, objectFactory);
 		
 	std::string hostName;
 	
