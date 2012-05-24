@@ -12,14 +12,14 @@ namespace Game
 class Transmission: public Part
 {
 	public:
+		float getEfficiency() const;
 		std::vector<float> getGearRatios() const;
-		int getNeutralGearIndex() const;
 		
 		Transmission(const Json::Value&);
 		virtual void save(Json::Value&) const;
 	
 	private:
-		int neutralGear;
+		float efficiency;
 		std::vector<float> gears;
 		
 };
