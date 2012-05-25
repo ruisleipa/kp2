@@ -7,6 +7,8 @@
 
 #include "ui_mainwindow.h"
 
+#include "models/vehicletablemodel.hpp"
+#include "models/parttablemodel.hpp"
 #include "game/state.hpp"
 #include "game/objectfactory.hpp"
 
@@ -20,6 +22,8 @@ class MainWindow : public QMainWindow
 	private:
 		std::unique_ptr<Ui::MainWindow> ui;
 		std::unique_ptr<Game::State> state;
+		std::unique_ptr<VehicleTableModel> vehicleModel;
+		std::unique_ptr<PartTableModel> partModel;
 
 		std::string fileName;
 
