@@ -83,7 +83,7 @@ class Container : public ContainerSignalsAndSlots
 
 			added(items.size() - 1);
 
-#ifdef KP2_CLIENT
+#ifdef GAME_OBJECTS_QT
 			connect(item, SIGNAL(changed()), this, SLOT(onChange()));
 #endif
 		};
@@ -97,7 +97,7 @@ class Container : public ContainerSignalsAndSlots
 
 			int index = std::distance(items.begin(), it);
 
-#ifdef KP2_CLIENT
+#ifdef GAME_OBJECTS_QT
 			item->disconnect(SIGNAL(changed()), this, SLOT(onChange()));
 #endif
 
@@ -143,7 +143,7 @@ class Container : public ContainerSignalsAndSlots
 			*this = b;
 		};
 
-#ifdef KP2_CLIENT
+#ifdef GAME_OBJECTS_QT
 		virtual void onChange()
 		{
 			// This cast is safe because the objects connected

@@ -6,7 +6,7 @@
 #include "gamemenu.hpp"
 #include "ui_carshopmenu.h"
 #include "game/vehicle.hpp"
-#include "vehicletablemodel.hpp"
+#include "models/vehicletablemodel.hpp"
 
 class CarShopMenu : public GameMenu
 {	

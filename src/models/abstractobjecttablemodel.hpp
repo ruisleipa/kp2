@@ -10,7 +10,7 @@ class AbstractObjectTableModel: public QAbstractTableModel
 
 	public:
 		virtual int getRowCount() const = 0;
-				
+
 		int columnCount(const QModelIndex& parent) const;
 		int rowCount(const QModelIndex& parent) const;
 		QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -24,15 +24,15 @@ class AbstractObjectTableModel: public QAbstractTableModel
 		virtual QVariant getData(int row, int col) const = 0;
 		virtual QVariant getDecoration(int row, int col) const = 0;
 		virtual QVariant getToolTip(int row) const;
-	
+
 	protected slots:
 		virtual void onAdd(int index) = 0;
 		virtual void onRemove(int index) = 0;
 		virtual void onChange(int index) = 0;
-		
+
 	private:
 
-		
+
 };
 
 #endif

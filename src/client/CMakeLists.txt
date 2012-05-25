@@ -31,17 +31,17 @@ set(client_SRCS
 	./mainwindow.cpp
 	./menucontainer.cpp
 	./menu.cpp
-	./abstractobjecttablemodel.cpp
-	./tableview.cpp
 	./playerproxy.cpp
-	./parttablemodel.cpp
 	./multiplayermenu.cpp
 	./settingsmenu.cpp
 	./singleplayermenu.cpp
 	./state.cpp
 	./technicsmenu.cpp
 	./updater.cpp
-	./vehicletablemodel.cpp
+	../views/tableview.cpp
+	../models/vehicletablemodel.cpp
+	../models/parttablemodel.cpp
+	../models/abstractobjecttablemodel.cpp
 	../json/json_reader.cpp
 	../json/json_value.cpp
 	../json/json_writer.cpp
@@ -90,7 +90,7 @@ set(game_SRCS
 
 set(client_MOC_HDRS
 	./carshopmenu.hpp
-	./abstractobjecttablemodel.hpp
+	../models/abstractobjecttablemodel.hpp
 	./connection.hpp
 	./gamemenu.hpp
 	./gamemainmenu.hpp
@@ -108,7 +108,7 @@ set(client_MOC_HDRS
 	./settingsmenu.hpp
 	./singleplayermenu.hpp
 	./technicsmenu.hpp
-	./tableview.hpp
+	../views/tableview.hpp
 	./updater.hpp
 )
 
@@ -116,7 +116,7 @@ find_package(Qt4 REQUIRED)
 
 set(QT_USE_QTNETWORK 1)
 
-add_definitions( -DKP2_CLIENT )
+add_definitions( -DKP2_CLIENT -DGAME_OBJECTS_QT )
 
 include( ${QT_USE_FILE} )
 

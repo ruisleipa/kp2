@@ -4,7 +4,7 @@ int AbstractObjectTableModel::columnCount(const QModelIndex& parent) const
 {
 	if(parent.isValid())
 		return 0;
-	
+
 	return getColumnCount();
 }
 
@@ -36,10 +36,10 @@ QVariant AbstractObjectTableModel::headerData(int section, Qt::Orientation orien
 {
 	if(role != Qt::DisplayRole)
 		return QVariant();
-	
+
 	if(orientation != Qt::Horizontal)
 		return QVariant();
-	
+
 	return QVariant(getHeader(section).c_str());
 }
 

@@ -5,7 +5,7 @@
 
 #include "gamemenu.hpp"
 #include "ui_garagemenu.h"
-#include "vehicletablemodel.hpp"
+#include "models/vehicletablemodel.hpp"
 
 class GarageMenu : public GameMenu
 {

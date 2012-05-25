@@ -8,17 +8,17 @@
 #include "abstractobjecttablemodel.hpp"
 #include "game/container.hpp"
 
-template<class T> 
+template<class T>
 class ObjectTableModel : public AbstractObjectTableModel
 {
 	public:
 		class Field;
-	
+
 		void addField(const Field* field)
 		{
 			fields.push_back(field);
 		}
-		
+
 		int getFieldIndex(const Field* field)
 		{
 			auto it = std::find(fields.begin(), fields.end(), field);
@@ -28,7 +28,7 @@ class ObjectTableModel : public AbstractObjectTableModel
 
 			return -1;
 		}
-				
+
 		class Field
 		{
 			public:
@@ -46,27 +46,27 @@ class ObjectTableModel : public AbstractObjectTableModel
 				{
 					parent->addField(this);
 				};
-			
+
 			private:
 				ObjectTableModel* parent;
 				std::string header;
 				std::function<QVariant(T*)> func;
-				
+
 		};
-		
+
 		virtual int getRowCount() const
 		{
 			return dataSource.getItemCount();
 		}
-	
+
 		T* getObject(int row) const
 		{
 			assert(row >= 0);
 			assert(row < dataSource.getItemCount());
-		
+
 			return dataSource.getByIndex(row);
 		}
-	
+
 		ObjectTableModel(const Game::Container<T>& dataSource):
 			dataSource(dataSource)
 		{
@@ -81,7 +81,7 @@ class ObjectTableModel : public AbstractObjectTableModel
 			return fields[col]->getHeader();
 		}
 
-		virtual int getColumnCount() const 
+		virtual int getColumnCount() const
 		{
 			return fields.size();
 		}
@@ -94,7 +94,7 @@ class ObjectTableModel : public AbstractObjectTableModel
 				++it;
 
 			return fields[col]->getData(*it);
-		}	
+		}
 
 		virtual QVariant getDecoration(int row, int col) const
 		{
@@ -107,25 +107,25 @@ class ObjectTableModel : public AbstractObjectTableModel
 
 		void onAdd(int index)
 		{
-			beginInsertRows(QModelIndex(), index, index);				
+			beginInsertRows(QModelIndex(), index, index);
 			endInsertRows();
 		}
-		
+
 		void onRemove(int index)
 		{
 			beginRemoveRows(QModelIndex(), index, index);
 			endRemoveRows();
 		}
-		
+
 		void onChange(int index)
 		{
 			(void)index;
 		}
-	
+
 	private:
 		const Game::Container<T>& dataSource;
 		std::vector<const Field*> fields;
-		
+
 };
 
 #endif

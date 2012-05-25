@@ -3,17 +3,17 @@
 #include <QHeaderView>
 
 void TableView::hideAllColumns()
-{	
+{
 	for(int i = 0; i < horizontalHeader()->count(); i++)
 		horizontalHeader()->hideSection(i);
-		
+
 	nextVisualIndex = 0;
 }
 
 void TableView::showColumn(int id)
 {
 	horizontalHeader()->showSection(id);
-		
+
 	int from = horizontalHeader()->visualIndex(id);
 
 	horizontalHeader()->moveSection(from, nextVisualIndex);
@@ -35,7 +35,7 @@ TableView::TableView(QWidget* parent):
 
 	for(int i = 0; i < h->count(); ++i)
 		h->setResizeMode(i, QHeaderView::ResizeToContents);
-	
+
         verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 }
 

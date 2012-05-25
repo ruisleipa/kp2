@@ -3,14 +3,14 @@
 
 #include "serializable.hpp"
 
-#ifdef KP2_CLIENT
+#ifdef GAME_OBJECTS_QT
 #include <QObject>
 #endif
 
 namespace Game
 {
 
-#ifdef KP2_CLIENT
+#ifdef GAME_OBJECTS_QT
 
 class ObjectSignals : public QObject
 {

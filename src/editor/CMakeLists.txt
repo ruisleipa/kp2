@@ -9,6 +9,10 @@ set(editor_SRCS
 	../json/json_value.cpp
 	../json/json_writer.cpp
 	../utils/curve.cpp
+	../views/tableview.cpp
+	../models/vehicletablemodel.cpp
+	../models/parttablemodel.cpp
+	../models/abstractobjecttablemodel.cpp
 )
 
 set(game_SRCS
@@ -41,11 +45,15 @@ set(game_SRCS
 
 set(editor_MOC_HDRS
 	./mainwindow.hpp
+	../views/tableview.hpp
+	../models/abstractobjecttablemodel.hpp
+	../game/object.hpp
+	../game/containersignalsandslots.hpp
 )
 
 find_package(Qt4 REQUIRED)
 
-add_definitions( -DKP2_EDITOR )
+add_definitions( -DKP2_EDITOR -DGAME_OBJECTS_QT )
 
 include( ${QT_USE_FILE} )
 

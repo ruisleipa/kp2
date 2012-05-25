@@ -13,7 +13,7 @@ class TableView: public QTableView
 
 		TableView();
 		explicit TableView(QWidget* parent);
-	
+
 	private:
 		int nextVisualIndex;
 };

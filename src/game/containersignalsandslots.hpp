@@ -1,14 +1,14 @@
 #ifndef GAME_CONTAINERSIGNALSANDSLOTS_HPP
 #define GAME_CONTAINERSIGNALSANDSLOTS_HPP
 
-#ifdef KP2_CLIENT
+#ifdef GAME_OBJECTS_QT
 #include <QObject>
 #endif
 
 namespace Game
 {
 
-#ifdef KP2_CLIENT
+#ifdef GAME_OBJECTS_QT
 
 class ContainerSignalsAndSlots : public QObject
 {

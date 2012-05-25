@@ -5,7 +5,7 @@
 
 #include "gamemenu.hpp"
 #include "ui_technicsmenu.h"
-#include "parttablemodel.hpp"
+#include "models/parttablemodel.hpp"
 
 class TechnicsMenu : public GameMenu
 {	
