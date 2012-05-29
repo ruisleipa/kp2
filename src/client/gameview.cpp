@@ -7,11 +7,16 @@ MenuContainer* GameView::getContainer()
 	return ui->menuContainer;
 }
 
+void GameView::onChange(Game::Object* object)
+{
+	update();
+}
+
 void GameView::gameStateLoaded(Client::State* state)
 {
 	player = state->getPlayer();
 	
-	connect(player, SIGNAL(changed()), this, SLOT(update()));
+	player->addListener(this);
 	
 	update();
 }

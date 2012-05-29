@@ -5,17 +5,25 @@
 #include <algorithm>
 
 #include "json/json.h"
+#include "object.hpp"
 #include "objectfactory.hpp"
-#include "containersignalsandslots.hpp"
 
 namespace Game
 {
 
 template<class T>
-class Container : public ContainerSignalsAndSlots
+class Container : public Object::Listener
 {
 	public:
 		typedef std::vector<T*> ContainerType;
+
+		class Listener
+		{
+			public:
+				virtual void onChange(Container<T>* container, int index) = 0;
+				virtual void onAdd(Container<T>* container, int index) = 0;
+				virtual void onRemove(Container<T>* container, int index) = 0;
+		};
 
 		typename ContainerType::iterator begin()
 		{
@@ -83,9 +91,7 @@ class Container : public ContainerSignalsAndSlots
 
 			added(items.size() - 1);
 
-#ifdef GAME_OBJECTS_QT
-			connect(item, SIGNAL(changed()), this, SLOT(onChange()));
-#endif
+			item->addListener(this);
 		};
 
 		virtual void remove(T* item)
@@ -97,9 +103,7 @@ class Container : public ContainerSignalsAndSlots
 
 			int index = std::distance(items.begin(), it);
 
-#ifdef GAME_OBJECTS_QT
-			item->disconnect(SIGNAL(changed()), this, SLOT(onChange()));
-#endif
+			item->removeListener(this);
 
 			items.erase(it);
 
@@ -120,6 +124,16 @@ class Container : public ContainerSignalsAndSlots
 			}
 		};
 
+		void addListener(Listener* listener) const
+		{
+			listeners.push_back(listener);
+		};
+
+		void removeListener(Listener* listener) const
+		{
+			listeners.erase(std::find(listeners.begin(), listeners.end(), listener));
+		};
+
 		Container(const Json::Value& value, ObjectFactory& factory)
 		{
 			for(auto item : value["items"])
@@ -135,21 +149,11 @@ class Container : public ContainerSignalsAndSlots
 			}
 		};
 
-		Container() = default;
-
-	protected:
-		Container(const Container& b)
-		{
-			*this = b;
-		};
-
-#ifdef GAME_OBJECTS_QT
-		virtual void onChange()
+		virtual void onChange(Object* object)
 		{
 			// This cast is safe because the objects connected
-			// to this slot by the add-method are always of the
-			// correct type.
-			T* item = static_cast<T*>(sender());
+			// by the add-method are always of the correct type.
+			T* item = static_cast<T*>(object);
 
 			auto it = std::find(items.begin(), items.end(), item);
 
@@ -160,10 +164,37 @@ class Container : public ContainerSignalsAndSlots
 
 			changed(index);
 		};
-#endif
+
+		Container() = default;
+
+	protected:
+		Container(const Container& b)
+		{
+			*this = b;
+		};
 
 	private:
+		void added(int index)
+		{
+			for(Listener* listener : listeners)
+				listener->onAdd(this, index);
+		}
+
+		void removed(int index)
+		{
+			for(Listener* listener : listeners)
+				listener->onRemove(this, index);
+		}
+
+		void changed(int index)
+		{
+			for(Listener* listener : listeners)
+				listener->onChange(this, index);
+		}
+
 		ContainerType items;
+
+		mutable std::vector<Listener*> listeners;
 };
 
 };

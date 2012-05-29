@@ -47,8 +47,6 @@ set(editor_MOC_HDRS
 	./mainwindow.hpp
 	../views/tableview.hpp
 	../models/abstractobjecttablemodel.hpp
-	../game/object.hpp
-	../game/containersignalsandslots.hpp
 )
 
 find_package(Qt4 REQUIRED)

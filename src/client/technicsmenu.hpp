@@ -7,11 +7,13 @@
 #include "ui_technicsmenu.h"
 #include "models/parttablemodel.hpp"
 
-class TechnicsMenu : public GameMenu
+class TechnicsMenu : public GameMenu, public Game::Object::Listener
 {	
 	Q_OBJECT
 
 	public:
+		void onChange(Game::Object* object);
+
 		explicit TechnicsMenu(QWidget *parent = 0);
 
 	public slots:

@@ -25,11 +25,6 @@ class AbstractObjectTableModel: public QAbstractTableModel
 		virtual QVariant getDecoration(int row, int col) const = 0;
 		virtual QVariant getToolTip(int row) const;
 
-	protected slots:
-		virtual void onAdd(int index) = 0;
-		virtual void onRemove(int index) = 0;
-		virtual void onChange(int index) = 0;
-
 	private:
 
 

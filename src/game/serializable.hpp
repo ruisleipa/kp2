@@ -12,6 +12,7 @@ class Serializable
 		virtual void save(Json::Value&) const;
 		
 		Serializable() = default;
+		Serializable(const Serializable&) = default;
 		Serializable(const Json::Value&);
 };
 

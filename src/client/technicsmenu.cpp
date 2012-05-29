@@ -2,6 +2,11 @@
 
 #include <QMessageBox>
 
+void TechnicsMenu::onChange(Game::Object* object)
+{
+	playerChanged();
+}
+
 TechnicsMenu::TechnicsMenu(QWidget *parent) :
 	GameMenu(parent),
 	ui(new Ui::TechnicsMenu)
@@ -30,7 +35,7 @@ void TechnicsMenu::gameStateLoaded(Client::State* state)
 	playerView->showColumn(playerModel->name.getIndex());
 	playerView->horizontalHeader()->setResizeMode(playerModel->name.getIndex(), QHeaderView::Stretch);
 
-	connect(state->getPlayer(), SIGNAL(changed()), this, SLOT(playerChanged()));
+	state->getPlayer()->addListener(this);
 }
 
 void TechnicsMenu::on_okButton_clicked()

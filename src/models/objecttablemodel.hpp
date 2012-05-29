@@ -9,7 +9,7 @@
 #include "game/container.hpp"
 
 template<class T>
-class ObjectTableModel : public AbstractObjectTableModel
+class ObjectTableModel : public AbstractObjectTableModel, public Game::Container<T>::Listener
 {
 	public:
 		class Field;
@@ -67,12 +67,40 @@ class ObjectTableModel : public AbstractObjectTableModel
 			return dataSource.getByIndex(row);
 		}
 
+		void onAdd(Game::Container<T>* container, int index)
+		{
+			(void)container;
+
+			beginInsertRows(QModelIndex(), index, index);
+			endInsertRows();
+		}
+
+		void onRemove(Game::Container<T>* container, int index)
+		{
+			(void)container;
+
+			beginRemoveRows(QModelIndex(), index, index);
+			endRemoveRows();
+		}
+
+		void onChange(Game::Container<T>* container, int i)
+		{
+			dataChanged(index(i, 0), index(i, columnCount(QModelIndex()) - 1));
+
+			std::cout << i << std::endl;
+
+			(void)container;
+		}
+
 		ObjectTableModel(const Game::Container<T>& dataSource):
 			dataSource(dataSource)
 		{
-			connect(&dataSource, SIGNAL(added(int)), this, SLOT(onAdd(int)));
-			connect(&dataSource, SIGNAL(removed(int)), this, SLOT(onRemove(int)));
-			connect(&dataSource, SIGNAL(changed(int)), this, SLOT(onChange(int)));
+			dataSource.addListener(this);
+		}
+
+		~ObjectTableModel()
+		{
+			dataSource.removeListener(this);
 		}
 
 	protected:
@@ -86,7 +114,7 @@ class ObjectTableModel : public AbstractObjectTableModel
 			return fields.size();
 		}
 
-                virtual QVariant getData(int row, int col) const
+		virtual QVariant getData(int row, int col) const
 		{
 			auto it = dataSource.begin();
 
@@ -103,23 +131,6 @@ class ObjectTableModel : public AbstractObjectTableModel
 			std::advance(it, row);
 
 			return fields[col]->getDecoration(*it);
-		}
-
-		void onAdd(int index)
-		{
-			beginInsertRows(QModelIndex(), index, index);
-			endInsertRows();
-		}
-
-		void onRemove(int index)
-		{
-			beginRemoveRows(QModelIndex(), index, index);
-			endRemoveRows();
-		}
-
-		void onChange(int index)
-		{
-			(void)index;
 		}
 
 	private:

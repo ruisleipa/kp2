@@ -3,39 +3,32 @@
 
 #include "serializable.hpp"
 
-#ifdef GAME_OBJECTS_QT
-#include <QObject>
-#endif
-
 namespace Game
 {
 
-#ifdef GAME_OBJECTS_QT
-
-class ObjectSignals : public QObject
-{
-	Q_OBJECT
-	
-	signals:
-		void changed();
-};
-
-#else
-
-class ObjectSignals
-{
-	protected:
-		void changed(){};
-};
-
-#endif
-
-class Object : public ObjectSignals, public Serializable
+class Object : public Serializable
 {
 	public:
+		class Listener
+		{
+			public:
+				virtual void onChange(Object* object) = 0;
+		};
+
+		void addListener(Listener* listener);
+		void removeListener(Listener* listener);
+
+		Object& operator=(const Object&);
+
 		Object() = default;
 		Object(const Object&) = default;
 		Object(const Json::Value&);
+
+	protected:
+		void changed();
+
+	private:
+		std::vector<Listener*> listeners;
 };
 
 };

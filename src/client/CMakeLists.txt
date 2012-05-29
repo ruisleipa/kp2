@@ -103,8 +103,6 @@ set(client_MOC_HDRS
 	./menu.hpp
 	./menucontainer.hpp
 	./multiplayermenu.hpp
-	../game/object.hpp
-	../game/containersignalsandslots.hpp
 	./settingsmenu.hpp
 	./singleplayermenu.hpp
 	./technicsmenu.hpp

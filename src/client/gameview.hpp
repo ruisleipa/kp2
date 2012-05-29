@@ -11,13 +11,15 @@
 
 #include "menu.hpp"
 
-class GameView : public Menu
+class GameView : public Menu, public Game::Object::Listener
 {
 	Q_OBJECT
 
 	public:
 		MenuContainer* getContainer();
 		
+		void onChange(Game::Object* object);
+
 		explicit GameView(QWidget *parent = 0);
 	
 	public slots:
