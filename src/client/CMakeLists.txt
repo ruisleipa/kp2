@@ -1,4 +1,8 @@
-set(client_UIS
+cmake_minimum_required(VERSION 2.8)
+
+project(kp2_client)
+
+set(UI
 	./ui/carlistmenu.ui
 	./ui/carshopmenu.ui
 	./ui/gamemainmenu.ui
@@ -16,7 +20,7 @@ set(client_UIS
 	./ui/technicsmenu.ui
 )
 
-set(client_SRCS
+set(SRC
 	./carshopmenu.cpp
 	./clientobjectfactory.cpp
 	./connection.cpp
@@ -60,81 +64,16 @@ set(client_SRCS
 	../exception/exception.cpp
 )
 
-set(game_SRCS
-	../game/camshaft.cpp
-	../game/charger.cpp
-	../game/chassis.cpp
-	../game/clutch.cpp
-	../game/cooler.cpp
-	../game/cylinderhead.cpp
-	../game/differential.cpp
-	../game/engine.cpp
-	../game/exhaustmanifold.cpp
-	../game/exhaustpipe.cpp
-	../game/fuelintake.cpp
-	../game/fuelpump.cpp
-	../game/injector.cpp
-	../game/intakemanifold.cpp
-	../game/object.cpp
-	../game/objectfactory.cpp
-	../game/part.cpp
-	../game/partcontainer.cpp
-	../game/player.cpp
-	../game/serializable.cpp
-	../game/state.cpp
-	../game/tire.cpp
-	../game/transmission.cpp
-	../game/upgrade.cpp
-	../game/vehicle.cpp
-)
-
-set(client_MOC_HDRS
-	./carshopmenu.hpp
-	../models/abstractobjecttablemodel.hpp
-	./connection.hpp
-	./gamemenu.hpp
-	./gamemainmenu.hpp
-	./gameloadingscreen.hpp
-	./gameview.hpp
-	./garagemenu.hpp
-	./loadingscreen.hpp
-	./mainmenu.hpp
-	./mainwindow.hpp
-	./menu.hpp
-	./menucontainer.hpp
-	./multiplayermenu.hpp
-	./settingsmenu.hpp
-	./singleplayermenu.hpp
-	./technicsmenu.hpp
-	../views/tableview.hpp
-	./updater.hpp
-)
-
-find_package(Qt4 REQUIRED)
-
 set(QT_USE_QTNETWORK 1)
 
-add_definitions( -DKP2_CLIENT -DGAME_OBJECTS_QT )
+include(../game.cmake)
+include(../qt.cmake)
+include(../common.cmake)
 
-include( ${QT_USE_FILE} )
-
-qt4_wrap_ui( client_UI_HDRS ${client_UIS} )
-
-qt4_wrap_cpp( client_MOC_SRCS ${client_MOC_HDRS} )
-
-include_directories(../)
-include_directories(./)
-include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/..)
-
-add_executable(kp2_client  ${client_SRCS} ${client_MOC_SRCS} ${game_SRCS} ${client_UI_HDRS} )
-
-target_link_libraries(kp2_client ${QT_LIBRARIES} audiere) 
+target_link_libraries(kp2_client audiere)
 
 IF(WIN32)
-	target_link_libraries(kp2_client ws2_32)	
-	add_definitions( -mwindows )
+	target_link_libraries(kp2_client ws2_32)
 ENDIF(WIN32)
 
 

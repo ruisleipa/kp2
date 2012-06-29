@@ -1,32 +1,8 @@
-set(game_SRCS
-	../game/camshaft.cpp
-	../game/charger.cpp
-	../game/chassis.cpp
-	../game/clutch.cpp
-	../game/cooler.cpp
-	../game/cylinderhead.cpp
-	../game/differential.cpp
-	../game/engine.cpp
-	../game/exhaustmanifold.cpp
-	../game/exhaustpipe.cpp
-	../game/fuelintake.cpp
-	../game/fuelpump.cpp
-	../game/injector.cpp
-	../game/intakemanifold.cpp
-	../game/object.cpp
-	../game/objectfactory.cpp
-	../game/part.cpp
-	../game/partcontainer.cpp
-	../game/player.cpp
-	../game/serializable.cpp
-	../game/state.cpp
-	../game/tire.cpp
-	../game/transmission.cpp
-	../game/upgrade.cpp
-	../game/vehicle.cpp
-)
+cmake_minimum_required(VERSION 2.8)
 
-set(server_SRCS
+project(kp2_server)
+
+set(SRC
 	./connection.cpp
 	./connectionmanager.cpp
 	./main.cpp
@@ -55,17 +31,8 @@ set(server_SRCS
 	../exception/exception.cpp
 )
 
-include_directories(../)
-include_directories(./)
-include_directories( ${CMAKE_BINARY_DIR} )
-
-add_definitions( -DKP2_SERVER )
-
-add_executable(kp2_server  ${server_SRCS} ${game_SRCS} )
-
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/..)
-
-target_link_libraries(kp2_server)
+include(../game.cmake)
+include(../common.cmake)
 
 IF(WIN32)
 	target_link_libraries(kp2_server ws2_32 bfd iberty psapi imagehlp intl)
