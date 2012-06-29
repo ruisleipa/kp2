@@ -11,7 +11,8 @@ namespace Ui {
 }
 
 class SinglePlayerMenu : public Menu
-{	Q_OBJECT
+{
+	Q_OBJECT
 
 public:
 	explicit SinglePlayerMenu(Connection&, QWidget *parent = 0);
