@@ -112,7 +112,7 @@ class Container : public Object::Listener
 
 		virtual void save(Json::Value& value) const
 		{
-			value["items"].resize(0);
+			value.resize(0);
 
 			for(T* item : items)
 			{
@@ -120,7 +120,7 @@ class Container : public Object::Listener
 
 				item->save(i);
 
-				value["items"].append(i);
+				value.append(i);
 			}
 		};
 
@@ -136,14 +136,14 @@ class Container : public Object::Listener
 
 		Container(const Json::Value& value, ObjectFactory& factory)
 		{
-			for(auto item : value["items"])
+			for(auto item : value)
 			{
 				Object* object = factory.create(item);
 
 				T* ptr = dynamic_cast<T*>(object);
 
 				if(ptr)
-					items.push_back(ptr);
+					add(ptr);
 				else
 					std::cerr << "Invalid item in container" << std::endl << item << std::endl;
 			}

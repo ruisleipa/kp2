@@ -1,112 +1,47 @@
 #include "partcontainer.hpp"
 
+#include "part.hpp"
+
 namespace Game
 {
 
-void PartContainer::add(Part* part)
+Part* PartContainer::Slot::getPart() const
 {
-	for(Part* attachTo : *this)
-	{
-		int alreadyAttached = 0;
-
-		for(Part* attachedPart : getAttachedParts(attachTo))
-		{
-			if(typeid(*attachedPart) == typeid(*part))
-				alreadyAttached++;
-		}
-
-		if(attachTo->getAttachmentLimitOfType(part) > alreadyAttached)
-		{
-			attachPart(attachTo, part);
-			Container::add(part);
-			return;
-		}
-	}
-
-	throw ExtraPartException();
+	return part.get();
 }
 
-void PartContainer::remove(Part* part)
+Part* PartContainer::Slot::detachPart()
 {
-	attachments.erase(part);
-
-	for(auto& p : attachments)
-	{
-		p.second.remove(part);
-	}
-
-	Container::remove(part);
+	return part.release();
 }
 
-PartContainer::Parts PartContainer::getAttachedParts(Part* part) const
+void PartContainer::Slot::attachPart(Part* part)
 {
-	if(attachments.find(part) != attachments.end())
-		return attachments.at(part);
-
-	return Parts();
+	if(this->part.get())
+		throw AlreadyInUseException();
+		
+	this->part.reset(part);
 }
 
-PartContainer::Parts PartContainer::getAllAttachedParts(Part* part) const
+PartContainer::Slots PartContainer::getSlots() const
 {
-	Parts parts = getAttachedParts(part);
-
-	for(Part* p : parts)
-	{
-		Parts tmp = getAllAttachedParts(p);
-
-		parts.insert(parts.end(), tmp.begin(), tmp.end());
-	}
-
-	return parts;
+	return registeredSlots;
 }
 
-PartContainer::PartContainer(const Json::Value& value, ObjectFactory& factory):
-	Container(value, factory)
+PartContainer::Slot& PartContainer::getSlotByName(const std::string& name) const
 {
-	int attachToIndex = 0;
-
-	for(auto indexesOfAttachedParts : value["attachments"])
-	{
-		Part* attachTo = getByIndex(attachToIndex);
-
-		for(auto attachedPartIndex : indexesOfAttachedParts)
-		{
-			Part* attachedPart = getByIndex(attachedPartIndex.asInt());
-
-			attachments[attachTo].push_back(attachedPart);
-		}
-
-		attachToIndex++;
-	}
+	return *registeredSlots.at(name);
 }
 
-void PartContainer::save(Json::Value& value) const
+PartContainer::PartContainer(const Json::Value& value):
+	Object(value)
 {
-	Container::save(value);
 
-	value["attachments"].resize(0);
-
-	for(Part* part : *this)
-	{
-		Json::Value attachments;
-
-		attachments.resize(0);
-
-		for(Part* attachedPart : getAttachedParts(part))
-		{
-			attachments.append(getIndexOf(attachedPart));
-		}
-
-		value["attachments"].append(attachments);
-	}
 }
 
-void PartContainer::attachPart(Part* attachTo, Part* part)
+void PartContainer::registerSlot(const std::string& name, PartContainer::Slot* slot)
 {
-	if(attachTo->canAttachPart(part))
-		attachments[attachTo].push_back(part);
-	else
-		throw IncompatiblePartException();
+	registeredSlots[name] = slot;
 }
 
 }

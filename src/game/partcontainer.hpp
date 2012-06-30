@@ -1,44 +1,105 @@
 #ifndef GAME_PARTCONTAINER_HPP
 #define GAME_PARTCONTAINER_HPP
 
+#include <string>
 #include <map>
-#include <list>
+#include <memory>
 
-#include "exception.hpp"
-#include "part.hpp"
-#include "container.hpp"
+#include "object.hpp"
 
 namespace Game
 {
 
-class PartContainer : public Container<Part>
+class Part;
+
+class PartContainer : public Object
 {
 	public:
-		class IncompatiblePartException : public Game::Exception
+		class Slot
 		{
+			public:
+				class AlreadyInUseException
+				{
 
+				};
+
+				class IncompatibleTypeException
+				{
+
+				};
+
+				virtual Part* getPart() const;
+				virtual Part* detachPart();
+				virtual void attachPart(Part* part);
+
+			private:
+				std::unique_ptr<Part> part;
 		};
 
-		class ExtraPartException : public Game::Exception
-		{
+		typedef const std::map<std::string, Slot*>& Slots;
 
+		Slots getSlots() const;
+		Slot& getSlotByName(const std::string& name) const;
+
+		PartContainer() = default;
+		PartContainer(const Json::Value&);
+
+	protected:
+		template <class T>
+		class TypedSlot : public Slot
+		{
+			public:
+				virtual T* getPart() const
+				{
+					return static_cast<T*>(Slot::getPart());
+				}
+
+				virtual T* detachPart()
+				{
+					return static_cast<T*>(Slot::detachPart());
+				}
+
+				virtual void attachPart(Part* part)
+				{
+					if(dynamic_cast<T*>(part))
+						Slot::attachPart(part);
+					else
+						throw Slot::IncompatibleTypeException();
+				}
+
+				TypedSlot() = default;
+
+				TypedSlot(const Json::Value& value)
+				{
+					if(!value.isNull())
+					{
+						T* part = new T(value);
+
+						attachPart(part);
+					}
+				}
+
+				virtual void save(Json::Value& value) const
+				{
+					if(getPart())
+					{
+						Json::Value part;
+
+						getPart()->save(part);
+
+						value = part;
+					}
+					else
+					{
+						value = Json::Value();
+					}
+				}
 		};
 
-		typedef std::list<Part*> Parts;
-
-		virtual void add(Part* part);
-		virtual void remove(Part* part);
-
-		Parts getAttachedParts(Part* part) const;
-		Parts getAllAttachedParts(Part* part) const;
-
-		PartContainer(const Json::Value& value, ObjectFactory& factory);
-		virtual void save(Json::Value& value) const;
+		void registerSlot(const std::string& name, Slot* slot);
 
 	private:
-		void attachPart(Part* part, Part* partToAttach);
-
-		std::map<Part*, Parts> attachments;
+		std::map<std::string, Slot*> registeredSlots;
 };
 
 };

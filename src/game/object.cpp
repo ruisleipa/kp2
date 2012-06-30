@@ -17,7 +17,7 @@ void Object::removeListener(Object::Listener* listener)
 
 Object& Object::operator=(const Object&)
 {
-	changed();
+
 }
 
 Object::Object(const Json::Value& value):

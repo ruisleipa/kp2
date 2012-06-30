@@ -1,69 +1,70 @@
 #include "chassis.hpp"
 
-#include "engine.hpp"
-#include "tire.hpp"
-
 namespace Game
 {
 
-bool Chassis::canAttachPart(const Part* part) const
+float Chassis::getDragCoefficient() const
 {
-	const Tire* tire = dynamic_cast<const Tire*>(part);
-
-	if(tire)
-		return true;
-
-	const Engine* engine = dynamic_cast<const Engine*>(part);
-
-	if(engine)
-	{
-		if(engine->getVolume() > maxEngineVolume)
-			return false;
-
-		if(engine->getCylinderCount() > maxEngineCylinderCount)
-			return false;
-
-		return true;
-	}
-
-	return false;
+	return dragCoefficient;
 }
 
-int Chassis::getAttachmentLimitOfType(const Part* part) const
+const Chassis::Dimensions& Chassis::getDimensions() const
 {
-	if(dynamic_cast<const Engine*>(part))
-		return 1;
-		
-	if(dynamic_cast<const Tire*>(part))
-		return 4;
-		
-	return 0;
+	return dimensions;
+}
+
+const Chassis::EngineConstraints& Chassis::getEngineConstraints() const
+{
+	return engineConstraints;
+}
+
+void Chassis::applyPropertiesOf(const Chassis& chassis)
+{
+	dragCoefficient = chassis.getDragCoefficient();
+	dimensions = chassis.getDimensions();
+	engineConstraints = chassis.getEngineConstraints();
+}
+
+Chassis::Chassis(float mass, float dragCoefficient, const Dimensions& dimensions, const EngineConstraints& engineConstraints):
+	Part(0, mass),
+	dragCoefficient(dragCoefficient),
+	dimensions(dimensions),
+	engineConstraints(engineConstraints)
+{
+	registerSlot("cylinderBlock", &cylinderBlock);
 }
 
 Chassis::Chassis(const Json::Value& value):
-	Part(value)
+	Part(value),
+	cylinderBlock(value["cylinderBlock"])
 {
 	dragCoefficient = value["dragCoefficient"].asDouble();
-	length = value["length"].asDouble();
-	width = value["width"].asDouble();
-	height = value["height"].asDouble();
-	wheelbase = value["wheelbase"].asDouble();
-	maxEngineVolume = value["maxEngineVolume"].asInt();
-	maxEngineCylinderCount = value["maxEngineCylinderCount"].asInt();
+	dimensions.length = value["dimensions"]["length"].asDouble();
+	dimensions.width = value["dimensions"]["width"].asDouble();
+	dimensions.height = value["dimensions"]["height"].asDouble();
+	dimensions.wheelbase = value["dimensions"]["wheelbase"].asDouble();
+	dimensions.axleTrack = value["dimensions"]["axleTrack"].asDouble();
+	engineConstraints.maxVolume = value["engineConstraints"]["maxEngineVolume"].asInt();
+	engineConstraints.maxCylinderCount = value["engineConstraints"]["maxEngineCylinderCount"].asInt();
+
+	registerSlot("cylinderBlock", &cylinderBlock);
 }
 
 void Chassis::save(Json::Value& value) const
 {
 	Part::save(value);
 
-	value["type"] = "chassis";
+	value["type"] = "Chassis";
 	value["dragCoefficient"] = dragCoefficient;
-	value["length"] = length;
-	value["width"] = width;
-	value["height"] = height;
-	value["wheelbase"] = wheelbase;
-	value["maxEngineVolume"] = maxEngineVolume;
-	value["maxEngineCylinderCount"] = maxEngineCylinderCount;
+	value["dimensions"]["length"] = dimensions.length;
+	value["dimensions"]["width"] = dimensions.width;
+	value["dimensions"]["height"] = dimensions.height;
+	value["dimensions"]["wheelbase"] = dimensions.wheelbase;
+	value["dimensions"]["axleTrack"] = dimensions.axleTrack;
+	value["engineConstraints"]["maxEngineVolume"] = engineConstraints.maxVolume;
+	value["engineConstraints"]["maxEngineCylinderCount"] = engineConstraints.maxCylinderCount;
+
+	cylinderBlock.save(value["cylinderBlock"]);
 }
 
 }

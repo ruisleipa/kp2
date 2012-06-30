@@ -28,14 +28,14 @@ const Container<Vehicle>& State::getShopVehicles() const
 	return vehicles;
 }
 
+void State::addShopVehicle(Vehicle* vehicle)
+{
+	vehicles.add(vehicle);
+}
+
 const Container<Part>& State::getShopParts() const
 {
 	return parts;
-}
-
-const Container<Upgrade>& State::getUpgrades() const
-{
-	return upgrades;
 }
 
 void State::save(Json::Value& value) const
@@ -43,7 +43,12 @@ void State::save(Json::Value& value) const
 	players.save(value["players"]);
 	vehicles.save(value["vehicles"]);
 	parts.save(value["parts"]);
-	upgrades.save(value["upgrades"]);
+}
+
+State::State(ObjectFactory& objectFactory):
+	objectFactory(objectFactory)
+{
+
 }
 
 State::State(const Json::Value& value, ObjectFactory& objectFactory):
@@ -51,8 +56,7 @@ State::State(const Json::Value& value, ObjectFactory& objectFactory):
 	objectFactory(objectFactory),
 	players(value["players"], objectFactory),
 	vehicles(value["vehicles"], objectFactory),
-	parts(value["parts"], objectFactory),
-	upgrades(value["upgrades"], objectFactory)
+	parts(value["parts"], objectFactory)
 {
 	
 }

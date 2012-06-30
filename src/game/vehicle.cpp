@@ -8,6 +8,11 @@ const std::string& Vehicle::getName() const
 	return name;
 }
 
+const std::string& Vehicle::getInfo() const
+{
+	return info;
+}
+
 float Vehicle::getMass() const
 {
 	return 0;
@@ -18,60 +23,60 @@ int Vehicle::getPrice() const
 	return price;
 }
 
+int Vehicle::getYear() const
+{
+	return year;
+}
+
 const std::string& Vehicle::getImageName() const
 {
 	return imageName;
 }
 
-const Container<Part>& Vehicle::getParts() const
+void Vehicle::applyPropertiesOf(const Vehicle& vehicle)
 {
-	return parts;
+	name = vehicle.getName();
+	price = vehicle.getPrice();
+	year = vehicle.getYear();
+	info = vehicle.getInfo();
+	imageName = vehicle.getImageName();
 }
 
-void Vehicle::attachPart(Part* part)
+Vehicle::Vehicle(const std::string& name, int price, int year, const std::string& info, const std::string& imageName):
+	name(name),
+	price(price),
+	year(year),
+	info(info),
+	imageName(imageName)
 {
-	parts.add(part);
-}
-
-PartContainer::Parts Vehicle::detachPart(Part* part)
-{
-	auto detachedParts = parts.getAllAttachedParts(part);
-
-	detachedParts.push_back(part);
-
-	for(Part* p : detachedParts)
-		parts.remove(p);
-
-	Json::Value v;
-
-	save(v);
-
-	std::cout << v << std::endl;
-
-	return detachedParts;
+	registerSlot("chassis", &chassis);
 }
 
 Vehicle::Vehicle(const Json::Value& value, ObjectFactory& factory):
-	Object(value),
-	parts(value["parts"], factory)
+	PartContainer(value),
+	chassis(value["chassis"]),
+	name(value["name"].asString()),
+	price(value["price"].asUInt()),
+	year(value["year"].asUInt()),
+	info(value["info"].asString()),
+	imageName(value["imageName"].asString())
 {
-	name = value["name"].asString();
-	price = value["price"].asUInt();
-	info = value["info"].asString();
-	imageName = value["imageName"].asString();	
+	registerSlot("chassis", &chassis);
 }
 
 void Vehicle::save(Json::Value& value) const
 {
-	Object::save(value);
+	PartContainer::save(value);
 
-	value["type"] = "vehicle";
+	value["type"] = "Vehicle";
+
+	chassis.save(value["chassis"]);
+
 	value["name"] = name;
 	value["price"] = price;
+	value["year"] = year;
 	value["info"] = info;
 	value["imageName"] = imageName;
-
-	parts.save(value["parts"]);
 }
 
 }

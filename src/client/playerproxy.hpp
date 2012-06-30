@@ -18,10 +18,6 @@ class PlayerProxy : public Game::Player
 		virtual void buyPart(const Game::Part* part);
 		virtual void buyVehicle(const Game::Vehicle* vehicle);
 		
-		virtual void attachPart(Game::Part* part);
-		virtual void detachPart(Game::Part* part);
-		virtual void upgradePart(Game::Part* part, const Game::Upgrade* upgrade);
-
 		PlayerProxy(const Json::Value& value, Game::ObjectFactory& factory, Connection& connection);
 	
 	private:

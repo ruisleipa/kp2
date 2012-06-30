@@ -5,7 +5,6 @@ project(kp2_phystest)
 set(SRC
 	../physics/clutch.cpp
 	../physics/axle.cpp
-	../physics/engine.cpp
 	../physics/starter.cpp
 	../physics/flywheel.cpp
 	../physics/transmission.cpp

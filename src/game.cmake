@@ -1,19 +1,9 @@
 set(SRC
 	${SRC}
-	../game/camshaft.cpp
-	../game/charger.cpp
 	../game/chassis.cpp
-	../game/clutch.cpp
-	../game/cooler.cpp
+	../game/crankshaft.cpp
+	../game/cylinderblock.cpp
 	../game/cylinderhead.cpp
-	../game/differential.cpp
-	../game/engine.cpp
-	../game/exhaustmanifold.cpp
-	../game/exhaustpipe.cpp
-	../game/fuelintake.cpp
-	../game/fuelpump.cpp
-	../game/injector.cpp
-	../game/intakemanifold.cpp
 	../game/object.cpp
 	../game/objectfactory.cpp
 	../game/part.cpp
@@ -21,8 +11,6 @@ set(SRC
 	../game/player.cpp
 	../game/serializable.cpp
 	../game/state.cpp
-	../game/tire.cpp
 	../game/transmission.cpp
-	../game/upgrade.cpp
 	../game/vehicle.cpp
 )

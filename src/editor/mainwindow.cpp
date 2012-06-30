@@ -44,13 +44,7 @@ void MainWindow::on_openAction_triggered()
 	vehicleView->showColumn(vehicleModel->name.getIndex());
 	vehicleView->horizontalHeader()->setResizeMode(vehicleModel->name.getIndex(), QHeaderView::Stretch);
 
-	partModel.reset(new PartTableModel(state->getShopParts()));
 
-	TableView* partView = ui->partView;
-	partView->setModel(partModel.get());
-	partView->hideAllColumns();
-	partView->showColumn(partModel->name.getIndex());
-	partView->horizontalHeader()->setResizeMode(partModel->name.getIndex(), QHeaderView::Stretch);
 
 	ui->saveAction->setEnabled(true);
 	ui->saveAsAction->setEnabled(true);
@@ -93,8 +87,6 @@ void MainWindow::on_closeAction_triggered()
 	vehicleModel.reset(0);
 	ui->vehicleView->setModel(vehicleModel.get());
 
-	partModel.reset(0);
-	ui->partView->setModel(partModel.get());
 
 	state.reset(0);
 

@@ -53,38 +53,6 @@ void Player::buyVehicle(const Vehicle* vehicle)
 	changed();
 }
 
-void Player::attachPart(Part* part)
-{
-	if(!parts.contains(part))
-		throw NoSuchPartException();
-
-	if(!getActiveVehicle())
-		return;
-
-	getActiveVehicle()->attachPart(part);
-
-	parts.remove(part);
-}
-
-void Player::detachPart(Part* part)
-{
-	if(!getActiveVehicle())
-		return;
-
-	PartContainer::Parts detachedParts;
-	
-	detachedParts = getActiveVehicle()->detachPart(part);
-
-	for(Part* p : detachedParts)
-		parts.add(p);
-}
-
-void Player::upgradePart(Part* part, const Upgrade* upgrade)
-{
-	(void)part;
-	(void)upgrade;
-}
-
 const std::string& Player::getName() const
 {
 	return name;
@@ -133,7 +101,7 @@ void Player::save(Json::Value& value) const
 {
 	Object::save(value);
 
-	value["type"] = "player";
+	value["type"] = "Player";
 	value["name"] = name;
 	value["money"] = money;
 	value["activeVehicle"] = vehicles.getIndexOf(activeVehicle);

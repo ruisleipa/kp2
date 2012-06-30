@@ -17,7 +17,6 @@ set(UI
 	./ui/scoresmenu.ui
 	./ui/settingsmenu.ui
 	./ui/singleplayermenu.ui
-	./ui/technicsmenu.ui
 )
 
 set(SRC
@@ -40,11 +39,9 @@ set(SRC
 	./settingsmenu.cpp
 	./singleplayermenu.cpp
 	./state.cpp
-	./technicsmenu.cpp
 	./updater.cpp
 	../views/tableview.cpp
 	../models/vehicletablemodel.cpp
-	../models/parttablemodel.cpp
 	../models/abstractobjecttablemodel.cpp
 	../json/json_reader.cpp
 	../json/json_value.cpp

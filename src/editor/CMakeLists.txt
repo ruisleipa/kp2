@@ -15,7 +15,6 @@ set(SRC
 	../utils/curve.cpp
 	../views/tableview.cpp
 	../models/vehicletablemodel.cpp
-	../models/parttablemodel.cpp
 	../models/abstractobjecttablemodel.cpp
 )
 

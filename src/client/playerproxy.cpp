@@ -54,46 +54,6 @@ void PlayerProxy::buyVehicle(const Game::Vehicle* vehicle)
 	makeCall("buyVehicle", arguments);
 }
 
-void PlayerProxy::attachPart(Game::Part* part)
-{
-	std::cout << "PlayerProxy::attachPart: " << part << std::endl;
-
-	Json::Value arguments;
-
-	arguments["part"] = this->getParts().getIndexOf(part);
-
-	Player::attachPart(part);
-
-	makeCall("attachPart", arguments);
-}
-
-void PlayerProxy::detachPart(Game::Part* part)
-{
-	std::cout << "PlayerProxy::detachPart: " << part << std::endl;
-
-	Json::Value arguments;
-
-	arguments["part"] = this->getActiveVehicle()->getParts().getIndexOf(part);
-
-	Player::detachPart(part);
-
-	makeCall("detachPart", arguments);
-}
-
-void PlayerProxy::upgradePart(Game::Part* part, const Game::Upgrade* upgrade)
-{
-	std::cout << "PlayerProxy::upgradePart: " << part << ", " << upgrade << std::endl;
-
-	Player::upgradePart(part, upgrade);
-
-	Json::Value arguments;
-
-	arguments["part"] = this->getParts().getIndexOf(part);
-	arguments["upgrade"] = connection.getGameState().getUpgrades().getIndexOf(upgrade);
-
-	makeCall("upgradePart", arguments);
-}
-
 PlayerProxy::PlayerProxy(const Json::Value& value, Game::ObjectFactory& factory, Connection& connection):
 	Player(value, factory),
 	connection(connection)

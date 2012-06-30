@@ -4,27 +4,25 @@
 #include <string>
 #include <memory>
 
-#include "object.hpp"
+#include "partcontainer.hpp"
 
 namespace Game
 {
 
-class Part : public Object
+class Part : public PartContainer
 {
 	public:
-		virtual const std::string& getName() const;
 		virtual int getPrice() const;
-
 		float getMass() const;
-		
+
 		virtual bool canAttachPart(const Part* part) const;
 		virtual int getAttachmentLimitOfType(const Part* part) const;
 
+		Part(int price = 0, float mass = 0.0);
 		Part(const Json::Value& value);
 		virtual void save(Json::Value& value) const;
-		
+
 	private:
-		std::string name;
 		int price;
 		float mass;
 };

@@ -7,7 +7,6 @@
 
 #include "part.hpp"
 #include "vehicle.hpp"
-#include "upgrade.hpp"
 #include "object.hpp"
 #include "container.hpp"
 #include "exception.hpp"
@@ -39,10 +38,6 @@ class Player : public Object
 
 		virtual void buyPart(const Part* part);
 		virtual void buyVehicle(const Vehicle* vehicle);
-
-		virtual void attachPart(Part* part);
-		virtual void detachPart(Part* part);
-		virtual void upgradePart(Part* part, const Upgrade* upgrade);
 
 		const std::string& getName() const;
 

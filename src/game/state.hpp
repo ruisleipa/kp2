@@ -7,7 +7,6 @@
 #include "vehicle.hpp"
 #include "part.hpp"
 #include "player.hpp"
-#include "upgrade.hpp"
 #include "object.hpp"
 #include "container.hpp"
 #include "objectfactory.hpp"
@@ -22,12 +21,15 @@ class State : public Object
 		Player* createPlayer();
 
 		const Container<Player>& getPlayers() const;
+
 		const Container<Vehicle>& getShopVehicles() const;
+		void addShopVehicle(Vehicle* vehicle);
+
 		const Container<Part>& getShopParts() const;
-		const Container<Upgrade>& getUpgrades() const;
 
 		virtual void save(Json::Value&) const;
 
+		State(ObjectFactory&);
 		State(const Json::Value&, ObjectFactory&);
 
 	private:
@@ -36,7 +38,6 @@ class State : public Object
 		Container<Player> players;
 		Container<Vehicle> vehicles;
 		Container<Part> parts;
-		Container<Upgrade> upgrades;
 };
 
 };

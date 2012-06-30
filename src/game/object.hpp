@@ -18,18 +18,21 @@ class Object : public Serializable
 		void addListener(Listener* listener);
 		void removeListener(Listener* listener);
 
-		Object& operator=(const Object&);
-
 		Object() = default;
-		Object(const Object&) = default;
 		Object(const Json::Value&);
 
 	protected:
+		Object(const Object&) = default;
+		Object& operator=(const Object&);
+
 		void changed();
 
 	private:
 		std::vector<Listener*> listeners;
 };
+
+
+
 
 };
 

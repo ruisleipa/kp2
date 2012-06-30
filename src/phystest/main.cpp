@@ -1,8 +1,6 @@
 #include <fstream>
 #include <iostream>
-#include "game/engine.hpp"
 #include "physics/math_tools.hpp"
-#include "physics/engine.hpp"
 #include "physics/starter.hpp"
 #include "physics/flywheel.hpp"
 #include "physics/clutch.hpp"
@@ -10,13 +8,6 @@
 
 int main(int argc,char** argv)
 {
-	Json::Value engineJson;
-
-	std::ifstream("engine.json") >> engineJson;
-
-	Game::Engine enginePart(engineJson);
-
-	Physics::Engine engine(enginePart);
 	Physics::Starter starter;
 	Physics::Flywheel flywheel;
 	Physics::Clutch clutch(100);
@@ -37,7 +28,6 @@ int main(int argc,char** argv)
 	std::cout << "drivetrainInertia" << "\t";
 	std::cout << std::endl;
 
-	engine.setThrottle(1.0);
 	starter.setRunning(true);
 
 	while(t < 10)
@@ -54,13 +44,11 @@ int main(int argc,char** argv)
 
 		double engineTorque = 0.0d;
 
-		engineTorque += engine.getTorque(vEngine);
 		engineTorque += starter.getTorque(vEngine);
 		engineTorque += flywheel.getTorque();
 
 		double engineInertia = 0.0d;
 
-		engineInertia += engine.getInertia();
 		engineInertia += starter.getInertia();
 		engineInertia += flywheel.getInertia();
 
