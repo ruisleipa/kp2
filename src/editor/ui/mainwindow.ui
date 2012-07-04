@@ -105,16 +105,7 @@
     <addaction name="separator"/>
     <addaction name="quitAction"/>
    </widget>
-   <widget class="QMenu" name="menuLis">
-    <property name="title">
-     <string>Lisää</string>
-    </property>
-    <addaction name="newPartAction"/>
-    <addaction name="newVehicleAction"/>
-    <addaction name="newUpgradeAction"/>
-   </widget>
    <addaction name="fileMenu"/>
-   <addaction name="menuLis"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="newAction">
