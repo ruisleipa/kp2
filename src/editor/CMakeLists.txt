@@ -28,10 +28,6 @@ set(SRC
 	../json/json_value.cpp
 	../json/json_writer.cpp
 	../utils/directory.cpp
-	../utils/curve.cpp
-	../views/tableview.cpp
-	../models/vehicletablemodel.cpp
-	../models/abstractobjecttablemodel.cpp
 )
 
 include(../game.cmake)

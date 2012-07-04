@@ -46,12 +46,7 @@ set(SRC
 	../json/json_reader.cpp
 	../json/json_value.cpp
 	../json/json_writer.cpp
-	../net/clientsocket.cpp
 	../net/packet.cpp
-	../net/serversocket.cpp
-	../net/socket.cpp
-	../net/socketactivity.cpp
-	../net/socketset.cpp
 	../sounds/musicplayer.cpp
 	../utils/curve.cpp
 	../utils/inifile.cpp
