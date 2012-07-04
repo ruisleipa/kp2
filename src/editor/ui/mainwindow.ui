@@ -32,8 +32,8 @@
       <property name="childrenCollapsible">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="widget" native="true">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+      <widget class="QWidget" name="listContainer" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -50,51 +50,36 @@
          <number>2</number>
         </property>
         <item>
-         <widget class="QSplitter" name="splitter_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+         <widget class="QTreeWidget" name="objectTreeWidget">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>0</height>
+           </size>
           </property>
-          <property name="handleWidth">
-           <number>8</number>
+          <property name="columnCount">
+           <number>1</number>
           </property>
-          <property name="childrenCollapsible">
-           <bool>false</bool>
-          </property>
-          <widget class="TableView" name="vehicleView">
-           <property name="showGrid">
-            <bool>false</bool>
+          <column>
+           <property name="text">
+            <string>Objektit</string>
            </property>
-           <attribute name="horizontalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-          </widget>
-          <widget class="TableView" name="partView">
-           <property name="showGrid">
-            <bool>false</bool>
-           </property>
-           <attribute name="horizontalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-          </widget>
-          <widget class="TableView" name="playerView">
-           <attribute name="horizontalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-          </widget>
+          </column>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QMdiArea" name="mdiArea"/>
+      <widget class="QMdiArea" name="mdiArea">
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="tabShape">
+        <enum>QTabWidget::Rounded</enum>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -104,7 +89,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>651</width>
+     <width>932</width>
      <height>21</height>
     </rect>
    </property>
