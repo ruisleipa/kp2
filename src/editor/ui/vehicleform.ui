@@ -24,7 +24,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
      <property name="spacing">
       <number>8</number>
      </property>
@@ -35,67 +35,106 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>Yleiset tiedot</string>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
        </property>
-       <layout class="QFormLayout" name="formLayout_3">
-        <property name="fieldGrowthPolicy">
-         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-        </property>
-        <property name="margin">
-         <number>4</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Nimi</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="nameField"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_12">
-          <property name="text">
-           <string>Vuosimalli</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QSpinBox" name="yearField">
-          <property name="suffix">
-           <string/>
-          </property>
-          <property name="prefix">
-           <string/>
-          </property>
-          <property name="minimum">
-           <number>1900</number>
-          </property>
-          <property name="maximum">
-           <number>2100</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-          <property name="value">
-           <number>1990</number>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Tietoja</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QTextEdit" name="infoField"/>
-        </item>
-       </layout>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Yleiset tiedot</string>
+        </attribute>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="minimumSize">
+            <size>
+             <width>125</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Nimi</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="nameField"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="minimumSize">
+            <size>
+             <width>125</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Vuosimalli</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="yearField">
+           <property name="suffix">
+            <string/>
+           </property>
+           <property name="prefix">
+            <string/>
+           </property>
+           <property name="minimum">
+            <number>1900</number>
+           </property>
+           <property name="maximum">
+            <number>2100</number>
+           </property>
+           <property name="singleStep">
+            <number>1</number>
+           </property>
+           <property name="value">
+            <number>1990</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="minimumSize">
+            <size>
+             <width>125</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Tietoja</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QTextEdit" name="infoField"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Osat</string>
+        </attribute>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QTreeWidget" name="partTree">
+           <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
+           <column>
+            <property name="text">
+             <string notr="true">1</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item>
+          <widget class="QStackedWidget" name="editorContainer"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
