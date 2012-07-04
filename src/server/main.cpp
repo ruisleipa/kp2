@@ -37,13 +37,15 @@ void startServer(int argc,char** argv)
 	unsigned int connectionLimit = config["connectionLimit"].asUInt();
 	bool quitWhenEmpty = config["quitWhenEmpty"].asBool();
 	bool isLocal = config["isLocal"].asBool();
-		
-	std::cout<<"Reading game state from \"gamedata/beginstate.cfg\"."<<std::endl;
-	
-	Json::Value state;	
-	std::ifstream stateStream("gamedata/beginstate.cfg");
-	stateStream >> state;	
-	
+
+	const std::string statePath = "gamedata/beginstate.kp2";
+
+	std::cout<<"Reading game state from \"" << statePath << "\"."<<std::endl;
+
+	Json::Value state;
+	std::ifstream stateStream(statePath);
+	stateStream >> state;
+
 	Game::ObjectFactory objectFactory;
 	Game::State gameState(state, objectFactory);
 		
