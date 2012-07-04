@@ -21,11 +21,13 @@ set(SRC
 	./vehicleform.cpp
 	./chassisform.cpp
 	./editform.cpp
+	./objectfactory.cpp
 	./typespecificformfactory.cpp
 	./typespecificform.cpp
 	../json/json_reader.cpp
 	../json/json_value.cpp
 	../json/json_writer.cpp
+	../utils/directory.cpp
 	../utils/curve.cpp
 	../views/tableview.cpp
 	../models/vehicletablemodel.cpp
