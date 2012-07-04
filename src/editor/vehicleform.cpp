@@ -64,6 +64,10 @@ VehicleForm::VehicleForm(Game::Vehicle* vehicle, QWidget *parent) :
 	infoField->setPlainText(vehicle->getInfo().c_str());
 
 	addSlotsFor(vehicle);
+
+	connect(nameField, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
+	connect(yearField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
+	connect(infoField, SIGNAL(textChanged()), this, SIGNAL(changed()));
 }
 
 void VehicleForm::openEditor(Game::Object* object)

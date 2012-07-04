@@ -20,6 +20,8 @@ CylinderBlockForm::CylinderBlockForm(Game::CylinderBlock* cylinderBlock, QWidget
 	cylinderCountField->setValue(cylinderBlock->getCylinderCount());
 	boreField->setValue(cylinderBlock->getBore());
 	heightField->setValue(cylinderBlock->getHeight());
-	
-	update();
+
+	connect(cylinderCountField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
+	connect(boreField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+	connect(heightField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
 }

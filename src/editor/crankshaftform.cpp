@@ -16,6 +16,6 @@ CrankshaftForm::CrankshaftForm(Game::Crankshaft* crankshaft, QWidget *parent):
 	setupUi(this);
 	
 	strokeField->setValue(crankshaft->getStroke());
-	
-	update();
+
+	connect(strokeField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
 }

@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
+    <width>250</width>
     <height>61</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>450</width>
+    <width>250</width>
     <height>0</height>
    </size>
   </property>
@@ -23,6 +23,9 @@
    <double>1.000000000000000</double>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
@@ -37,18 +40,24 @@
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_4">
+        <property name="minimumSize">
+         <size>
+          <width>125</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Iskunpituus</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="strokeField">
+       <widget class="QDoubleSpinBox" name="strokeField">
         <property name="suffix">
          <string> mm</string>
         </property>
         <property name="maximum">
-         <number>1000</number>
+         <double>1000.000000000000000</double>
         </property>
        </widget>
       </item>

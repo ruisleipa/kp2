@@ -15,24 +15,15 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
-    <number>0</number>
+    <number>9</number>
    </property>
    <item>
     <widget class="QStackedWidget" name="formContainer"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="leftMargin">
-      <number>9</number>
-     </property>
-     <property name="topMargin">
+     <property name="margin">
       <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>9</number>
-     </property>
-     <property name="bottomMargin">
-      <number>9</number>
      </property>
      <item>
       <spacer name="horizontalSpacer">

@@ -20,6 +20,8 @@ CylinderHeadForm::CylinderHeadForm(Game::CylinderHead* cylinderHead, QWidget *pa
 	cylinderCountField->setValue(cylinderHead->getCylinderCount());
 	boreField->setValue(cylinderHead->getBore());
 	chamberHeightField->setValue(cylinderHead->getChamberHeight());
-	
-	update();
+
+	connect(cylinderCountField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
+	connect(boreField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+	connect(chamberHeightField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
 }

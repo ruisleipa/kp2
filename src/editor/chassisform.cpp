@@ -42,4 +42,14 @@ ChassisForm::ChassisForm(Game::Chassis* chassis, QWidget *parent) :
 	
 	maxEngineVolumeField->setValue(constraints.maxVolume);
 	maxEngineCylinderCountField->setValue(constraints.maxCylinderCount);
+
+	connect(massField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
+	connect(dragCoefficientField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+	connect(lengthField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+	connect(widthField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+	connect(heightField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+	connect(axleTrackField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+	connect(wheelbaseField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+	connect(maxEngineVolumeField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
+	connect(maxEngineCylinderCountField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
 }
