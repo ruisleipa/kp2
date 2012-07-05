@@ -7,12 +7,17 @@
 #include "game/object.hpp"
 #include "game/objectfactory.hpp"
 
+namespace Editor
+{
+
 class TypeSpecificFormFactory
 {
 	public:
 		TypeSpecificForm* createFormFor(Game::Object* object);
 		
 		TypeSpecificFormFactory();
+
+};
 
 };
 

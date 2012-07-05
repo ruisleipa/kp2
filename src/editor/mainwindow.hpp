@@ -11,6 +11,9 @@
 #include "game/state.hpp"
 #include "game/objectfactory.hpp"
 
+namespace Editor
+{
+
 class MainWindow : public QMainWindow, private Ui::MainWindow
 {
 	Q_OBJECT
@@ -54,6 +57,8 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
 		void on_objectTreeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
 
 		void objectEdited(Game::Object* object);
+
+};
 
 };
 

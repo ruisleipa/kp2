@@ -5,6 +5,9 @@
 #include "ui_crankshaftform.h"
 #include "game/crankshaft.hpp"
 
+namespace Editor
+{
+
 class CrankshaftForm : public TypeSpecificForm, public Ui::CrankshaftForm
 {
 	Q_OBJECT
@@ -17,6 +20,8 @@ class CrankshaftForm : public TypeSpecificForm, public Ui::CrankshaftForm
 	private:
 		Game::Crankshaft* crankshaft;
 		
+};
+
 };
 
 #endif

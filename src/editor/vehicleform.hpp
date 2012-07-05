@@ -8,6 +8,9 @@
 #include "game/vehicle.hpp"
 #include <QTreeWidgetItem>
 
+namespace Editor
+{
+
 class VehicleForm : public TypeSpecificForm, private Ui::VehicleForm
 {
 	Q_OBJECT
@@ -32,6 +35,8 @@ class VehicleForm : public TypeSpecificForm, private Ui::VehicleForm
 		void on_partTree_itemClicked(QTreeWidgetItem *selectedItem, int column);
 		void on_partTree_itemDoubleClicked(QTreeWidgetItem *selectedItem, int column);
 		void objectEdited();
+
+};
 
 };
 

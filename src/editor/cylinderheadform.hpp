@@ -5,6 +5,9 @@
 #include "ui_cylinderheadform.h"
 #include "game/cylinderhead.hpp"
 
+namespace Editor
+{
+
 class CylinderHeadForm : public TypeSpecificForm, public Ui::CylinderHeadForm
 {
 	Q_OBJECT
@@ -17,6 +20,8 @@ class CylinderHeadForm : public TypeSpecificForm, public Ui::CylinderHeadForm
 	private:
 		Game::CylinderHead* cylinderHead;
 		
+};
+
 };
 
 #endif

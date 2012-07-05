@@ -2,6 +2,9 @@
 
 #include <string>
 
+namespace Editor
+{
+
 void CylinderBlockForm::updateOriginal()
 {
 	int cylinderCount = cylinderCountField->value();
@@ -24,4 +27,6 @@ CylinderBlockForm::CylinderBlockForm(Game::CylinderBlock* cylinderBlock, QWidget
 	connect(cylinderCountField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
 	connect(boreField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
 	connect(heightField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+}
+
 }

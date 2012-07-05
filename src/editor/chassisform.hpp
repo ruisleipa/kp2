@@ -5,6 +5,9 @@
 #include "ui_chassisform.h"
 #include "game/chassis.hpp"
 
+namespace Editor
+{
+
 class ChassisForm : public TypeSpecificForm, private Ui::ChassisForm
 {
 	Q_OBJECT
@@ -16,6 +19,8 @@ class ChassisForm : public TypeSpecificForm, private Ui::ChassisForm
 		
 	private:
 		Game::Chassis* chassis;
+};
+
 };
 
 #endif

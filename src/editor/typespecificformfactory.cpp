@@ -8,6 +8,9 @@
 #include "chassisform.hpp"
 #include "vehicleform.hpp"
 
+namespace Editor
+{
+
 TypeSpecificForm* TypeSpecificFormFactory::createFormFor(Game::Object* object)
 {
 	TypeSpecificForm* child = nullptr;		
@@ -31,5 +34,7 @@ TypeSpecificForm* TypeSpecificFormFactory::createFormFor(Game::Object* object)
 
 TypeSpecificFormFactory::TypeSpecificFormFactory()
 {
+
+}
 
 }

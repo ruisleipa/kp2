@@ -10,6 +10,9 @@
 #include "ui_editform.h"
 #include "game/object.hpp"
 
+namespace Editor
+{
+
 class EditForm : public QWidget, private Ui::EditForm
 {
 	Q_OBJECT
@@ -30,6 +33,8 @@ class EditForm : public QWidget, private Ui::EditForm
 		void on_saveButton_clicked();
 		void on_okButton_clicked();
 	
+};
+
 };
 
 #endif

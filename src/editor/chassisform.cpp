@@ -1,5 +1,8 @@
 #include "chassisform.hpp"
 
+namespace Editor
+{
+
 void ChassisForm::updateOriginal()
 {
 	float mass = massField->value();
@@ -52,4 +55,6 @@ ChassisForm::ChassisForm(Game::Chassis* chassis, QWidget *parent) :
 	connect(wheelbaseField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
 	connect(maxEngineVolumeField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
 	connect(maxEngineCylinderCountField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
+}
+
 }

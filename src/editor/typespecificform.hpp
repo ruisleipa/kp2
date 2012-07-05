@@ -5,6 +5,9 @@
 
 #include "game/chassis.hpp"
 
+namespace Editor
+{
+
 class TypeSpecificForm : public QWidget
 {
 	Q_OBJECT
@@ -16,6 +19,8 @@ class TypeSpecificForm : public QWidget
 
 	signals:
 		void changed();
+};
+
 };
 
 #endif

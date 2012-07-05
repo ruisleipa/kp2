@@ -2,6 +2,9 @@
 
 #include "typespecificformfactory.hpp"
 
+namespace Editor
+{
+
 EditForm::EditForm(Game::Object* object, QWidget *parent) :
 	QWidget(parent),
 	object(object),
@@ -31,4 +34,6 @@ void EditForm::on_okButton_clicked()
 	edited(object);
 	
 	close();
+}
+
 }

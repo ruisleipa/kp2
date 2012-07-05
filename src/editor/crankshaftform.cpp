@@ -2,6 +2,9 @@
 
 #include <string>
 
+namespace Editor
+{
+
 void CrankshaftForm::updateOriginal()
 {
 	double stroke = strokeField->value();
@@ -18,4 +21,6 @@ CrankshaftForm::CrankshaftForm(Game::Crankshaft* crankshaft, QWidget *parent):
 	strokeField->setValue(crankshaft->getStroke());
 
 	connect(strokeField, SIGNAL(valueChanged(double)), this, SIGNAL(changed()));
+}
+
 }

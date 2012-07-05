@@ -10,6 +10,9 @@
 
 #include "editform.hpp"
 
+namespace Editor
+{
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent)
 {
@@ -222,4 +225,6 @@ void MainWindow::objectEdited(Game::Object* object)
 				item->setText(0, QString(vehicle->getName().c_str()));
 		}
 	}
+}
+
 }

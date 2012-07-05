@@ -2,6 +2,9 @@
 #include "typespecificformfactory.hpp"
 #include "objectfactory.hpp"
 
+namespace Editor
+{
+
 void VehicleForm::updateOriginal()
 {
 	std::string name = nameField->text().toStdString();
@@ -134,4 +137,6 @@ void VehicleForm::on_partTree_itemDoubleClicked(QTreeWidgetItem* selectedItem, i
 void VehicleForm::objectEdited()
 {
 	editor->updateOriginal();
+}
+
 }
