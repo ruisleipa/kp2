@@ -3,12 +3,9 @@ cmake_minimum_required(VERSION 2.8)
 project(kp2_server)
 
 set(SRC
-	./connection.cpp
-	./connectionmanager.cpp
-	./main.cpp
-	../json/json_reader.cpp
-	../json/json_value.cpp
-	../json/json_writer.cpp
+	connection.cpp
+	connectionmanager.cpp
+	main.cpp
 	../debug/assert.cpp
 	../debug/crashcatcher.cpp
 	../debug/crashmessage.cpp
@@ -31,14 +28,16 @@ set(SRC
 	../exception/exception.cpp
 )
 
-include(../game.cmake)
-include(../common.cmake)
+add_executable(${PROJECT_NAME} ${SRC})
+
+target_link_libraries(${PROJECT_NAME} kp2_game)
+target_link_libraries(${PROJECT_NAME} jsoncpp)
 
 IF(WIN32)
-	target_link_libraries(kp2_server ws2_32 bfd iberty psapi imagehlp intl)
+	target_link_libraries(${PROJECT_NAME} ws2_32 bfd iberty psapi imagehlp intl)
 ENDIF(WIN32)
 
 IF(UNIX)
-	target_link_libraries(kp2_server rt dl)	
+	target_link_libraries(${PROJECT_NAME} rt dl)
 ENDIF(UNIX)
 
