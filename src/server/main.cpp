@@ -8,9 +8,6 @@
 
 #include "net/serversocket.hpp"
 
-#include "debug/crashmessage.hpp"
-#include "debug/crashcatcher.hpp"
-
 #include "connectionmanager.hpp"
 #include "game/objectfactory.hpp"
 #include "game/state.hpp"
@@ -83,9 +80,6 @@ void startServer(int argc,char** argv)
 
 int main(int argc,char** argv)
 {
-	CrashMessage crashMessage;
-	CrashCatcher crashHandler(crashMessage);
-
 	OutputRedirector redirect("server.log");
 
 	try

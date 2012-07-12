@@ -6,11 +6,6 @@ set(SRC
 	connection.cpp
 	connectionmanager.cpp
 	main.cpp
-	../debug/assert.cpp
-	../debug/crashcatcher.cpp
-	../debug/crashmessage.cpp
-	../debug/stack.cpp
-	../debug/stacktrace.cpp
 	../net/clientsocket.cpp
 	../net/packet.cpp
 	../net/serversocket.cpp
