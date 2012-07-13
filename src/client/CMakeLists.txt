@@ -28,7 +28,6 @@ set(SRC
 	gameview.cpp
 	gameloadingscreen.cpp
 	garagemenu.cpp
-	loadingscreen.cpp
 	main.cpp
 	mainmenu.cpp
 	mainwindow.cpp
