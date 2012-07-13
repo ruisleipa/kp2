@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 
-#include "utils/inifile.hpp"
 #include "utils/outputredirector.hpp"
 #include "utils/commandlineparser.hpp"
 #include "utils/timer.hpp"

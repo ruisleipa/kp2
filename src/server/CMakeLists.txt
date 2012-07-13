@@ -14,7 +14,6 @@ set(SRC
 	../net/socketset.cpp
 	../utils/commandlineparser.cpp
 	../utils/outputredirector.cpp
-	../utils/inifile.cpp
 	../utils/demangle.cpp
 	../utils/directory.cpp
 	../utils/timer.cpp

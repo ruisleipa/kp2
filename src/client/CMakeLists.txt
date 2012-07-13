@@ -45,7 +45,6 @@ set(SRC
 	../net/packet.cpp
 	../sounds/musicplayer.cpp
 	../utils/curve.cpp
-	../utils/inifile.cpp
 	../utils/demangle.cpp
 	../utils/directory.cpp
 	../utils/outputredirector.cpp
