@@ -16,6 +16,7 @@ include_directories(src)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_definitions( -std=gnu++0x -Wall -Wextra -g -O0 )
 
