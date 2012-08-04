@@ -88,13 +88,13 @@ int main(int argc, char *argv[])
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameLoadingScreen, SLOT(onCompletion(Client::State*)));
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameView, SLOT(gameStateLoaded(Client::State*)));
 
-	w.getContainer()->addMenu(mainMenu);
-	w.getContainer()->addMenu(settingsMenu);
-	w.getContainer()->addMenu(singlePlayerMenu);
-	w.getContainer()->addMenu(multiPlayerMenu);
-	w.getContainer()->addMenu(gameLoadingScreen);
-	w.getContainer()->addMenu(gameView);
-	
+	mainWindow.addMenu(mainMenu);
+	mainWindow.addMenu(settingsMenu);
+	mainWindow.addMenu(singlePlayerMenu);
+	mainWindow.addMenu(multiPlayerMenu);
+	mainWindow.addMenu(gameLoadingScreen);
+	mainWindow.addMenu(gameView);
+
 	GameMainMenu* gameMainMenu = new GameMainMenu();
 	CarShopMenu* carShopMenu = new CarShopMenu();
 	GarageMenu* garageMenu = new GarageMenu();
@@ -103,9 +103,9 @@ int main(int argc, char *argv[])
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), carShopMenu, SLOT(gameStateLoaded(Client::State*)));
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), garageMenu, SLOT(gameStateLoaded(Client::State*)));
 
-	gameView->getContainer()->addMenu(gameMainMenu);
-	gameView->getContainer()->addMenu(carShopMenu);
-	gameView->getContainer()->addMenu(garageMenu);
+	gameView->addMenu(gameMainMenu);
+	gameView->addMenu(carShopMenu);
+	gameView->addMenu(garageMenu);
 
 	Updater updater(musicPlayer, connection);
 	loadStyleSheet(a);

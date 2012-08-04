@@ -1,8 +1,8 @@
 #include "mainwindow.hpp"
 
-MenuContainer* MainWindow::getContainer()
+void MainWindow::addMenu(Menu* menu)
 {
-	return ui->menuContainer;
+	ui->menuContainer->addMenu(menu);
 }
 
 MainWindow::MainWindow(QWidget *parent) :

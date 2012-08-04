@@ -10,14 +10,14 @@
 #include "ui_gameview.h"
 
 #include "menu.hpp"
+#include "gamemenu.hpp"
 
 class GameView : public Menu, public Game::Object::Listener
 {
 	Q_OBJECT
 
 	public:
-		MenuContainer* getContainer();
-		
+		void addMenu(GameMenu *menu);
 		void onChange(Game::Object* object);
 
 		explicit GameView(QWidget *parent = 0);

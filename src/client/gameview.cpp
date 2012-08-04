@@ -2,9 +2,9 @@
 
 #include <sstream>
 
-MenuContainer* GameView::getContainer()
+void GameView::addMenu(GameMenu* menu)
 {
-	return ui->menuContainer;
+	ui->menuContainer->addMenu(menu);
 }
 
 void GameView::onChange(Game::Object* object)

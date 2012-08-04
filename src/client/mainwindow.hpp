@@ -13,8 +13,8 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 	public:
-		MenuContainer* getContainer();
-	
+		void addMenu(Menu *menu);
+
 		explicit MainWindow(QWidget *parent = 0);
 
 	private:
