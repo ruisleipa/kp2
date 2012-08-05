@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
 	Client::Application application(argc, argv);
 
-	MainWindow w;
+	MainWindow mainWindow;
 
 	MusicPlayer musicPlayer;
 	Connection connection;
@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
 
 	qInstallMsgHandler(customMessageHandler);
 
-	w.show();
-	w.dumpObjectTree();
+	mainWindow.show();
+	mainWindow.dumpObjectTree();
 
 	return application.exec();
 }
