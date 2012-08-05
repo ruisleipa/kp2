@@ -8,7 +8,6 @@
 #include <stdlib.h>
 
 #include "utils/string.hpp"
-#include "debug/assert.hpp"
 
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET -1
