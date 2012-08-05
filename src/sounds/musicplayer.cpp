@@ -26,21 +26,21 @@ void MusicPlayer::setVolume(int volume)
 {
 	if(volume > 100)
 		volume = 100;
-	
+
 	/*if(this->volume == 0 && volume > 0)
 	{
-		playRandomSong();		
+		playRandomSong();
 	}
 	*/
-	
+
 	float coeff = volume / 100.0;
-		
+
 	if(sound)
 	{
 		sound->setVolume(coeff * coeff);
 	}
-	
-		
+
+
 	this->volume = volume;
 }
 
@@ -61,7 +61,7 @@ MusicPlayer::MusicPlayer():
 	}
 	catch(...)
 	{
-	
+
 	}
 
 	files = readDirectory(MUSIC_DIRECTORY);
@@ -71,7 +71,7 @@ MusicPlayer::MusicPlayer():
 	rng.seed(std::time(nullptr));
 
 	std::shuffle(files.begin(), files.end(), rng);
-	
+
 	device = audiere::OpenDevice();
 }
 
@@ -83,7 +83,7 @@ MusicPlayer::~MusicPlayer()
 	}
 	catch(...)
 	{
-		
+
 	}
 }
 
@@ -91,12 +91,12 @@ std::string MusicPlayer::pick()
 {
 	if(files.size() == 0)
 		return "";
-	
+
 	currentSong = currentSong % files.size();
-	
+
 	if(currentSong >= files.size())
 		return "";
-	
+
 	return files[currentSong++];
 }
 

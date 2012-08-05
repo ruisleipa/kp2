@@ -19,7 +19,7 @@ void PartContainer::Slot::attachPart(Part* part)
 {
 	if(this->part.get())
 		throw AlreadyInUseException();
-		
+
 	this->part.reset(part);
 }
 

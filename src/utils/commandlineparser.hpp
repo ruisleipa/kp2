@@ -15,7 +15,7 @@ class CommandLineParseError: public std::runtime_error
 		CommandLineParseError(const std::string& msg):
 			std::runtime_error(msg)
 		{
-		
+
 		}
 };
 
@@ -25,12 +25,12 @@ class CommandLineParser
 		template<typename T>
 		bool getValue(const std::string& key,T& value);
 		bool getValue(const std::string& key,std::string& value);
-		
+
 		CommandLineParser(int argc,char** argv);
-				
+
 	private:
 		void parse(int argc,char** argv);
-	
+
 		std::map<std::string,std::string> values;
 
 };
@@ -44,15 +44,15 @@ bool CommandLineParser::getValue(const std::string& key,T& value)
 	}
 
 	T temp;
-	
+
 	std::stringstream ss;
 	ss << values[key];
-	
+
 	ss >> temp;
-	
+
 	if (ss.fail())
 		return false;
-		
+
 	value = temp;
 	return true;
 }

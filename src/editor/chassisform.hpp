@@ -14,9 +14,9 @@ class ChassisForm : public TypeSpecificForm, private Ui::ChassisForm
 
 	public:
 		virtual void updateOriginal();
-	
+
 		explicit ChassisForm(Game::Chassis* chassis, QWidget *parent = 0);
-		
+
 	private:
 		Game::Chassis* chassis;
 };

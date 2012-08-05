@@ -6,7 +6,7 @@
 Menu::Menu(QWidget *parent) :
 	QWidget(parent)
 {
-  
+
 }
 
 void Menu::paintEvent(QPaintEvent *)

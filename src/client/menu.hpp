@@ -12,7 +12,7 @@ class Menu: public QWidget
 
 	protected:
 		void paintEvent(QPaintEvent *);
-		
+
 	signals:
 		void navigateTo(const QString& name);
 		void navigateToPrevious();

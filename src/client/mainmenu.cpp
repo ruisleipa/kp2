@@ -5,7 +5,7 @@ MainMenu::MainMenu(QWidget *parent) :
 	Menu(parent),
 	ui(new Ui::MainMenu)
 {
-	ui->setupUi(this);	
+	ui->setupUi(this);
 }
 
 MainMenu::~MainMenu()

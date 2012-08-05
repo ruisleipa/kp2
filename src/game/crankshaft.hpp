@@ -10,15 +10,15 @@ namespace Game
 
 class Crankshaft : public Part
 {
-	public:	
+	public:
 		double getStroke() const;
-		
+
 		void applyPropertiesOf(const Crankshaft& crankshaft);
-	
+
 		Crankshaft(double stroke);
 		Crankshaft(const Json::Value& value);
 		virtual void save(Json::Value& value) const;
-		
+
 	private:
 		double stroke;
 };

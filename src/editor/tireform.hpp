@@ -17,16 +17,16 @@ class TireForm : public QWidget
 
 	private:
 		Game::Tire generate();
-	
+
 		std::unique_ptr<Ui::TireForm> ui;
-		
-		Game::Tire* tire;	
-		
+
+		Game::Tire* tire;
+
 	private slots:
 		void on_closeButton_clicked();
 		void on_saveButton_clicked();
 		void on_okButton_clicked();
-	
+
 };
 
 #endif

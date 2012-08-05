@@ -7,10 +7,10 @@
 class OutputRedirector
 {
 	public:
-		OutputRedirector(const std::string& filename);		
-		~OutputRedirector();		
+		OutputRedirector(const std::string& filename);
+		~OutputRedirector();
 
-	private:				
+	private:
 		std::ofstream m_filestream;
 		std::streambuf* m_cout_buffer;
 		std::streambuf* m_cerr_buffer;

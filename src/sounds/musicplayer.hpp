@@ -10,26 +10,26 @@ const std::string MUSIC_SETTINGS = "cfg/music.cfg";
 
 class MusicPlayer
 {
-	public:				
+	public:
 		void update();
 		void playRandomSong();
-		
+
 		void setVolume(int volume);
 		int getVolume();
-		
+
 		MusicPlayer();
 		~MusicPlayer();
-	
-	private:		
+
+	private:
 		std::vector<std::string> files;
 		audiere::AudioDevicePtr device;
 		audiere::OutputStreamPtr sound;
 		size_t currentSong;
 		float volume;
-		
+
 		std::string pick();
 		void play(const std::string& file);
-		
+
 		void loadSettings();
 		void saveSettings();
 };

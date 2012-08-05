@@ -24,7 +24,7 @@ class Packet
 		const Packet& operator<<(int32_t value);
 		const Packet& operator<<(float value);
 		const Packet& operator<<(const std::string& value);
-		
+
 		const Packet& operator>>(uint8_t& value);
 		const Packet& operator>>(uint16_t& value);
 		const Packet& operator>>(uint32_t& value);
@@ -33,17 +33,17 @@ class Packet
 		const Packet& operator>>(int32_t& value);
 		const Packet& operator>>(float& value);
 		const Packet& operator>>(std::string& value);
-				
+
 		std::string getString() const;
-		
+
 		uint16_t getType() const;
-		void setType(uint16_t type);		
-		
+		void setType(uint16_t type);
+
 		void readFromBuffer(std::string& buffer);
-		
+
 		Packet();
 		Packet(const Packet&);
-				
+
 		friend std::ostream& operator<<(std::ostream& stream,const Packet& packet);
 
 	private:

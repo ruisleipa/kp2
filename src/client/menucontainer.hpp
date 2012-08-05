@@ -17,7 +17,7 @@ public:
 	void addMenu(Menu* menu);
 	explicit MenuContainer(QWidget *parent = 0);
 
-public slots:	
+public slots:
 	void navigateTo(QString name);
 	void navigateToPrevious();
 

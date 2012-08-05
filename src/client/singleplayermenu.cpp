@@ -17,7 +17,7 @@ SinglePlayerMenu::~SinglePlayerMenu()
 void SinglePlayerMenu::on_startGameButton_clicked()
 {
 	connection.startLocalServer();
-	
+
 	navigateTo("GameLoadingScreen");
 }
 

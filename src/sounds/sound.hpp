@@ -23,12 +23,12 @@ class Sound
 		void setVolume(float);
 		void setPitch(float);
 		void setLooping(bool);
-		
+
 		bool isPlaying();
 
 	private:
 		void initSounds();
-	
+
 		static int m_sound_sys_ref_count;
 		static bool m_sound_sys_init_tried;
 		static bool m_sound_sys_init_success;

@@ -7,7 +7,7 @@ SettingsMenu::SettingsMenu(MusicPlayer& musicPlayer, QWidget *parent) :
 	musicPlayer(musicPlayer)
 {
 	ui->setupUi(this);
-	
+
 	ui->musicVolumeSlider->setValue(musicPlayer.getVolume());
 }
 

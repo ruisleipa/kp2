@@ -24,7 +24,7 @@ Timer::Timer():
 
 	if(!QueryPerformanceFrequency(&frequency))
 		throw TimerException("Timer::Timer(): QueryPerformanceFrequency() failed");
-	
+
 	m_frequency=frequency.QuadPart;
 #else
 	if(clock_getres(CLOCK_MONOTONIC,0) == -1)
@@ -39,9 +39,9 @@ double Timer::getTime() const
 	//TODO: implement support for more precise timers
 	//TODO: handle rollovers
 
-#ifdef WIN32	
+#ifdef WIN32
 	LARGE_INTEGER time;
-	
+
 	if(!QueryPerformanceCounter(&time))
 		throw TimerException("Timer::getTime(): QueryPerformanceCounter failed");
 
@@ -51,7 +51,7 @@ double Timer::getTime() const
 
 	if(clock_gettime(CLOCK_MONOTONIC,&time) == -1)
 		throw TimerException("Timer::getTime(): clock_gettime failed");
-	
+
 	return time.tv_sec+double(time.tv_nsec)/1000000000.0;
-#endif	
+#endif
 }

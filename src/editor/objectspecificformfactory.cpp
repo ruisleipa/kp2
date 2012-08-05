@@ -8,29 +8,29 @@
 void EditFormFactory::createEditForm(Game::Object* object)
 {
 	if(dynamic_cast<Game::Engine*>(object))
-		child = new EngineForm(dynamic_cast<Game::Engine*>(object));	
+		child = new EngineForm(dynamic_cast<Game::Engine*>(object));
 	if(dynamic_cast<Game::Chassis*>(object))
-		child = new ChassisForm(dynamic_cast<Game::Chassis*>(object));	
+		child = new ChassisForm(dynamic_cast<Game::Chassis*>(object));
 	if(dynamic_cast<Game::Vehicle*>(object))
-		child = new VehicleForm(dynamic_cast<Game::Vehicle*>(object), factory);		
+		child = new VehicleForm(dynamic_cast<Game::Vehicle*>(object), factory);
 
 	QWidget* form = new EditForm();
-		
-	
+
+
 	if(child)
 	{
 		Qt::WindowFlags flags = Qt::CustomizeWindowHint;
 		flags |= Qt::WindowSystemMenuHint;
 		flags |= Qt::WindowTitleHint;
 		flags |= Qt::WindowCloseButtonHint;
-		
+
 		QMdiSubWindow* subWindow = mdiArea->addSubWindow(child, flags);
-		
+
 		subWindow->setAttribute(Qt::WA_DeleteOnClose);
 		child->setAttribute(Qt::WA_DeleteOnClose);
-		
+
 		connect(child, SIGNAL(destroyed()), subWindow, SLOT(close()));
-		
+
 		child->show();
 	}
 }
@@ -69,7 +69,7 @@ void MainWindow::on_saveAsAction_triggered()
 		return;
 
 	this->fileName = fileName;
-	
+
 	saveFile();
 }
 
@@ -86,7 +86,7 @@ void MainWindow::on_quitAction_triggered()
 void MainWindow::on_vehicleView_doubleClicked(QModelIndex current)
 {
 	Game::Vehicle* vehicle = vehicleModel->getObject(current.row());
-	
+
 	if(vehicle)
 		openEditor(vehicle);
 }
@@ -94,7 +94,7 @@ void MainWindow::on_vehicleView_doubleClicked(QModelIndex current)
 void MainWindow::on_partView_doubleClicked(QModelIndex current)
 {
 	Game::Part* part = partModel->getObject(current.row());
-	
+
 	if(part)
 		openEditor(part);
 }
@@ -137,27 +137,27 @@ void MainWindow::on_addPartButton_clicked()
 	classNames.push_back("tire");
 	items << tr("Vaihteisto");
 	classNames.push_back("transmission");
-	
+
 	bool ok;
 	QString item = QInputDialog::getItem(this, tr("Uusi osa..."), tr("Valitse osatyyppi"), items, 0, false, &ok);
-	
+
 	if(!ok)
 		return;
-		
+
 	std::string className = classNames[items.indexOf(item)];
-	
+
 	Json::Value partTemplate;
-	
+
 	std::string fileName = "data/editor/templates/";
 	fileName += className;
-		
+
 	std::ifstream(fileName) >> partTemplate;
-	
+
 	Game::ObjectFactory factory;
-	
+
 	Game::Object* object = factory.create(partTemplate);
-	
+
 	state->getShopParts().add(dynamic_cast<Game::Part*>(object));
-	
+
 	openEditor(object);
 }

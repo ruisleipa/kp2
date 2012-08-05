@@ -6,7 +6,7 @@ Updater::Updater(MusicPlayer& musicPlayer, Connection& connection, QObject *pare
 	musicPlayer(musicPlayer),
 	connection(connection)
 {
-	
+
 }
 
 Updater::~Updater()

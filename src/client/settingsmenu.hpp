@@ -18,7 +18,7 @@ public:
 
 private:
 	Ui::SettingsMenu *ui;
-	
+
 	MusicPlayer& musicPlayer;
 
 private slots:

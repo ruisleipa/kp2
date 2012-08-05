@@ -15,14 +15,14 @@ class Connection
 		void writeBufferedData();
 
 		void writePacket(const Net::Packet& packet);
-		
+
 		Connection(Game::State& gameState, Game::Player* player, Net::ClientSocket& socket);
-		
+
 	private:
 		std::string receiveBuffer;
 		std::string sendBuffer;
 		char scrapBuffer[BUFFERSIZE];
-		
+
 		Game::State& gameState;
 		Game::Player* player;
 		Net::ClientSocket* socket;

@@ -10,11 +10,11 @@ class State : public Game::State
 {
 	public:
 		Game::Player* getPlayer();
-	
+
 		State(const Json::Value& value, Game::ObjectFactory&);
-		
+
 		void save(Json::Value& value) const;
-		
+
 	private:
 		Game::Player* player;
 };

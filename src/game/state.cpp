@@ -14,10 +14,10 @@ Player* State::createPlayer()
 	Player* player = new Game::Player(objectFactory);
 
 	players.add(player);
-	
+
 	return player;
 }
-	
+
 const Container<Player>& State::getPlayers() const
 {
 	return players;
@@ -58,7 +58,7 @@ State::State(const Json::Value& value, ObjectFactory& objectFactory):
 	vehicles(value["vehicles"], objectFactory),
 	parts(value["parts"], objectFactory)
 {
-	
+
 }
 
 };

@@ -14,9 +14,9 @@ bool ServerSocket::accept(ClientSocket& socket)
 
 	if(acceptImpl(newsocket) == false)
 		return false;
-		
+
 	socket.captureSocket(newsocket);
-	
+
 	return true;
 }
 

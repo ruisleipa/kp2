@@ -16,26 +16,26 @@ class ConnectionManager
 {
 	public:
 		void processConnections();
-		
+
 		int getConnectionCount();
 		Connection& getConnectionByIndex(int index);
-		
+
 		ConnectionManager(Net::ServerSocket&, Game::State&);
-		
+
 	private:
 		void acceptConnection();
 		void readFromSocket(Net::ClientSocket* socket);
 		void writeToSocket(Net::ClientSocket* socket);
 		void closeConnectionBySocket(Net::ClientSocket* socket);
-	
+
 		Net::ServerSocket& serverSocket;
 		Game::State& gameState;
-		
+
 		std::map<Net::ClientSocket*, Connection> connections;
 		std::list<Net::ClientSocket> sockets;
-		
+
 		Net::SocketSet socketSet;
-		
+
 };
 
 #endif

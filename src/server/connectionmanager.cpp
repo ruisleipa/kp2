@@ -17,12 +17,12 @@ void ConnectionManager::processConnections()
 	else
 	{
 		Net::ClientSocket* socket = dynamic_cast<Net::ClientSocket*>(activity.socket);
-		
+
 		try
 		{
 			if(activity.canRead)
 				readFromSocket(socket);
-			
+
 			writeToSocket(socket);
 		}
 		catch(Net::ConnectionClosedException& e)
@@ -30,7 +30,7 @@ void ConnectionManager::processConnections()
 			std::cerr << "Connection closed: ";
 			std::cerr << e.getMessage();
 			std::cerr << std::endl;
-		
+
 			closeConnectionBySocket(socket);
 		}
 	}
@@ -44,19 +44,19 @@ int ConnectionManager::getConnectionCount()
 Connection& ConnectionManager::getConnectionByIndex(int index)
 {
 	std::map<Net::ClientSocket*, Connection>::iterator i;
-	
+
 	i = connections.begin();
-	
-	while(index > 0) 
+
+	while(index > 0)
 	{
 		if(i == connections.end())
 			throw std::runtime_error("No connection for index");
-		
+
 		i++;
-		
+
 		index--;
 	}
-	
+
 	return i->second;
 }
 
@@ -69,13 +69,13 @@ void ConnectionManager::acceptConnection()
 	Game::Player* player = gameState.createPlayer();
 
 	player->setMoney(5000);
-	
+
 	sockets.push_back(socket);
-	
+
 	Connection connection(gameState, player, sockets.back());
 	connections.insert(std::make_pair(&sockets.back(), connection));
 	socketSet.add(&sockets.back());
-	
+
 	std::cout << "New connection" << std::endl;
 }
 
@@ -96,7 +96,7 @@ void ConnectionManager::readFromSocket(Net::ClientSocket* socket)
 void ConnectionManager::writeToSocket(Net::ClientSocket* socket)
 {
 	Connection& connection = connections.at(socket);
-	
+
 	connection.writeBufferedData();
 }
 
@@ -104,13 +104,13 @@ void ConnectionManager::closeConnectionBySocket(Net::ClientSocket* socket)
 {
 	socketSet.remove(socket);
 	connections.erase(socket);
-	
+
 	std::list<Net::ClientSocket>::iterator i;
-	
+
 	for(i = sockets.begin(); i != sockets.end(); ++i)
 	{
 		Net::ClientSocket* s = &(*i);
-	
+
 		if(socket == s)
 		{
 			sockets.erase(i);

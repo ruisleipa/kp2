@@ -17,31 +17,31 @@ float Curve::getValue(float position) const
 
 	std::map<int, float>::const_iterator previous = points.begin();
 	std::map<int, float>::const_iterator current = points.begin();
-	
+
 	while(current != points.end() && current->first <= position)
 	{
 		previous = current;
-		
+
 		++current;
 	}
-	
+
 	if(current == points.end())
 	{
 		current = previous;
 	}
-	
+
 	int lowPosition = previous->first;
 	int highPosition = current->first;
 	float lowValue = previous->second;
 	float highValue = current->second;
-	
+
 	float amount;
-	
+
 	if(lowPosition != position)
 		amount = float(position - lowPosition) / float(highPosition - lowPosition);
 	else
 		amount = 0.0;
-	
+
 	float value = lowValue + ((highValue - lowValue) * amount);
 
 	return value;
@@ -52,13 +52,13 @@ float Curve::getMax() const
 	float value = 0.0;
 
 	for(std::map<int, float>::const_iterator i = points.begin(); i != points.end(); ++i)
-	{		
+	{
 		if(i == points.begin())
 			value = i->second;
 		else
-			value = std::max(value, i->second);	
+			value = std::max(value, i->second);
 	}
-	
+
 	return value;
 }
 

@@ -21,15 +21,15 @@ class GameView : public Menu, public Game::Object::Listener
 		void onChange(Game::Object* object);
 
 		explicit GameView(QWidget *parent = 0);
-	
+
 	public slots:
 		void gameStateLoaded(Client::State*);
-	
+
 	private:
 		std::unique_ptr<Ui::GameView> ui;
-		
+
 		Game::Player* player;
-	
+
 	private slots:
 		void on_settingsButton_clicked();
 		void update();

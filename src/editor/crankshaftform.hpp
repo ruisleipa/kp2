@@ -14,12 +14,12 @@ class CrankshaftForm : public TypeSpecificForm, public Ui::CrankshaftForm
 
 	public:
 		virtual void updateOriginal();
-	
+
 		explicit CrankshaftForm(Game::Crankshaft* crankshaft, QWidget *parent = 0);
 
 	private:
 		Game::Crankshaft* crankshaft;
-		
+
 };
 
 };

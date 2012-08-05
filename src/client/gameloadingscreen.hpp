@@ -11,7 +11,7 @@
 class MenuContainer;
 
 class GameLoadingScreen : public Menu
-{	
+{
 	Q_OBJECT
 
 public:
@@ -28,10 +28,10 @@ public slots:
 
 signals:
 	void cancelled();
-	
+
 private:
 	std::unique_ptr<Ui::GameLoadingScreen> ui;
-	
+
 private slots:
 	void on_cancelButton_clicked();
 

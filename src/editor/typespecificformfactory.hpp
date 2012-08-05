@@ -14,7 +14,7 @@ class TypeSpecificFormFactory
 {
 	public:
 		TypeSpecificForm* createFormFor(Game::Object* object);
-		
+
 		TypeSpecificFormFactory();
 
 };

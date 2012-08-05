@@ -9,7 +9,7 @@
 #include "models/vehicletablemodel.hpp"
 
 class CarShopMenu : public GameMenu
-{	
+{
 	Q_OBJECT
 
 	public:
@@ -17,19 +17,19 @@ class CarShopMenu : public GameMenu
 
 	public slots:
 		virtual void gameStateLoaded(Client::State*);
-		
+
 	private:
 		std::unique_ptr<Ui::CarShopMenu> ui;
 		std::unique_ptr<VehicleTableModel> model;
 
 		Game::Player* player;
 		Game::Vehicle* vehicle;
-	
+
 	private slots:
 		void onCurrentChanged(const QModelIndex&, const QModelIndex&);
 		void on_cancelButton_clicked();
 		void on_buyButton_clicked();
-	
+
 };
 
 #endif

@@ -32,7 +32,7 @@ inline B convertTo(const A& a)
 	ss << a;
 	B b;
 	ss >> b;
-	
+
 	return b;
 }
 

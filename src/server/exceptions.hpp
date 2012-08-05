@@ -14,10 +14,10 @@ class PartDoesNotFitException
 		PartDoesNotFitException(const std::string& reason):
 			reason(reason)
 		{
-		
+
 		}
-		
-		std::string reason;		
+
+		std::string reason;
 };
 
 class VehicleDoesNotWorkException
@@ -26,10 +26,10 @@ class VehicleDoesNotWorkException
 		VehicleDoesNotWorkException(const std::string& reason):
 			reason(reason)
 		{
-		
+
 		}
-		
-		std::string reason;		
+
+		std::string reason;
 };
 
 class NoSuchPartException

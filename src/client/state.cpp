@@ -17,7 +17,7 @@ State::State(const Json::Value& value, Game::ObjectFactory& objectFactory):
 }
 
 void State::save(Json::Value& value) const
-{	
+{
 	Game::State::save(value);
 
 	value["client"]["playerId"] = getPlayers().getIndexOf(player);

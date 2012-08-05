@@ -8,7 +8,7 @@
 Game::Object* ClientObjectFactory::allocate(const Json::Value& value)
 {
 	std::string type = value["type"].asString();
-	
+
 	if(type == "player")
 		return new PlayerProxy(value, *this, connection);
 

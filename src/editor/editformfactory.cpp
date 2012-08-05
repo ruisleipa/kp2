@@ -11,8 +11,8 @@ void EditFormFactory::createEditForm(Game::Object* object)
 	TypeSpecificFormFactory specific();
 
 	QWidget* specificForm = specific.createForm(object);
-	
+
 	QWidget* form = new EditForm(specificForm);
-	
+
 	return form;
 }

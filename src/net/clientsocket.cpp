@@ -15,7 +15,7 @@ int ClientSocket::read(char* data,int size)
 
 int ClientSocket::write(const char* data,int size)
 {
-	return writeImpl(data,size);	
+	return writeImpl(data,size);
 }
 
 ClientSocket::ClientSocket()

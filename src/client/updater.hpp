@@ -20,7 +20,7 @@ public slots:
 private:
 	MusicPlayer& musicPlayer;
 	Connection& connection;
-	
+
 };
 
 #endif // MAINMENU_H

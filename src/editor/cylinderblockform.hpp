@@ -14,12 +14,12 @@ class CylinderBlockForm : public TypeSpecificForm, public Ui::CylinderBlockForm
 
 	public:
 		virtual void updateOriginal();
-	
+
 		explicit CylinderBlockForm(Game::CylinderBlock* cylinderBlock, QWidget *parent = 0);
 
 	private:
 		Game::CylinderBlock* cylinderBlock;
-		
+
 };
 
 };

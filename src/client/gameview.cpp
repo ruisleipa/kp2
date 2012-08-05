@@ -15,9 +15,9 @@ void GameView::onChange(Game::Object* object)
 void GameView::gameStateLoaded(Client::State* state)
 {
 	player = state->getPlayer();
-	
+
 	player->addListener(this);
-	
+
 	update();
 }
 
@@ -29,10 +29,10 @@ void GameView::on_settingsButton_clicked()
 void GameView::update()
 {
 	std::stringstream s;
-	
+
 	s << player->getName() << ", ";
 	s << player->getMoney();
-	
+
 	ui->infoLabel->setText(s.str().c_str());
 }
 

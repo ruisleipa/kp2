@@ -14,14 +14,14 @@ class Transmission: public Part
 	public:
 		float getEfficiency() const;
 		std::vector<float> getGearRatios() const;
-		
+
 		Transmission(const Json::Value&);
 		virtual void save(Json::Value&) const;
-	
+
 	private:
 		float efficiency;
 		std::vector<float> gears;
-		
+
 };
 
 };

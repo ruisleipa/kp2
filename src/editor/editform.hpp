@@ -22,17 +22,17 @@ class EditForm : public QWidget, private Ui::EditForm
 
 	signals:
 		void edited(Game::Object*);
-		
+
 	private:
 		Game::Object* object;
-		
+
 		TypeSpecificForm* form;
-	
+
 	private slots:
 		void on_closeButton_clicked();
 		void on_saveButton_clicked();
 		void on_okButton_clicked();
-	
+
 };
 
 };

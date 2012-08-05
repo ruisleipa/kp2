@@ -13,7 +13,7 @@ class ServerSocket: public Socket
 {
 	public:
 		bool open(const std::string& hostname,int port);
-	
+
 		bool accept(ClientSocket& socket);
 };
 

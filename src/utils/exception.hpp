@@ -11,9 +11,9 @@ class Exception: public std::runtime_error
 		Exception(const std::string& what);:
 			std::runtime_error(what)
 		{
-			
+
 		}
-		
+
 		friend std::ostream& operator<<(std::ostream& os,const Exception& e);
 };
 

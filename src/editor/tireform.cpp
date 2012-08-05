@@ -8,13 +8,13 @@ TireForm::TireForm(Game::Tire* original, QWidget *parent) :
 	tire(original)
 {
 	ui->setupUi(this);
-		
+
 	setWindowTitle(trUtf8("Korin tiedot"));
-	
+
 	Json::Value data;
-	
+
 	tire->save(data);
-	
+
 	ui->mass->setValue(data["mass"].asDouble());
 	ui->dragCoefficient->setValue(data["dragCoefficient"].asDouble());
 	ui->length->setValue(data["length"].asDouble());
@@ -29,9 +29,9 @@ TireForm::TireForm(Game::Tire* original, QWidget *parent) :
 Game::Tire TireForm::generate()
 {
 	Json::Value data;
-	
+
 	tire->save(data);
-		
+
 	data["mass"] = ui->mass->value();
 	data["dragCoefficient"] = ui->dragCoefficient->value();
 	data["length"] = ui->length->value();
@@ -46,18 +46,18 @@ Game::Tire TireForm::generate()
 }
 
 void TireForm::on_closeButton_clicked()
-{	
+{
 	close();
 }
 
 void TireForm::on_saveButton_clicked()
-{	
+{
 	*tire = generate();
 }
 
 void TireForm::on_okButton_clicked()
-{	
+{
 	*tire = generate();
-	
+
 	close();
 }

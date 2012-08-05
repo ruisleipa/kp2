@@ -14,12 +14,12 @@ class CylinderHeadForm : public TypeSpecificForm, public Ui::CylinderHeadForm
 
 	public:
 		virtual void updateOriginal();
-				
+
 		explicit CylinderHeadForm(Game::CylinderHead* cylinderHead, QWidget *parent = 0);
 
 	private:
 		Game::CylinderHead* cylinderHead;
-		
+
 };
 
 };

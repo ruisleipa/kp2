@@ -24,7 +24,7 @@ Transmission::Transmission(const Json::Value& value):
 
 void Transmission::save(Json::Value& value) const
 {
-	Part::save(value);	
+	Part::save(value);
 
 	value["efficiency"] = efficiency;
 

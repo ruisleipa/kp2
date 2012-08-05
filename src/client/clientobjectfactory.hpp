@@ -12,9 +12,9 @@ class ClientObjectFactory : public Game::ObjectFactory
 
 	protected:
 		virtual Game::Object* allocate(const Json::Value&);
-		
+
 	private:
-		Connection& connection;		
+		Connection& connection;
 };
 
 #endif

@@ -52,7 +52,7 @@ void GameLoadingScreen::onCompletion(Client::State* state)
 {
 	ui->progressLabel->setText(trUtf8("Ladattu..."));
 	ui->progressBar->setValue(100);
-	
+
 	emit navigateTo("GameView");
 }
 
@@ -64,6 +64,6 @@ void GameLoadingScreen::onError(const std::string& str)
 
 void GameLoadingScreen::on_cancelButton_clicked()
 {
-	emit navigateToPrevious();	
+	emit navigateToPrevious();
 	emit cancelled();
 }

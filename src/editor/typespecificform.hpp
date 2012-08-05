@@ -14,7 +14,7 @@ class TypeSpecificForm : public QWidget
 
 	public:
 		virtual void updateOriginal() = 0;
-	
+
 		explicit TypeSpecificForm(QWidget *parent = 0);
 
 	signals:

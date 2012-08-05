@@ -9,7 +9,7 @@
 
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/select.h> 
+#include <sys/select.h>
 
 #endif
 
@@ -27,23 +27,23 @@ class SocketSet
 	public:
 		void add(Socket* socket);
 		void remove(Socket* socket);
-			
+
 		SocketActivity waitForActivity(unsigned int timeOutInMilliseconds = 0);
 
 		SocketSet();
 		~SocketSet();
-		
+
 	private:
 		SocketSet(const SocketSet&);
 		SocketSet& operator=(const SocketSet&);
-	
+
 		void updateActivity(unsigned int timeOutInMilliseconds);
 		void socketClosed(Socket* socket);
-	
+
 		std::set<Socket*> sockets;
 		std::vector<Socket*> readableSockets;
 		std::vector<Socket*> writableSockets;
-		
+
 		friend class Socket;
 };
 

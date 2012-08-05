@@ -109,8 +109,8 @@ std::vector<std::string> tokenize(std::string str,std::string delim)
 		end=str.find_first_of(delim,begin);
 
 		token=str.substr(begin,end-begin);
-		
-		vector.push_back(token);	
+
+		vector.push_back(token);
 
 		begin=str.find_first_not_of(delim,end);
 	}
