@@ -59,18 +59,9 @@ int main(int argc, char *argv[])
 	SettingsMenu* settingsMenu = new SettingsMenu(musicPlayer);
 	SinglePlayerMenu* singlePlayerMenu = new SinglePlayerMenu(connection);
 	MultiPlayerMenu* multiPlayerMenu = new MultiPlayerMenu(connection);
-	GameLoadingScreen* gameLoadingScreen = new GameLoadingScreen();
+	GameLoadingScreen* gameLoadingScreen = new GameLoadingScreen(connection);
 	GameView* gameView = new GameView();
 
-	QObject::connect(gameLoadingScreen, SIGNAL(cancelled()), &connection, SLOT(close()));
-	QObject::connect(&connection, SIGNAL(startingLocalServer()), gameLoadingScreen, SLOT(onStartingLocalServer()));
-	QObject::connect(&connection, SIGNAL(connectingToRemote()), gameLoadingScreen, SLOT(onConnectingToRemote()));
-	QObject::connect(&connection, SIGNAL(connectingToLocal()), gameLoadingScreen, SLOT(onConnectingToLocal()));
-	QObject::connect(&connection, SIGNAL(connected()), gameLoadingScreen, SLOT(onConnected()));
-	QObject::connect(&connection, SIGNAL(receivingGameState()), gameLoadingScreen, SLOT(onReceivingGameState()));
-	QObject::connect(&connection, SIGNAL(error(const std::string&)), gameLoadingScreen, SLOT(onError(const std::string&)));
-
-	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameLoadingScreen, SLOT(onCompletion(Client::State*)));
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameView, SLOT(gameStateLoaded(Client::State*)));
 
 	mainWindow.addMenu(mainMenu);

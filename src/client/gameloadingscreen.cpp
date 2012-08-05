@@ -2,11 +2,20 @@
 
 #include <iostream>
 
-GameLoadingScreen::GameLoadingScreen(QWidget *parent) :
+GameLoadingScreen::GameLoadingScreen(Connection& connection, QWidget *parent) :
 	Menu(parent),
 	ui(new Ui::GameLoadingScreen)
 {
 	ui->setupUi(this);
+
+	connect(this, SIGNAL(cancelled()), &connection, SLOT(close()));
+	connect(&connection, SIGNAL(startingLocalServer()), this, SLOT(onStartingLocalServer()));
+	connect(&connection, SIGNAL(connectingToRemote()), this, SLOT(onConnectingToRemote()));
+	connect(&connection, SIGNAL(connectingToLocal()), this, SLOT(onConnectingToLocal()));
+	connect(&connection, SIGNAL(connected()), this, SLOT(onConnected()));
+	connect(&connection, SIGNAL(receivingGameState()), this, SLOT(onReceivingGameState()));
+	connect(&connection, SIGNAL(error(const std::string&)), this, SLOT(onError(const std::string&)));
+	connect(&connection, SIGNAL(ready(Client::State*)), this, SLOT(onCompletion(Client::State*)));
 }
 
 void GameLoadingScreen::onStartingLocalServer()

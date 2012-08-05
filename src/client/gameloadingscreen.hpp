@@ -6,6 +6,7 @@
 #include "state.hpp"
 #include "menu.hpp"
 #include "ui_gameloadingscreen.h"
+#include "connection.hpp"
 
 class MenuContainer;
 
@@ -14,7 +15,7 @@ class GameLoadingScreen : public Menu
 	Q_OBJECT
 
 public:
-	explicit GameLoadingScreen(QWidget *parent = 0);
+	GameLoadingScreen(Connection& connection, QWidget *parent = 0);
 
 public slots:
 	void onStartingLocalServer();
