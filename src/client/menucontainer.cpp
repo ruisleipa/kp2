@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+namespace Client
+{
+
 void MenuContainer::addMenu(Menu* menu)
 {
 	if(ui->container->count() == 0)
@@ -52,4 +55,6 @@ MenuContainer::MenuContainer(QWidget *parent) :
 	ui(new Ui::MenuContainer)
 {
 	ui->setupUi(this);
+}
+
 }

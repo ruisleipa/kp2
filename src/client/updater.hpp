@@ -6,6 +6,9 @@
 #include "sounds/musicplayer.hpp"
 #include "connection.hpp"
 
+namespace Client
+{
+
 class Updater : public QObject
 {
 	Q_OBJECT
@@ -23,4 +26,6 @@ private:
 
 };
 
-#endif // MAINMENU_H
+}
+
+#endif

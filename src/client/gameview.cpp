@@ -2,6 +2,9 @@
 
 #include <sstream>
 
+namespace Client
+{
+
 void GameView::addMenu(GameMenu* menu)
 {
 	ui->menuContainer->addMenu(menu);
@@ -42,5 +45,7 @@ GameView::GameView(QWidget *parent) :
 	player(nullptr)
 {
 	ui->setupUi(this);
+}
+
 }
 

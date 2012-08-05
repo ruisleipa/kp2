@@ -8,6 +8,9 @@ namespace Ui {
 	class SettingsMenu;
 }
 
+namespace Client
+{
+
 class SettingsMenu : public Menu
 {
 	Q_OBJECT
@@ -25,5 +28,7 @@ private slots:
 	void on_pushButton_clicked();
 	void on_musicVolumeSlider_valueChanged(int);
 };
+
+}
 
 #endif // SETTINGSMENU_H

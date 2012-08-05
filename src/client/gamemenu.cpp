@@ -1,5 +1,8 @@
 #include "gamemenu.hpp"
 
+namespace Client
+{
+
 GameMenu::GameMenu(QWidget *parent) :
 	Menu(parent)
 {
@@ -8,5 +11,7 @@ GameMenu::GameMenu(QWidget *parent) :
 
 void GameMenu::gameStateLoaded(Client::State*)
 {
+
+}
 
 }

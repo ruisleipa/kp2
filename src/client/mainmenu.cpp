@@ -1,6 +1,9 @@
 #include "mainmenu.hpp"
 #include "ui_mainmenu.h"
 
+namespace Client
+{
+
 MainMenu::MainMenu(QWidget *parent) :
 	Menu(parent),
 	ui(new Ui::MainMenu)
@@ -31,4 +34,6 @@ void MainMenu::on_settingsButton_clicked()
 void MainMenu::on_singlePlayerButton_clicked()
 {
 	navigateTo("SinglePlayerMenu");
+}
+
 }

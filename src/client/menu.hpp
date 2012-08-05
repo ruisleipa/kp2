@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+namespace Client
+{
+
 class Menu: public QWidget
 {
 	Q_OBJECT
@@ -18,4 +21,6 @@ class Menu: public QWidget
 		void navigateToPrevious();
 };
 
-#endif // MENU_H
+}
+
+#endif

@@ -5,7 +5,10 @@
 #include "connection.hpp"
 #include "playerproxy.hpp"
 
-Game::Object* ClientObjectFactory::allocate(const Json::Value& value)
+namespace Client
+{
+
+Game::Object* ObjectFactory::allocate(const Json::Value& value)
 {
 	std::string type = value["type"].asString();
 
@@ -15,8 +18,10 @@ Game::Object* ClientObjectFactory::allocate(const Json::Value& value)
 	return ObjectFactory::allocate(value);
 }
 
-ClientObjectFactory::ClientObjectFactory(Connection& connection):
+ObjectFactory::ObjectFactory(Connection& connection):
 	connection(connection)
 {
+
+}
 
 }

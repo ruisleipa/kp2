@@ -7,6 +7,9 @@
 #include "ui_garagemenu.h"
 #include "models/vehicletablemodel.hpp"
 
+namespace Client
+{
+
 class GarageMenu : public GameMenu
 {
 	Q_OBJECT
@@ -29,5 +32,7 @@ class GarageMenu : public GameMenu
 		void on_selectButton_clicked();
 		void on_cancelButton_clicked();
 };
+
+}
 
 #endif

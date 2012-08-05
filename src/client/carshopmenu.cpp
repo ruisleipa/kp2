@@ -2,6 +2,9 @@
 
 #include <QMessageBox>
 
+namespace Client
+{
+
 CarShopMenu::CarShopMenu(QWidget *parent) :
 	GameMenu(parent),
 	ui(new Ui::CarShopMenu),
@@ -70,3 +73,4 @@ void CarShopMenu::on_buyButton_clicked()
 
 }
 
+}

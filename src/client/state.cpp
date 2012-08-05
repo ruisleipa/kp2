@@ -23,4 +23,4 @@ void State::save(Json::Value& value) const
 	value["client"]["playerId"] = getPlayers().getIndexOf(player);
 }
 
-};
+}

@@ -1,5 +1,8 @@
 #include "gamemainmenu.hpp"
 
+namespace Client
+{
+
 GameMainMenu::GameMainMenu(QWidget *parent) :
 	GameMenu(parent),
 	ui(new Ui::GameMainMenu)
@@ -55,4 +58,6 @@ void GameMainMenu::on_quarterMileButton_clicked()
 void GameMainMenu::on_longRaceButton_clicked()
 {
 	navigateTo("LongRaceMenu");
+}
+
 }

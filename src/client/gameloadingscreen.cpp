@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+namespace Client
+{
+
 GameLoadingScreen::GameLoadingScreen(Connection& connection, QWidget *parent) :
 	Menu(parent),
 	ui(new Ui::GameLoadingScreen)
@@ -66,4 +69,6 @@ void GameLoadingScreen::on_cancelButton_clicked()
 {
 	emit navigateToPrevious();
 	emit cancelled();
+}
+
 }

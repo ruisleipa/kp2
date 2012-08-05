@@ -4,6 +4,9 @@
 #include "menu.hpp"
 #include "state.hpp"
 
+namespace Client
+{
+
 class GameMenu: public Menu
 {
 	Q_OBJECT
@@ -14,5 +17,7 @@ class GameMenu: public Menu
 	public slots:
 		virtual void gameStateLoaded(Client::State*);
 };
+
+}
 
 #endif

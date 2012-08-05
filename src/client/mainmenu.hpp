@@ -7,6 +7,9 @@ namespace Ui {
 	class MainMenu;
 }
 
+namespace Client
+{
+
 class MainMenu : public Menu
 {
 	Q_OBJECT
@@ -25,4 +28,6 @@ private slots:
 	void on_settingsButton_clicked();
 };
 
-#endif // MAINMENU_H
+}
+
+#endif

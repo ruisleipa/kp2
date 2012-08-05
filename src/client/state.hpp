@@ -19,7 +19,7 @@ class State : public Game::State
 		Game::Player* player;
 };
 
-};
+}
 
 #endif
 

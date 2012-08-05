@@ -2,6 +2,9 @@
 
 #include "protocol/protocol.hpp"
 
+namespace Client
+{
+
 void PlayerProxy::setName(const std::string& name)
 {
 	std::cout << "PlayerProxy::setName: " << name << std::endl;
@@ -94,3 +97,4 @@ int PlayerProxy::getIndex()
 	return std::distance(begin, i);
 }
 
+}

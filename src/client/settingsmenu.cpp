@@ -1,6 +1,9 @@
 #include "settingsmenu.hpp"
 #include "ui_settingsmenu.h"
 
+namespace Client
+{
+
 SettingsMenu::SettingsMenu(MusicPlayer& musicPlayer, QWidget *parent) :
 	Menu(parent),
 	ui(new Ui::SettingsMenu),
@@ -24,4 +27,6 @@ void SettingsMenu::on_pushButton_clicked()
 void SettingsMenu::on_musicVolumeSlider_valueChanged(int volume)
 {
 	musicPlayer.setVolume(volume);
+}
+
 }

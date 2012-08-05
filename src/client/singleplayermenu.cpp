@@ -1,6 +1,9 @@
 #include "singleplayermenu.hpp"
 #include "ui_singleplayermenu.h"
 
+namespace Client
+{
+
 SinglePlayerMenu::SinglePlayerMenu(Connection& connection, QWidget *parent) :
 	Menu(parent),
 	ui(new Ui::SinglePlayerMenu),
@@ -24,4 +27,6 @@ void SinglePlayerMenu::on_startGameButton_clicked()
 void SinglePlayerMenu::on_cancelButton_clicked()
 {
 	navigateToPrevious();
+}
+
 }

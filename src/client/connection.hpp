@@ -14,6 +14,9 @@ class Packet;
 
 const int BUFFERSIZE=512;
 
+namespace Client
+{
+
 class Connection : public QObject
 {
 	Q_OBJECT
@@ -51,7 +54,7 @@ class Connection : public QObject
 
 		QProcess serverProcess;
 
-		ClientObjectFactory objectFactory;
+		ObjectFactory objectFactory;
 
 		std::unique_ptr<Client::State> state;
 
@@ -61,5 +64,6 @@ class Connection : public QObject
 		void onConnected();
 };
 
-#endif
+}
 
+#endif

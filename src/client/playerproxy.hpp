@@ -4,6 +4,9 @@
 #include "game/player.hpp"
 #include "connection.hpp"
 
+namespace Client
+{
+
 class InvalidPlayerException
 {
 
@@ -27,5 +30,7 @@ class PlayerProxy : public Game::Player
 		Connection& connection;
 
 };
+
+}
 
 #endif

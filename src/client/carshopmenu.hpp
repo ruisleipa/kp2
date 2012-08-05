@@ -8,6 +8,9 @@
 #include "game/vehicle.hpp"
 #include "models/vehicletablemodel.hpp"
 
+namespace Client
+{
+
 class CarShopMenu : public GameMenu
 {
 	Q_OBJECT
@@ -31,5 +34,7 @@ class CarShopMenu : public GameMenu
 		void on_buyButton_clicked();
 
 };
+
+}
 
 #endif

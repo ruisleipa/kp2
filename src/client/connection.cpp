@@ -13,6 +13,9 @@
 #include "net/clientsocket.hpp"
 #include "protocol/protocol.hpp"
 
+namespace Client
+{
+
 void Connection::connect(std::string hostname,int port)
 {
 	socket.connectToHost(hostname.c_str(), port);
@@ -148,4 +151,6 @@ Connection::~Connection()
 	socket.close();
 
 	serverProcess.waitForFinished();
+}
+
 }

@@ -50,17 +50,17 @@ int main(int argc, char *argv[])
 
 	Client::Application application(argc, argv);
 
-	MainWindow mainWindow;
+	Client::MainWindow mainWindow;
 
 	MusicPlayer musicPlayer;
-	Connection connection;
+	Client::Connection connection;
 
-	MainMenu* mainMenu = new MainMenu();
-	SettingsMenu* settingsMenu = new SettingsMenu(musicPlayer);
-	SinglePlayerMenu* singlePlayerMenu = new SinglePlayerMenu(connection);
-	MultiPlayerMenu* multiPlayerMenu = new MultiPlayerMenu(connection);
-	GameLoadingScreen* gameLoadingScreen = new GameLoadingScreen(connection);
-	GameView* gameView = new GameView();
+	Client::MainMenu* mainMenu = new Client::MainMenu();
+	Client::SettingsMenu* settingsMenu = new Client::SettingsMenu(musicPlayer);
+	Client::SinglePlayerMenu* singlePlayerMenu = new Client::SinglePlayerMenu(connection);
+	Client::MultiPlayerMenu* multiPlayerMenu = new Client::MultiPlayerMenu(connection);
+	Client::GameLoadingScreen* gameLoadingScreen = new Client::GameLoadingScreen(connection);
+	Client::GameView* gameView = new Client::GameView();
 
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameView, SLOT(gameStateLoaded(Client::State*)));
 
@@ -71,9 +71,9 @@ int main(int argc, char *argv[])
 	mainWindow.addMenu(gameLoadingScreen);
 	mainWindow.addMenu(gameView);
 
-	GameMainMenu* gameMainMenu = new GameMainMenu();
-	CarShopMenu* carShopMenu = new CarShopMenu();
-	GarageMenu* garageMenu = new GarageMenu();
+	Client::GameMainMenu* gameMainMenu = new Client::GameMainMenu();
+	Client::CarShopMenu* carShopMenu = new Client::CarShopMenu();
+	Client::GarageMenu* garageMenu = new Client::GarageMenu();
 
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), gameMainMenu, SLOT(gameStateLoaded(Client::State*)));
 	QObject::connect(&connection, SIGNAL(ready(Client::State*)), carShopMenu, SLOT(gameStateLoaded(Client::State*)));
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 	gameView->addMenu(carShopMenu);
 	gameView->addMenu(garageMenu);
 
-	Updater updater(musicPlayer, connection);
+	Client::Updater updater(musicPlayer, connection);
 
 	QTimer updateTimer;
 	QObject::connect(&updateTimer, SIGNAL(timeout()), &updater, SLOT(update()));

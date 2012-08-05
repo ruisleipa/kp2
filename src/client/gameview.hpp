@@ -12,6 +12,9 @@
 #include "menu.hpp"
 #include "gamemenu.hpp"
 
+namespace Client
+{
+
 class GameView : public Menu, public Game::Object::Listener
 {
 	Q_OBJECT
@@ -34,5 +37,7 @@ class GameView : public Menu, public Game::Object::Listener
 		void on_settingsButton_clicked();
 		void update();
 };
+
+}
 
 #endif

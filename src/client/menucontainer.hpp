@@ -9,6 +9,9 @@
 #include "menu.hpp"
 #include "ui_menucontainer.h"
 
+namespace Client
+{
+
 class MenuContainer : public QWidget
 {
 	Q_OBJECT
@@ -27,5 +30,7 @@ private:
 	std::unique_ptr<Ui::MenuContainer> ui;
 	std::stack<QString> navigationHistory;
 };
+
+}
 
 #endif

@@ -6,6 +6,9 @@
 #include "gamemenu.hpp"
 #include "ui_gamemainmenu.h"
 
+namespace Client
+{
+
 class GameMainMenu : public GameMenu
 {
 	Q_OBJECT
@@ -30,4 +33,6 @@ class GameMainMenu : public GameMenu
 
 };
 
-#endif // GAMEMAINMENU_H
+}
+
+#endif

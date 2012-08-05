@@ -70,13 +70,13 @@
     </layout>
    </item>
    <item>
-    <widget class="MenuContainer" name="menuContainer" native="true"/>
+    <widget class="Client::MenuContainer" name="menuContainer" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MenuContainer</class>
+   <class>Client::MenuContainer</class>
    <extends>QWidget</extends>
    <header>menucontainer.hpp</header>
    <container>1</container>

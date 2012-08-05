@@ -3,12 +3,15 @@
 
 #include "game/objectfactory.hpp"
 
+namespace Client
+{
+
 class Connection;
 
-class ClientObjectFactory : public Game::ObjectFactory
+class ObjectFactory : public Game::ObjectFactory
 {
 	public:
-		ClientObjectFactory(Connection& connection);
+		ObjectFactory(Connection& connection);
 
 	protected:
 		virtual Game::Object* allocate(const Json::Value&);
@@ -16,5 +19,7 @@ class ClientObjectFactory : public Game::ObjectFactory
 	private:
 		Connection& connection;
 };
+
+}
 
 #endif

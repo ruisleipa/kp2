@@ -8,6 +8,9 @@
 #include "ui_mainwindow.h"
 #include "menucontainer.hpp"
 
+namespace Client
+{
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -21,5 +24,7 @@ class MainWindow : public QMainWindow
 		std::unique_ptr<Ui::MainWindow> ui;
 
 };
+
+}
 
 #endif

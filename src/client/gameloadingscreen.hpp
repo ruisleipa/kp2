@@ -10,6 +10,9 @@
 
 class MenuContainer;
 
+namespace Client
+{
+
 class GameLoadingScreen : public Menu
 {
 	Q_OBJECT
@@ -36,5 +39,7 @@ private slots:
 	void on_cancelButton_clicked();
 
 };
+
+}
 
 #endif

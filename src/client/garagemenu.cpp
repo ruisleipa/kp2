@@ -1,5 +1,8 @@
 #include "garagemenu.hpp"
 
+namespace Client
+{
+
 GarageMenu::GarageMenu(QWidget *parent) :
 	GameMenu(parent),
 	ui(new Ui::GarageMenu),
@@ -49,5 +52,7 @@ void GarageMenu::on_selectButton_clicked()
 void GarageMenu::on_cancelButton_clicked()
 {
 	navigateToPrevious();
+}
+
 }
 

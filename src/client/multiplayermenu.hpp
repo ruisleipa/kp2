@@ -7,6 +7,9 @@
 #include "connection.hpp"
 #include "ui_multiplayermenu.h"
 
+namespace Client
+{
+
 class MultiPlayerMenu : public Menu
 {
 	Q_OBJECT
@@ -22,5 +25,7 @@ class MultiPlayerMenu : public Menu
 		void on_cancelButton_clicked();
 		void on_connectButton_clicked();
 };
+
+}
 
 #endif

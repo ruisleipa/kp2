@@ -10,6 +10,9 @@ namespace Ui {
 	class SinglePlayerMenu;
 }
 
+namespace Client
+{
+
 class SinglePlayerMenu : public Menu
 {
 	Q_OBJECT
@@ -27,4 +30,6 @@ private slots:
 	void on_startGameButton_clicked();
 };
 
-#endif // SINGLEPLAYERMENU_H
+}
+
+#endif
