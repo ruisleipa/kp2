@@ -1,6 +1,7 @@
 #include "vehicleform.hpp"
 #include "typespecificformfactory.hpp"
 #include "objectfactory.hpp"
+#include "utils/directory.hpp"
 
 namespace Editor
 {
