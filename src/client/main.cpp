@@ -1,9 +1,5 @@
-#include <memory>
-#include <QtGui/QApplication>
-#include <QtGui/QStackedLayout>
-#include <QString>
-#include <QTextStream>
-#include <QFile>
+#include "application.hpp"
+
 #include <QWindowsStyle>
 #include <QTimer>
 #include "mainwindow.hpp"
@@ -25,15 +21,6 @@
 #include "carshopmenu.hpp"
 #include "garagemenu.hpp"
 
-void loadStyleSheet(QApplication& app)
-{
-	QFile file("data/style/stylesheet.qss");
-	file.open(QIODevice::ReadOnly);
-	QString styleSheet = QTextStream(&file).readAll();
-	file.close();
-
-	app.setStyleSheet(styleSheet);
-}
 
 void customMessageHandler(QtMsgType type, const char *msg)
 {
@@ -61,9 +48,7 @@ int main(int argc, char *argv[])
 {
 	OutputRedirector redirect("client.log");
 
-	QApplication::setStyle(new QWindowsStyle);
-
-	QApplication a(argc, argv);
+	Client::Application application(argc, argv);
 
 	MainWindow w;
 
@@ -108,7 +93,6 @@ int main(int argc, char *argv[])
 	gameView->addMenu(garageMenu);
 
 	Updater updater(musicPlayer, connection);
-	loadStyleSheet(a);
 
 	QTimer updateTimer;
 	QObject::connect(&updateTimer, SIGNAL(timeout()), &updater, SLOT(update()));
@@ -120,5 +104,5 @@ int main(int argc, char *argv[])
 	w.show();
 	w.dumpObjectTree();
 
-	return a.exec();
+	return application.exec();
 }

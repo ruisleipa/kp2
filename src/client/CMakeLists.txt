@@ -20,6 +20,7 @@ set(UI
 )
 
 set(SRC
+	application.cpp
 	carshopmenu.cpp
 	clientobjectfactory.cpp
 	connection.cpp
