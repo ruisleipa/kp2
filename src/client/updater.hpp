@@ -15,7 +15,6 @@ class Updater : public QObject
 
 	public:
 		explicit Updater(MusicPlayer& musicPlayer, Connection& connection, QObject *parent = 0);
-		~Updater();
 
 	public slots:
 		void update();

@@ -12,11 +12,6 @@ Updater::Updater(MusicPlayer& musicPlayer, Connection& connection, QObject *pare
 
 }
 
-Updater::~Updater()
-{
-
-}
-
 void Updater::update()
 {
 	musicPlayer.update();
