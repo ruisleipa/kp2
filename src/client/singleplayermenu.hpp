@@ -5,24 +5,19 @@
 
 #include "menu.hpp"
 #include "connection.hpp"
-
-namespace Ui {
-	class SinglePlayerMenu;
-}
+#include "ui_singleplayermenu.h"
 
 namespace Client
 {
 
-class SinglePlayerMenu : public Menu
+class SinglePlayerMenu : public Menu, private Ui::SinglePlayerMenu
 {
 	Q_OBJECT
 
 public:
 	explicit SinglePlayerMenu(Connection&, QWidget *parent = 0);
-	~SinglePlayerMenu();
 
 private:
-	Ui::SinglePlayerMenu *ui;
 	Connection& connection;
 
 private slots:

@@ -4,10 +4,9 @@ namespace Client
 {
 
 GameMainMenu::GameMainMenu(QWidget *parent) :
-	GameMenu(parent),
-	ui(new Ui::GameMainMenu)
+	GameMenu(parent)
 {
-	ui->setupUi(this);
+	setupUi(this);
 }
 
 void GameMainMenu::on_carShopButton_clicked()

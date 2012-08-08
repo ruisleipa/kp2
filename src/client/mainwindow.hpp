@@ -11,7 +11,7 @@
 namespace Client
 {
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, private Ui::MainWindow
 {
 	Q_OBJECT
 
@@ -19,10 +19,6 @@ class MainWindow : public QMainWindow
 		void addMenu(Menu *menu);
 
 		explicit MainWindow(QWidget *parent = 0);
-
-	private:
-		std::unique_ptr<Ui::MainWindow> ui;
-
 };
 
 }

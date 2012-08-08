@@ -7,14 +7,14 @@ namespace Client
 
 void MenuContainer::addMenu(Menu* menu)
 {
-	if(ui->container->count() == 0)
+	if(container->count() == 0)
 	{
 		std::cout << "pushing first " << menu->objectName().toStdString() << std::endl;
 
 		navigationHistory.push(menu->objectName());
 	}
 
-	ui->container->addWidget(menu);
+	container->addWidget(menu);
 
 	QObject::connect(menu, SIGNAL(navigateTo(QString)), this, SLOT(navigateTo(QString)));
 	QObject::connect(menu, SIGNAL(navigateToPrevious()), this, SLOT(navigateToPrevious()));
@@ -40,21 +40,20 @@ void MenuContainer::navigateToPrevious()
 
 bool MenuContainer::setVisibleMenu(QString name)
 {
-	QWidget* widget = ui->container->findChild<QWidget*>(name);
+	QWidget* widget = container->findChild<QWidget*>(name);
 
 	if(!widget)
 		return false;
 
-	ui->container->setCurrentWidget(widget);
+	container->setCurrentWidget(widget);
 
 	return true;
 }
 
 MenuContainer::MenuContainer(QWidget *parent) :
-	QWidget(parent),
-	ui(new Ui::MenuContainer)
+	QWidget(parent)
 {
-	ui->setupUi(this);
+	setupUi(this);
 }
 
 }

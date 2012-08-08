@@ -6,10 +6,9 @@ namespace Client
 {
 
 GameLoadingScreen::GameLoadingScreen(Connection& connection, QWidget *parent) :
-	Menu(parent),
-	ui(new Ui::GameLoadingScreen)
+	Menu(parent)
 {
-	ui->setupUi(this);
+	setupUi(this);
 
 	connect(this, SIGNAL(cancelled()), &connection, SLOT(close()));
 	connect(&connection, SIGNAL(startingLocalServer()), this, SLOT(onStartingLocalServer()));
@@ -23,46 +22,46 @@ GameLoadingScreen::GameLoadingScreen(Connection& connection, QWidget *parent) :
 
 void GameLoadingScreen::onStartingLocalServer()
 {
-	ui->progressLabel->setText(trUtf8("Käynnistetään yksinpelin palvelinta..."));
-	ui->progressBar->setValue(10);
+	progressLabel->setText(trUtf8("Käynnistetään yksinpelin palvelinta..."));
+	progressBar->setValue(10);
 }
 
 void GameLoadingScreen::onConnectingToRemote()
 {
-	ui->progressLabel->setText(trUtf8("Yhdistetään verkkopeliin..."));
-	ui->progressBar->setValue(25);
+	progressLabel->setText(trUtf8("Yhdistetään verkkopeliin..."));
+	progressBar->setValue(25);
 }
 
 void GameLoadingScreen::onConnectingToLocal()
 {
-	ui->progressLabel->setText(trUtf8("Yhdistetään paikalliseen peliin..."));
-	ui->progressBar->setValue(25);
+	progressLabel->setText(trUtf8("Yhdistetään paikalliseen peliin..."));
+	progressBar->setValue(25);
 }
 
 void GameLoadingScreen::onConnected()
 {
-	ui->progressLabel->setText(trUtf8("Yhdistetty..."));
-	ui->progressBar->setValue(40);
+	progressLabel->setText(trUtf8("Yhdistetty..."));
+	progressBar->setValue(40);
 }
 
 void GameLoadingScreen::onReceivingGameState()
 {
-	ui->progressLabel->setText(trUtf8("Ladataan pelitilannetta..."));
-	ui->progressBar->setValue(60);
+	progressLabel->setText(trUtf8("Ladataan pelitilannetta..."));
+	progressBar->setValue(60);
 }
 
 void GameLoadingScreen::onCompletion(Client::State* state)
 {
-	ui->progressLabel->setText(trUtf8("Ladattu..."));
-	ui->progressBar->setValue(100);
+	progressLabel->setText(trUtf8("Ladattu..."));
+	progressBar->setValue(100);
 
 	emit navigateTo("GameView");
 }
 
 void GameLoadingScreen::onError(const std::string& str)
 {
-	ui->progressLabel->setText(trUtf8(str.c_str()));
-	ui->progressBar->setValue(100);
+	progressLabel->setText(trUtf8(str.c_str()));
+	progressBar->setValue(100);
 }
 
 void GameLoadingScreen::on_cancelButton_clicked()

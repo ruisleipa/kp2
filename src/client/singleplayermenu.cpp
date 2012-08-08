@@ -6,15 +6,9 @@ namespace Client
 
 SinglePlayerMenu::SinglePlayerMenu(Connection& connection, QWidget *parent) :
 	Menu(parent),
-	ui(new Ui::SinglePlayerMenu),
 	connection(connection)
 {
-	ui->setupUi(this);
-}
-
-SinglePlayerMenu::~SinglePlayerMenu()
-{
-	delete ui;
+	setupUi(this);
 }
 
 void SinglePlayerMenu::on_startGameButton_clicked()

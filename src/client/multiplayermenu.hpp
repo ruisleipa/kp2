@@ -10,7 +10,7 @@
 namespace Client
 {
 
-class MultiPlayerMenu : public Menu
+class MultiPlayerMenu : public Menu, private Ui::MultiPlayerMenu
 {
 	Q_OBJECT
 
@@ -18,7 +18,6 @@ class MultiPlayerMenu : public Menu
 		explicit MultiPlayerMenu(Connection&, QWidget *parent = 0);
 
 	private:
-		std::unique_ptr<Ui::MultiPlayerMenu> ui;
 		Connection& connection;
 
 	private slots:

@@ -13,7 +13,7 @@ class MenuContainer;
 namespace Client
 {
 
-class GameLoadingScreen : public Menu
+class GameLoadingScreen : public Menu, private Ui::GameLoadingScreen
 {
 	Q_OBJECT
 
@@ -31,9 +31,6 @@ public slots:
 
 signals:
 	void cancelled();
-
-private:
-	std::unique_ptr<Ui::GameLoadingScreen> ui;
 
 private slots:
 	void on_cancelButton_clicked();

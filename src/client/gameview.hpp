@@ -15,7 +15,7 @@
 namespace Client
 {
 
-class GameView : public Menu, public Game::Object::Listener
+class GameView : public Menu, public Game::Object::Listener, private Ui::GameView
 {
 	Q_OBJECT
 
@@ -29,8 +29,6 @@ class GameView : public Menu, public Game::Object::Listener
 		void gameStateLoaded(Client::State*);
 
 	private:
-		std::unique_ptr<Ui::GameView> ui;
-
 		Game::Player* player;
 
 	private slots:

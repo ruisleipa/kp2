@@ -1,19 +1,12 @@
 #include "mainmenu.hpp"
-#include "ui_mainmenu.h"
 
 namespace Client
 {
 
 MainMenu::MainMenu(QWidget *parent) :
-	Menu(parent),
-	ui(new Ui::MainMenu)
+	Menu(parent)
 {
-	ui->setupUi(this);
-}
-
-MainMenu::~MainMenu()
-{
-	delete ui;
+	setupUi(this);
 }
 
 void MainMenu::on_quitButton_clicked()

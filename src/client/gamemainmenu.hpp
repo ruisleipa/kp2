@@ -9,15 +9,12 @@
 namespace Client
 {
 
-class GameMainMenu : public GameMenu
+class GameMainMenu : public GameMenu, private Ui::GameMainMenu
 {
 	Q_OBJECT
 
 	public:
 		explicit GameMainMenu(QWidget *parent = 0);
-
-	private:
-		std::unique_ptr<Ui::GameMainMenu> ui;
 
 	private slots:
 		void on_carShopButton_clicked();

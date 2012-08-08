@@ -5,14 +5,13 @@ namespace Client
 
 void MainWindow::addMenu(Menu* menu)
 {
-	ui->menuContainer->addMenu(menu);
+	menuContainer->addMenu(menu);
 }
 
 MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+	QMainWindow(parent)
 {
-	ui->setupUi(this);
+	setupUi(this);
 }
 
 }

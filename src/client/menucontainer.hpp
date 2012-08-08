@@ -12,7 +12,7 @@
 namespace Client
 {
 
-class MenuContainer : public QWidget
+class MenuContainer : public QWidget, private Ui::MenuContainer
 {
 	Q_OBJECT
 
@@ -27,7 +27,6 @@ public slots:
 private:
 	bool setVisibleMenu(QString name);
 
-	std::unique_ptr<Ui::MenuContainer> ui;
 	std::stack<QString> navigationHistory;
 };
 

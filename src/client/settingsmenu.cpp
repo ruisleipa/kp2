@@ -1,22 +1,15 @@
 #include "settingsmenu.hpp"
-#include "ui_settingsmenu.h"
 
 namespace Client
 {
 
 SettingsMenu::SettingsMenu(MusicPlayer& musicPlayer, QWidget *parent) :
 	Menu(parent),
-	ui(new Ui::SettingsMenu),
 	musicPlayer(musicPlayer)
 {
-	ui->setupUi(this);
+	setupUi(this);
 
-	ui->musicVolumeSlider->setValue(musicPlayer.getVolume());
-}
-
-SettingsMenu::~SettingsMenu()
-{
-	delete ui;
+	musicVolumeSlider->setValue(musicPlayer.getVolume());
 }
 
 void SettingsMenu::on_pushButton_clicked()

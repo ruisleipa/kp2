@@ -3,25 +3,19 @@
 
 #include "sounds/musicplayer.hpp"
 #include "menu.hpp"
-
-namespace Ui {
-	class SettingsMenu;
-}
+#include "ui_settingsmenu.h"
 
 namespace Client
 {
 
-class SettingsMenu : public Menu
+class SettingsMenu : public Menu, private Ui::SettingsMenu
 {
 	Q_OBJECT
 
 public:
 	explicit SettingsMenu(MusicPlayer& musicPlayer, QWidget *parent = 0);
-	~SettingsMenu();
 
 private:
-	Ui::SettingsMenu *ui;
-
 	MusicPlayer& musicPlayer;
 
 private slots:

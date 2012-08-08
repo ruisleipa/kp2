@@ -7,7 +7,7 @@ namespace Client
 
 void GameView::addMenu(GameMenu* menu)
 {
-	ui->menuContainer->addMenu(menu);
+	menuContainer->addMenu(menu);
 }
 
 void GameView::onChange(Game::Object* object)
@@ -36,15 +36,14 @@ void GameView::update()
 	s << player->getName() << ", ";
 	s << player->getMoney();
 
-	ui->infoLabel->setText(s.str().c_str());
+	infoLabel->setText(s.str().c_str());
 }
 
 GameView::GameView(QWidget *parent) :
 	Menu(parent),
-	ui(new Ui::GameView),
 	player(nullptr)
 {
-	ui->setupUi(this);
+	setupUi(this);
 }
 
 }

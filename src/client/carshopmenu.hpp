@@ -11,7 +11,7 @@
 namespace Client
 {
 
-class CarShopMenu : public GameMenu
+class CarShopMenu : public GameMenu, private Ui::CarShopMenu
 {
 	Q_OBJECT
 
@@ -22,7 +22,6 @@ class CarShopMenu : public GameMenu
 		virtual void gameStateLoaded(Client::State*);
 
 	private:
-		std::unique_ptr<Ui::CarShopMenu> ui;
 		std::unique_ptr<VehicleTableModel> model;
 
 		Game::Player* player;
