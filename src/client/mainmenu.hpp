@@ -11,14 +11,14 @@ class MainMenu : public Menu, private Ui::MainMenu
 {
 	Q_OBJECT
 
-public:
-	explicit MainMenu(QWidget *parent = 0);
+	public:
+		explicit MainMenu(QWidget *parent = 0);
 
-private slots:
-	void on_singlePlayerButton_clicked();
-	void on_quitButton_clicked();
-	void on_multiPlayerButton_clicked();
-	void on_settingsButton_clicked();
+	private slots:
+		void on_singlePlayerButton_clicked();
+		void on_quitButton_clicked();
+		void on_multiPlayerButton_clicked();
+		void on_settingsButton_clicked();
 };
 
 }

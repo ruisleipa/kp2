@@ -12,15 +12,15 @@ class SettingsMenu : public Menu, private Ui::SettingsMenu
 {
 	Q_OBJECT
 
-public:
-	explicit SettingsMenu(MusicPlayer& musicPlayer, QWidget *parent = 0);
+	public:
+		explicit SettingsMenu(MusicPlayer& musicPlayer, QWidget *parent = 0);
 
-private:
-	MusicPlayer& musicPlayer;
+	private:
+		MusicPlayer& musicPlayer;
 
-private slots:
-	void on_pushButton_clicked();
-	void on_musicVolumeSlider_valueChanged(int);
+	private slots:
+		void on_pushButton_clicked();
+		void on_musicVolumeSlider_valueChanged(int);
 };
 
 }

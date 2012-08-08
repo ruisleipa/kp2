@@ -16,18 +16,18 @@ class MenuContainer : public QWidget, private Ui::MenuContainer
 {
 	Q_OBJECT
 
-public:
-	void addMenu(Menu* menu);
-	explicit MenuContainer(QWidget *parent = 0);
+	public:
+		void addMenu(Menu* menu);
+		explicit MenuContainer(QWidget *parent = 0);
 
-public slots:
-	void navigateTo(QString name);
-	void navigateToPrevious();
+	public slots:
+		void navigateTo(QString name);
+		void navigateToPrevious();
 
-private:
-	bool setVisibleMenu(QString name);
+	private:
+		bool setVisibleMenu(QString name);
 
-	std::stack<QString> navigationHistory;
+		std::stack<QString> navigationHistory;
 };
 
 }

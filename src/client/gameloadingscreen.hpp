@@ -17,23 +17,23 @@ class GameLoadingScreen : public Menu, private Ui::GameLoadingScreen
 {
 	Q_OBJECT
 
-public:
-	GameLoadingScreen(Connection& connection, QWidget *parent = 0);
+	public:
+		GameLoadingScreen(Connection& connection, QWidget *parent = 0);
 
-public slots:
-	void onStartingLocalServer();
-	void onConnectingToRemote();
-	void onConnectingToLocal();
-	void onConnected();
-	void onReceivingGameState();
-	void onCompletion(Client::State*);
-	void onError(const std::string&);
+	public slots:
+		void onStartingLocalServer();
+		void onConnectingToRemote();
+		void onConnectingToLocal();
+		void onConnected();
+		void onReceivingGameState();
+		void onCompletion(Client::State*);
+		void onError(const std::string&);
 
-signals:
-	void cancelled();
+	signals:
+		void cancelled();
 
-private slots:
-	void on_cancelButton_clicked();
+	private slots:
+		void on_cancelButton_clicked();
 
 };
 
