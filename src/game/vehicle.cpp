@@ -52,7 +52,7 @@ Vehicle::Vehicle(const std::string& name, int price, int year, const std::string
 	registerSlot("chassis", &chassis);
 }
 
-Vehicle::Vehicle(const Json::Value& value, ObjectFactory& factory):
+Vehicle::Vehicle(const Json::Value& value):
 	PartContainer(value),
 	chassis(value["chassis"]),
 	name(value["name"].asString()),

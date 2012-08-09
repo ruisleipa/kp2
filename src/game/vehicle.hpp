@@ -24,7 +24,7 @@ class Vehicle : public PartContainer
 		void applyPropertiesOf(const Vehicle& vehicle);
 
 		Vehicle(const std::string& name, int price, int year, const std::string& info, const std::string& imageName);
-		Vehicle(const Json::Value&, ObjectFactory&);
+		Vehicle(const Json::Value&);
 		virtual void save(Json::Value& value) const;
 
 	private:

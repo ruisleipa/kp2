@@ -39,7 +39,7 @@ Game::Object* ObjectFactory::allocate(const Json::Value& value)
 	else if(type == "CylinderHead")
 		return new Game::CylinderHead(value);
 	else if(type == "Vehicle")
-		return new Game::Vehicle(value, *this);
+		return new Game::Vehicle(value);
 	else if(type == "Player")
 		return new Game::Player(value, *this);
 	else if(type == "")
