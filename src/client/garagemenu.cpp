@@ -39,8 +39,6 @@ void GarageMenu::onCurrentChanged(const QModelIndex& current, const QModelIndex&
 	carImage->setPixmap(QPixmap(QString("gamedata/vehicleimages/") + QString(vehicle->getImageName().c_str())));
 	value->setText(QString::number(vehicle->getPrice()) + trUtf8(" €"));
 	chassisMass->setText(QString::number(vehicle->getMass()) + QString(" kg"));
-	engine->setText("1.0L S4 OVH\nTurbo");
-	fuelintake->setText("2x30mm Kaasutin");
 }
 
 void GarageMenu::on_selectButton_clicked()

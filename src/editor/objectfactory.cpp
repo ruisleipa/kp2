@@ -19,7 +19,7 @@ Game::Object* ObjectFactory::createObject(const std::string& className)
 
 	Game::ObjectFactory factory;
 
-	return factory.create(objectTemplate);
+	return factory.deserialize(objectTemplate);
 }
 
 }

@@ -138,7 +138,7 @@ class Container : public Object::Listener
 		{
 			for(auto item : value)
 			{
-				Object* object = factory.create(item);
+				Object* object = factory.deserialize(item);
 
 				T* ptr = dynamic_cast<T*>(object);
 

@@ -6,6 +6,8 @@ set(SRC
 	connection.cpp
 	connectionmanager.cpp
 	main.cpp
+	objectfactory.cpp
+	objectidmapper.cpp
 	../net/clientsocket.cpp
 	../net/packet.cpp
 	../net/serversocket.cpp

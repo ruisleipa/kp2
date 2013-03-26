@@ -3,6 +3,7 @@
 
 #include "json/value.h"
 #include "object.hpp"
+#include "objectidmapper.hpp"
 
 namespace Game
 {
@@ -10,7 +11,7 @@ namespace Game
 class ObjectFactory
 {
 	public:
-		Object* create(const Json::Value&);
+		virtual Object* deserialize(const Json::Value&);
 
 		template<class T>
 		T* clone(const T* t)
@@ -19,11 +20,15 @@ class ObjectFactory
 
 			t->save(v);
 
-			return dynamic_cast<T*>(create(v));
+			return dynamic_cast<T*>(deserialize(v));
 		};
 
 	protected:
 		virtual Object* allocate(const Json::Value&);
+
+	private:
+		Object* create(const Json::Value& value);
+
 };
 
 };

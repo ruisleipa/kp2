@@ -34,6 +34,7 @@ set(SRC
 	mainwindow.cpp
 	menucontainer.cpp
 	menu.cpp
+	objectidmapper.cpp
 	playerproxy.cpp
 	multiplayermenu.cpp
 	settingsmenu.cpp

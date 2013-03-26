@@ -9,6 +9,7 @@ set(SRC
 	cylinderhead.cpp
 	object.cpp
 	objectfactory.cpp
+	objectidmapper.cpp
 	part.cpp
 	partcontainer.cpp
 	player.cpp

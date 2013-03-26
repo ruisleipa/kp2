@@ -15,9 +15,14 @@ void Object::removeListener(Object::Listener* listener)
 	listeners.erase(std::find(listeners.begin(), listeners.end(), listener));
 }
 
+void Object::save(Json::Value& value) const
+{
+	value["__pointer"] = (unsigned int)this;
+}
+
 Object& Object::operator=(const Object&)
 {
-
+	return *this;
 }
 
 Object::Object(const Json::Value& value):

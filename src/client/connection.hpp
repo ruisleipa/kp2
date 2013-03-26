@@ -9,6 +9,7 @@
 #include "net/packet.hpp"
 #include "state.hpp"
 #include "clientobjectfactory.hpp"
+#include "objectidmapper.hpp"
 
 class Packet;
 
@@ -30,6 +31,9 @@ class Connection : public QObject
 		Game::State& getGameState();
 
 		void writeToServer(const Net::Packet& packet);
+
+		const std::string& getId(const Game::Object* object);
+		void makeRemoteCall(const Game::Object* object, const std::string& method, const Json::Value& arguments);
 
 		Connection();
 		~Connection();
@@ -55,6 +59,7 @@ class Connection : public QObject
 		QProcess serverProcess;
 
 		ObjectFactory objectFactory;
+		ObjectIdMapper objectIdMapper;
 
 		std::unique_ptr<Client::State> state;
 

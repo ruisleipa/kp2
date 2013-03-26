@@ -15,7 +15,7 @@ void PlayerProxy::setName(const std::string& name)
 
 	arguments["name"] = name;
 
-	makeCall("setName", arguments);
+	connection.makeRemoteCall(this, "setName", arguments);
 }
 
 void PlayerProxy::setActiveVehicle(Game::Vehicle* vehicle)
@@ -26,9 +26,9 @@ void PlayerProxy::setActiveVehicle(Game::Vehicle* vehicle)
 
 	Json::Value arguments;
 
-	arguments["vehicle"] = this->getVehicles().getIndexOf(vehicle);
+	arguments["vehicle"] = connection.getId(vehicle);
 
-	makeCall("setActiveVehicle", arguments);
+	connection.makeRemoteCall(this, "setActiveVehicle", arguments);
 }
 
 void PlayerProxy::buyPart(const Game::Part* part)
@@ -39,22 +39,22 @@ void PlayerProxy::buyPart(const Game::Part* part)
 
 	Json::Value arguments;
 
-	arguments["part"] = connection.getGameState().getShopParts().getIndexOf(part);
+	arguments["part"] = connection.getId(part);
 
-	makeCall("buyPart", arguments);
+	connection.makeRemoteCall(this, "buyPart", arguments);
 }
 
-void PlayerProxy::buyVehicle(const Game::Vehicle* vehicle)
+void PlayerProxy::buyVehicle(const Game::Vehicle* shopVehicle)
 {
-	std::cout << "PlayerProxy::buyVehicle: " << vehicle << std::endl;
+	std::cout << "PlayerProxy::buyVehicle: " << shopVehicle << std::endl;
 
-	Player::buyVehicle(vehicle);
+	Player::buyVehicle(shopVehicle);
 
 	Json::Value arguments;
 
-	arguments["vehicle"] = connection.getGameState().getShopVehicles().getIndexOf(vehicle);
+	arguments["vehicleInShop"] = connection.getId(shopVehicle);
 
-	makeCall("buyVehicle", arguments);
+	connection.makeRemoteCall(this, "buyVehicle", arguments);
 }
 
 PlayerProxy::PlayerProxy(const Json::Value& value, Game::ObjectFactory& factory, Connection& connection):
@@ -62,39 +62,6 @@ PlayerProxy::PlayerProxy(const Json::Value& value, Game::ObjectFactory& factory,
 	connection(connection)
 {
 
-}
-
-void PlayerProxy::makeCall(const std::string& method, const Json::Value& arguments)
-{
-	Json::Value call;
-
-	call["objectType"] = "player";
-	call["objectIndex"] = getIndex();
-	call["method"] = method;
-	call["arguments"] = arguments;
-
-	Net::Packet packet;
-	packet.setType(Protocol::REMOTE_INVOCATION);
-
-	Json::FastWriter fw;
-
-	packet << fw.write(call);
-
-	connection.writeToServer(packet);
-
-	std::cout << call;
-}
-
-int PlayerProxy::getIndex()
-{
-	auto begin = connection.getGameState().getPlayers().begin();
-	auto end = connection.getGameState().getPlayers().end();
-	auto i = std::find(begin, end, this);
-
-	if(i == end)
-		throw InvalidPlayerException();
-
-	return std::distance(begin, i);
 }
 
 }

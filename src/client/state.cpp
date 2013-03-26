@@ -13,6 +13,8 @@ Game::Player* State::getPlayer()
 State::State(const Json::Value& value, Game::ObjectFactory& objectFactory):
 	Game::State(value, objectFactory)
 {
+	std::cout << value << std::endl;
+
 	player = getPlayers().getByIndex(value["client"]["playerId"].asInt());
 }
 
