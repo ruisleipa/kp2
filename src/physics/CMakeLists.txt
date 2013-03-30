@@ -3,11 +3,14 @@ cmake_minimum_required(VERSION 2.8)
 project(kp2_physics)
 
 set(SRC
-	clutch.cpp
 	axle.cpp
-	starter.cpp
+	clutch.cpp
+	engine.cpp
 	flywheel.cpp
+	process.cpp
+	starter.cpp
 	transmission.cpp
+	vehicle.cpp
 )
 
 add_library(${PROJECT_NAME} ${SRC})
