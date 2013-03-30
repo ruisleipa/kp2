@@ -20,6 +20,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_definitions( -std=gnu++0x -Wall -Wextra -g -O0 )
 
+add_subdirectory(src/customplot)
 add_subdirectory(src/json)
 add_subdirectory(src/physics)
 add_subdirectory(src/game)

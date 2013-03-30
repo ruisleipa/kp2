@@ -40,6 +40,7 @@ add_executable(${PROJECT_NAME} ${SRC} ${UI})
 target_link_libraries(${PROJECT_NAME} kp2_physics)
 target_link_libraries(${PROJECT_NAME} kp2_game)
 target_link_libraries(${PROJECT_NAME} jsoncpp)
+target_link_libraries(${PROJECT_NAME} customplot)
 target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
 
 

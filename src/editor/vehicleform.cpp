@@ -2,9 +2,75 @@
 #include "typespecificformfactory.hpp"
 #include "objectfactory.hpp"
 #include "utils/directory.hpp"
+#include "physics/vehicle.hpp"
+
+#include <QVector>
+
 
 namespace Editor
 {
+void VehicleForm::updatePlot()
+{
+	std::map<int, Physics::NewtonMeters> torqueData;
+	std::map<int, Physics::Watts> powerData;
+
+	Physics::Vehicle simulation(*vehicle);
+
+	while(simulation.getState().time < 10.0)
+	{
+		const double PI = 3.14159265;
+		const double RADS_TO_RPM = 60.0f / (2.0f * PI);
+
+		int rpm = simulation.getState().engineSpeed * RADS_TO_RPM;
+
+		torqueData[rpm] = simulation.getState().engineTorque;
+		powerData[rpm] = simulation.getState().enginePower / 1000.0;
+
+		simulation.advanceSimulation();
+	}
+
+	QVector<double> rpm;
+	QVector<double> torque;
+	QVector<double> power;
+
+	for(auto pair : torqueData)
+	{
+		rpm.push_back(pair.first);
+		torque.push_back(pair.second);
+
+		std::cout << pair.first << " " << pair.second << std::endl;
+	}
+
+	for(auto pair : powerData)
+	{
+		power.push_back(pair.second);
+
+		std::cout << pair.second << std::endl;
+	}
+
+	plot->clearGraphs();
+
+	plot->addGraph();
+	plot->graph(0)->setData(rpm, power);
+	plot->graph(0)->setPen(QPen(QColor(255, 40, 40)));
+	plot->graph(0)->rescaleValueAxis(false);
+
+	plot->addGraph();
+	plot->graph(1)->setData(rpm, torque);
+	plot->graph(1)->setValueAxis(plot->yAxis2);
+	plot->graph(1)->setPen(QPen(QColor(40, 40, 255)));
+	plot->graph(1)->rescaleValueAxis(true);
+
+	plot->xAxis->setLabel(trUtf8("Kierrosluku (kierrosta/min)"));
+	plot->yAxis->setLabel(trUtf8("Teho (kW)"));
+	plot->yAxis->setLabelColor(QColor(255, 40, 40));
+	plot->yAxis2->setVisible(true);
+	plot->yAxis2->setLabel(trUtf8("Vääntö (Nm)"));
+	plot->yAxis2->setLabelColor(QColor(40, 40, 255));
+
+	plot->xAxis->setRange(0, 10000);
+	plot->replot();
+}
 
 void VehicleForm::updateOriginal()
 {
@@ -68,6 +134,8 @@ VehicleForm::VehicleForm(Game::Vehicle* vehicle, QWidget *parent) :
 	infoField->setPlainText(vehicle->getInfo().c_str());
 
 	addSlotsFor(vehicle);
+
+	updatePlot();
 
 	connect(nameField, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
 	connect(yearField, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
@@ -138,6 +206,8 @@ void VehicleForm::on_partTree_itemDoubleClicked(QTreeWidgetItem* selectedItem, i
 void VehicleForm::objectEdited()
 {
 	editor->updateOriginal();
+
+	updatePlot();
 }
 
 }

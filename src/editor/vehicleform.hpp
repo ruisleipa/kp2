@@ -20,12 +20,12 @@ class VehicleForm : public TypeSpecificForm, private Ui::VehicleForm
 
 		explicit VehicleForm(Game::Vehicle* vehicle, QWidget* parent = 0);
 
-
 	private:
 		void openEditor(Game::Object *object);
 		void setItemIcon(QTreeWidgetItem* item);
 		void addSlotsFor(Game::PartContainer *container, QTreeWidgetItem *item = 0);
 		void addSlotItem(Game::PartContainer::Slot* slot, std::string slotName, QTreeWidgetItem* parent);
+		void updatePlot();
 
 		std::map<QTreeWidgetItem*, Game::PartContainer::Slot*> itemSlots;
 		Game::Vehicle* vehicle;
