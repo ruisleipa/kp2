@@ -21,6 +21,9 @@ class Vehicle : public PartContainer
 		virtual int getPrice() const;
 		const std::string& getImageName() const;
 
+		TypedSlot<Chassis>& getChassisSlot();
+		const TypedSlot<Chassis>& getChassisSlot() const;
+
 		void applyPropertiesOf(const Vehicle& vehicle);
 
 		Vehicle(const std::string& name, int price, int year, const std::string& info, const std::string& imageName);

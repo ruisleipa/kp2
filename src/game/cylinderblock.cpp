@@ -18,6 +18,26 @@ double CylinderBlock::getHeight() const
 	return height;
 }
 
+PartContainer::TypedSlot<CylinderHead>& CylinderBlock::getCylinderHeadSlot()
+{
+	return cylinderHead;
+}
+
+const PartContainer::TypedSlot<CylinderHead> &CylinderBlock::getCylinderHeadSlot() const
+{
+	return cylinderHead;
+}
+
+PartContainer::TypedSlot<Crankshaft>& CylinderBlock::getCrankshaftSlot()
+{
+	return crankshaft;
+}
+
+const PartContainer::TypedSlot<Crankshaft>& CylinderBlock::getCrankshaftSlot() const
+{
+	return crankshaft;
+}
+
 void CylinderBlock::applyPropertiesOf(const CylinderBlock& cylinderBlock)
 {
 	cylinderCount = cylinderBlock.getCylinderCount();

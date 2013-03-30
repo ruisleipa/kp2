@@ -31,6 +31,9 @@ class Chassis : public Part
 		const Dimensions& getDimensions() const;
 		const EngineConstraints& getEngineConstraints() const;
 
+		TypedSlot<CylinderBlock>& getCylinderBlockSlot();
+		const TypedSlot<CylinderBlock>& getCylinderBlockSlot() const;
+
 		void applyPropertiesOf(const Chassis& chassis);
 
 		Chassis(float mass, float dragCoefficient, const Dimensions&, const EngineConstraints&);

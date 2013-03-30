@@ -18,6 +18,16 @@ const Chassis::EngineConstraints& Chassis::getEngineConstraints() const
 	return engineConstraints;
 }
 
+PartContainer::TypedSlot<Game::CylinderBlock>& Game::Chassis::getCylinderBlockSlot()
+{
+	return cylinderBlock;
+}
+
+const PartContainer::TypedSlot<CylinderBlock> &Chassis::getCylinderBlockSlot() const
+{
+	return cylinderBlock;
+}
+
 void Chassis::applyPropertiesOf(const Chassis& chassis)
 {
 	dragCoefficient = chassis.getDragCoefficient();

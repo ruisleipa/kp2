@@ -33,6 +33,16 @@ const std::string& Vehicle::getImageName() const
 	return imageName;
 }
 
+PartContainer::TypedSlot<Chassis>& Vehicle::getChassisSlot()
+{
+	return chassis;
+}
+
+const PartContainer::TypedSlot<Chassis>& Vehicle::getChassisSlot() const
+{
+	return chassis;
+}
+
 void Vehicle::applyPropertiesOf(const Vehicle& vehicle)
 {
 	name = vehicle.getName();

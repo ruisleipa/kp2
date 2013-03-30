@@ -23,6 +23,11 @@ class CylinderBlock : public Part
 		CylinderBlock(const Json::Value& value);
 		virtual void save(Json::Value& value) const;
 
+		PartContainer::TypedSlot<CylinderHead>& getCylinderHeadSlot();
+		const PartContainer::TypedSlot<CylinderHead>& getCylinderHeadSlot() const;
+		PartContainer::TypedSlot<Crankshaft>& getCrankshaftSlot();
+		const PartContainer::TypedSlot<Crankshaft>& getCrankshaftSlot() const;
+
 	private:
 		TypedSlot<CylinderHead> cylinderHead;
 		TypedSlot<Crankshaft> crankshaft;
