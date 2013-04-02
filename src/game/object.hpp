@@ -18,6 +18,8 @@ class Object : public Serializable
 		void addListener(Listener* listener);
 		void removeListener(Listener* listener);
 
+		void save(Json::Value &) const;
+
 		Object() = default;
 		Object(const Json::Value&);
 

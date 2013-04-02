@@ -36,6 +36,7 @@ set(SRC
 	menu.cpp
 	playerproxy.cpp
 	multiplayermenu.cpp
+	remotecall.cpp
 	settingsmenu.cpp
 	singleplayermenu.cpp
 	state.cpp

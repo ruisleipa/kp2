@@ -63,7 +63,7 @@ void Connection::processPackets()
 
 				ss >> v;
 
-				std::cout << v;
+				std::cout << v << std::endl;
 
 				try
 				{
@@ -99,6 +99,36 @@ void Connection::writeToServer(const Net::Packet& packet)
 	std::string str = packet.getString();
 
 	socket.write(str.c_str(), str.size());
+}
+
+const std::string& Connection::getId(const Game::Object* object)
+{
+	return objectIdMapper.getId(object);
+}
+
+void Connection::makeRemoteCall(const Game::Object* object, const std::string& method, const Json::Value& arguments)
+{
+	Json::Value call;
+
+	call["id"] = objectIdMapper.getId(object);
+	call["method"] = method;
+	call["arguments"] = arguments;
+
+	Net::Packet packet;
+	packet.setType(Protocol::REMOTE_INVOCATION);
+
+	Json::FastWriter fw;
+
+	packet << fw.write(call);
+
+	writeToServer(packet);
+
+	std::cout << call;
+}
+
+RemoteCall Connection::createRemoteCall()
+{
+	return RemoteCall(objectIdMapper);
 }
 
 void Connection::startLocalServer()
@@ -139,7 +169,7 @@ void Connection::onConnected()
 }
 
 Connection::Connection():
-	objectFactory(*this)
+	objectFactory(*this, objectIdMapper)
 {
 	QObject::connect(&serverProcess, SIGNAL(started()), this, SLOT(onServerStarted()));
 	QObject::connect(&serverProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onServerError(QProcess::ProcessError)));

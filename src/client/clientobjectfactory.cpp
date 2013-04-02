@@ -12,14 +12,24 @@ Game::Object* ObjectFactory::allocate(const Json::Value& value)
 {
 	std::string type = value["type"].asString();
 
-	if(type == "player")
+	if(type == "Player")
 		return new PlayerProxy(value, *this, connection);
 
-	return ObjectFactory::allocate(value);
+	return Game::ObjectFactory::allocate(value);
 }
 
-ObjectFactory::ObjectFactory(Connection& connection):
-	connection(connection)
+Game::Object* ObjectFactory::deserialize(const Json::Value& serializedObject)
+{
+	Game::Object* object = Game::ObjectFactory::deserialize(serializedObject);
+
+	objectIdMapper.addMapping(serializedObject["__id"].asString(), object);
+
+	return object;
+}
+
+ObjectFactory::ObjectFactory(Connection& connection, Game::ObjectIdMapper& objectIdMapper):
+	connection(connection),
+	objectIdMapper(objectIdMapper)
 {
 
 }

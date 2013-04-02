@@ -35,53 +35,48 @@ void Connection::processReceivedData()
 				ss >> call;
 				std::cout << "Remote invocation:" << call << std::endl;
 
-				std::string type = call["objectType"].asString();
-				int objectIndex = call["objectIndex"].asInt();
+				Game::Object* object = objectIdMapper.getObject(call["id"].asString());
 
-				if(type == "player")
+				if(object)
 				{
-					Game::Player* player = gameState.getPlayers().getByIndex(objectIndex);
-
-					if(player != this->player)
+					if(Game::Player* player = dynamic_cast<Game::Player*>(object))
 					{
-						std::cout << "Connection invoked method on non-owned player." << std::endl;
-					}
+						if(player != this->player)
+						{
+							std::cout << "Connection invoked method on non-owned player." << std::endl;
+						}
 
-					std::string method = call["method"].asString();
+						std::string method = call["method"].asString();
+						Json::Value& arguments = call["arguments"];
 
-					if(method == "setName")
-					{
-						std::string name = call["arguments"]["name"].asString();
+						if(method == "setName")
+						{
+							std::string name = arguments["name"].asString();
 
-						player->setName(name);
-					}
-					else if(method == "setActiveVehicle")
-					{
-						int vehicleIndex = call["arguments"]["vehicle"].asInt();
+							player->setName(name);
+						}
+						else if(method == "setActiveVehicle")
+						{
+							Game::Vehicle* vehicle = objectIdMapper.getTypedObject<Game::Vehicle*>(arguments["vehicle"].asString());
 
-						Game::Vehicle* vehicle = player->getVehicles().getByIndex(vehicleIndex);
+							player->setActiveVehicle(vehicle);
+						}
+						else if(method == "buyPart")
+						{
+							Game::Part* part = objectIdMapper.getTypedObject<Game::Part*>(arguments["part"].asString());
 
-						player->setActiveVehicle(vehicle);
-					}
-					else if(method == "buyPart")
-					{
-						int partIndex = call["arguments"]["part"].asInt();
+							player->buyPart(part);
+						}
+						else if(method == "buyVehicle")
+						{
+							Game::Vehicle* vehicle = objectIdMapper.getTypedObject<Game::Vehicle*>(arguments["vehicle"].asString());
 
-						Game::Part* part = gameState.getShopParts().getByIndex(partIndex);
-
-						player->buyPart(part);
-					}
-					else if(method == "buyVehicle")
-					{
-						int vehicleIndex = call["arguments"]["vehicle"].asInt();
-
-						Game::Vehicle* vehicle = gameState.getShopVehicles().getByIndex(vehicleIndex);
-
-						player->buyVehicle(vehicle);
-					}
-					else
-					{
-						std::cout << "Unimplemented method of class " << type << ": " << method << std::endl;
+							player->buyVehicle(vehicle);
+						}
+						else
+						{
+							std::cout << "Unimplemented method of class Player" << method << std::endl;
+						}
 					}
 				}
 			}
@@ -110,6 +105,20 @@ void Connection::writePacket(const Net::Packet& packet)
 	sendBuffer.append(str.c_str(), str.size());
 }
 
+void Connection::addIds(Json::Value& value)
+{
+	if(value.isObject() && value.isMember("__pointer"))
+	{
+		Game::Object* object = (Game::Object*)value["__pointer"].asUInt();
+
+		value["__id"] = objectIdMapper.getId(object);
+	}
+
+	if(value.isObject() || value.isArray())
+		for(auto& child : value)
+			addIds(child);
+}
+
 Connection::Connection(Game::State& gameState, Game::Player* player, Net::ClientSocket& socket):
 	gameState(gameState),
 	player(player),
@@ -117,6 +126,10 @@ Connection::Connection(Game::State& gameState, Game::Player* player, Net::Client
 {
 	Json::Value state;
 	gameState.save(state);
+
+	addIds(state);
+
+	std::cout << state << std::endl;
 
 	state["client"]["playerId"] = gameState.getPlayers().getIndexOf(player);
 

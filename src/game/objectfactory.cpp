@@ -12,18 +12,9 @@
 namespace Game
 {
 
-Object* ObjectFactory::create(const Json::Value& value)
+Object* ObjectFactory::deserialize(const Json::Value& value)
 {
-	std::string type;
-
-	type = value["type"].asString();
-
-	Object* object = allocate(value);
-
-	if(object == nullptr)
-		throw std::runtime_error("Invalid object type \"" + type + "\"");
-
-	return object;
+	return create(value);
 }
 
 Game::Object* ObjectFactory::allocate(const Json::Value& value)
@@ -46,6 +37,18 @@ Game::Object* ObjectFactory::allocate(const Json::Value& value)
 		return new Game::Object(value);
 
 	return nullptr;
+}
+
+Object* ObjectFactory::create(const Json::Value& value)
+{
+	std::string type = value["type"].asString();
+
+	Object* object = allocate(value);
+
+	if(object == nullptr)
+		throw std::runtime_error("Invalid object type \"" + type + "\"");
+
+	return object;
 }
 
 }
